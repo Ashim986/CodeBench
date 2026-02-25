@@ -98,11 +98,9 @@ struct DataJourneyStructureCanvasView<Header: View, Footer: View>: View {
             )
             .clipped()
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(
-                String(format: AppStrings.a11yDataJourneyCanvas, structureTypeName)
-            )
+            .accessibilityLabel("Data Journey \(structureTypeName) canvas")
             .accessibilityValue(canvasAccessibilityValue)
-            .accessibilityIdentifier(AccessibilityID.DataJourney.canvas)
+            .accessibilityIdentifier("dataJourney.canvas")
         }
     }
 
@@ -149,7 +147,7 @@ struct DataJourneyStructureCanvasView<Header: View, Footer: View>: View {
         default:
             return ""
         }
-        return String(format: AppStrings.a11yDataJourneyValue, count, summary)
+        return "\(count) values: \(summary)"
     }
 
     // MARK: - Variable Name

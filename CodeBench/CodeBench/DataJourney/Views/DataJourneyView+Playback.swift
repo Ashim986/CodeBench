@@ -34,9 +34,7 @@ extension DataJourneyView {
                 stepControlsTimeline(style: style)
             }
         }
-        .accessibilityIdentifier(
-            AccessibilityID.DataJourney.playbackControls
-        )
+        .accessibilityIdentifier("dataJourney.playbackControls")
     }
 
     func stepControlsHeader(
