@@ -12,6 +12,9 @@ struct GraphView: View {
     let bubbleStyle: TraceBubble.Style
     @Environment(\.dsTheme) var theme
     @State private var cachedLayout: GraphLayout?
+    @State private var overflowNodeCount = 0
+
+    private let maxVisualizationNodes = 40
 
     private var pointerHeight: CGFloat {
         pointerFontSize + pointerVerticalPadding * 2 + 4
@@ -41,54 +44,62 @@ struct GraphView: View {
         let layout = cachedLayout ?? makeLayout()
         let pointersByIndex = groupedPointers
         let visitedIndices = visitedNodeIndices
-        ScrollView(.horizontal, showsIndicators: false) {
-            ZStack {
-                Canvas { context, _ in
-                    let nodeRadius = nodeSize / 2
-                    for edge in layout.edges {
-                        drawSurfaceEdge(
-                            context: &context,
-                            edge: edge,
-                            nodeRadius: nodeRadius
-                        )
-                    }
-                }
-
-                ForEach(layout.nodes) { node in
-                    ZStack(alignment: .top) {
-                        let isVisited = visitedIndices.contains(node.index)
-                        let fill = theme.colors.surfaceElevated
-                        TraceBubble(
-                            text: "\(node.index)",
-                            fill: fill,
-                            size: nodeSize,
-                            style: bubbleStyle
-                        )
-                        .opacity(isVisited ? 0.5 : 1.0)
-                        if let pointerStack = pointersByIndex[node.index] {
-                            let stackHeight = CGFloat(pointerStack.count) * pointerHeight +
-                                CGFloat(max(pointerStack.count - 1, 0)) * pointerSpacing
-                            VStack(spacing: pointerSpacing) {
-                                ForEach(pointerStack) { pointer in
-                                    PointerBadge(
-                                        text: pointer.name,
-                                        color: pointer.color,
-                                        fontSize: pointerFontSize,
-                                        horizontalPadding: pointerHorizontalPadding,
-                                        verticalPadding: pointerVerticalPadding,
-                                        valueText: pointer.valueText
-                                    )
-                                }
-                            }
-                            .offset(y: -(nodeSize / 2 + stackHeight))
+        VStack(spacing: 0) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                ZStack {
+                    Canvas { context, _ in
+                        let nodeRadius = nodeSize / 2
+                        for edge in layout.edges {
+                            drawSurfaceEdge(
+                                context: &context,
+                                edge: edge,
+                                nodeRadius: nodeRadius
+                            )
                         }
                     }
-                    .position(node.position)
+
+                    ForEach(layout.nodes) { node in
+                        ZStack(alignment: .top) {
+                            let isVisited = visitedIndices.contains(node.index)
+                            let fill = theme.colors.surfaceElevated
+                            TraceBubble(
+                                text: "\(node.index)",
+                                fill: fill,
+                                size: nodeSize,
+                                style: bubbleStyle
+                            )
+                            .opacity(isVisited ? 0.5 : 1.0)
+                            if let pointerStack = pointersByIndex[node.index] {
+                                let stackHeight = CGFloat(pointerStack.count) * pointerHeight +
+                                    CGFloat(max(pointerStack.count - 1, 0)) * pointerSpacing
+                                VStack(spacing: pointerSpacing) {
+                                    ForEach(pointerStack) { pointer in
+                                        PointerBadge(
+                                            text: pointer.name,
+                                            color: pointer.color,
+                                            fontSize: pointerFontSize,
+                                            horizontalPadding: pointerHorizontalPadding,
+                                            verticalPadding: pointerVerticalPadding,
+                                            valueText: pointer.valueText
+                                        )
+                                    }
+                                }
+                                .offset(y: -(nodeSize / 2 + stackHeight))
+                            }
+                        }
+                        .position(node.position)
+                    }
                 }
+                .frame(width: graphCompactWidth, height: layout.height)
             }
-            .frame(width: graphCompactWidth, height: layout.height)
+            .frame(height: layout.height)
+            if overflowNodeCount > 0 {
+                Text("...and \(overflowNodeCount) more")
+                    .font(VizTypography.secondaryLabel)
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 4)
+            }
         }
-        .frame(height: layout.height)
         .onAppear {
             cachedLayout = makeLayout()
         }
@@ -98,8 +109,18 @@ struct GraphView: View {
     }
 
     private func makeLayout() -> GraphLayout {
+        let truncatedAdjacency: [[Int]]
+        if adjacency.count > maxVisualizationNodes {
+            truncatedAdjacency = Array(adjacency.prefix(maxVisualizationNodes)).map { neighbors in
+                neighbors.filter { $0 < maxVisualizationNodes }
+            }
+            overflowNodeCount = adjacency.count - maxVisualizationNodes
+        } else {
+            truncatedAdjacency = adjacency
+            overflowNodeCount = 0
+        }
         let compactSize = CGSize(width: graphCompactWidth, height: graphHeight)
-        return GraphLayout(adjacency: adjacency, size: compactSize, nodeSize: nodeSize)
+        return GraphLayout(adjacency: truncatedAdjacency, size: compactSize, nodeSize: nodeSize)
     }
 
     private var graphCompactWidth: CGFloat {

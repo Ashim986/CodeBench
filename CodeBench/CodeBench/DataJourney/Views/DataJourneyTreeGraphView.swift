@@ -15,6 +15,9 @@ struct TreeGraphView: View {
     private let pointerSpacing: CGFloat = 2
     @Environment(\.dsTheme) var theme
     @State private var cachedTreeLayout: TraceTreeLayout?
+    @State private var overflowNodeCount = 0
+
+    private let maxVisualizationNodes = 40
 
     private var pointerHeight: CGFloat {
         pointerFontSize + pointerVerticalPadding * 2 + 4
@@ -52,76 +55,84 @@ struct TreeGraphView: View {
             ($0.id, CGPoint(x: $0.position.x, y: $0.position.y + yOffset))
         })
         let totalHeight = layout.height + topPadding + bottomPadding
-        ScrollView(.horizontal, showsIndicators: false) {
-            ZStack {
-                Canvas { context, _ in
-                    for edge in layout.edges {
-                        let from = CGPoint(x: edge.from.x, y: edge.from.y + yOffset)
-                        let to = CGPoint(x: edge.to.x, y: edge.to.y + yOffset)
-                        let controlX = (from.x + to.x) / 2
-                        let controlY = from.y + (to.y - from.y) * 0.3
-                        var path = Path()
-                        path.move(to: from)
-                        path.addQuadCurve(
-                            to: to,
-                            control: CGPoint(x: controlX, y: controlY)
-                        )
-                        context.stroke(
-                            path,
-                            with: .color(theme.vizColors.quinary.opacity(0.55)),
-                            lineWidth: 1.5
-                        )
-                    }
+        VStack(spacing: 0) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                ZStack {
+                    Canvas { context, _ in
+                        for edge in layout.edges {
+                            let from = CGPoint(x: edge.from.x, y: edge.from.y + yOffset)
+                            let to = CGPoint(x: edge.to.x, y: edge.to.y + yOffset)
+                            let controlX = (from.x + to.x) / 2
+                            let controlY = from.y + (to.y - from.y) * 0.3
+                            var path = Path()
+                            path.move(to: from)
+                            path.addQuadCurve(
+                                to: to,
+                                control: CGPoint(x: controlX, y: controlY)
+                            )
+                            context.stroke(
+                                path,
+                                with: .color(theme.vizColors.quinary.opacity(0.55)),
+                                lineWidth: 1.5
+                            )
+                        }
 
-                    for (index, motion) in pointerMotions.enumerated() {
-                        guard let from = positions[motion.fromId],
-                              let to = positions[motion.toId],
-                              from != to else { continue }
-                        let useBottom = index >= 2
-                        let laneIndex = max(0, useBottom ? index - 2 : index)
-                        drawPointerMotion(
-                            context: &context,
-                            motion: motion,
-                            from: from,
-                            to: to,
-                            laneIndex: laneIndex,
-                            useBottom: useBottom
-                        )
-                    }
-                }
-
-                ForEach(layout.nodes) { node in
-                    ZStack(alignment: .top) {
-                        TraceValueNode(
-                            value: node.value,
-                            size: nodeSize,
-                            style: bubbleStyle,
-                            highlighted: highlightedNodeIds.contains(node.id)
-                        )
-                        if let pointerStack = pointersById[node.id] {
-                            let stackHeight = CGFloat(pointerStack.count) * pointerHeight +
-                                CGFloat(max(pointerStack.count - 1, 0)) * pointerSpacing
-                            VStack(spacing: pointerSpacing) {
-                                ForEach(pointerStack) { pointer in
-                                    PointerBadge(
-                                        text: pointer.name,
-                                        color: pointer.color,
-                                        fontSize: pointerFontSize,
-                                        horizontalPadding: pointerHorizontalPadding,
-                                        verticalPadding: pointerVerticalPadding,
-                                        valueText: pointer.valueText
-                                    )
-                                }
-                            }
-                            .offset(y: -(nodeSize / 2 + stackHeight))
+                        for (index, motion) in pointerMotions.enumerated() {
+                            guard let from = positions[motion.fromId],
+                                  let to = positions[motion.toId],
+                                  from != to else { continue }
+                            let useBottom = index >= 2
+                            let laneIndex = max(0, useBottom ? index - 2 : index)
+                            drawPointerMotion(
+                                context: &context,
+                                motion: motion,
+                                from: from,
+                                to: to,
+                                laneIndex: laneIndex,
+                                useBottom: useBottom
+                            )
                         }
                     }
-                    .position(CGPoint(x: node.position.x, y: node.position.y + yOffset))
+
+                    ForEach(layout.nodes) { node in
+                        ZStack(alignment: .top) {
+                            TraceValueNode(
+                                value: node.value,
+                                size: nodeSize,
+                                style: bubbleStyle,
+                                highlighted: highlightedNodeIds.contains(node.id)
+                            )
+                            if let pointerStack = pointersById[node.id] {
+                                let stackHeight = CGFloat(pointerStack.count) * pointerHeight +
+                                    CGFloat(max(pointerStack.count - 1, 0)) * pointerSpacing
+                                VStack(spacing: pointerSpacing) {
+                                    ForEach(pointerStack) { pointer in
+                                        PointerBadge(
+                                            text: pointer.name,
+                                            color: pointer.color,
+                                            fontSize: pointerFontSize,
+                                            horizontalPadding: pointerHorizontalPadding,
+                                            verticalPadding: pointerVerticalPadding,
+                                            valueText: pointer.valueText
+                                        )
+                                    }
+                                }
+                                .offset(y: -(nodeSize / 2 + stackHeight))
+                            }
+                        }
+                        .position(CGPoint(x: node.position.x, y: node.position.y + yOffset))
+                    }
                 }
+                .frame(width: layout.width, height: totalHeight)
             }
-            .frame(width: layout.width, height: totalHeight)
+            .frame(height: totalHeight)
+            if overflowNodeCount > 0 {
+                Text("...and \(overflowNodeCount) more")
+                    .font(VizTypography.secondaryLabel)
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 4)
+            }
         }
-        .frame(height: totalHeight)
         .onAppear {
             cachedTreeLayout = makeTreeLayout()
         }
@@ -131,7 +142,11 @@ struct TreeGraphView: View {
     }
 
     private func makeTreeLayout() -> TraceTreeLayout {
-        TraceTreeLayout(tree: tree, nodeSize: nodeSize, levelSpacing: levelSpacing)
+        let totalNodeCount = tree.nodes.count
+        let layout = TraceTreeLayout(tree: tree, nodeSize: nodeSize, levelSpacing: levelSpacing, maxNodes: maxVisualizationNodes)
+        let renderedCount = layout.nodes.count
+        overflowNodeCount = max(0, totalNodeCount - renderedCount)
+        return layout
     }
 
     private func drawPointerMotion(
@@ -281,7 +296,8 @@ struct TraceTreeLayout {
     init(
         tree: TraceTree,
         nodeSize: CGFloat,
-        levelSpacing: CGFloat
+        levelSpacing: CGFloat,
+        maxNodes: Int = .max
     ) {
         guard let rootId = tree.rootId else {
             nodes = []
@@ -301,7 +317,8 @@ struct TraceTreeLayout {
         let result = Self.layoutNodes(
             rootId: rootId, nodeMap: nodeMap,
             effectiveWidth: effectiveWidth,
-            levelSpacing: levelSpacing, nodeSize: nodeSize
+            levelSpacing: levelSpacing, nodeSize: nodeSize,
+            maxNodes: maxNodes
         )
 
         let layoutEdges = Self.buildEdges(
@@ -342,7 +359,8 @@ struct TraceTreeLayout {
         nodeMap: [String: TraceTreeNode],
         effectiveWidth: CGFloat,
         levelSpacing: CGFloat,
-        nodeSize: CGFloat
+        nodeSize: CGFloat,
+        maxNodes: Int = .max
     ) -> LayoutResult {
         var nodes: [Node] = []
         var positions: [String: CGPoint] = [:]
@@ -356,6 +374,7 @@ struct TraceTreeLayout {
             let entry = queue.removeFirst()
             guard let node = nodeMap[entry.id],
                   !visited.contains(entry.id) else { continue }
+            guard nodes.count < maxNodes else { continue }
             visited.insert(entry.id)
             maxLevel = max(maxLevel, entry.level)
             let countAtLevel = 1 << entry.level

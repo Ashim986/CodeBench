@@ -13,6 +13,8 @@ struct HeapView: View {
     let pointerVerticalPadding: CGFloat
     @Environment(\.dsTheme) var theme
 
+    private let maxVisualizationNodes = 40
+
     init(
         items: [TraceValue],
         isMinHeap: Bool = true,
@@ -34,6 +36,10 @@ struct HeapView: View {
     }
 
     var body: some View {
+        let displayItems = items.count > maxVisualizationNodes
+            ? Array(items.prefix(maxVisualizationNodes))
+            : items
+        let overflowCount = max(0, items.count - maxVisualizationNodes)
         VStack(alignment: .leading, spacing: DSLayout.spacing(10)) {
             // Label
             HStack(spacing: DSLayout.spacing(6)) {
@@ -54,7 +60,7 @@ struct HeapView: View {
 
             // Array view
             SequenceBubbleRow(
-                items: items,
+                items: displayItems,
                 showIndices: true,
                 cycleIndex: nil,
                 isTruncated: false,
@@ -85,7 +91,7 @@ struct HeapView: View {
             }
 
             // Tree view — reuse the existing TraceTree + TreeGraphView
-            let tree = TraceTree.fromLevelOrder(items)
+            let tree = TraceTree.fromLevelOrder(displayItems)
             let treeHighlights = highlightedTreeNodeIds
             TreeGraphView(
                 tree: tree,
@@ -97,6 +103,13 @@ struct HeapView: View {
                 pointerHorizontalPadding: pointerHorizontalPadding,
                 pointerVerticalPadding: pointerVerticalPadding
             )
+
+            if overflowCount > 0 {
+                Text("...and \(overflowCount) more")
+                    .font(VizTypography.secondaryLabel)
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 4)
+            }
         }
     }
 
