@@ -155,8 +155,8 @@ Step granularity target: 20-50 steps per visualization. Use semantic granularity
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| REQ-F01 | Phase 1: Foundation Bug Fixes | Pending |
-| REQ-F02 | Phase 1: Foundation Bug Fixes | Pending |
+| REQ-F01 | Phase 1: Foundation Bug Fixes | Complete |
+| REQ-F02 | Phase 1: Foundation Bug Fixes | Complete |
 | REQ-F03 | Phase 2: Trace Pipeline (macOS) | Pending |
 | REQ-F04 | Phase 2: Trace Pipeline (macOS) | Pending |
 | REQ-F05 | Phase 3: Trace Pipeline (iOS) + Bridge | Pending |

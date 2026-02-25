@@ -198,7 +198,7 @@ Note: Phases 1 and 4 are independent and could theoretically run in parallel. Ph
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation Bug Fixes | 1/5 | In Progress | - |
+| 1. Foundation Bug Fixes | 2/5 | In Progress | - |
 | 2. Trace Pipeline (macOS) | 0/6 | Not started | - |
 | 3. Trace Pipeline (iOS) + Bridge | 0/5 | Not started | - |
 | 4. Comparison Strategies | 0/6 | Not started | - |
