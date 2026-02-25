@@ -150,4 +150,27 @@ Step granularity target: 20-50 steps per visualization. Use semantic granularity
 | P2 | 3 | REQ-VZ04, REQ-S01, REQ-S02 |
 
 ---
+
+## Traceability
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| REQ-F01 | Phase 1: Foundation Bug Fixes | Pending |
+| REQ-F02 | Phase 1: Foundation Bug Fixes | Pending |
+| REQ-F03 | Phase 2: Trace Pipeline (macOS) | Pending |
+| REQ-F04 | Phase 2: Trace Pipeline (macOS) | Pending |
+| REQ-F05 | Phase 3: Trace Pipeline (iOS) + Bridge | Pending |
+| REQ-V01 | Phase 4: Comparison Strategies | Pending |
+| REQ-VZ01 | Phase 5: Trace Authoring | Pending |
+| REQ-V02 | Phase 6: Test Validation Coverage | Pending |
+| REQ-V03 | Phase 6: Test Validation Coverage | Pending |
+| REQ-F06 | Phase 7: Playback Enhancements | Pending |
+| REQ-VZ03 | Phase 7: Playback Enhancements | Pending |
+| REQ-VZ02 | Phase 8: Visual Polish and Study Workflow | Pending |
+| REQ-VZ04 | Phase 8: Visual Polish and Study Workflow | Pending |
+| REQ-S01 | Phase 8: Visual Polish and Study Workflow | Pending |
+| REQ-S02 | Phase 8: Visual Polish and Study Workflow | Pending |
+
+---
 *Requirements defined: 2026-02-24*
+*Traceability added: 2026-02-24*
