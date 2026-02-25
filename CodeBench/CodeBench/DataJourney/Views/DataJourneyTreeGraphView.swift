@@ -249,7 +249,7 @@ struct TraceTreeLayout {
     }
 
     struct Edge: Identifiable {
-        let id = UUID()
+        let id: String
         let from: CGPoint
         let to: CGPoint
     }
@@ -400,6 +400,7 @@ struct TraceTreeLayout {
             if let leftId = node.left,
                let leftPos = positions[leftId] {
                 edges.append(Edge(
+                    id: "tree-edge-\(node.id)-\(leftId)",
                     from: CGPoint(
                         x: parentPos.x,
                         y: parentPos.y + nodeSize / 2
@@ -413,6 +414,7 @@ struct TraceTreeLayout {
             if let rightId = node.right,
                let rightPos = positions[rightId] {
                 edges.append(Edge(
+                    id: "tree-edge-\(node.id)-\(rightId)",
                     from: CGPoint(
                         x: parentPos.x,
                         y: parentPos.y + nodeSize / 2

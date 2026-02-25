@@ -89,7 +89,7 @@ struct TrieGraphView: View {
                                 .stroke(theme.vizColors.tertiary, lineWidth: 2)
                                 .frame(width: nodeSize + 4, height: nodeSize + 4)
                         }
-                        if let pointerStack = pointerMap[node.trieNodeId] {
+                        if let pointerStack = pointerMap[node.id] {
                             let stackHeight = CGFloat(pointerStack.count) * pointerHeight
                             VStack(spacing: DSLayout.spacing(2)) {
                                 ForEach(pointerStack) { pointer in
@@ -127,15 +127,14 @@ struct TrieGraphView: View {
 
 struct TrieLayout {
     struct LayoutNode: Identifiable {
-        let id = UUID()
-        let trieNodeId: String
+        let id: String
         let character: String
         let isEnd: Bool
         let position: CGPoint
     }
 
     struct LayoutEdge: Identifiable {
-        let id = UUID()
+        let id: String
         let from: CGPoint
         let to: CGPoint
         let character: String
@@ -174,7 +173,7 @@ struct TrieLayout {
             guard let node = nodeById[nodeId] else { return }
             let pos = CGPoint(x: x, y: y)
             layoutNodes.append(LayoutNode(
-                trieNodeId: node.id,
+                id: node.id,
                 character: node.character,
                 isEnd: node.isEnd,
                 position: pos
@@ -193,6 +192,7 @@ struct TrieLayout {
                 let childY = y + vSpacing
                 let childNode = nodeById[childId]
                 layoutEdges.append(LayoutEdge(
+                    id: "trie-edge-\(nodeId)-\(childId)",
                     from: pos,
                     to: CGPoint(x: childCenterX, y: childY),
                     character: childNode?.character ?? ""

@@ -9,13 +9,13 @@ enum DataJourneyEventKind: String {
 }
 
 struct DataJourneyEvent: Identifiable {
-    let id = UUID()
+    let id: String
     let kind: DataJourneyEventKind
     let line: Int?
     let label: String?
     let values: [String: TraceValue]
 
-    static func from(json: Any) -> DataJourneyEvent? {
+    static func from(json: Any, index: Int = 0) -> DataJourneyEvent? {
         guard let dict = json as? [String: Any] else { return nil }
         guard let kindString = dict["kind"] as? String,
               let kind = DataJourneyEventKind(rawValue: kindString) else { return nil }
@@ -31,8 +31,9 @@ struct DataJourneyEvent: Identifiable {
         let label = dict["label"] as? String
         let valuesDict = dict["values"] as? [String: Any] ?? [:]
         let values = valuesDict.mapValues { TraceValue.from(json: $0) }
+        let eventId = "event-\(index)-\(kind.rawValue)-\(line ?? 0)-\(label ?? "unlabeled")"
 
-        return DataJourneyEvent(kind: kind, line: line, label: label, values: values)
+        return DataJourneyEvent(id: eventId, kind: kind, line: line, label: label, values: values)
     }
 }
 

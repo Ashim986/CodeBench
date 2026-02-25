@@ -207,13 +207,13 @@ struct GraphView: View {
 
 struct GraphLayout {
     struct Node: Identifiable {
-        let id = UUID()
+        let id: String
         let index: Int
         let position: CGPoint
     }
 
     struct Edge: Identifiable {
-        let id = UUID()
+        let id: String
         let from: CGPoint
         let to: CGPoint
         let directed: Bool
@@ -249,7 +249,11 @@ struct GraphLayout {
 
         var nodes: [Node] = []
         for index in 0 ..< count {
-            nodes.append(Node(index: index, position: positions[index]))
+            nodes.append(Node(
+                id: "node-\(index)",
+                index: index,
+                position: positions[index]
+            ))
         }
 
         var edges: [Edge] = []
@@ -257,7 +261,11 @@ struct GraphLayout {
             for neighbor in adjacency[index] {
                 guard neighbor >= 0, neighbor < count else { continue }
                 if isUndirected, neighbor < index { continue }
+                let edgeId = isUndirected
+                    ? "edge-\(min(index, neighbor))-\(max(index, neighbor))"
+                    : "edge-\(index)-\(neighbor)"
                 edges.append(Edge(
+                    id: edgeId,
                     from: positions[index],
                     to: positions[neighbor],
                     directed: !isUndirected,

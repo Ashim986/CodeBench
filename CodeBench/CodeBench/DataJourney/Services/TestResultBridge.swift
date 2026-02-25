@@ -18,6 +18,7 @@ enum TestResultBridge {
         let inputValues = parseInputParameters(result.input)
         if !inputValues.isEmpty {
             events.append(DataJourneyEvent(
+                id: "event-0-input-0-Input",
                 kind: .input,
                 line: nil,
                 label: "Input",
@@ -28,6 +29,7 @@ enum TestResultBridge {
         // Parse expected output
         let expectedValue = parseValue(result.originalExpected.trimmingCharacters(in: .whitespaces))
         events.append(DataJourneyEvent(
+            id: "event-\(events.count)-step-0-Expected",
             kind: .step,
             line: nil,
             label: "Expected",
@@ -36,10 +38,12 @@ enum TestResultBridge {
 
         // Parse computed output
         let computedValue = parseValue(result.computedOutput.trimmingCharacters(in: .whitespaces))
+        let outputLabel = result.outputMatches ? "Output (Match)" : "Output (Mismatch)"
         events.append(DataJourneyEvent(
+            id: "event-\(events.count)-output-0-\(outputLabel)",
             kind: .output,
             line: nil,
-            label: result.outputMatches ? "Output (Match)" : "Output (Mismatch)",
+            label: outputLabel,
             values: ["result": computedValue]
         ))
 

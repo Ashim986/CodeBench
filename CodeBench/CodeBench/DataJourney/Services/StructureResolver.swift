@@ -129,7 +129,7 @@ enum StructureResolver {
         lists: inout [NamedTraceList]
     ) -> Bool {
         guard case let .list(list) = value else { return false }
-        lists.append(NamedTraceList(name: name, list: list))
+        lists.append(NamedTraceList(id: name, name: name, list: list))
         return true
     }
 
@@ -142,9 +142,10 @@ enum StructureResolver {
         for (index, item) in items.enumerated() {
             switch item {
             case let .list(list):
+                let name = "list[\(index)]"
                 lists.append(
                     NamedTraceList(
-                        name: "list[\(index)]", list: list
+                        id: name, name: name, list: list
                     )
                 )
                 heads.append(list.nodes.first?.value ?? .null)
@@ -153,9 +154,10 @@ enum StructureResolver {
                     nodes: [], cycleIndex: nil,
                     isTruncated: false, isDoubly: false
                 )
+                let name = "list[\(index)]"
                 lists.append(
                     NamedTraceList(
-                        name: "list[\(index)]", list: emptyList
+                        id: name, name: name, list: emptyList
                     )
                 )
                 heads.append(.null)
