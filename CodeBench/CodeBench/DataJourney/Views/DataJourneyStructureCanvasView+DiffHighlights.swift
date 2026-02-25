@@ -1,3 +1,4 @@
+import LeetPulseDesignSystemCore
 import SwiftUI
 
 // MARK: - Diff Highlighting Helpers

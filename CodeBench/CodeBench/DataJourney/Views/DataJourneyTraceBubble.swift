@@ -1,4 +1,5 @@
 
+import LeetPulseDesignSystemCore
 import SwiftUI
 
 struct TraceBubble: View {
@@ -99,28 +100,28 @@ struct TraceBubble: View {
         case .added:
             ZStack {
                 Circle()
-                    .fill(theme.colors.warning.opacity(0.1))
+                    .fill(theme.colors.success.opacity(0.1))
                 Circle()
-                    .stroke(theme.colors.warning, lineWidth: 2)
+                    .stroke(theme.colors.success, lineWidth: 2)
                     .shadow(
-                        color: theme.colors.warning.opacity(0.5),
+                        color: theme.colors.success.opacity(0.5),
                         radius: 4
                     )
                 if differentiateWithoutColor {
                     changeIcon(
                         "plus.circle",
-                        color: theme.colors.warning
+                        color: theme.colors.success
                     )
                 }
             }
         case .removed:
             ZStack {
                 Circle()
-                    .fill(theme.vizColors.senary.opacity(0.25))
+                    .fill(theme.colors.danger.opacity(0.25))
                 if differentiateWithoutColor {
                     changeIcon(
                         "minus.circle",
-                        color: theme.vizColors.senary
+                        color: theme.colors.danger
                     )
                 }
             }

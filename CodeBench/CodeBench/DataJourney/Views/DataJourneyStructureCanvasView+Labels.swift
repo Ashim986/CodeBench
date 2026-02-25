@@ -1,4 +1,5 @@
 
+import LeetPulseDesignSystemCore
 import SwiftUI
 
 extension DataJourneyStructureCanvasView {

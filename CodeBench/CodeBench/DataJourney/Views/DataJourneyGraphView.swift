@@ -1,4 +1,5 @@
 
+import LeetPulseDesignSystemCore
 import SwiftUI
 
 struct GraphView: View {
@@ -96,7 +97,7 @@ struct GraphView: View {
             if overflowNodeCount > 0 {
                 Text("...and \(overflowNodeCount) more")
                     .font(VizTypography.secondaryLabel)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(theme.colors.textSecondary)
                     .padding(.top, 4)
             }
         }

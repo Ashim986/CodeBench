@@ -1,4 +1,5 @@
 
+import LeetPulseDesignSystemCore
 import SwiftUI
 
 /// Renders a trie as an N-ary tree layout with character-labeled edges and isEnd highlighting.
@@ -118,7 +119,7 @@ struct TrieGraphView: View {
             if overflowNodeCount > 0 {
                 Text("...and \(overflowNodeCount) more")
                     .font(VizTypography.secondaryLabel)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(theme.colors.textSecondary)
                     .padding(.top, 4)
             }
         }

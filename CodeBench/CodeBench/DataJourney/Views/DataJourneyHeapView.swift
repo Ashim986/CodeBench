@@ -1,4 +1,5 @@
 
+import LeetPulseDesignSystemCore
 import SwiftUI
 
 /// Dual visualization for heap data: array view on top, implicit binary tree below.
@@ -107,7 +108,7 @@ struct HeapView: View {
             if overflowCount > 0 {
                 Text("...and \(overflowCount) more")
                     .font(VizTypography.secondaryLabel)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(theme.colors.textSecondary)
                     .padding(.top, 4)
             }
         }
