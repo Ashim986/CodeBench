@@ -32,13 +32,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. Graph nodes animate position changes smoothly during step playback with no identity-based flickering or node destruction/recreation
   2. Layout computation runs once per data change, not on every SwiftUI render cycle
   3. Step playback maintains 60fps on graph and tree visualizations (no force simulation in body)
-**Plans**: 4 plans
+**Plans**: 5 plans
 
 Plans:
 - [ ] 01-01-PLAN.md -- Infrastructure: Add LeetPulseDesignSystem SPM dependency, delete DesignTokens.swift shim, remove TestCaseEvaluator/CodeBench duplicate
-- [ ] 01-02-PLAN.md -- Core Bug Fixes: Replace all UUID() identity with stable composite IDs, memoize layout computation in Graph/Tree/Trie views
-- [ ] 01-03-PLAN.md -- DS Token Sweep: Replace all hardcoded colors/fonts/spacing with LeetPulseDesignSystem tokens across all 27 visualization views
-- [ ] 01-04-PLAN.md -- Verification: Debug test harness with rapid step transitions, SwiftLint UUID regression guard, grep-based styling audit, visual human verification
+- [ ] 01-02-PLAN.md -- Core Bug Fixes: Replace all UUID() identity with stable composite IDs, memoize layout computation in Graph/Tree/Trie views, enforce 40-node truncation limit
+- [ ] 01-03-PLAN.md -- DS Token Sweep (Part 1): Replace hardcoded styling in graph/tree/trie/canvas/heap/matrix/bubble views (14 files)
+- [ ] 01-04-PLAN.md -- DS Token Sweep (Part 2): Replace hardcoded styling in sequence/string/dictionary/timeline/main views (12 files)
+- [ ] 01-05-PLAN.md -- Verification: Debug test harness with rapid step transitions, SwiftLint UUID regression guard, grep-based styling audit, visual human verification
 
 ### Phase 2: Trace Pipeline (macOS)
 **Goal**: Algorithm solutions can record intermediate state snapshots that serialize to well-formed JSON files
@@ -197,7 +198,7 @@ Note: Phases 1 and 4 are independent and could theoretically run in parallel. Ph
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation Bug Fixes | 0/4 | Planned | - |
+| 1. Foundation Bug Fixes | 0/5 | Planned | - |
 | 2. Trace Pipeline (macOS) | 0/6 | Not started | - |
 | 3. Trace Pipeline (iOS) + Bridge | 0/5 | Not started | - |
 | 4. Comparison Strategies | 0/6 | Not started | - |
