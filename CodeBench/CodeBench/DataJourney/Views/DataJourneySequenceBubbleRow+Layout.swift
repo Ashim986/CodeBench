@@ -1,3 +1,4 @@
+import LeetPulseDesignSystemCore
 import SwiftUI
 
 private struct SequenceLane {

@@ -1,3 +1,4 @@
+import LeetPulseDesignSystemCore
 import SwiftUI
 
 extension DataJourneyView {

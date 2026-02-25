@@ -1,4 +1,4 @@
-
+import LeetPulseDesignSystemCore
 import SwiftUI
 
 struct SequenceBubbleRow: View {

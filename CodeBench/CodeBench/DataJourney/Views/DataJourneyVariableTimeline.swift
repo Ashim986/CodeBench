@@ -1,4 +1,4 @@
-
+import LeetPulseDesignSystemCore
 import SwiftUI
 
 /// Collapsible timeline showing how each variable evolves across all playback steps.

@@ -1,4 +1,4 @@
-
+import LeetPulseDesignSystemCore
 import SwiftUI
 
 /// Displays a string as a full label above a row of character bubbles with index pointers.
