@@ -32,14 +32,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. Graph nodes animate position changes smoothly during step playback with no identity-based flickering or node destruction/recreation
   2. Layout computation runs once per data change, not on every SwiftUI render cycle
   3. Step playback maintains 60fps on graph and tree visualizations (no force simulation in body)
-**Plans**: 5 plans
+**Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: Audit and replace UUID identity in GraphLayout.Node with stable semantic IDs
-- [ ] 01-02: Extract layout computation from SwiftUI body into cached/memoized state
-- [ ] 01-03: Verify tree layout (TraceTreeLayout) is also memoized, not recomputed per render
-- [ ] 01-04: Build test harness -- graph and tree visualizations with rapid step transitions to verify no flickering
-- [ ] 01-05: Profile frame rate during step playback on both graph and tree views
+- [ ] 01-01-PLAN.md -- Infrastructure: Add LeetPulseDesignSystem SPM dependency, delete DesignTokens.swift shim, remove TestCaseEvaluator/CodeBench duplicate
+- [ ] 01-02-PLAN.md -- Core Bug Fixes: Replace all UUID() identity with stable composite IDs, memoize layout computation in Graph/Tree/Trie views
+- [ ] 01-03-PLAN.md -- DS Token Sweep: Replace all hardcoded colors/fonts/spacing with LeetPulseDesignSystem tokens across all 27 visualization views
+- [ ] 01-04-PLAN.md -- Verification: Debug test harness with rapid step transitions, SwiftLint UUID regression guard, grep-based styling audit, visual human verification
 
 ### Phase 2: Trace Pipeline (macOS)
 **Goal**: Algorithm solutions can record intermediate state snapshots that serialize to well-formed JSON files
@@ -198,7 +197,7 @@ Note: Phases 1 and 4 are independent and could theoretically run in parallel. Ph
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation Bug Fixes | 0/5 | Not started | - |
+| 1. Foundation Bug Fixes | 0/4 | Planned | - |
 | 2. Trace Pipeline (macOS) | 0/6 | Not started | - |
 | 3. Trace Pipeline (iOS) + Bridge | 0/5 | Not started | - |
 | 4. Comparison Strategies | 0/6 | Not started | - |
