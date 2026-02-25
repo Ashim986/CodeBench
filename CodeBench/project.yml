@@ -8,12 +8,19 @@ options:
   createIntermediateGroups: true
   generateEmptyDirectories: true
 
+packages:
+  LeetPulseDesignSystem:
+    path: ../../LeetPulseDesignSystem
+
 targets:
   CodeBench:
     type: application
     platform: iOS
     sources:
       - CodeBench
+    dependencies:
+      - package: LeetPulseDesignSystem
+        product: LeetPulseDesignSystemCore
     resources:
       - path: CodeBench/Resources
         type: folder

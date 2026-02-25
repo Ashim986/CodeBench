@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -19,6 +19,7 @@
 		382ABD2706C6F5D3B4D4008A /* DataJourneyHeapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D832F6D061675654B7DD815 /* DataJourneyHeapView.swift */; };
 		39415F4F87DB0E5F98582BB8 /* DataJourneyMatrixGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6716D41DCF8B7F15055D654B /* DataJourneyMatrixGridView.swift */; };
 		3E40AC5108E35761ED12476E /* DataJourneyStructureCanvasView+CombinedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC205B796DEE68DCC236EFB1 /* DataJourneyStructureCanvasView+CombinedList.swift */; };
+		3E7594794569CC25ADCA6723 /* LeetPulseDesignSystemCore in Frameworks */ = {isa = PBXBuildFile; productRef = 488E21691446EC42DBD6A2EB /* LeetPulseDesignSystemCore */; };
 		3F547BFC4CB4DA8648DDFD26 /* DataJourneyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD8A9895C6FAF0D80A4CC5B /* DataJourneyInteractor.swift */; };
 		409ECD93334BD9A02418E50F /* ResultsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A75F36A04FBDEDCFD77933 /* ResultsLoader.swift */; };
 		420AC42398E0BACADA6EE37E /* DataJourneyPlaceholderViewiOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEAB0D0C880FA3A046DEAF0D /* DataJourneyPlaceholderViewiOS.swift */; };
@@ -50,7 +51,6 @@
 		C2A870FF47FA2C11B10C01CD /* DataJourneyView+Playback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010B4807A3DB2416BB4D24ED /* DataJourneyView+Playback.swift */; };
 		C91C0647026647A1A72A6C6C /* summary.json in Resources */ = {isa = PBXBuildFile; fileRef = E3A9B7B2A92F2F820EE473BE /* summary.json */; };
 		CEC53EC8133158791DD29E53 /* DataJourneyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747D38C3C0FFE561129683E2 /* DataJourneyModels.swift */; };
-		D16406BC9B3A084C8C6BF8B6 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD2FFA4585FA07F0F92941 /* DesignTokens.swift */; };
 		D7FC54F3E8FD9BB99F817CF9 /* StructureResolver+Handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C8927D12C2A32DC2B41AB6 /* StructureResolver+Handlers.swift */; };
 		DDF3F7D143CFDFF7C14DC10E /* DataJourneyStructureCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491E459F26057B02C6192118 /* DataJourneyStructureCanvasView.swift */; };
 		E25EC50B8D5C43BBDF3EDABB /* TopicBrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5457463E83F812AAEBCA698 /* TopicBrowseView.swift */; };
@@ -76,7 +76,6 @@
 		3F533E2D77F7E951A31E7459 /* DataJourneyCodeContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataJourneyCodeContext.swift; sourceTree = "<group>"; };
 		4289D2C11871BA379DE5ADB7 /* StructureResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructureResolver.swift; sourceTree = "<group>"; };
 		454A94634D1BB26D5D643480 /* DataJourneyVariableTimeline+Rendering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataJourneyVariableTimeline+Rendering.swift"; sourceTree = "<group>"; };
-		45FD2FFA4585FA07F0F92941 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		48C8927D12C2A32DC2B41AB6 /* StructureResolver+Handlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StructureResolver+Handlers.swift"; sourceTree = "<group>"; };
 		491E459F26057B02C6192118 /* DataJourneyStructureCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataJourneyStructureCanvasView.swift; sourceTree = "<group>"; };
 		4D9D1A7CB6E90096F61D7D55 /* DataJourneyModels+Display.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataJourneyModels+Display.swift"; sourceTree = "<group>"; };
@@ -94,6 +93,7 @@
 		9AD8A9895C6FAF0D80A4CC5B /* DataJourneyInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataJourneyInteractor.swift; sourceTree = "<group>"; };
 		9F338EEEECF8D0D90F2532B0 /* DataJourneyStructureCanvasView+Labels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataJourneyStructureCanvasView+Labels.swift"; sourceTree = "<group>"; };
 		A5457463E83F812AAEBCA698 /* TopicBrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicBrowseView.swift; sourceTree = "<group>"; };
+		A668218B686435823DDC7381 /* LeetPulseDesignSystem */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LeetPulseDesignSystem; path = ../../LeetPulseDesignSystem; sourceTree = SOURCE_ROOT; };
 		AC205B796DEE68DCC236EFB1 /* DataJourneyStructureCanvasView+CombinedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataJourneyStructureCanvasView+CombinedList.swift"; sourceTree = "<group>"; };
 		B84F5D8AEC27F360C25C641D /* intervals.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = intervals.json; sourceTree = "<group>"; };
 		C59F6D1E184E871D92FA32A3 /* CodeBenchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeBenchApp.swift; sourceTree = "<group>"; };
@@ -114,6 +114,17 @@
 		FD3BC2253556D66A2C7B29AE /* DataJourneyAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataJourneyAnimationController.swift; sourceTree = "<group>"; };
 		FEAB0D0C880FA3A046DEAF0D /* DataJourneyPlaceholderViewiOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataJourneyPlaceholderViewiOS.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		529130A93353C0038AAEA641 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3E7594794569CC25ADCA6723 /* LeetPulseDesignSystemCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		113765D071C777BB2B48FB7A /* Views */ = {
@@ -193,6 +204,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		4E306C175FCEDEC39494C844 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				A668218B686435823DDC7381 /* LeetPulseDesignSystem */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		59DCDD578FB246B88479CB56 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -246,6 +265,7 @@
 			isa = PBXGroup;
 			children = (
 				1649BA2767619C4D88DD3ADD /* CodeBench */,
+				4E306C175FCEDEC39494C844 /* Packages */,
 				59DCDD578FB246B88479CB56 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -253,7 +273,6 @@
 		F6705F6945A3F2DB49526FB1 /* DataJourney */ = {
 			isa = PBXGroup;
 			children = (
-				45FD2FFA4585FA07F0F92941 /* DesignTokens.swift */,
 				BC2C05CB31B88648B69C4972 /* iOS */,
 				8B6146D32F68C783B4FBCA5E /* Models */,
 				873068310493360C3D5AF1CC /* Services */,
@@ -271,6 +290,7 @@
 			buildPhases = (
 				7C4D656BE86ABDE3BA18C71E /* Sources */,
 				88CB58035C2D4691CC1F2AD4 /* Resources */,
+				529130A93353C0038AAEA641 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -278,7 +298,7 @@
 			);
 			name = CodeBench;
 			packageProductDependencies = (
-				C585886A2F4E7353009987E8 /* LeetCodeHelpers */,
+				488E21691446EC42DBD6A2EB /* LeetPulseDesignSystemCore */,
 			);
 			productName = CodeBench;
 			productReference = 61681EE28A38712EAD254030 /* CodeBench.app */;
@@ -309,8 +329,9 @@
 			mainGroup = C053F0C17A863C31C44614A8;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				C58588692F4E7353009987E8 /* XCLocalSwiftPackageReference "../TestCaseEvaluator" */,
+				D414422FB7218C5880142947 /* XCLocalSwiftPackageReference "../../LeetPulseDesignSystem" */,
 			);
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -375,7 +396,6 @@
 				C2A870FF47FA2C11B10C01CD /* DataJourneyView+Playback.swift in Sources */,
 				81F9EB28D53993150FF145B9 /* DataJourneyView+Selection.swift in Sources */,
 				2D47D4D1D95E945BC3A70493 /* DataJourneyView.swift in Sources */,
-				D16406BC9B3A084C8C6BF8B6 /* DesignTokens.swift in Sources */,
 				47FEA9CAAF63E673098A89BE /* ProblemBrowseView.swift in Sources */,
 				409ECD93334BD9A02418E50F /* ResultsLoader.swift in Sources */,
 				A7ED73BF75A1D3A5A30A8FDC /* SolutionView.swift in Sources */,
@@ -586,16 +606,16 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		C58588692F4E7353009987E8 /* XCLocalSwiftPackageReference "../TestCaseEvaluator" */ = {
+		D414422FB7218C5880142947 /* XCLocalSwiftPackageReference "../../LeetPulseDesignSystem" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../TestCaseEvaluator;
+			relativePath = ../../LeetPulseDesignSystem;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		C585886A2F4E7353009987E8 /* LeetCodeHelpers */ = {
+		488E21691446EC42DBD6A2EB /* LeetPulseDesignSystemCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = LeetCodeHelpers;
+			productName = LeetPulseDesignSystemCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
