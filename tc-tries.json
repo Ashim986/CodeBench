@@ -1,0 +1,1429 @@
+{
+  "topic": "tries",
+  "version": "1.0.0",
+  "generatedAt": "2026-02-20T16:12:00Z",
+  "problems": [
+    {
+      "problemSlug": "design-add-and-search-words-data-structure",
+      "leetCodeNumber": 211,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "a5cce6af-5c81-4bf2-8379-980a6457473c",
+          "input": "['WordDictionary', 'addWord', 'search']",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "1f0f0d53-3dda-46a9-b113-4bba1d0ce651",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "edf20a63-086a-4c6a-9f83-0f41cff1a92d",
+          "input": "['WordDictionary', 'search', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "38a62840-510d-466e-8f02-ac83f9a75839",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'search', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "8a9ae01b-ee71-4da0-89b9-f4b89a404b1c",
+          "input": "['WordDictionary', 'addWord', 'search', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "d96bc235-b7d8-4683-8779-2c983ad2a1dc",
+          "input": "['WordDictionary', 'search', 'search', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "f7a1045d-c14c-4326-8881-30400e1dbaa7",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'search', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "6ada9ff8-7aa0-4364-9446-1b32698adb3c",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "05afc099-8034-4141-9fca-dfd425aeb57e",
+          "input": "['WordDictionary', 'search', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "ed9e3a25-abcb-4f2b-aefd-5d1f07d18b1c",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "f0daa092-5490-4d6d-a3d2-70e2a3c0f10e",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "95622dae-ff23-4497-9440-24720263750b",
+          "input": "['WordDictionary', 'search', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "[false,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "cf10f8ac-54f6-4be6-8068-755c0a4c27be",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "2ac22141-0272-4992-b736-3285c158efa9",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "993bc05e-17b1-433a-828b-8b5747e19625",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "cc9a362f-8660-4dc9-9cac-e69277a673ea",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "a402ea62-933f-4548-9b16-2bfb65000962",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "1bf3b17c-b363-49fc-ac7f-60c6be3e3968",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "54507584-6d45-47d8-87b8-6b41b948169c",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "d8503c83-314a-44d6-8055-448694bbad72",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "043bd8ee-9a32-44e7-a128-56659246a379",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "f20407e1-b7ec-4991-8c32-c4c069db6ef5",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "9a2c631e-312c-4be3-acdc-cb8e945227af",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "ce67cdf1-8a2f-428c-94b1-5cf9befc7fdf",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "120153b0-ab4d-46cd-99ef-0c333c52d00e",
+          "input": "['WordDictionary', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'addWord', 'search']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "implement-trie-prefix-tree",
+      "leetCodeNumber": 208,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "9ec92828-370a-411a-b1b3-b338fcf6cf85",
+          "input": "['Trie', 'insert', 'insert', 'search', 'search', 'startsWith', 'startsWith']",
+          "expectedOutput": "[null,null,null,true,true,true,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "8b87af70-b4fc-4efa-8ec4-a8af166ba7ec",
+          "input": "['Trie', 'insert', 'search', 'startsWith']",
+          "expectedOutput": "[null,null,false,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "4ebd7284-3eb7-4c72-b5f0-2689835d81bd",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'search', 'search', 'search']",
+          "expectedOutput": "[null,null,null,null,true,false,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "ac48e20e-378b-4f7a-ba69-e3a2dfef7875",
+          "input": "['Trie', 'insert', 'insert', 'startsWith', 'startsWith', 'search']",
+          "expectedOutput": "[null,null,null,true,true,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "9637b330-5001-42e6-b60f-57e0813798c2",
+          "input": "['Trie', 'search', 'search', 'insert', 'insert', 'search']",
+          "expectedOutput": "[null,false,false,null,null,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "d1c2e05e-a9fd-4fb7-81d9-81b3761e6b00",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'insert', 'insert', 'search', 'search', 'search', 'search']",
+          "expectedOutput": "[null,null,null,null,null,null,true,true,true,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "140c906e-9f01-4b9c-b02c-a0e177f3f38c",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'startsWith', 'startsWith', 'startsWith']",
+          "expectedOutput": "[null,null,null,null,true,true,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "87f92699-84e9-44cb-95f2-17823227ed09",
+          "input": "['Trie', 'search', 'startsWith', 'insert', 'insert', 'search', 'search']",
+          "expectedOutput": "[null,false,false,null,null,true,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "e7f6b516-33da-44fb-b2b1-3ff23ef253fd",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'search', 'search', 'search']",
+          "expectedOutput": "[null,null,null,null,null,null,null,true,true,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "ae8fc466-d1f0-4c8e-a4db-f0b22ed16cd8",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'insert', 'insert', 'startsWith', 'startsWith', 'startsWith']",
+          "expectedOutput": "[null,null,null,null,null,null,true,true,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "c359fad4-ed41-402e-af4b-c1520818f75b",
+          "input": "['Trie', 'search', 'search', 'search', 'insert', 'insert', 'insert']",
+          "expectedOutput": "[null,false,false,false,null,null,null]",
+          "orderMatters": true
+        },
+        {
+          "id": "bcbcc728-238e-4f68-be24-b9dc850b20a6",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'search']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "e6e43335-c137-4df0-8501-0066de324557",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'startsWith']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "4ff2c72a-0dea-4323-baee-626266f3c62c",
+          "input": "['Trie', 'search', 'search', 'search', 'search', 'insert', 'insert']",
+          "expectedOutput": "[null,false,false,false,false,null,null]",
+          "orderMatters": true
+        },
+        {
+          "id": "774ed163-d4c8-4941-ab93-d9f65d87e251",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'search']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "d8d22b3d-2b90-44be-8796-376793636f32",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'startsWith']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "e8de91fa-c081-428e-ae0c-2bd97672c8bb",
+          "input": "['Trie', 'search', 'search', 'search', 'search', 'search', 'insert']",
+          "expectedOutput": "[null,false,false,false,false,false,null]",
+          "orderMatters": true
+        },
+        {
+          "id": "d7207f78-6117-4a01-b6fa-c6c2e568059c",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'search']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "e32bac3f-2db9-47fb-a830-c93488dbdd06",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'startsWith']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "225db699-a812-4a55-9ece-60c46d0efca1",
+          "input": "['Trie', 'search', 'search', 'search', 'search', 'search', 'search', 'insert']",
+          "expectedOutput": "[null,false,false,false,false,false,false,null]",
+          "orderMatters": true
+        },
+        {
+          "id": "fab0e668-369c-4924-9289-7f5fd05879c0",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'search']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "278bdc9e-159c-4ab4-ab57-596b14fc656f",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'startsWith']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "4bd93ecf-5e87-465d-92a4-14cbb1ad0be4",
+          "input": "['Trie', 'search', 'search', 'search', 'search', 'search', 'search', 'search', 'insert']",
+          "expectedOutput": "[null,false,false,false,false,false,false,false,null]",
+          "orderMatters": true
+        },
+        {
+          "id": "72eaa292-3add-4edb-9f27-8025c0a0cb9c",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'search']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,null,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "0c7c5889-9e33-4d2c-970c-9a14decf7e08",
+          "input": "['Trie', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'startsWith']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,null,null,false]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "longest-word-in-dictionary",
+      "leetCodeNumber": 720,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "200d0442-370c-4319-addf-aeda8901d3d8",
+          "input": "words = [\"a\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "46924aca-04ec-4ee4-a1e9-535bc29d7d4f",
+          "input": "words = []",
+          "expectedOutput": "\"\"",
+          "orderMatters": true
+        },
+        {
+          "id": "00617d16-c63e-432b-925c-6ab36accc42b",
+          "input": "words = [\"a\",\"b\",\"c\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "bbb43a62-8cdd-4efb-afc8-27c6efd8e4ca",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "60540a34-a586-4d03-aa7a-719f21481e5f",
+          "input": "words = [\"banana\",\"ban\",\"ba\",\"b\"]",
+          "expectedOutput": "b",
+          "orderMatters": true
+        },
+        {
+          "id": "54387f8e-8337-438a-9195-b8492fecadf1",
+          "input": "words = [\"word\",\"wor\",\"wo\",\"w\"]",
+          "expectedOutput": "w",
+          "orderMatters": true
+        },
+        {
+          "id": "b46d1b8a-ea0c-438e-837d-6ba906d1d0a7",
+          "input": "words = [\"a\",\"aa\",\"aaa\",\"aaaa\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "e621ae15-6d88-417b-bf4f-e734f3b5b991",
+          "input": "words = [\"b\",\"bb\",\"bbb\",\"bbbb\"]",
+          "expectedOutput": "b",
+          "orderMatters": true
+        },
+        {
+          "id": "ac690377-14a6-42a1-8182-8a447af2dfa0",
+          "input": "words = [\"c\",\"cc\",\"ccc\",\"cccc\"]",
+          "expectedOutput": "c",
+          "orderMatters": true
+        },
+        {
+          "id": "53e80d56-ca0b-4915-8ab8-0d4cd3755d1c",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"application\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "779979aa-ad6b-4558-9d97-af3aa95a7a72",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apply\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "67d3cea4-cc26-4637-a38f-1732c0e4db6d",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apart\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "d8eac0a3-d8d1-4e6a-81a9-0eadcaa21b67",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apt\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "91719b44-5ae4-4030-b842-f0d6bc4d64de",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apex\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "c970108e-7082-4a0f-a427-5ae5b434f29c",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apricot\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "c103901d-9eae-44d0-bcbd-bf6e2ccb7d19",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apron\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "46e1f7dd-9988-45b8-a8df-2034eb2dd4aa",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apology\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "e6b121e0-53f7-45fa-8764-9ddd88127de4",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apostle\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "24f1f95f-bd05-42e5-8061-7f6de5e7aecb",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apothecary\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "29a9d60a-1a43-4919-a317-ef27d1d7eab4",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apricots\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "c8890f1e-bada-4b3b-b883-a78dd36453fa",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"aprons\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "b9e37e4d-9ffa-478c-a1ba-d51df0bc84a0",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apologies\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "225bb32a-3576-4607-9428-a496a6b9228c",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apostles\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "cc9b903f-761e-4203-a168-9a8bede60559",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apothecaries\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "5bf6f7c0-48ef-48d8-ac3d-cefde45909e4",
+          "input": "words = [\"apple\",\"app\",\"ap\",\"a\",\"apricot\",\"apron\",\"apology\",\"apostle\",\"apothecary\"]",
+          "expectedOutput": "a",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "map-sum-pairs",
+      "leetCodeNumber": 677,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "4a70d811-0702-4640-9425-6c5a7116ef57",
+          "input": "['MapSum', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "22ecb4d1-3c8d-4352-8622-eda90b6ab049",
+          "input": "['MapSum', 'insert', 'sum', 'insert', 'sum']",
+          "expectedOutput": "[null,null,1,null,2]",
+          "orderMatters": true
+        },
+        {
+          "id": "835f8ad5-c2fe-46f4-b038-e2485b112598",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,null,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "a86686ba-bfae-49b2-9baf-eabebad2398e",
+          "input": "['MapSum', 'insert', 'sum', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,1,null,null,2]",
+          "orderMatters": true
+        },
+        {
+          "id": "c7c931a2-37de-473d-921f-7d00f2e0cd96",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,null,null,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "49c73cbc-5e6a-437f-8861-dbd6c6d7ef5a",
+          "input": "['MapSum', 'insert', 'insert', 'sum', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,1,null,2]",
+          "orderMatters": true
+        },
+        {
+          "id": "dc3e9961-23c1-411e-b22f-34b2bd29a1db",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'sum', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,null,1,null,2]",
+          "orderMatters": true
+        },
+        {
+          "id": "2ddc3ecd-567d-4975-8371-337990a426c8",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,null,null,null,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "b855f7ac-fe83-4e2c-bab3-1d4308cdd711",
+          "input": "['MapSum', 'insert', 'sum', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,1,null,null,null,2]",
+          "orderMatters": true
+        },
+        {
+          "id": "1903229c-86f3-429a-b311-b31173a44189",
+          "input": "['MapSum', 'insert', 'insert', 'sum', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,1,null,null,null,2]",
+          "orderMatters": true
+        },
+        {
+          "id": "776dd7f0-882e-4a5f-ab8e-e862a37f181a",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'sum', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,null,0,null,null,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "540da747-28cf-47f2-aac9-692c81fb114a",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'sum', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,null,null,0,null,null,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "28f5e0eb-2e75-4197-9dec-d148b918d649",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,null,null,null,0,null,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "75254f56-c05a-45b0-a724-fcb1750bcc2e",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum', 'sum']",
+          "expectedOutput": "[null,null,null,null,null,null,null,0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "b0825dad-b6f6-4bd6-87ec-3ff8c689ae26",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "a6a5913d-5582-45e4-852f-887b8b89dc20",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "31552c8d-2648-4b30-9f70-f12a148cd746",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "f11d9835-c560-476c-9384-dce319d22a06",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,null,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "f3f7b930-9807-4609-aab4-3e70064536ca",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,null,null,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "38041d26-62a6-42c1-b1f3-35903f6021e1",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "8b126b8b-90b5-4bbc-8829-15e686a9d888",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "91",
+          "orderMatters": true
+        },
+        {
+          "id": "5b84cd8d-1960-4155-bd42-2194b4c99f6e",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "105",
+          "orderMatters": true
+        },
+        {
+          "id": "6a231061-6e18-44e3-99e3-9721ee8da2df",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "120",
+          "orderMatters": true
+        },
+        {
+          "id": "4a0a3011-c112-44da-bf27-9af0ffef3a99",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "136",
+          "orderMatters": true
+        },
+        {
+          "id": "24124030-2a0c-4b49-876d-fe8e875ee68d",
+          "input": "['MapSum', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert', 'sum']",
+          "expectedOutput": "153",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "replace-words",
+      "leetCodeNumber": 648,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "370c2a7b-3608-449a-88dd-d70fd26d865f",
+          "input": "dictionary = [\"a\"], sentence = \"a\"",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "e376b5db-7f02-4d16-9b0e-d80331b3a298",
+          "input": "dictionary = [\"a\"], sentence = \"aa\"",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "81ef16ca-aa13-4526-be4c-62eb2d3af569",
+          "input": "dictionary = [\"a\"], sentence = \"aaa\"",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "5ce7083a-c7cc-4dbf-a03b-8f8b4c1801bb",
+          "input": "dictionary = [\"cat\"], sentence = \"cat\"",
+          "expectedOutput": "cat",
+          "orderMatters": true
+        },
+        {
+          "id": "1b01ad27-4671-45c3-96e0-2766363ddcc0",
+          "input": "dictionary = [\"cat\"], sentence = \"cattle\"",
+          "expectedOutput": "cat",
+          "orderMatters": true
+        },
+        {
+          "id": "4f162f4b-164d-48a1-9a17-c8ab5ccd7220",
+          "input": "dictionary = [\"cat\"], sentence = \"category\"",
+          "expectedOutput": "cat",
+          "orderMatters": true
+        },
+        {
+          "id": "8e1f6484-d871-4e84-93f2-9674e44acde7",
+          "input": "dictionary = [\"cat\", \"dog\"], sentence = \"cattle dog\"",
+          "expectedOutput": "cat dog",
+          "orderMatters": true
+        },
+        {
+          "id": "34b726bd-0c1d-4457-aa63-697eea00dc32",
+          "input": "dictionary = [\"cat\", \"dog\"], sentence = \"category dog\"",
+          "expectedOutput": "cat dog",
+          "orderMatters": true
+        },
+        {
+          "id": "4e7f4886-557c-4618-a34a-01c25e725b1b",
+          "input": "dictionary = [\"cat\", \"dog\"], sentence = \"cattle category\"",
+          "expectedOutput": "cat cat",
+          "orderMatters": true
+        },
+        {
+          "id": "cfe29adb-cc79-4cb0-b792-c83a55d0df64",
+          "input": "dictionary = [], sentence = \"hello world\"",
+          "expectedOutput": "hello world",
+          "orderMatters": true
+        },
+        {
+          "id": "7a9ab5a7-3092-4364-96c0-2186011e6f12",
+          "input": "dictionary = [\"hello\"], sentence = \"hello world\"",
+          "expectedOutput": "hello world",
+          "orderMatters": true
+        },
+        {
+          "id": "a100b423-822e-44c3-87b3-c44ee5639579",
+          "input": "dictionary = [\"hello\"], sentence = \"hellohello\"",
+          "expectedOutput": "hello",
+          "orderMatters": true
+        },
+        {
+          "id": "246f0adc-da7e-4a6e-a602-5b0a12ed91ef",
+          "input": "dictionary = [\"hello\"], sentence = \"hellohellohello\"",
+          "expectedOutput": "hello",
+          "orderMatters": true
+        },
+        {
+          "id": "f0b9b0b8-d610-45b9-8e64-1f9298f65971",
+          "input": "dictionary = [\"a\", \"aa\"], sentence = \"aaa\"",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "b49498f2-7f2e-4e0a-a1e9-ab8270ce6265",
+          "input": "dictionary = [\"a\", \"aa\"], sentence = \"aaaa\"",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "186a6a7e-77be-4d45-a83d-1d02ba81d025",
+          "input": "dictionary = [\"a\", \"aa\"], sentence = \"aaaaa\"",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "59eebd3a-1c35-4377-90e2-a6b699b332ea",
+          "input": "dictionary = [\"apple\"], sentence = \"appleapple\"",
+          "expectedOutput": "apple",
+          "orderMatters": true
+        },
+        {
+          "id": "71fa7a09-afc6-46e8-93f0-27ef69eb42e2",
+          "input": "dictionary = [\"apple\"], sentence = \"appleappleapple\"",
+          "expectedOutput": "apple",
+          "orderMatters": true
+        },
+        {
+          "id": "7a64643f-7862-44e0-8cec-ab49b6b89f05",
+          "input": "dictionary = [\"apple\"], sentence = \"appleappleappleapple\"",
+          "expectedOutput": "apple",
+          "orderMatters": true
+        },
+        {
+          "id": "3497c23b-fca3-4185-9e5c-9a0f645a97dd",
+          "input": "dictionary = [\"a\", \"b\"], sentence = \"ab\"",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "cedee841-c0f1-4436-bfb3-f31cbd3456eb",
+          "input": "dictionary = [\"a\", \"b\"], sentence = \"ba\"",
+          "expectedOutput": "b",
+          "orderMatters": true
+        },
+        {
+          "id": "d6aeb0ed-a1f6-4913-b24f-861228b61856",
+          "input": "dictionary = [\"a\", \"b\"], sentence = \"aba\"",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "6b405630-0fd4-411c-8646-fb1740a414cf",
+          "input": "dictionary = [\"\"], sentence = \"hello world\"",
+          "expectedOutput": "",
+          "orderMatters": true
+        },
+        {
+          "id": "c4023bc3-7991-470d-adf8-bb88906af86a",
+          "input": "dictionary = [\"a\", \"b\", \"c\"], sentence = \"abc\"",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "14bbc0ce-2345-440e-9c85-55a91620f335",
+          "input": "dictionary = [\"a\", \"b\", \"c\"], sentence = \"bca\"",
+          "expectedOutput": "b",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "short-encoding-of-words",
+      "leetCodeNumber": 820,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "5f288bd8-e47e-4b9a-870c-3e90723fb1cc",
+          "input": "words = []",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "8130d4a8-8330-4a15-b720-a9fd265bfcfe",
+          "input": "words = [\"a\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "00a76452-9f03-422f-870c-aa95a7720931",
+          "input": "words = [\"abc\", \"def\"]",
+          "expectedOutput": "8",
+          "orderMatters": true
+        },
+        {
+          "id": "e0cbeb0e-31f0-46d6-b495-547a429bb28c",
+          "input": "words = [\"abc\", \"abcd\"]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "fa14d1c8-4b74-4c88-849a-b8667a1083cf",
+          "input": "words = [\"abcd\", \"abc\"]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "37b3c698-1029-4a81-bc18-aeefb0261934",
+          "input": "words = [\"a\", \"b\", \"c\"]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "be67c44e-13f0-45c7-a2a7-53e9fb368a81",
+          "input": "words = [\"time\", \"me\", \"bell\", \"time\"]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "910e8798-51aa-42fd-9fd9-c593885d3702",
+          "input": "words = [\"a\", \"b\", \"c\", \"d\", \"e\", \"f\", \"g\", \"h\", \"i\", \"j\", \"k\", \"l\", \"m\", \"n\", \"o\", \"p\", \"q\", \"r\", \"s\", \"t\", \"u\", \"v\", \"w\", \"x\", \"y\", \"z\"]",
+          "expectedOutput": "52",
+          "orderMatters": true
+        },
+        {
+          "id": "0a54e37e-801e-4063-b939-0f56f2217a4f",
+          "input": "words = [\"abcdefghijklmnopqrstuvwxyz\"]",
+          "expectedOutput": "27",
+          "orderMatters": true
+        },
+        {
+          "id": "3df50063-e14c-4e8f-a2ab-7a3d433f32b2",
+          "input": "words = [\"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\"]",
+          "expectedOutput": "27",
+          "orderMatters": true
+        },
+        {
+          "id": "57373b98-11f2-4829-b993-4d68b58cb636",
+          "input": "words = [\"a\", \"a\", \"a\", \"a\", \"a\", \"a\", \"a\", \"a\", \"a\", \"a\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "2ba44dcd-b671-4da2-b645-4dbb6608a618",
+          "input": "words = [\"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\"]",
+          "expectedOutput": "27",
+          "orderMatters": true
+        },
+        {
+          "id": "53e354aa-27c3-4ba3-a8bc-406c8b73263e",
+          "input": "words = [\"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\", \"abcdefghijklmnopqrstuvwxyz\"]",
+          "expectedOutput": "27",
+          "orderMatters": true
+        },
+        {
+          "id": "8aee83e2-27e6-4363-9a3e-3e027a7e5236",
+          "input": "words = [\"apple\", \"app\", \"ap\"]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "d66e66fc-cf8b-473c-827f-6ac7f6f67a41",
+          "input": "words = [\"apple\", \"app\", \"ap\", \"a\"]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "aab01f9c-aeb7-4577-ad9d-cb4507b78c72",
+          "input": "words = [\"a\", \"aa\", \"aaa\"]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "cf2d146e-56b9-4659-8f44-ed09d34bdd81",
+          "input": "words = [\"aaa\", \"aa\", \"a\"]",
+          "expectedOutput": "9",
+          "orderMatters": true
+        },
+        {
+          "id": "f9191904-ad47-4769-8ef0-ed2b3b768ae2",
+          "input": "words = [\"abc\", \"abc\", \"abc\"]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "9c447dc8-d870-4887-a2b9-4a66194b3e73",
+          "input": "words = [\"a\", \"aa\", \"aaa\", \"aaaa\", \"aaaaa\", \"aaaaaa\", \"aaaaaaa\", \"aaaaaaaa\", \"aaaaaaaaa\", \"aaaaaaaaaa\"]",
+          "expectedOutput": "65",
+          "orderMatters": true
+        },
+        {
+          "id": "dff8a3df-6fb5-49b7-b327-f894dd215341",
+          "input": "words = [\"\", \"a\", \"aa\", \"aaa\"]",
+          "expectedOutput": "9",
+          "orderMatters": true
+        },
+        {
+          "id": "2be7e234-0726-4473-8f2d-69d4c64db5e7",
+          "input": "words = [\"a\", \"\", \"aa\", \"aaa\"]",
+          "expectedOutput": "9",
+          "orderMatters": true
+        },
+        {
+          "id": "fe27864f-017b-4081-9c8d-4d4669796727",
+          "input": "words = [\"a\", \"aa\", \"\", \"aaa\"]",
+          "expectedOutput": "9",
+          "orderMatters": true
+        },
+        {
+          "id": "5d4d5a26-5c2a-464a-a9a1-172d7bec431c",
+          "input": "words = [\"a\", \"aa\", \"aaa\", \"\"]",
+          "expectedOutput": "9",
+          "orderMatters": true
+        },
+        {
+          "id": "de32cbad-6bb1-45f6-828a-c9d625732b90",
+          "input": "words = [\"abc\", \"abcde\", \"abcdef\", \"abcdefg\", \"abcdefgh\", \"abcdefghi\", \"abcdefghij\"]",
+          "expectedOutput": "55",
+          "orderMatters": true
+        },
+        {
+          "id": "f850dcc4-4189-43f4-b2e2-143201d15793",
+          "input": "words = [\"abcdefghij\", \"abcdefghi\", \"abcdefgh\", \"abcdefg\", \"abcdef\", \"abcde\", \"abcd\", \"abc\"]",
+          "expectedOutput": "60",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "top-k-frequent-words",
+      "leetCodeNumber": 692,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "c807e573-3eab-4aa1-b8d8-dc7197c9bd3b",
+          "input": "words = [\"a\",\"b\",\"c\"], k = 3",
+          "expectedOutput": "[\"a\",\"b\",\"c\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "db47dce3-f4e1-459f-b2d6-064f9e5994b8",
+          "input": "words = [\"a\",\"a\",\"a\"], k = 1",
+          "expectedOutput": "[\"a\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "714e5f67-8b4f-49ed-879e-06095937f97d",
+          "input": "words = [\"a\",\"b\",\"c\"], k = 1",
+          "expectedOutput": "[\"a\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "19e440e8-3ec6-4c6c-9c83-642766c9e3c8",
+          "input": "words = [], k = 2",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "cb6035f0-ec8b-470d-8897-d53045a8438a",
+          "input": "words = [\"a\"], k = 1",
+          "expectedOutput": "[\"a\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "bf735007-eba2-40b7-88af-c100e73f20ce",
+          "input": "words = [\"a\",\"b\",\"c\"], k = 0",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "b1344f17-24d5-4667-916a-add44a9314de",
+          "input": "words = [\"a\",\"a\",\"b\",\"b\",\"c\"], k = 2",
+          "expectedOutput": "[\"a\",\"b\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "b1c143c9-e2b4-45fa-8347-203c92a2f1aa",
+          "input": "words = [\"a\",\"b\",\"c\",\"d\",\"e\"], k = 5",
+          "expectedOutput": "[\"a\",\"b\",\"c\",\"d\",\"e\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "c6f7963d-532c-43ec-b584-06a903c12aef",
+          "input": "words = [\"a\",\"a\",\"a\",\"b\",\"b\",\"c\"], k = 3",
+          "expectedOutput": "[\"a\",\"b\",\"c\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "46a1c7e5-863c-4b5b-8e46-e7bdce9a48a7",
+          "input": "words = [\"z\",\"y\",\"x\"], k = 3",
+          "expectedOutput": "[\"z\",\"y\",\"x\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "e01441a9-d4bf-4719-8c99-15ffef367a31",
+          "input": "words = [\"apple\",\"banana\",\"cherry\"], k = 3",
+          "expectedOutput": "[\"apple\",\"banana\",\"cherry\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "1a355dc3-bba6-4ed0-b4a0-56d241372418",
+          "input": "words = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\"], k = 4",
+          "expectedOutput": "[\"a\",\"b\",\"c\",\"d\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "306ed016-7f45-44bb-8b94-617da86bd771",
+          "input": "words = [\"hello\",\"world\",\"hello\",\"world\"], k = 2",
+          "expectedOutput": "[\"hello\",\"world\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "88fbe2cc-3b15-4dcd-be02-252707bd1d66",
+          "input": "words = [\"a\",\"a\",\"b\",\"b\",\"c\",\"c\"], k = 2",
+          "expectedOutput": "[\"a\",\"b\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "6f693636-eb6b-4be5-a34a-934791f841af",
+          "input": "words = [\"x\",\"y\",\"z\",\"x\",\"y\",\"z\"], k = 3",
+          "expectedOutput": "[\"x\",\"y\",\"z\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "bf8ad6dc-beea-4fa3-b92d-f773a1750cc0",
+          "input": "words = [\"abc\",\"def\",\"ghi\"], k = 3",
+          "expectedOutput": "[\"abc\",\"def\",\"ghi\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "7810391f-4da1-47a8-8b21-645de27f2acf",
+          "input": "words = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\"], k = 7",
+          "expectedOutput": "[\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "d25da584-0f9a-481a-a7bc-24fa904c913e",
+          "input": "words = [\"apple\",\"banana\",\"orange\"], k = 3",
+          "expectedOutput": "[\"apple\",\"banana\",\"orange\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "71016601-0f4b-40ae-9d5f-d830dc69054c",
+          "input": "words = [\"hello\",\"hello\",\"hello\"], k = 1",
+          "expectedOutput": "[\"hello\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "99ff9693-00ae-4e82-8395-e8f00e7312c0",
+          "input": "words = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\"], k = 8",
+          "expectedOutput": "[\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "75ec1639-153b-4d7d-8368-5729eb8190ec",
+          "input": "words = [\"x\",\"x\",\"x\",\"y\",\"y\",\"y\"], k = 2",
+          "expectedOutput": "[\"x\",\"y\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "95d3c0a0-051d-403c-aee4-eeeb255a7b11",
+          "input": "words = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\"], k = 9",
+          "expectedOutput": "[\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "aa4d355b-5544-4ae3-b16b-d517b9e2ae5d",
+          "input": "words = [\"apple\",\"banana\",\"cherry\",\"date\"], k = 4",
+          "expectedOutput": "[\"apple\",\"banana\",\"cherry\",\"date\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "a5a072f1-f138-4cee-9d9f-1241728a9abf",
+          "input": "words = [\"hello\",\"world\",\"abc\",\"def\"], k = 4",
+          "expectedOutput": "[\"hello\",\"world\",\"abc\",\"def\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "ab9c25f4-316d-4f8b-af22-7429a40969c1",
+          "input": "words = [\"a\",\"a\",\"b\",\"b\",\"c\",\"c\",\"d\"], k = 3",
+          "expectedOutput": "[\"a\",\"b\",\"c\"]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "word-search-ii",
+      "leetCodeNumber": 212,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "cd27884b-858b-4ba7-a615-dd6285e0c234",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"b\"],[\"c\",\"d\"]]', '[\"abcb\"]']]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "6aeb520f-79f8-405d-a32e-da4dfa22a52a",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"a\"],[\"a\",\"a\"]]', '[\"aa\"]']]",
+          "expectedOutput": "[\"aa\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "1f8a4631-cb6d-49c5-994b-acaf6071dd58",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"b\"],[\"c\",\"d\"]]', '[\"abcd\"]']]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "0807e892-86af-488b-8784-fede3b1e85c8",
+          "input": "[['WordSearch', 'find'], ['[[\"o\",\"a\"],[\"e\",\"t\"]]', '[\"oath\",\"pea\"]']]",
+          "expectedOutput": "[\"oath\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "d0e7d60c-1e09-4b35-81a3-b5b6284c38ef",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"b\"],[\"c\",\"d\"]]', '[\"ab\",\"cd\"]']]",
+          "expectedOutput": "[\"ab\",\"cd\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "d7077ff5-44e6-4dff-8502-600d9398a677",
+          "input": "[['WordSearch', 'find'], ['[[\"a\"],[\"b\"]]', '[\"ab\"]']]",
+          "expectedOutput": "[\"ab\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "00025565-5d45-4c71-b6b6-4c934bf4ef5b",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"b\"],[\"c\",\"d\"]]', '[\"abc\"]']]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "8d5a91d2-a1d1-4661-ad60-5a0695c6f0a8",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"a\"],[\"a\",\"a\"]]', '[\"aaaa\"]']]",
+          "expectedOutput": "[\"aaaa\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "6b90ced9-cab0-4284-b0eb-e9e64a8eda06",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"b\"],[\"c\",\"d\"]]', '[\"abcd\",\"ab\"]']]",
+          "expectedOutput": "[\"ab\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "c7b8ae10-65c6-4a23-a124-b3f6fa36fe23",
+          "input": "[['WordSearch', 'find'], ['[[\"o\",\"a\",\"a\",\"n\"],[\"e\",\"t\",\"a\",\"e\"],[\"i\",\"h\",\"k\",\"r\"],[\"i\",\"f\",\"l\",\"v\"]]', '[\"oath\",\"pea\",\"eat\",\"rain\"]']]",
+          "expectedOutput": "[\"oath\",\"eat\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "1fcd3c10-5492-4e9e-b070-ec5a495b7900",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"b\"],[\"c\",\"d\"]]', '[\"ab\",\"cd\",\"abcd\"]']]",
+          "expectedOutput": "[\"ab\",\"abcd\",\"cd\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "557a95ec-2e42-4e46-a079-444a9ee68619",
+          "input": "[['WordSearch', 'find'], ['[[\"a\"],[\"b\"],[\"c\"]]', '[\"abc\"]']]",
+          "expectedOutput": "[\"abc\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "232e10e9-e905-4682-8a63-1bebce522510",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"b\"],[\"c\",\"d\"]]', '[\"ab\",\"cd\",\"abc\"]']]",
+          "expectedOutput": "[\"abc\",\"ab\",\"cd\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "6b74252d-27bd-486a-b60f-b89bf2532f79",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"a\"],[\"a\",\"a\"]]', '[\"aaaa\",\"aa\"]']]",
+          "expectedOutput": "[\"aa\",\"aaaa\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "6d184e14-927d-478c-be5a-3bc6cd3419a4",
+          "input": "[['WordSearch', 'find'], ['[[\"o\",\"a\",\"a\",\"n\"],[\"e\",\"t\",\"a\",\"e\"],[\"i\",\"h\",\"k\",\"r\"],[\"i\",\"f\",\"l\",\"v\"]]', '[\"oath\",\"pea\",\"eat\",\"rain\",\"o\"]']]",
+          "expectedOutput": "[\"o\",\"oath\",\"eat\",\"rain\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "7af2bb03-1ca9-453d-92fe-14c132997cf1",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"b\"],[\"c\",\"d\"]]', '[\"ab\",\"cd\",\"abcd\",\"abc\"]']]",
+          "expectedOutput": "[\"ab\",\"abcd\",\"abc\",\"cd\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "b2fc5fa7-95bf-4a96-b8d6-4dbc85f57600",
+          "input": "[['WordSearch', 'find'], ['[[\"a\"],[\"b\"],[\"c\"]]', '[\"abc\",\"ab\"]']]",
+          "expectedOutput": "[\"abc\",\"ab\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "a1ca6268-ab48-49e3-b92c-0321ec8d7347",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"b\"],[\"c\",\"d\"]]', '[\"ab\",\"cd\",\"abc\",\"abcd\"]']]",
+          "expectedOutput": "[\"ab\",\"abcd\",\"abc\",\"cd\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "819f617b-1788-4b06-9e9d-fc3089efcb17",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"a\"],[\"a\",\"a\"]]', '[\"aaaa\",\"aa\",\"a\"]']]",
+          "expectedOutput": "[\"a\",\"aa\",\"aaaa\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "3e3b92ad-0b3e-4297-9c71-37f17a38bcc4",
+          "input": "[['WordSearch', 'find'], ['[[\"o\",\"a\",\"a\",\"n\"],[\"e\",\"t\",\"a\",\"e\"],[\"i\",\"h\",\"k\",\"r\"],[\"i\",\"f\",\"l\",\"v\"]]', '[\"oath\",\"pea\",\"eat\",\"rain\",\"o\",\"oa\"]']]",
+          "expectedOutput": "[\"o\",\"oa\",\"oath\",\"eat\",\"rain\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "ad4156a7-ea2b-475d-942f-38f8a62b836b",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"b\"],[\"c\",\"d\"]]', '[\"ab\",\"cd\",\"abcd\",\"abc\",\"ab\"]']]",
+          "expectedOutput": "[\"ab\",\"abc\",\"abcd\",\"cd\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "4f85aaf2-0006-4b57-bcfe-10860303b321",
+          "input": "[['WordSearch', 'find'], ['[[\"a\"],[\"b\"],[\"c\"]]', '[\"abc\",\"ab\",\"a\"]']]",
+          "expectedOutput": "[\"a\",\"ab\",\"abc\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "08efcf6f-b519-4682-aef8-553663144ff5",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"b\"],[\"c\",\"d\"]]', '[\"ab\",\"cd\",\"abc\",\"abcd\",\"ab\",\"a\"]']]",
+          "expectedOutput": "[\"a\",\"ab\",\"abc\",\"abcd\",\"cd\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "2f085e05-bd87-43a0-ac9d-9f72bc3afd3d",
+          "input": "[['WordSearch', 'find'], ['[[\"a\",\"a\"],[\"a\",\"a\"]]', '[\"aaaa\",\"aa\",\"a\",\"aaaaa\"]']]",
+          "expectedOutput": "[\"a\",\"aa\",\"aaaa\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "4f411bba-3435-4b60-b641-6dd4b0ee93f5",
+          "input": "[['WordSearch', 'find'], ['[[\"o\",\"a\",\"a\",\"n\"],[\"e\",\"t\",\"a\",\"e\"],[\"i\",\"h\",\"k\",\"r\"],[\"i\",\"f\",\"l\",\"v\"]]', '[\"oath\",\"pea\",\"eat\",\"rain\",\"o\",\"oa\",\"oat\"]']]",
+          "expectedOutput": "[\"oath\",\"o\",\"oa\",\"oat\",\"eat\",\"pea\",\"rain\"]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "implement-magic-dictionary",
+      "leetCodeNumber": 676,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "d5c1d385-32ad-42e2-9a6f-a55e08313aa5",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'search', 'search']",
+          "expectedOutput": "[null,null,false,true,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "94483e5c-d8bf-458f-a168-03fdb131f0c2",
+          "input": "['MagicDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[null,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "b11635b6-8014-4f52-a3a7-36aa942e4fc2",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'search']",
+          "expectedOutput": "[null,null,false,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "dfdda647-e177-47a9-a3c5-72cfaaf09973",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'buildDictionary', 'search']",
+          "expectedOutput": "[null,null,false,null,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "c3a7ad0e-0f98-47c2-82aa-08e3862a3834",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'search', 'buildDictionary', 'search']",
+          "expectedOutput": "[null,null,false,true,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "0d8013c8-f9e8-4d19-a214-f453e6787eb6",
+          "input": "['MagicDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[null,null,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "bd389b29-abe0-411b-9d5d-372e9be86002",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[null,null,false,null,null,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "87b79c22-0ebe-4ede-9ddc-6b67f32357c7",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'search', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[null,null,false,true,null,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "4f727e9e-b7fa-495f-b5e6-df99708faa33",
+          "input": "['MagicDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[null,null,null,null,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "8b836569-e45b-4ac0-a5dd-e9c9054f6453",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[null,null,false,null,null,null,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "eeb0c1c6-b19f-40f3-87d2-e373de88967a",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'search', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[false,true,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "a552c8fb-08f8-4322-9018-b05b874cbc24",
+          "input": "['MagicDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[false]",
+          "orderMatters": true
+        },
+        {
+          "id": "e91851c3-6fd9-4048-9f2f-5f16a9536df8",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[false,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "31074455-8bdf-4829-8f81-4252bfff7c26",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'search', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[false,true,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "e691a10d-c8a9-4dbe-b3bd-42c6157698fa",
+          "input": "['MagicDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[false]",
+          "orderMatters": true
+        },
+        {
+          "id": "cb407c37-2001-414d-8c5a-af30bbce0779",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[false,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "b8f32046-fc98-4bf5-a229-4a0fee743108",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'search', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[false,true,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "ad8db53d-073d-4376-a32e-a485652da6a4",
+          "input": "['MagicDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[false]",
+          "orderMatters": true
+        },
+        {
+          "id": "e6a4c9bf-98e8-42a5-ac04-9f5959d3fbfc",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[false,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "85b64fcc-6807-4833-b048-b59a6df3b2a5",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'search', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[false,true,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "5fe3ec73-f3d3-4e89-b3a3-ed31a1d0cd27",
+          "input": "['MagicDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "f55b8b31-7199-4df9-823a-46c94a5ab357",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "b73cb518-1fd7-4b51-8670-8a438598b241",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'search', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[false,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "3d252d00-0762-41da-9f43-a6653adde2e5",
+          "input": "['MagicDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "c03af727-7b4f-401a-9c0b-6b1db3848b4e",
+          "input": "['MagicDictionary', 'buildDictionary', 'search', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'buildDictionary', 'search']",
+          "expectedOutput": "[false,false]",
+          "orderMatters": true
+        }
+      ]
+    }
+  ]
+}

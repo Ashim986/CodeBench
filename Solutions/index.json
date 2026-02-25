@@ -1,0 +1,89 @@
+{
+  "topics": [
+    {
+      "topic": "arrays-hashing",
+      "file": "arrays-hashing.json",
+      "count": 102
+    },
+    {
+      "topic": "backtracking",
+      "file": "backtracking.json",
+      "count": 27
+    },
+    {
+      "topic": "binary-search",
+      "file": "binary-search.json",
+      "count": 32
+    },
+    {
+      "topic": "bit-manipulation",
+      "file": "bit-manipulation.json",
+      "count": 19
+    },
+    {
+      "topic": "dynamic-programming",
+      "file": "dynamic-programming.json",
+      "count": 74
+    },
+    {
+      "topic": "graphs",
+      "file": "graphs.json",
+      "count": 22
+    },
+    {
+      "topic": "greedy",
+      "file": "greedy.json",
+      "count": 23
+    },
+    {
+      "topic": "heap-priority-queue",
+      "file": "heap-priority-queue.json",
+      "count": 15
+    },
+    {
+      "topic": "intervals",
+      "file": "intervals.json",
+      "count": 5
+    },
+    {
+      "topic": "linked-list",
+      "file": "linked-list.json",
+      "count": 38
+    },
+    {
+      "topic": "math-geometry",
+      "file": "math-geometry.json",
+      "count": 114
+    },
+    {
+      "topic": "misc",
+      "file": "misc.json",
+      "count": 43
+    },
+    {
+      "topic": "sliding-window",
+      "file": "sliding-window.json",
+      "count": 12
+    },
+    {
+      "topic": "stack",
+      "file": "stack.json",
+      "count": 40
+    },
+    {
+      "topic": "trees",
+      "file": "trees.json",
+      "count": 69
+    },
+    {
+      "topic": "tries",
+      "file": "tries.json",
+      "count": 10
+    },
+    {
+      "topic": "two-pointers",
+      "file": "two-pointers.json",
+      "count": 67
+    }
+  ]
+}

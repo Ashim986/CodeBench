@@ -1,0 +1,874 @@
+{
+  "solutions": [
+    {
+      "approaches": [
+        {
+          "approach": "1. Map email to account index\n2. Union emails within each account\n3. Group emails by root, attach to name",
+          "code": "class Solution {\n    func accountsMerge(_ accounts: [[String]]) -> [[String]] {\n        var parent: [String: String] = [:]\n        var emailToName: [String: String] = [:]\n\n        func find(_ x: String) -> String {\n            if parent[x] == nil { parent[x] = x }\n            if parent[x] != x { parent[x] = find(parent[x]!) }\n            return parent[x]!\n        }\n\n        func union(_ x: String, _ y: String) {\n            parent[find(x)] = find(y)\n        }\n\n        for account in accounts {\n            let name = account[0]\n            for i in 1..<account.count {\n                emailToName[account[i]] = name\n                if i > 1 { union(account[1], account[i]) }\n            }\n        }\n\n        var groups: [String: [String]] = [:]\n        for email in emailToName.keys {\n            groups[find(email), default: []].append(email)\n        }\n\n        return groups.values.map { emails in\n            [emailToName[emails[0]]!] + emails.sorted()\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Parent map",
+            "time": "O(n × α(n))",
+            "timeExplanation": "Union-Find operations"
+          },
+          "explanation": "Same email = same person.",
+          "id": "5e2514a3-5230-4041-b19a-f108efe359d4",
+          "intuition": "Union emails in same account, group by root.",
+          "name": "Union Find",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "Merged accounts",
+              "explanation": "Same person's accounts merged",
+              "id": "94838e6d-4fee-43f0-bf0c-8bb71ed79b99",
+              "input": "accounts with overlapping emails"
+            }
+          ]
+        }
+      ],
+      "id": "ca392b78-c624-42b7-bb06-3d5afaf8698d",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "accounts-merge",
+      "relatedProblems": [],
+      "summary": "Merge accounts with same emails. Union Find on emails."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Map: original -> clone\n2. DFS: if node in map, return clone\n3. Create clone, add to map\n4. Recursively clone neighbors",
+          "code": "class Solution {\n    func cloneGraph(_ node: Node?) -> Node? {\n        guard let node = node else { return nil }\n\n        var cloned: [Int: Node] = [:]\n\n        func dfs(_ node: Node) -> Node {\n            if let clone = cloned[node.val] { return clone }\n\n            let clone = Node(node.val)\n            cloned[node.val] = clone\n\n            for neighbor in node.neighbors {\n                if let n = neighbor {\n                    clone.neighbors.append(dfs(n))\n                }\n            }\n\n            return clone\n        }\n\n        return dfs(node)\n    }\n}",
+          "complexity": {
+            "space": "O(V)",
+            "spaceExplanation": "Hash map stores V nodes",
+            "time": "O(V + E)",
+            "timeExplanation": "Visit each node and edge"
+          },
+          "explanation": "Hash map prevents infinite loops by tracking visited nodes.",
+          "id": "550e8400-e29b-41d4-a716-446655440157",
+          "intuition": "Map original nodes to clones. When visiting, create clone if not exists, recurse for neighbors.",
+          "name": "DFS with Hash Map",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[2,4],[1,3],[2,4],[1,3]]",
+              "explanation": "Deep copy preserves structure",
+              "id": "550e8400-e29b-41d4-a716-446655440263",
+              "input": "[[2,4],[1,3],[2,4],[1,3]]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440046",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "clone-graph",
+      "relatedProblems": [
+        "copy-list-with-random-pointer"
+      ],
+      "summary": "Deep copy a graph. Use hash map to track cloned nodes, BFS or DFS."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Build adjacency list from prerequisites\n2. DFS from each node, mark as 'visiting'\n3. If encounter 'visiting' node, cycle found\n4. Mark 'visited' when done with all neighbors",
+          "code": "class Solution {\n    func canFinish(_ numCourses: Int, _ prerequisites: [[Int]]) -> Bool {\n        var graph = [[Int]](repeating: [], count: numCourses)\n        for pre in prerequisites {\n            graph[pre[1]].append(pre[0])\n        }\n\n        var state = [Int](repeating: 0, count: numCourses)  // 0=unvisited, 1=visiting, 2=visited\n\n        func hasCycle(_ node: Int) -> Bool {\n            if state[node] == 1 { return true }  // Cycle\n            if state[node] == 2 { return false }  // Already done\n\n            state[node] = 1\n            for neighbor in graph[node] {\n                if hasCycle(neighbor) { return true }\n            }\n            state[node] = 2\n            return false\n        }\n\n        for i in 0..<numCourses {\n            if hasCycle(i) { return false }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(V + E)",
+            "spaceExplanation": "Graph storage and recursion",
+            "time": "O(V + E)",
+            "timeExplanation": "Visit each node and edge once"
+          },
+          "explanation": "'Visiting' means in current DFS path. If we see it again, we've found a back edge (cycle).",
+          "id": "550e8400-e29b-41d4-a716-446655440138",
+          "intuition": "Build graph of prerequisites. Detect cycle using DFS with three states: unvisited, visiting, visited.",
+          "name": "DFS Cycle Detection",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "Take course 0, then course 1",
+              "id": "550e8400-e29b-41d4-a716-446655440244",
+              "input": "numCourses = 2, prerequisites = [[1,0]]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440027",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "course-schedule",
+      "relatedProblems": [
+        "course-schedule-ii"
+      ],
+      "summary": "Detect if courses can be completed (no cycle in prerequisite graph). Use DFS with visited states or topological sort."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Build graph and in-degree array\n2. Add all nodes with in-degree 0 to queue\n3. Process queue: add to result, decrement neighbors' in-degrees\n4. If result size != numCourses, cycle exists",
+          "code": "class Solution {\n    func findOrder(_ numCourses: Int, _ prerequisites: [[Int]]) -> [Int] {\n        var graph = [[Int]](repeating: [], count: numCourses)\n        var inDegree = [Int](repeating: 0, count: numCourses)\n\n        for pre in prerequisites {\n            graph[pre[1]].append(pre[0])\n            inDegree[pre[0]] += 1\n        }\n\n        var queue = (0..<numCourses).filter { inDegree[$0] == 0 }\n        var result: [Int] = []\n\n        while !queue.isEmpty {\n            let course = queue.removeFirst()\n            result.append(course)\n            for next in graph[course] {\n                inDegree[next] -= 1\n                if inDegree[next] == 0 {\n                    queue.append(next)\n                }\n            }\n        }\n\n        return result.count == numCourses ? result : []\n    }\n}",
+          "complexity": {
+            "space": "O(V + E)",
+            "spaceExplanation": "Graph and queue storage",
+            "time": "O(V + E)",
+            "timeExplanation": "Process each node and edge once"
+          },
+          "explanation": "Topological sort using BFS. In-degree 0 means all prerequisites satisfied.",
+          "id": "550e8400-e29b-41d4-a716-446655440139",
+          "intuition": "Start with courses having no prerequisites (in-degree 0). Process them, reduce neighbors' in-degrees, repeat.",
+          "name": "Kahn's Algorithm (BFS)",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[0,1,2,3] or [0,2,1,3]",
+              "explanation": "Valid topological orderings",
+              "id": "550e8400-e29b-41d4-a716-446655440245",
+              "input": "numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440028",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "course-schedule-ii",
+      "relatedProblems": [
+        "course-schedule",
+        "alien-dictionary"
+      ],
+      "summary": "Return course order (topological sort). Use Kahn's algorithm (BFS) or DFS with post-order."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Build graph: a→b with weight values[i], b→a with 1/values[i]\n2. For query, DFS find path and multiply",
+          "code": "class Solution {\n    func calcEquation(_ equations: [[String]], _ values: [Double], _ queries: [[String]]) -> [Double] {\n        var graph: [String: [(String, Double)]] = [:]\n        for i in 0..<equations.count {\n            let a = equations[i][0], b = equations[i][1]\n            graph[a, default: []].append((b, values[i]))\n            graph[b, default: []].append((a, 1.0 / values[i]))\n        }\n\n        func dfs(_ curr: String, _ target: String, _ visited: inout Set<String>) -> Double {\n            if graph[curr] == nil { return -1.0 }\n            if curr == target { return 1.0 }\n            visited.insert(curr)\n            for (next, val) in graph[curr]! {\n                if !visited.contains(next) {\n                    let res = dfs(next, target, &visited)\n                    if res != -1.0 { return val * res }\n                }\n            }\n            return -1.0\n        }\n\n        return queries.map { q in\n            var visited = Set<String>()\n            return dfs(q[0], q[1], &visited)\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(N)",
+            "spaceExplanation": "Graph storage",
+            "time": "O(Q × N)",
+            "timeExplanation": "Q queries, N nodes each"
+          },
+          "explanation": "Graph enables transitive division.",
+          "id": "91a389d8-8e6f-4907-981f-94e1b5e74fdc",
+          "intuition": "a/b = a/c × c/b. Find path and multiply weights.",
+          "name": "Graph DFS",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[6.0]",
+              "explanation": "a/c = a/b × b/c = 2×3 = 6",
+              "id": "796737c4-a6db-4d96-9049-ed6a701e6669",
+              "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"c\"]]"
+            }
+          ]
+        }
+      ],
+      "id": "efee4b0f-9f29-46ae-807a-9886cf05f65b",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "evaluate-division",
+      "relatedProblems": [],
+      "summary": "Evaluate a/b given equations. Build graph of ratios, DFS to find path product."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Reverse edges\n2. Start from terminal nodes (no outgoing edges in original)\n3. Propagate safety backwards",
+          "code": "class Solution {\n    func eventualSafeNodes(_ graph: [[Int]]) -> [Int] {\n        let n = graph.count\n        var state = [Int](repeating: 0, count: n)  // 0=unvisited, 1=visiting, 2=safe\n\n        func dfs(_ node: Int) -> Bool {\n            if state[node] != 0 { return state[node] == 2 }\n            state[node] = 1\n            for next in graph[node] {\n                if !dfs(next) { return false }\n            }\n            state[node] = 2\n            return true\n        }\n\n        var result: [Int] = []\n        for i in 0..<n {\n            if dfs(i) { result.append(i) }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(V)",
+            "spaceExplanation": "State array",
+            "time": "O(V+E)",
+            "timeExplanation": "Visit each node"
+          },
+          "explanation": "Or detect cycles with DFS coloring.",
+          "id": "f98519f6-f8ed-496b-ab72-d93b5e71dd9c",
+          "intuition": "Safe nodes eventually reach terminal nodes only.",
+          "name": "Reverse Topological Sort",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[2,4,5,6]",
+              "explanation": "Safe nodes",
+              "id": "cff62128-3880-4003-9e76-4eb63cad00f2",
+              "input": "graph = [[1,2],[2,3],[5],[0],[5],[],[]]"
+            }
+          ]
+        }
+      ],
+      "id": "ccba25d6-0a2e-45f3-af94-60dcf7cbe726",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "find-eventual-safe-states",
+      "relatedProblems": [],
+      "summary": "Find nodes that don't lead to cycles. Reverse graph, topo sort from terminal nodes."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. If start color == new color, return\n2. DFS to fill start and all same-color neighbors",
+          "code": "class Solution {\n    func floodFill(_ image: [[Int]], _ sr: Int, _ sc: Int, _ color: Int) -> [[Int]] {\n        var image = image\n        let original = image[sr][sc]\n        if original == color { return image }\n        func dfs(_ r: Int, _ c: Int) {\n            if r < 0 || r >= image.count || c < 0 || c >= image[0].count { return }\n            if image[r][c] != original { return }\n            image[r][c] = color\n            dfs(r+1, c); dfs(r-1, c); dfs(r, c+1); dfs(r, c-1)\n        }\n        dfs(sr, sc)\n        return image\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Recursion depth",
+            "time": "O(n)",
+            "timeExplanation": "Visit each cell once"
+          },
+          "explanation": "Standard flood fill using DFS. Check bounds and color before recursing.",
+          "id": "908fed6e-be51-45aa-bd34-bad4b52b792d",
+          "intuition": "From start, recursively fill same-color neighbors.",
+          "name": "DFS",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[2,2,2],[2,2,0],[2,0,1]]",
+              "explanation": "Fill connected 1s with 2",
+              "id": "b55894f4-396b-4e32-801e-a49d6a7e9a92",
+              "input": "image=[[1,1,1],[1,1,0],[1,0,1]], sr=1, sc=1, color=2"
+            }
+          ]
+        }
+      ],
+      "id": "b8ab8619-81ae-4080-ab46-0e2a8b556a64",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "flood-fill",
+      "relatedProblems": [
+        "number-of-islands"
+      ],
+      "summary": "Fill connected cells of same color. DFS/BFS from starting cell."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. For each uncolored node, BFS assign colors\n2. If neighbor already has same color, return false",
+          "code": "class Solution {\n    func isBipartite(_ graph: [[Int]]) -> Bool {\n        var colors = [Int](repeating: -1, count: graph.count)\n        for i in 0..<graph.count {\n            if colors[i] != -1 { continue }\n            var queue = [i]; colors[i] = 0\n            while !queue.isEmpty {\n                let node = queue.removeFirst()\n                for neighbor in graph[node] {\n                    if colors[neighbor] == -1 { colors[neighbor] = 1 - colors[node]; queue.append(neighbor) }\n                    else if colors[neighbor] == colors[node] { return false }\n                }\n            }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(V)",
+            "spaceExplanation": "Color array",
+            "time": "O(V+E)",
+            "timeExplanation": "Visit all nodes and edges"
+          },
+          "explanation": "Bipartite iff we can 2-color it. BFS level by level alternates colors.",
+          "id": "47e1cffd-4793-448f-87d2-562eabb175e2",
+          "intuition": "Assign colors. If neighbor has same color, not bipartite.",
+          "name": "BFS Coloring",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "false",
+              "explanation": "Has odd cycle",
+              "id": "5fb126b2-1636-46aa-a05c-1bba6c7b01f3",
+              "input": "[[1,2,3],[0,2],[0,1,3],[0,2]]"
+            }
+          ]
+        }
+      ],
+      "id": "2b6fa75f-5731-4a58-a1af-ff0701dc91f2",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "is-graph-bipartite",
+      "relatedProblems": [
+        "possible-bipartition"
+      ],
+      "summary": "Check if graph can be 2-colored. BFS/DFS assigning colors, check no adjacent same colors."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Start with the given room and search all adjacent rooms. 2. If a room has a key that unlocks an unvisited room, add it to the search path. 3. Repeat steps 1-2 until no new rooms can be visited.",
+          "code": "import Foundation\n\nclass Solution {\n    func canVisitAllRooms(_ rooms: [[Int]]) -> Bool {\n        var visited = Set<Int>()\n        func dfs(_ roomIndex: Int) {\n            if !visited.contains(roomIndex) {\n                visited.insert(roomIndex)\n                for key in rooms[roomIndex] {\n                    dfs(key)\n                }\n            }\n        }\n        dfs(0)\n        return visited.count == rooms.count\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear due to the recursive call stack and the set used to track visited rooms.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because each room is visited once."
+          },
+          "explanation": "This brute force approach tries every combination, making it inefficient for large inputs but guaranteeing the correct result.",
+          "id": "ec015924-3f23-4469-9d48-d06c60becd7a",
+          "intuition": "This solution uses a recursive depth-first search (DFS) to visit each room and collect keys. It checks every possible path and backtracks when necessary.",
+          "name": "Brute Force Approach with Depth-First Search",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "All rooms can be visited from the starting room.",
+              "id": "42823e19-57c1-4d39-9e30-8ce1e26b83e6",
+              "input": "rooms = [[1],[2],[3],[]]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "Not all rooms are reachable from the starting room.",
+              "id": "447bfa93-142b-4559-8ab5-1bc678456079",
+              "input": "rooms = [[1,3],[3,0,1],[2],[0]]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Start with the given room and add it to a queue. 2. For each room in the queue, remove it and add all unvisited rooms that can be unlocked with the current set of keys. 3. Repeat step 2 until the queue is empty.",
+          "code": "import Foundation\n\nclass Solution {\n    func canVisitAllRooms(_ rooms: [[Int]]) -> Bool {\n        var visited = Set<Int>()\n        var queue: [Int] = [0]\n        while !queue.isEmpty {\n            let roomIndex = queue.removeFirst()\n            if !visited.contains(roomIndex) {\n                visited.insert(roomIndex)\n                for key in rooms[roomIndex] {\n                    if !visited.contains(key) {\n                        queue.append(key)\n                    }\n                }\n            }\n        }\n        return visited.count == rooms.count\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear due to the queue and set used to track visited rooms.",
+            "time": "O(n + m)",
+            "timeExplanation": "The time complexity is linear with respect to the number of rooms and keys."
+          },
+          "explanation": "This approach is more efficient because it avoids revisiting the same rooms and keys.",
+          "id": "2cf0e20a-3fa9-4a8d-935f-fd8046a836e8",
+          "intuition": "This solution uses a breadth-first search (BFS) to visit each room level by level, keeping track of the keys collected so far.",
+          "name": "Optimized Approach with Breadth-First Search",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "All rooms can be visited from the starting room.",
+              "id": "7243ce09-e806-4ada-9186-893aa1e09632",
+              "input": "rooms = [[1],[2],[3],[]]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "Not all rooms are reachable from the starting room.",
+              "id": "919e443b-b2aa-4a0c-ad61-b9e7f7bc3647",
+              "input": "rooms = [[1,3],[3,0,1],[2],[0]]"
+            }
+          ]
+        }
+      ],
+      "id": "6d4b8ed6-6912-47bf-8659-e39156449ce3",
+      "lastUpdated": "2026-02-06T21:43:38Z",
+      "problemSlug": "keys-and-rooms",
+      "relatedProblems": [
+        "number-of-islands",
+        "clone-graph"
+      ],
+      "summary": "This problem involves finding all rooms in a building that can be visited from a given room, with each room potentially containing keys to other rooms. We need to determine if all rooms can be visited, considering the keys collected along the way."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Build graph: edge from richer to poorer\n2. DFS from each person into richer neighbors\n3. Memoize results",
+          "code": "class Solution {\n    func loudAndRich(_ richer: [[Int]], _ quiet: [Int]) -> [Int] {\n        let n = quiet.count\n        var graph = [[Int]](repeating: [], count: n)\n        for r in richer {\n            graph[r[1]].append(r[0])\n        }\n        var answer = [Int](repeating: -1, count: n)\n\n        func dfs(_ node: Int) -> Int {\n            if answer[node] != -1 { return answer[node] }\n            answer[node] = node\n            for richer in graph[node] {\n                let candidate = dfs(richer)\n                if quiet[candidate] < quiet[answer[node]] {\n                    answer[node] = candidate\n                }\n            }\n            return answer[node]\n        }\n\n        for i in 0..<n { dfs(i) }\n        return answer\n    }\n}",
+          "complexity": {
+            "space": "O(n + r)",
+            "spaceExplanation": "Graph + memo",
+            "time": "O(n + r)",
+            "timeExplanation": "Visit each node once"
+          },
+          "explanation": "answer[x] = quietest person in x's richer-or-equal set.",
+          "id": "c6902b0f-46df-4f4c-ba4f-20cbe97ca1cd",
+          "intuition": "Recursively find quietest in richer subgraph.",
+          "name": "DFS",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[5,5,2,5,4,5,6,7]",
+              "explanation": "Quietest richer person for each",
+              "id": "b3dcffe7-93c8-49de-8c1e-2dc73fe7e73e",
+              "input": "richer = [[1,0],[2,1],[3,1],[3,7],...], quiet = [3,2,5,4,6,1,7,0]"
+            }
+          ]
+        }
+      ],
+      "id": "1223e497-77ad-4a61-aee7-99c19bebc200",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "loud-and-rich",
+      "relatedProblems": [],
+      "summary": "For each person, find quietest among richer people. DFS with memoization."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. For each cell (i,j) with value 1:\n2. DFS: mark visited (set to 0), count 1 + area of 4 neighbors\n3. Track maximum area",
+          "code": "class Solution {\n    func maxAreaOfIsland(_ grid: [[Int]]) -> Int {\n        var grid = grid\n        let m = grid.count, n = grid[0].count\n        var maxArea = 0\n\n        func dfs(_ i: Int, _ j: Int) -> Int {\n            guard i >= 0 && i < m && j >= 0 && j < n && grid[i][j] == 1 else { return 0 }\n            grid[i][j] = 0\n            return 1 + dfs(i+1, j) + dfs(i-1, j) + dfs(i, j+1) + dfs(i, j-1)\n        }\n\n        for i in 0..<m {\n            for j in 0..<n {\n                if grid[i][j] == 1 {\n                    maxArea = max(maxArea, dfs(i, j))\n                }\n            }\n        }\n\n        return maxArea\n    }\n}",
+          "complexity": {
+            "space": "O(m*n)",
+            "spaceExplanation": "Recursion stack worst case",
+            "time": "O(m*n)",
+            "timeExplanation": "Visit each cell once"
+          },
+          "explanation": "Marking as 0 prevents revisiting. Each cell visited once.",
+          "id": "550e8400-e29b-41d4-a716-446655440158",
+          "intuition": "For each unvisited land cell, DFS to count connected land. Track max area.",
+          "name": "DFS",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "5",
+              "explanation": "Connected 1s form island of size 5",
+              "id": "550e8400-e29b-41d4-a716-446655440264",
+              "input": "[[0,0,1,0],[1,1,1,0],[0,1,0,0]]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440047",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "max-area-of-island",
+      "relatedProblems": [
+        "number-of-islands",
+        "island-perimeter"
+      ],
+      "summary": "Find largest island area. DFS/BFS from each land cell, mark visited, count area."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. BFS from start gene\n2. Try all single-character mutations\n3. Count steps to reach end",
+          "code": "class Solution {\n    func minMutation(_ start: String, _ end: String, _ bank: [String]) -> Int {\n        var bankSet = Set(bank)\n        if !bankSet.contains(end) { return -1 }\n        var queue = [(start, 0)]\n        var visited = Set([start])\n        let genes: [Character] = [\"A\", \"C\", \"G\", \"T\"]\n\n        while !queue.isEmpty {\n            let (gene, steps) = queue.removeFirst()\n            if gene == end { return steps }\n            var chars = Array(gene)\n            for i in 0..<chars.count {\n                let original = chars[i]\n                for g in genes {\n                    chars[i] = g\n                    let mutation = String(chars)\n                    if bankSet.contains(mutation) && !visited.contains(mutation) {\n                        visited.insert(mutation)\n                        queue.append((mutation, steps + 1))\n                    }\n                }\n                chars[i] = original\n            }\n        }\n        return -1\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Visited set",
+            "time": "O(n × 8 × 4)",
+            "timeExplanation": "BFS through bank"
+          },
+          "explanation": "Only valid mutations (in bank) explored.",
+          "id": "2563ac88-a832-4687-bd58-81ac294fca2f",
+          "intuition": "Same as word ladder but with 4 choices (A,C,G,T).",
+          "name": "BFS",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "Two mutations",
+              "id": "b6da3906-de2d-47d9-8b1b-4f64c9e2cf61",
+              "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\"]"
+            }
+          ]
+        }
+      ],
+      "id": "2d21e6d3-bf45-4453-aa19-12c7660bc2d3",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "minimum-genetic-mutation",
+      "relatedProblems": [
+        "word-ladder"
+      ],
+      "summary": "Minimum mutations to reach target gene. BFS treating genes as nodes."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Find all leaves (degree 1)\n2. Remove leaves, update degrees\n3. Repeat until 1-2 nodes remain",
+          "code": "class Solution {\n    func findMinHeightTrees(_ n: Int, _ edges: [[Int]]) -> [Int] {\n        if n == 1 { return [0] }\n        var adj = [[Int]](repeating: [], count: n)\n        var degree = [Int](repeating: 0, count: n)\n        for e in edges {\n            adj[e[0]].append(e[1])\n            adj[e[1]].append(e[0])\n            degree[e[0]] += 1\n            degree[e[1]] += 1\n        }\n        var leaves = (0..<n).filter { degree[$0] == 1 }\n        var remaining = n\n        while remaining > 2 {\n            var newLeaves: [Int] = []\n            for leaf in leaves {\n                remaining -= 1\n                for neighbor in adj[leaf] {\n                    degree[neighbor] -= 1\n                    if degree[neighbor] == 1 { newLeaves.append(neighbor) }\n                }\n            }\n            leaves = newLeaves\n        }\n        return leaves\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Adjacency list",
+            "time": "O(n)",
+            "timeExplanation": "Visit each node once"
+          },
+          "explanation": "Tree has 1 or 2 centers.",
+          "id": "a964509c-f1cf-487b-9bd3-05e0777f1b82",
+          "intuition": "MHT roots are the center(s) of the longest path.",
+          "name": "Topological Trimming",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[3,4]",
+              "explanation": "Two MHT roots",
+              "id": "865c049c-d1e5-4d29-89dc-b6be11a6b6bc",
+              "input": "n = 6, edges = [[3,0],[3,1],[3,2],[3,4],[5,4]]"
+            }
+          ]
+        }
+      ],
+      "id": "c25cbce2-969d-4294-b34a-7525aa26a36c",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "minimum-height-trees",
+      "relatedProblems": [],
+      "summary": "Find roots that minimize tree height. Trim leaves until 1-2 nodes remain."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Iterate all cells.\n2. When you find land, increment count and DFS to mark the entire island as water.",
+          "code": "class Solution {\n    func numIslands(_ grid: [[Character]]) -> Int {\n        var grid = grid\n        let rows = grid.count\n        let cols = grid.first?.count ?? 0\n        var count = 0\n\n        func dfs(_ r: Int, _ c: Int) {\n            if r < 0 || r >= rows || c < 0 || c >= cols { return }\n            if grid[r][c] != \"1\" { return }\n            grid[r][c] = \"0\"\n            dfs(r + 1, c)\n            dfs(r - 1, c)\n            dfs(r, c + 1)\n            dfs(r, c - 1)\n        }\n\n        for r in 0..<rows {\n            for c in 0..<cols {\n                if grid[r][c] == \"1\" {\n                    count += 1\n                    dfs(r, c)\n                }\n            }\n        }\n        return count\n    }\n}",
+          "complexity": {
+            "space": "O(m * n)",
+            "spaceExplanation": "DFS recursion stack can reach all cells in the worst case.",
+            "time": "O(m * n)",
+            "timeExplanation": "Every cell is visited at most once."
+          },
+          "explanation": "DFS visits all connected land cells, so each island is counted once.",
+          "id": "623b0613-cf2f-476d-b645-283a712a2085",
+          "intuition": "Each island is a connected component of '1's. Marking a component prevents double counting.",
+          "name": "DFS Flood Fill",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "All land is connected.",
+              "id": "fa57d4ea-0dec-463a-8a3b-e5d06b3fb13e",
+              "input": "grid = [[\"1\",\"1\",\"1\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"]]"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "Three separate islands.",
+              "id": "5164b72d-7171-48da-aa64-47e45e594562",
+              "input": "grid = [[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"1\",\"0\"],[\"0\",\"0\",\"0\",\"1\",\"1\"]]"
+            }
+          ]
+        }
+      ],
+      "id": "6f18a7ea-1f71-41c6-ad8a-91f28173bbb2",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "number-of-islands",
+      "relatedProblems": [
+        "max-area-of-island",
+        "surrounded-regions"
+      ],
+      "summary": "Count islands by flooding each discovered land cell with DFS."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start from each unvisited node and perform a Depth-First Search to mark all nodes in the same connected component as visited. Increment the count of connected components whenever we start a new Depth-First Search from an unvisited node.",
+          "code": "class Solution {\n    func findCircleNum(_ isConnected: [[Int]]) -> Int {\n        var visited = Array(repeating: false, count: isConnected.count)\n        var count = 0\n\n        for i in 0..<isConnected.count {\n            if !visited[i] {\n                count += 1\n                dfs(isConnected, &visited, i)\n            }\n        }\n\n        return count\n    }\n\n    func dfs(_ graph: [[Int]], _ visited: inout [Bool], _ node: Int) {\n        visited[node] = true\n        for i in 0..<graph.count {\n            if graph[node][i] == 1 && !visited[i] {\n                dfs(graph, &visited, i)\n            }\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity of this approach is O(n) because we need to store the visited array of size n.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity of this approach is O(n^2) because in the worst-case scenario, we have to iterate through each node and perform a Depth-First Search from each node, resulting in quadratic time complexity."
+          },
+          "explanation": "This brute-force approach involves iterating through each node in the graph and performing a Depth-First Search from each unvisited node. While this approach works, it may not be the most efficient solution due to its high time complexity.",
+          "id": "6fe86753-95ee-46ca-8f9d-dad074667a63",
+          "intuition": "This approach works by directly counting the number of connected components in the graph using Depth-First Search.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "There are 2 connected components in this graph.",
+              "id": "ffa6a353-749a-4e53-94f1-1a8752cece9e",
+              "input": "isConnected = [[1,1,0],[1,1,0],[0,0,1]]"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "There are 3 connected components in this graph.",
+              "id": "754565fe-aa41-4527-bd09-c9130c3788de",
+              "input": "isConnected = [[1,0,0],[0,1,0],[0,0,1]]"
+            }
+          ]
+        },
+        {
+          "approach": "Use the Union-Find algorithm to group connected nodes together and count the number of groups.",
+          "code": "class Solution {\n    func findCircleNum(_ isConnected: [[Int]]) -> Int {\n        let n = isConnected.count\n        var parent = Array(repeating: 0, count: n)\n        for i in 0..<n {\n            parent[i] = i\n        }\n\n        for i in 0..<n {\n            for j in i+1..<n {\n                if isConnected[i][j] == 1 {\n                    union(&parent, i, j)\n                }\n            }\n        }\n\n        var count = 0\n        for i in 0..<n {\n            if find(&parent, i) == i {\n                count += 1\n            }\n        }\n\n        return count\n    }\n\n    func find(_ parent: inout [Int], _ x: Int) -> Int {\n        if parent[x] != x {\n            parent[x] = find(&parent, parent[x])\n        }\n        return parent[x]\n    }\n\n    func union(_ parent: inout [Int], _ x: Int, _ y: Int) {\n        let rootX = find(&parent, x)\n        let rootY = find(&parent, y)\n        if rootX != rootY {\n            parent[rootY] = rootX\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity of this approach is O(n) because we need to store the parent array of size n.",
+            "time": "O(n^2 * alpha(n))",
+            "timeExplanation": "The time complexity of this approach is O(n^2 * alpha(n)) where alpha(n) is the inverse Ackermann function, which grows very slowly."
+          },
+          "explanation": "The Union-Find algorithm uses two main operations: Union and Find. The Union operation merges two sets together, while the Find operation finds the representative of a set. By using these operations, we can efficiently count the number of connected components in the graph.",
+          "id": "9687a50d-98ac-493b-9a7a-fc59adad836f",
+          "intuition": "This approach works by using the Union-Find algorithm to efficiently find the number of connected components in the graph.",
+          "name": "Optimized Union-Find Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "There are 2 connected components in this graph.",
+              "id": "8b3721d1-a102-42dd-9600-2931832e9dbc",
+              "input": "isConnected = [[1,1,0],[1,1,0],[0,0,1]]"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "There are 3 connected components in this graph.",
+              "id": "c7ca95fb-b4a2-452f-80b1-c6b85b4d1eb9",
+              "input": "isConnected = [[1,0,0],[0,1,0],[0,0,1]]"
+            }
+          ]
+        }
+      ],
+      "id": "e9e361ff-8799-4f48-8354-c4407763d5c8",
+      "lastUpdated": "2026-02-06T21:25:35Z",
+      "problemSlug": "number-of-provinces",
+      "relatedProblems": [
+        "number-of-islands",
+        "connected-components-in-graph"
+      ],
+      "summary": "Number of Provinces is a graph theory problem that requires us to find the number of connected components in a graph. The key insight here is that we can use the Union-Find algorithm or Depth-First Search to solve this problem efficiently."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. BFS from Pacific edges (top, left)\n2. BFS from Atlantic edges (bottom, right)\n3. Cells in both sets can reach both oceans",
+          "code": "class Solution {\n    func pacificAtlantic(_ heights: [[Int]]) -> [[Int]] {\n        guard !heights.isEmpty else { return [] }\n        let m = heights.count, n = heights[0].count\n        var pacific = Set<[Int]>()\n        var atlantic = Set<[Int]>()\n\n        func bfs(_ starts: [[Int]], _ reachable: inout Set<[Int]>) {\n            var queue = starts\n            for s in starts { reachable.insert(s) }\n            let dirs = [(0,1),(0,-1),(1,0),(-1,0)]\n\n            while !queue.isEmpty {\n                let curr = queue.removeFirst()\n                for (dr, dc) in dirs {\n                    let nr = curr[0] + dr, nc = curr[1] + dc\n                    if nr >= 0 && nr < m && nc >= 0 && nc < n &&\n                       !reachable.contains([nr, nc]) &&\n                       heights[nr][nc] >= heights[curr[0]][curr[1]] {\n                        reachable.insert([nr, nc])\n                        queue.append([nr, nc])\n                    }\n                }\n            }\n        }\n\n        var pacificStarts = [[Int]]()\n        var atlanticStarts = [[Int]]()\n        for i in 0..<m {\n            pacificStarts.append([i, 0])\n            atlanticStarts.append([i, n-1])\n        }\n        for j in 0..<n {\n            pacificStarts.append([0, j])\n            atlanticStarts.append([m-1, j])\n        }\n\n        bfs(pacificStarts, &pacific)\n        bfs(atlanticStarts, &atlantic)\n\n        return Array(pacific.intersection(atlantic))\n    }\n}",
+          "complexity": {
+            "space": "O(m*n)",
+            "spaceExplanation": "Two sets storing cells",
+            "time": "O(m*n)",
+            "timeExplanation": "Visit each cell at most twice"
+          },
+          "explanation": "Reverse the problem: find which cells are reachable going uphill from each ocean. Intersection gives answer.",
+          "id": "550e8400-e29b-41d4-a716-446655440167",
+          "intuition": "Instead of checking each cell, work backwards from oceans. A cell can reach ocean if water can flow TO it from ocean edge (going uphill).",
+          "name": "Reverse BFS from Oceans",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]",
+              "explanation": "These cells can flow to both oceans",
+              "id": "550e8400-e29b-41d4-a716-446655440273",
+              "input": "[[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440056",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "pacific-atlantic-water-flow",
+      "relatedProblems": [
+        "number-of-islands",
+        "surrounded-regions"
+      ],
+      "summary": "Find cells that can flow to both Pacific and Atlantic oceans. Use reverse BFS/DFS from ocean edges."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Max heap on probability\n2. Relax edges by multiplying probabilities\n3. Return prob[end]",
+          "code": "class Solution {\n    func maxProbability(_ n: Int, _ edges: [[Int]], _ succProb: [Double], _ start: Int, _ end: Int) -> Double {\n        var graph = [Int: [(Int, Double)]]()\n        for (i, e) in edges.enumerated() {\n            graph[e[0], default: []].append((e[1], succProb[i]))\n            graph[e[1], default: []].append((e[0], succProb[i]))\n        }\n        var prob = [Double](repeating: 0, count: n)\n        prob[start] = 1\n        var heap = [(1.0, start)]  // (prob, node)\n\n        while !heap.isEmpty {\n            heap.sort { $0.0 > $1.0 }  // Max heap\n            let (p, node) = heap.removeFirst()\n            if node == end { return p }\n            if p < prob[node] { continue }\n            for (next, edgeProb) in graph[node] ?? [] {\n                let newProb = p * edgeProb\n                if newProb > prob[next] {\n                    prob[next] = newProb\n                    heap.append((newProb, next))\n                }\n            }\n        }\n        return 0\n    }\n}",
+          "complexity": {
+            "space": "O(V+E)",
+            "spaceExplanation": "Graph + heap",
+            "time": "O(E log V)",
+            "timeExplanation": "Dijkstra"
+          },
+          "explanation": "Use negative log to convert to shortest path.",
+          "id": "80287ef4-6963-4220-bb4e-4bd7bc5168c2",
+          "intuition": "Dijkstra but maximize probability product.",
+          "name": "Dijkstra Max",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "0.25",
+              "explanation": "0→1→2 has prob 0.25",
+              "id": "c1a41016-307d-43f2-8a2d-8ad14f181626",
+              "input": "n=3, edges=[[0,1],[1,2],[0,2]], succProb=[0.5,0.5,0.2], start=0, end=2"
+            }
+          ]
+        }
+      ],
+      "id": "fdfa90db-bcb6-4f76-a8c9-a118a48d9743",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "path-with-maximum-probability",
+      "relatedProblems": [
+        "network-delay-time"
+      ],
+      "summary": "Max probability path in graph. Modified Dijkstra with max instead of min."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all possible subsets of the given set of people, and for each subset, check if the subset and its complement satisfy the dislikes.",
+          "code": "class Solution {\n    import Foundation\n\n    func possibleBipartition(_ N: Int, _ dislikes: [[Int]]) -> Bool {\n        var bipartition: [Int: Bool] = [:]\n        for i in 1...N {\n            bipartition[i] = true\n        }\n\n        for dislike in dislikes {\n            let p1 = dislike[0]\n            let p2 = dislike[1]\n            if bipartition[p1] == bipartition[p2] {\n                return false\n            }\n        }\n\n        for start in 1...N {\n            var queue: [Int] = [start]\n            var visited: Set<Int> = Set()\n            while !queue.isEmpty {\n                let current = queue.removeFirst()\n                visited.insert(current)\n                for dislike in dislikes {\n                    let p1 = dislike[0]\n                    let p2 = dislike[1]\n                    if p1 == current && !visited.contains(p2) {\n                        queue.append(p2)\n                        bipartition[p2] = !bipartition[p1]\n                    }\n                    if p2 == current && !visited.contains(p1) {\n                        queue.append(p1)\n                        bipartition[p1] = !bipartition[p2]\n                    }\n                }\n            }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(N)",
+            "spaceExplanation": "We need to store the current assignment of people to the two groups, which requires O(N) space.",
+            "time": "O(2^N)",
+            "timeExplanation": "We are trying all possible assignments of people to the two groups, resulting in 2^N possible assignments."
+          },
+          "explanation": "We start by generating all possible subsets of the set of people. For each subset, we check if the subset and its complement satisfy the given dislikes. If we find a subset that satisfies the dislikes, we return true. If we try all subsets and none of them satisfy the dislikes, we return false.",
+          "id": "7f3b9102-c1fb-4396-beef-29b8f6f5b682",
+          "intuition": "Try all possible assignments of people to the two groups and check if the resulting bipartition satisfies the given dislikes.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "false",
+              "explanation": "Person 1 dislikes person 2 and person 3, so person 1 must be in a different group than person 2 and person 3. However, person 2 and person 3 cannot be in the same group because person 2 dislikes person 4, and person 1 cannot be in the same group as person 2 or person 3.",
+              "id": "ab95b7cc-b350-455b-851c-4c6a5ebe1535",
+              "input": "N = 4, dislikes = [[1,2],[1,3],[2,4]]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "Person 1 dislikes person 2 and person 3, so person 1 must be in a different group than person 2 and person 3. However, person 2 and person 3 cannot be in the same group because they dislike each other.",
+              "id": "efaea067-4efb-4dc0-8c59-149a7cd21fbf",
+              "input": "N = 3, dislikes = [[1,2],[1,3],[2,3]]"
+            }
+          ]
+        },
+        {
+          "approach": "Create a graph where each person is a node, and two nodes are connected if the corresponding people dislike each other. Then, use a graph coloring algorithm to try to color the graph with two colors.",
+          "code": "class Solution {\n    import Foundation\n\n    func possibleBipartition(_ N: Int, _ dislikes: [[Int]]) -> Bool {\n        var graph: [Int: [Int]] = [:]\n        for i in 1...N {\n            graph[i] = []\n        }\n        for dislike in dislikes {\n            let p1 = dislike[0]\n            let p2 = dislike[1]\n            graph[p1]!.append(p2)\n            graph[p2]!.append(p1)\n        }\n\n        var color: [Int: Int] = [:]\n        for node in graph.keys {\n            if color[node] == nil {\n                if !dfs(graph, node, 1, &color) {\n                    return false\n                }\n            }\n        }\n        return true\n    }\n\n    func dfs(_ graph: [Int: [Int]], _ node: Int, _ c: Int, _ color: inout [Int: Int]) -> Bool {\n        if let existingColor = color[node] {\n            return existingColor == c\n        }\n        color[node] = c\n        for neighbor in graph[node]! {\n            if !dfs(graph, neighbor, -c, &color) {\n                return false\n            }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(N + M)",
+            "spaceExplanation": "We need to store the graph and the color of each node.",
+            "time": "O(N + M)",
+            "timeExplanation": "We visit each node and each edge once."
+          },
+          "explanation": "We start by creating a graph where each person is a node, and two nodes are connected if the corresponding people dislike each other. Then, we use a graph coloring algorithm to try to color the graph with two colors. If the graph can be colored with two colors, then we can bipartition the group.",
+          "id": "f5ad2876-80a2-4437-81d2-f43160ab15b8",
+          "intuition": "Use graph coloring to determine if the group can be bipartitioned. If the graph is bipartite, then we can bipartition the group.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "false",
+              "explanation": "Person 1 dislikes person 2 and person 3, so person 1 must be in a different group than person 2 and person 3. However, person 2 and person 3 cannot be in the same group because person 2 dislikes person 4, and person 1 cannot be in the same group as person 2 or person 3.",
+              "id": "18f4ea84-32df-4759-8201-ac741b2668cf",
+              "input": "N = 4, dislikes = [[1,2],[1,3],[2,4]]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "Person 1 dislikes person 2 and person 3, so person 1 must be in a different group than person 2 and person 3. However, person 2 and person 3 cannot be in the same group because they dislike each other.",
+              "id": "230a0ac5-a0ba-442e-b791-2edf21264170",
+              "input": "N = 3, dislikes = [[1,2],[1,3],[2,3]]"
+            }
+          ]
+        }
+      ],
+      "id": "b859fc26-786b-4f50-9f6b-e334c8aa3ab6",
+      "lastUpdated": "2026-02-06T21:46:28Z",
+      "problemSlug": "possible-bipartition",
+      "relatedProblems": [
+        "graph-bipartite",
+        "is-graph-bipartite"
+      ],
+      "summary": "Given a set of dislikes, determine if it's possible to bipartition the group into two disjoint sets. The key insight is to model the problem as a graph, where each person is a node, and two nodes are connected if the corresponding people dislike each other."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Union-Find with each edge\n2. If two nodes already in same component, return this edge\n3. This gives the last edge forming a cycle",
+          "code": "class Solution {\n    func findRedundantConnection(_ edges: [[Int]]) -> [Int] {\n        let n = edges.count\n        var parent = Array(0...n)\n\n        func find(_ x: Int) -> Int {\n            if parent[x] != x {\n                parent[x] = find(parent[x])\n            }\n            return parent[x]\n        }\n\n        for edge in edges {\n            let p1 = find(edge[0]), p2 = find(edge[1])\n            if p1 == p2 {\n                return edge\n            }\n            parent[p1] = p2\n        }\n\n        return []\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Parent array",
+            "time": "O(n * α(n))",
+            "timeExplanation": "Process n edges with near-constant find"
+          },
+          "explanation": "The problem guarantees exactly one redundant edge. First edge that creates cycle (when processing in order) is the answer.",
+          "id": "550e8400-e29b-41d4-a716-446655440170",
+          "intuition": "Process edges in order. When union fails (same component), that's the redundant edge.",
+          "name": "Union-Find",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[2,3]",
+              "explanation": "[2,3] creates cycle 1-2-3-1",
+              "id": "550e8400-e29b-41d4-a716-446655440276",
+              "input": "[[1,2],[1,3],[2,3]]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440059",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "redundant-connection",
+      "relatedProblems": [
+        "graph-valid-tree",
+        "redundant-connection-ii"
+      ],
+      "summary": "Find edge that creates cycle in undirected graph. Last edge that connects already-connected nodes."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Add all rotten oranges to a queue; count fresh oranges.\n2. Process the queue level by level, rotting adjacent fresh oranges.\n3. Increment minutes after each level.\n4. If fresh oranges remain, return -1; otherwise return minutes.",
+          "code": "class Solution {\n    func orangesRotting(_ grid: [[Int]]) -> Int {\n        var grid = grid\n        let rows = grid.count\n        let cols = grid.first?.count ?? 0\n        var queue: [(Int, Int)] = []\n        var fresh = 0\n\n        for r in 0..<rows {\n            for c in 0..<cols {\n                if grid[r][c] == 2 { queue.append((r, c)) }\n                else if grid[r][c] == 1 { fresh += 1 }\n            }\n        }\n\n        let directions = [(1,0),(-1,0),(0,1),(0,-1)]\n        var minutes = 0\n        var head = 0\n\n        while head < queue.count && fresh > 0 {\n            let levelCount = queue.count - head\n            for _ in 0..<levelCount {\n                let (r, c) = queue[head]\n                head += 1\n                for (dr, dc) in directions {\n                    let nr = r + dr\n                    let nc = c + dc\n                    if nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] == 1 {\n                        grid[nr][nc] = 2\n                        fresh -= 1\n                        queue.append((nr, nc))\n                    }\n                }\n            }\n            minutes += 1\n        }\n\n        return fresh == 0 ? minutes : -1\n    }\n}",
+          "complexity": {
+            "space": "O(m * n)",
+            "spaceExplanation": "Queue may hold all cells in the grid.",
+            "time": "O(m * n)",
+            "timeExplanation": "Each cell is processed at most once."
+          },
+          "explanation": "BFS naturally tracks the minimum time to reach each orange because it expands in waves.",
+          "id": "33f1b3ba-ac87-4e04-8610-23e61eb07e5d",
+          "intuition": "Each minute, all currently rotten oranges infect adjacent fresh ones. BFS levels model this time expansion.",
+          "name": "BFS Multi-Source",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "All oranges rot in 4 minutes.",
+              "id": "963f04ce-46ca-4f77-84ee-f13640cb6a5a",
+              "input": "grid = [[2,1,1],[1,1,0],[0,1,1]]"
+            },
+            {
+              "expectedOutput": "-1",
+              "explanation": "Some oranges are unreachable.",
+              "id": "8e19da01-63c9-42cb-a384-85cbb69562de",
+              "input": "grid = [[2,1,1],[0,1,1],[1,0,1]]"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "No fresh oranges to rot.",
+              "id": "2efd6748-b2da-4ee7-aeac-9dbe9e4071a8",
+              "input": "grid = [[0,2]]"
+            }
+          ]
+        }
+      ],
+      "id": "ad4417ac-7912-43ec-b99c-b98060877efe",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "rotting-oranges",
+      "relatedProblems": [
+        "01-matrix",
+        "shortest-path-in-binary-matrix"
+      ],
+      "summary": "Use BFS from all rotten oranges to simulate minute-by-minute spread."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Convert board position to coordinates\n2. BFS from 1, try moves 1-6\n3. Handle snakes/ladders",
+          "code": "class Solution {\n    func snakesAndLadders(_ board: [[Int]]) -> Int {\n        let n = board.count\n        func getCoord(_ s: Int) -> (Int, Int) {\n            let r = (s - 1) / n\n            let c = (s - 1) % n\n            let row = n - 1 - r\n            let col = r % 2 == 0 ? c : n - 1 - c\n            return (row, col)\n        }\n        var visited = Set<Int>([1])\n        var queue = [(1, 0)]\n        while !queue.isEmpty {\n            let (curr, moves) = queue.removeFirst()\n            for i in 1...6 {\n                var next = curr + i\n                if next > n * n { continue }\n                let (r, c) = getCoord(next)\n                if board[r][c] != -1 { next = board[r][c] }\n                if next == n * n { return moves + 1 }\n                if !visited.contains(next) {\n                    visited.insert(next)\n                    queue.append((next, moves + 1))\n                }\n            }\n        }\n        return -1\n    }\n}",
+          "complexity": {
+            "space": "O(n²)",
+            "spaceExplanation": "Visited set",
+            "time": "O(n²)",
+            "timeExplanation": "Visit each square"
+          },
+          "explanation": "Each state is a square, edges are dice rolls.",
+          "id": "9e89367b-e271-4eaf-b5b8-62c98937d4e5",
+          "intuition": "BFS finds shortest path in unweighted graph.",
+          "name": "BFS",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "Minimum dice rolls",
+              "id": "0b1fe068-6347-4b39-9e4e-2d5f60ac9ea4",
+              "input": "board with snakes/ladders"
+            }
+          ]
+        }
+      ],
+      "id": "69d3955b-6dc3-4d5e-83a7-dc150598c441",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "snakes-and-ladders",
+      "relatedProblems": [],
+      "summary": "Minimum moves in snakes and ladders. BFS from square 1 to n²."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. DFS from all border O's, mark as 'S' (safe)\n2. Scan grid: O -> X, S -> O",
+          "code": "class Solution {\n    func solve(_ board: inout [[Character]]) {\n        guard !board.isEmpty else { return }\n        let m = board.count, n = board[0].count\n\n        func dfs(_ i: Int, _ j: Int) {\n            guard i >= 0 && i < m && j >= 0 && j < n && board[i][j] == \"O\" else { return }\n            board[i][j] = \"S\"\n            dfs(i+1, j); dfs(i-1, j); dfs(i, j+1); dfs(i, j-1)\n        }\n\n        // Mark border-connected O's\n        for i in 0..<m {\n            dfs(i, 0); dfs(i, n-1)\n        }\n        for j in 0..<n {\n            dfs(0, j); dfs(m-1, j)\n        }\n\n        // Flip: O->X, S->O\n        for i in 0..<m {\n            for j in 0..<n {\n                if board[i][j] == \"O\" { board[i][j] = \"X\" }\n                else if board[i][j] == \"S\" { board[i][j] = \"O\" }\n            }\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(m*n)",
+            "spaceExplanation": "Recursion stack",
+            "time": "O(m*n)",
+            "timeExplanation": "Visit each cell"
+          },
+          "explanation": "Reverse thinking: instead of finding surrounded, find NOT surrounded from borders.",
+          "id": "550e8400-e29b-41d4-a716-446655440159",
+          "intuition": "O's connected to border can't be surrounded. Mark them, flip remaining O's to X.",
+          "name": "DFS from Border",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\"]]",
+              "explanation": "Center O is surrounded and captured",
+              "id": "550e8400-e29b-41d4-a716-446655440265",
+              "input": "[[\"X\",\"X\",\"X\"],[\"X\",\"O\",\"X\"],[\"X\",\"X\",\"X\"]]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440048",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "surrounded-regions",
+      "relatedProblems": [
+        "number-of-islands"
+      ],
+      "summary": "Capture surrounded O's. Border-connected O's survive; mark them, then flip rest."
+    }
+  ],
+  "topic": "graphs",
+  "version": "2.0.0"
+}

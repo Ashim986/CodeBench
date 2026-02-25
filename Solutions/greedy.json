@@ -1,0 +1,1616 @@
+{
+  "solutions": [
+    {
+      "approaches": [
+        {
+          "approach": "First, we sort the array. Then we iterate over the array, and for each number, we check if we can find its double in the remaining array. If we can't, we return false.",
+          "code": "class Solution {\n    func canReorderDoubled(_ arr: [Int]) -> Bool {\n        var nums = arr.sorted()\n        var used: [Int: Int] = [:]\n\n        for num in nums {\n            if used[num] ?? 0 > 0 {\n                used[num] = (used[num] ?? 0) - 1\n            } else if used[num * 2] ?? 0 > 0 {\n                used[num * 2] = (used[num * 2] ?? 0) - 1\n            } else {\n                if num == 0 {\n                    if used[num] == nil {\n                        used[num] = 1\n                    } else {\n                        used[num] = (used[num] ?? 0) + 1\n                    }\n                } else if num < 0 {\n                    let double = num / 2\n                    if double % 2 == 0 {\n                        if used[double] ?? 0 > 0 {\n                            used[double] = (used[double] ?? 0) - 1\n                        } else {\n                            if used[num] == nil {\n                                used[num] = 1\n                            } else {\n                                used[num] = (used[num] ?? 0) + 1\n                            }\n                        }\n                    } else {\n                        if used[num] == nil {\n                            used[num] = 1\n                        } else {\n                            used[num] = (used[num] ?? 0) + 1\n                        }\n                    }\n                } else {\n                    if used[num] == nil {\n                        used[num] = 1\n                    } else {\n                        used[num] = (used[num] ?? 0) + 1\n                    }\n                }\n            }\n        }\n\n        for (_, value) in used {\n            if value != 0 {\n                return false\n            }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are using a dictionary to store the used numbers.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) because in the worst case, we might have to iterate over the entire array for each number."
+          },
+          "explanation": "This approach works by checking every possible pair of numbers in the array. It has a high time complexity because it involves a nested loop over the array.",
+          "id": "b86bc2e2-a4e6-42bb-a4c5-b50946d5e3a2",
+          "intuition": "This approach involves generating all possible pairs of numbers in the array and checking if we can form pairs of doubled numbers.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "false",
+              "explanation": "We cannot form pairs of doubled numbers from this array because 6 does not have a double in the array.",
+              "id": "7d5ea17d-8ea1-439d-8f32-c0badad27f9b",
+              "input": "nums = [3, 1, 3, 6]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "We cannot form pairs of doubled numbers from this array because 6 does not have a double in the array.",
+              "id": "c28c8300-f1eb-4dea-8827-d32d3061a82a",
+              "input": "nums = [2, 1, 2, 6]"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "We can form pairs of doubled numbers from this array because (-2, -4) and (2, 4) are pairs of doubled numbers.",
+              "id": "132e2910-8eb9-4bc0-bb2a-44fd58032e56",
+              "input": "nums = [4, -2, 2, -4]"
+            }
+          ]
+        },
+        {
+          "approach": "First, we use a frequency counter to count the occurrences of each number in the array. Then, we sort the array and start from the smallest absolute value. For each number, we try to remove a pair of it and its double from the frequency counter.",
+          "code": "class Solution {\n    func canReorderDoubled(_ arr: [Int]) -> Bool {\n        var count: [Int: Int] = [:]\n\n        for num in arr {\n            count[num, default: 0] += 1\n        }\n\n        let sortedKeys = Array(count.keys).sorted { abs($0) < abs($1) }\n\n        for key in sortedKeys {\n            if count[key] == 0 {\n                continue\n            }\n\n            let double = key * 2\n            if count[double] == nil || count[key]! > (count[double] ?? 0) {\n                return false\n            }\n\n            count[double] = (count[double] ?? 0) - count[key]!\n        }\n\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are using a frequency counter to store the occurrences of each number.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity is O(n log n) because we are sorting the keys of the frequency counter."
+          },
+          "explanation": "This approach works by counting the occurrences of each number in the array, then iteratively removing the pairs of doubled numbers. It has a lower time complexity than the brute force approach.",
+          "id": "d480f463-9ca9-4503-a8ef-00e2536dc08b",
+          "intuition": "This approach involves using a frequency counter to count the occurrences of each number in the array, then iteratively removing the pairs of doubled numbers.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "false",
+              "explanation": "We cannot form pairs of doubled numbers from this array because 6 does not have a double in the array.",
+              "id": "7c41293c-1708-4028-9498-ee2a0c8af429",
+              "input": "nums = [3, 1, 3, 6]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "We cannot form pairs of doubled numbers from this array because 6 does not have a double in the array.",
+              "id": "1bb97f34-c157-45e4-879e-c36cfbdac9d5",
+              "input": "nums = [2, 1, 2, 6]"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "We can form pairs of doubled numbers from this array because (-2, -4) and (2, 4) are pairs of doubled numbers.",
+              "id": "6b15f511-4650-47a7-9306-cf836b3b89ed",
+              "input": "nums = [4, -2, 2, -4]"
+            }
+          ]
+        }
+      ],
+      "id": "600d38ee-7e31-48a1-b896-ff7aadcce846",
+      "lastUpdated": "2026-02-06T21:51:05Z",
+      "problemSlug": "array-of-doubled-pairs",
+      "relatedProblems": [
+        "valid-palindrome-ii",
+        "max-consecutive-ones-iii"
+      ],
+      "summary": "The problem requires us to determine if we can form an array of doubled pairs from a given array of integers. The key insight is to use a greedy approach to pair up the numbers in the array."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all permutations of the array, partition each permutation into two-element sub-arrays, calculate the sum of the minimum of each sub-array, and return the minimum sum found.",
+          "code": "class Solution {\n    import Foundation\n\n    func arrayPairSum(_ nums: [Int]) -> Int {\n        var result = Int.max\n        let permutations = getPermutations(nums)\n        for permutation in permutations {\n            var sum = 0\n            for i in stride(from: 0, to: nums.count, by: 2) {\n                sum += min(permutation[i], permutation[i+1])\n            }\n            result = min(result, sum)\n        }\n        return result\n    }\n\n    func getPermutations(_ nums: [Int]) -> [[Int]] {\n        guard nums.count > 0 else {\n            return []\n        }\n        var result: [[Int]] = []\n        var temp: [Int] = []\n        getPermutationsHelper(nums, 0, &temp, &result)\n        return result\n    }\n\n    func getPermutationsHelper(_ nums: [Int], _ index: Int, _ temp: inout [Int], _ result: inout [[Int]]) {\n        if index == nums.count {\n            result.append(temp)\n            return\n        }\n        for i in 0..<nums.count {\n            if temp.contains(nums[i]) {\n                continue\n            }\n            temp.append(nums[i])\n            getPermutationsHelper(nums, index+1, &temp, &result)\n            temp.removeLast()\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we need to store the permutations.",
+            "time": "O(n!)",
+            "timeExplanation": "Generating all permutations of the array takes O(n!) time."
+          },
+          "explanation": "This approach is not efficient for large arrays because it generates all permutations of the array which results in a time complexity of O(n!).",
+          "id": "1ad6a46b-76d1-47d5-a373-5d5701815ff0",
+          "intuition": "This approach works by trying all possible pairings of elements in the array and returning the minimum sum.",
+          "name": "Brute-Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "We can partition the array as [1,2] and [3,4] to get a sum of 1+3 = 4.",
+              "id": "242d5aac-f67d-4a9b-b114-f6f115b6aae3",
+              "input": "nums = [1,4,3,2]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "We can partition the array as [1,2] to get a sum of 1.",
+              "id": "cbe19dbf-fc30-4a33-bf37-519aca7a4f90",
+              "input": "nums = [1,2]"
+            }
+          ]
+        },
+        {
+          "approach": "Sort the array, then iterate through the array in steps of 2, adding the smaller of each pair to the sum.",
+          "code": "class Solution {\n    import Foundation\n\n    func arrayPairSum(_ nums: [Int]) -> Int {\n        var numsCopy = nums\n        numsCopy.sort()\n        var sum = 0\n        for i in stride(from: 0, to: numsCopy.count, by: 2) {\n            sum += min(numsCopy[i], numsCopy[i+1])\n        }\n        return sum\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we need to store the sorted array.",
+            "time": "O(n log n)",
+            "timeExplanation": "Sorting the array takes O(n log n) time."
+          },
+          "explanation": "This approach works because the sum of the minimum of each pair is minimized when the pairs are made up of adjacent elements in the sorted array.",
+          "id": "1e4ee21e-0914-4cfc-af53-0b32f32103b6",
+          "intuition": "This approach works by sorting the array and pairing adjacent elements to minimize the sum.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "We can partition the array as [1,2] and [3,4] to get a sum of 1+3 = 4.",
+              "id": "28ad87d3-0145-400b-94ce-6491223541d6",
+              "input": "nums = [1,4,3,2]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "We can partition the array as [1,2] to get a sum of 1.",
+              "id": "240f465a-3cab-4c49-8d63-751f9da8a3c5",
+              "input": "nums = [1,2]"
+            }
+          ]
+        }
+      ],
+      "id": "a60f80f2-f3b8-4c7a-8fbc-79e1b21f45a4",
+      "lastUpdated": "2026-02-06T21:26:17Z",
+      "problemSlug": "array-partition",
+      "relatedProblems": [
+        "array-partition-i",
+        "partition-equal-subset-sum"
+      ],
+      "summary": "This problem involves partitioning an array of even length into two element sub-arrays and returning the minimum sum of these sub-arrays. The key insight to solving this problem is to sort the array and pair adjacent elements to minimize the sum."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Create a recursive function that tries to plant a flower in each plot and checks if the neighbors are empty. If a flower can be planted, recursively call the function on the next plot.",
+          "code": "class Solution {\n    func canPlaceFlowers(_ flowerbed: [Int], _ n: Int) -> Bool { \n        var flowerbed = flowerbed \n        var count = 0 \n        for i in 0..<flowerbed.count { \n            if flowerbed[i] == 0 && (i == 0 || flowerbed[i-1] == 0) && (i == flowerbed.count-1 || flowerbed[i+1] == 0) { \n                flowerbed[i] = 1 \n                count += 1 \n                if count >= n { \n                    return true \n                } \n            } \n        } \n        return count >= n \n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we're not using any extra space that scales with the input size.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we're iterating through the array once."
+          },
+          "explanation": "This approach tries all possible combinations, which makes it inefficient for large arrays. It's used as a baseline to compare with the optimized approach.",
+          "id": "08786df9-574d-4a35-aead-bc67501620ad",
+          "intuition": "This approach involves trying all possible combinations of planting flowers in the array and checking if the resulting arrangement satisfies the condition.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "We can plant a flower in the second or third plot.",
+              "id": "d3972669-c44c-4190-bd6d-aa5d5d7fa24e",
+              "input": "flowerbed = [1,0,0,0,1], n = 1"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "We can only plant one flower in the second or third plot.",
+              "id": "7290e26e-6344-478c-b1c8-191a770e7e02",
+              "input": "flowerbed = [1,0,0,0,1], n = 2"
+            }
+          ]
+        },
+        {
+          "approach": "Create a function that iterates through the array and checks if the current plot and its neighbors are empty. If they are, plant a flower and increment the count.",
+          "code": "class Solution {\n    func canPlaceFlowers(_ flowerbed: [Int], _ n: Int) -> Bool { \n        var count = 0 \n        for i in 0..<flowerbed.count { \n            if flowerbed[i] == 0 && (i == 0 || flowerbed[i-1] == 0) && (i == flowerbed.count-1 || flowerbed[i+1] == 0) { \n                flowerbed[i] = 1 \n                count += 1 \n            } \n        } \n        return count >= n \n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we're not using any extra space that scales with the input size.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we're iterating through the array once."
+          },
+          "explanation": "This approach is more efficient than the brute force approach because it only iterates through the array once and doesn't try all possible combinations.",
+          "id": "24472499-d6a1-47a7-9011-416380c093a6",
+          "intuition": "This approach involves iterating through the array and checking if the current plot and its neighbors are empty. If they are, we can plant a flower and increment the count.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "We can plant a flower in the second or third plot.",
+              "id": "b32f51ee-bddd-4376-8c4b-f60f4af9131d",
+              "input": "flowerbed = [1,0,0,0,1], n = 1"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "We can only plant one flower in the second or third plot.",
+              "id": "800f0947-c308-47b1-b297-e20be962c793",
+              "input": "flowerbed = [1,0,0,0,1], n = 2"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "We can plant flowers in every other plot.",
+              "id": "7a71677f-3840-4a7f-b0a2-afcfb2bb6368",
+              "input": "flowerbed = [0,0,0,0,0], n = 3"
+            }
+          ]
+        }
+      ],
+      "id": "c8b1fce3-2bcf-4511-bfa4-d6076955068b",
+      "lastUpdated": "2026-02-06T21:28:26Z",
+      "problemSlug": "can-place-flowers",
+      "relatedProblems": [
+        "insert-position",
+        "find-peak-element"
+      ],
+      "summary": "This problem involves determining whether it's possible to plant flowers in a given array without violating the rule that no two flowers can be planted in adjacent plots. The key insight is to iterate through the array and check if the current plot and its neighbors are empty."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start by generating all possible combinations of columns, then for each combination, create a new 2D array with the columns removed. Check each row in the new array to see if it's sorted. If all rows are sorted, count this as a valid combination.",
+          "code": "class Solution {\n    import Foundation\n\n    func minDeletionSize(_ strs: [String]) -> Int {\n        var res = 0\n        let strsArray = strs.map { Array($0) }\n        for (index, str) in strsArray.enumerated() {\n            for (nextIndex, nextStr) in strsArray.enumerated() {\n                if index < nextIndex {\n                    var isSorted = true\n                    for (charIndex, char) in str.enumerated() {\n                        if char > nextStr[charIndex] {\n                            isSorted = false\n                            break\n                        }\n                    }\n                    if !isSorted {\n                        res += 1\n                        break\n                    }\n                }\n            }\n        }\n        return res\n    }\n}",
+          "complexity": {
+            "space": "O(n * m)",
+            "spaceExplanation": "Space complexity is for storing the character array representations of the input strings.",
+            "time": "O(n^2 * m)",
+            "timeExplanation": "Time complexity is quadratic due to nested iteration over all strings and their characters."
+          },
+          "explanation": "Given the 2D array of strings, generate all combinations of columns. For each combination, remove these columns from the array and check if each row is sorted. Keep track of the minimum number of columns that need to be removed to make all rows sorted.",
+          "id": "611cd03a-f1ec-4d50-a83c-af1ea5a7d1e4",
+          "intuition": "This approach involves iterating over all possible combinations of columns and checking if deleting these columns results in sorted rows.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "One column needs to be deleted to make the rows sorted.",
+              "id": "5ca2db06-07fd-4a5c-a7b5-a0ecc8422a2d",
+              "input": "strs = [\"cba\",\"daf\",\"ghi\"]"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "No columns need to be deleted since the rows are already sorted.",
+              "id": "fcde5f3a-f581-4649-ad0e-3a93f4ec8961",
+              "input": "strs = [\"a\",\"b\"]"
+            }
+          ]
+        },
+        {
+          "approach": "Compare characters in each position across all strings. If a character is greater than another character in the same position in a different string (indicating unsorted rows), mark this column for deletion.",
+          "code": "class Solution {\n    import Foundation\n\n    func minDeletionSize(_ strs: [String]) -> Int {\n        let strsArray = strs.map { Array($0) }\n        var columnsToDelete = 0\n        let n = strsArray.count\n        let m = strsArray[0].count\n\n        for j in 0..<m {\n            for i in 1..<n {\n                if strsArray[i-1][j] > strsArray[i][j] {\n                    columnsToDelete += 1\n                    break\n                }\n            }\n        }\n\n        return columnsToDelete\n    }\n}",
+          "complexity": {
+            "space": "O(n * m)",
+            "spaceExplanation": "Space complexity is for storing the character array representations of the input strings.",
+            "time": "O(n * m)",
+            "timeExplanation": "Time complexity is linear with respect to the total number of characters across all strings."
+          },
+          "explanation": "Iterate over the characters of the strings, comparing each character with others in the same position. If a comparison indicates an unsorted pair of rows, mark that column for deletion.",
+          "id": "4cb31ee3-5a49-486d-95c5-613b0cbf0426",
+          "intuition": "This approach involves directly identifying and eliminating columns that are causing the rows to be unsorted, rather than checking all combinations.",
+          "name": "Greedy",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "One column needs to be deleted to make the rows sorted.",
+              "id": "47009181-6ad2-405f-a77e-da2ab5d4eb9b",
+              "input": "strs = [\"cba\",\"daf\",\"ghi\"]"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "No columns need to be deleted since the rows are already sorted.",
+              "id": "bdeac760-02a8-484c-8eda-e2e5e5af8796",
+              "input": "strs = [\"a\",\"b\"]"
+            }
+          ]
+        }
+      ],
+      "id": "33ac38cf-eee1-4f34-beab-b9d9d6adb7d8",
+      "lastUpdated": "2026-02-06T21:51:10Z",
+      "problemSlug": "delete-columns-to-make-sorted-ii",
+      "relatedProblems": [
+        "delete-columns-to-make-sorted",
+        "longest-increasing-subsequence"
+      ],
+      "summary": "Delete Columns to Make Sorted II involves deleting columns from a 2D array of strings to make each row sorted, focusing on a greedy approach. This problem can be solved through a brute-force method or by using a more efficient greedy algorithm to eliminate unnecessary columns."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Create a queue of the senate, iterate through each senator, apply the voting rules, then requeue the senator at the appropriate position",
+          "code": "import Foundation\n\nclass Solution {\n    func predictPartyVictory(_ senate: String) -> String {\n        var queue: [Character] = Array(senate)\n        while true {\n            let first = queue.first!\n            queue.append(queue.removeFirst())\n            if first == \"R\" {\n                if let index = queue.firstIndex(of: \"D\") {\n                    queue.remove(at: index)\n                    return \"Radiant\"\n                }\n            } else {\n                if let index = queue.firstIndex(of: \"R\") {\n                    queue.remove(at: index)\n                    return \"Dire\"\n                }\n            }\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we create a queue of the same length as the senate",
+            "time": "O(n^2)",
+            "timeExplanation": "Each iteration of the while loop takes O(n) time, where n is the length of the senate, in the worst case the while loop will run n times"
+          },
+          "explanation": "Create a queue and initialize it with the senate, iterate through the queue, for each senator apply the voting rules, and then requeue the senator at the end or start based on the rules and their sentiment",
+          "id": "01559f5b-edd6-41fb-8fcc-40c02f2315c6",
+          "intuition": "Use a queue to simulate the voting process, where each senator is dequeued and then enqueued at the end, either at the start or end based on their sentiment and the voting rules",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "Radiant",
+              "explanation": "In the first round the Radiant senator will vote and the Dire senator will be removed, then the Radiant senator will be requeued and the Dire senator will have been removed so Radiant wins",
+              "id": "ff6e06ca-def9-4bc3-ad3f-92e2bd8d4f5b",
+              "input": "senate = \"RD\""
+            },
+            {
+              "expectedOutput": "Radiant",
+              "explanation": "The Radiant and Dire senators will alternate voting and removing each other until one party has been completely removed, in this case Radiant wins",
+              "id": "01fa3645-e68b-4629-a8ad-3d4255597262",
+              "input": "senate = \"RDRD\""
+            }
+          ]
+        },
+        {
+          "approach": "Create two queues, one for the Radiant and one for the Dire senators, iterate through the queues and apply the voting rules to determine the outcome of the vote",
+          "code": "import Foundation\n\nclass Solution {\n    func predictPartyVictory(_ senate: String) -> String {\n        var rQueue: [Character] = [], dQueue: [Character] = []\n        for (index, char) in senate.enumerated() {\n            if char == \"R\" {\n                rQueue.append(char)\n            } else {\n                dQueue.append(char)\n            }\n        }\n        while !rQueue.isEmpty && !dQueue.isEmpty {\n            if rQueue.count > dQueue.count {\n                return \"Radiant\"\n            } else if rQueue.count < dQueue.count {\n                return \"Dire\"\n            } else {\n                if rQueue.first! > dQueue.first! {\n                    rQueue.append(rQueue.removeFirst())\n                    dQueue.removeFirst()\n                } else {\n                    dQueue.append(dQueue.removeFirst())\n                    rQueue.removeFirst()\n                }\n            }\n        }\n        return rQueue.isEmpty ? \"Dire\" : \"Radiant\"\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we create two queues of the same length as the senate",
+            "time": "O(n)",
+            "timeExplanation": "Each iteration of the while loop takes constant time, and the loop will run at most n times"
+          },
+          "explanation": "Create two queues and initialize them with the senate, iterate through the queues and apply the voting rules to determine the outcome of the vote",
+          "id": "6ea9e6d6-b760-44b7-842d-8d25c64c9c0d",
+          "intuition": "Use two separate queues for the Radiant and Dire senators to optimize the voting process",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "Radiant",
+              "explanation": "In the first round the Radiant senator will vote and the Dire senator will be removed, then the Radiant senator will be requeued and the Dire senator will have been removed so Radiant wins",
+              "id": "e0b224f0-bfa1-4230-aa0f-01bdfd4e9ad0",
+              "input": "senate = \"RD\""
+            },
+            {
+              "expectedOutput": "Radiant",
+              "explanation": "The Radiant and Dire senators will alternate voting and removing each other until one party has been completely removed, in this case Radiant wins",
+              "id": "ae9c69c6-d168-4908-9a2a-ccc93ed50577",
+              "input": "senate = \"RDRD\""
+            }
+          ]
+        }
+      ],
+      "id": "c50a1797-d07e-495b-88c3-b068fc71fe68",
+      "lastUpdated": "2026-02-06T21:30:55Z",
+      "problemSlug": "dota2-senate",
+      "relatedProblems": [
+        "predict-the-winner",
+        "majority-element"
+      ],
+      "summary": "The problem asks to predict the outcome of a vote in the senate based on the sentiments of the senators and the voting rules, key insight is to use a data structure like a queue to model the voting process."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Track total (gas - cost for all) and tank (running sum)\n2. If tank < 0, reset start to next station, reset tank\n3. Return start if total >= 0, else -1",
+          "code": "class Solution {\n    func canCompleteCircuit(_ gas: [Int], _ cost: [Int]) -> Int {\n        var total = 0\n        var tank = 0\n        var start = 0\n\n        for i in 0..<gas.count {\n            let diff = gas[i] - cost[i]\n            total += diff\n            tank += diff\n\n            if tank < 0 {\n                start = i + 1\n                tank = 0\n            }\n        }\n\n        return total >= 0 ? start : -1\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only tracking a few variables",
+            "time": "O(n)",
+            "timeExplanation": "Single pass through arrays"
+          },
+          "explanation": "Key insight: if we can't reach station i+1 from some start s, then any station between s and i also can't reach i+1 (because we'd have even less gas). So when tank goes negative, skip all those stations. If total is non-negative, the remaining stations must work.",
+          "id": "1ba963ca-54d1-47b2-ae93-e31fa04a550e",
+          "intuition": "If total gas >= total cost, solution exists. If we run out at station i, start after i (stations 0 to i can't be start). Track where tank goes negative.",
+          "name": "Greedy Single Pass",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "Start at station 3: tank 4-1=3, 3+5-2=6, 6+1-3=4, 4+2-4=2, 2+3-5=0. Success!",
+              "id": "ad59c438-fa2b-47ec-a03b-a83316de8c69",
+              "input": "gas = [1,2,3,4,5], cost = [3,4,5,1,2]"
+            },
+            {
+              "expectedOutput": "-1",
+              "explanation": "Total gas 9 < total cost 10. Impossible.",
+              "id": "b5edb2af-7f12-41f9-8b9d-3f123ded9da1",
+              "input": "gas = [2,3,4], cost = [3,4,3]"
+            }
+          ]
+        },
+        {
+          "approach": "1. For each starting station i\n2. Simulate trip: at each station add gas, subtract cost\n3. If tank ever negative, this start fails\n4. If complete circuit, return i",
+          "code": "class Solution {\n    func canCompleteCircuit(_ gas: [Int], _ cost: [Int]) -> Int {\n        let n = gas.count\n\n        for start in 0..<n {\n            var tank = 0\n            var success = true\n\n            for i in 0..<n {\n                let station = (start + i) % n\n                tank += gas[station] - cost[station]\n                if tank < 0 {\n                    success = false\n                    break\n                }\n            }\n\n            if success { return start }\n        }\n\n        return -1\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only loop variables",
+            "time": "O(n²)",
+            "timeExplanation": "Try each of n starts, each simulation is O(n)"
+          },
+          "explanation": "Simple simulation to verify the greedy approach. Try each start, simulate the journey. TLE for large inputs but helps understand the problem.",
+          "id": "78e14786-cca2-4b1b-a5b1-f09992ed3099",
+          "intuition": "Try each station as start. Simulate the trip and check if we complete the circuit.",
+          "name": "Brute Force (for understanding)",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "Trying stations 0,1,2 fail. Station 3 succeeds.",
+              "id": "1cbb8bbf-bbbd-4fca-aa9c-570b20e9e6db",
+              "input": "gas = [1,2,3,4,5], cost = [3,4,5,1,2]"
+            }
+          ]
+        }
+      ],
+      "id": "7da2ba9b-f8b5-40ee-add3-95cb464ba560",
+      "lastUpdated": "2026-02-06T00:53:56.092Z",
+      "problemSlug": "gas-station",
+      "relatedProblems": [
+        "minimum-cost-to-hire-k-workers"
+      ],
+      "summary": "Find starting gas station index to complete circular trip. If total gas >= total cost, solution exists. Start from station after the one where tank goes negative."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "We start by generating all possible subsets of the given hand. Then, for each subset, we check if the cards are consecutive by sorting them and comparing each card with its previous one. If all cards in a subset are consecutive, we remove these cards from the hand and continue with the remaining cards.",
+          "code": "import Foundation\n\nclass Solution {\n    func isNStraightHand(_ hand: [Int], _ W: Int) -> Bool {\n        let sortedHand = hand.sorted()\n        var handSet = Set<Int>(sortedHand)\n        var result = true\n        while !handSet.isEmpty {\n            let minCard = handSet.min()!\n            var currentSet = Set<Int>(Array(handSet).filter { $0 <= minCard + W - 1 })\n            var validSet = true\n            for card in minCard...minCard + W - 1 {\n                if !currentSet.contains(card) {\n                    validSet = false\n                    break\n                }\n            }\n            if !validSet {\n                result = false\n                break\n            }\n            currentSet.forEach { handSet.remove($0) }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we use a set to store the remaining cards in the hand.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) due to the nested loop structure, where n is the number of cards in the hand."
+          },
+          "explanation": "This approach ensures we consider all possible ways to divide the hand into straight sequences but can be inefficient due to its exponential time complexity.",
+          "id": "c5dd7581-be0c-4bc5-a855-d7f0034afccf",
+          "intuition": "This approach involves generating all possible subsets of the given hand and checking if each subset can form a straight sequence.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "We can divide the hand into two straight sequences: [1,2,3] and [6,7,8].",
+              "id": "265e8bdd-6aa0-4958-aedc-b35a30abffb2",
+              "input": "hand = [1,2,3,6,2,3,4,7,8], W = 3"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "We cannot divide the hand into two straight sequences of length 4 because we only have 5 cards in total.",
+              "id": "8c065ceb-49d9-4862-a4db-c9ed5951345e",
+              "input": "hand = [1,2,3,4,5], W = 4"
+            }
+          ]
+        },
+        {
+          "approach": "We start by creating a dictionary to store the frequency of each card. Then, for each card in ascending order, we try to construct a straight sequence starting from this card. If we can construct a sequence of length W, we remove these cards from the dictionary and continue with the remaining cards.",
+          "code": "import Foundation\n\nclass Solution {\n    func isNStraightHand(_ hand: [Int], _ W: Int) -> Bool {\n        let count = Dictionary(grouping: hand, by: { $0 }).mapValues { $0.count }\n        let sortedKeys = count.keys.sorted()\n        var index = 0\n        while index < sortedKeys.count {\n            let start = sortedKeys[index]\n            if count[start] == 0 {\n                index += 1\n                continue\n            }\n            for offset in 0..<W {\n                let next = start + offset\n                if !count.keys.contains(next) || count[next] == 0 {\n                    return false\n                }\n                count[next]! -= 1\n            }\n            index += 1\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we use a dictionary to store the frequency of each card.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity is O(n log n) due to the sorting operation, where n is the number of unique cards in the hand."
+          },
+          "explanation": "This approach is more efficient because it avoids unnecessary iterations by only considering the cards that can potentially start a straight sequence.",
+          "id": "45076888-9158-4320-a28e-7185c7034015",
+          "intuition": "This approach involves using a dictionary to store the frequency of each card and then iteratively constructing the straight sequences.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "We can divide the hand into two straight sequences: [1,2,3] and [6,7,8].",
+              "id": "598abffd-0eac-4c51-96f6-8fb4b313620c",
+              "input": "hand = [1,2,3,6,2,3,4,7,8], W = 3"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "We cannot divide the hand into two straight sequences of length 4 because we only have 5 cards in total.",
+              "id": "df3199ac-e407-4154-842c-1c7cbb250fba",
+              "input": "hand = [1,2,3,4,5], W = 4"
+            }
+          ]
+        }
+      ],
+      "id": "851c06cd-fd64-4a01-ae9c-1f51753a66c3",
+      "lastUpdated": "2026-02-06T21:43:59Z",
+      "problemSlug": "hand-of-straights",
+      "relatedProblems": [
+        "array-nesting",
+        "valid-tic-tac-toe-state"
+      ],
+      "summary": "Hand of Straights is a problem where we need to determine if a given hand of cards can be divided into straight sequences of a minimum length. The key insight to this problem is to understand that we need to use a greedy approach along with sorting to ensure we can construct the sequences."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Iterate over all elements, and for each element, check all pairs of elements to its right to see if they form an increasing subsequence.",
+          "code": "class Solution {\n    func increasingTriplet(nums: [Int]) -> Bool { \n     let n = nums.count \n     for i in 0..<n { \n     for j in i+1..<n { \n     for k in j+1..<n { \n     if nums[i] < nums[j] && nums[j] < nums[k] { \n     return true \n     } \n     } \n     } \n     } \n     return false \n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we are not using any additional data structures that scale with input size.",
+            "time": "O(n^3)",
+            "timeExplanation": "The time complexity is cubic because we are using three nested loops to compare all possible triplets in the array."
+          },
+          "explanation": "The brute force solution iterates over all possible triplets in the array, comparing each triplet to see if it forms an increasing sequence.",
+          "id": "cd31e140-6123-4bc4-9ec1-a41f39b84835",
+          "intuition": "This approach involves checking all possible triplets in the array to see if any of them form an increasing subsequence.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The subsequence [1,2,3] is increasing, so the function returns true.",
+              "id": "84222762-a9c9-41e2-95b4-65178d123e06",
+              "input": "nums = [1,2,3]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "There is no increasing subsequence, so the function returns false.",
+              "id": "867522e8-9c95-4cdc-bcd3-5fd91d092cee",
+              "input": "nums = [5,4,3,2,1]"
+            }
+          ]
+        },
+        {
+          "approach": "Use two variables to track the smallest possible first and second elements, updating them as we iterate through the array.",
+          "code": "class Solution {\n    func increasingTriplet(nums: [Int]) -> Bool { \n     var first = Int.max \n     var second = Int.max \n     for num in nums { \n     if num <= first { \n     first = num \n     } else if num <= second { \n     second = num \n     } else { \n     return true \n     } \n     } \n     return false \n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we are using a constant amount of space to store the first and second variables.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we are making a single pass through the array."
+          },
+          "explanation": "The optimized solution uses two variables, first and second, to track the smallest possible first and second elements for an increasing subsequence. It iterates through the array, updating these variables whenever it finds a smaller possible first or second element.",
+          "id": "cef09045-a0c0-4751-b51e-aef3a332cc4d",
+          "intuition": "Instead of checking all possible triplets, we can track the smallest possible first and second elements for an increasing subsequence.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The subsequence [1,2,3] is increasing, so the function returns true.",
+              "id": "372c475f-b41d-49dc-805f-7ca23cd794c1",
+              "input": "nums = [1,2,3]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "There is no increasing subsequence, so the function returns false.",
+              "id": "9cfaacd2-55a1-492a-b4f6-dce849819300",
+              "input": "nums = [5,4,3,2,1]"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "The subsequence [0,4,6] is increasing, so the function returns true.",
+              "id": "38ac8823-2c12-4ab5-b601-5e3bf5255f0d",
+              "input": "nums = [2,1,5,0,4,6]"
+            }
+          ]
+        }
+      ],
+      "id": "f63fe9a2-7cb2-43a6-b8ec-8eabacf676ee",
+      "lastUpdated": "2026-02-06T21:13:19Z",
+      "problemSlug": "increasing-triplet-subsequence",
+      "relatedProblems": [
+        "subarray-sum-equals-k",
+        "minimum-size-subarray-sum"
+      ],
+      "summary": "The problem asks to determine if there exists an increasing triplet subsequence in a given array, with the key insight being that we can track the smallest possible first and second elements to identify such a subsequence."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all permutations of the input numbers, join each permutation into a string, and compare them to find the largest one.",
+          "code": "class Solution {\n    import Foundation\n\n    func largestNumber(_ nums: [Int]) -> String {\n        var numsStr = nums.map { String($0) }\n        var maxNum = \"\"\n        let count = numsStr.count\n        var permutations: [[String]] = [[]]\n        for num in numsStr {\n            var newPermutations: [[String]] = []\n            for perm in permutations {\n                for i in 0...perm.count {\n                    var newPerm = perm\n                    newPerm.insert(num, at: i)\n                    newPermutations.append(newPerm)\n                }\n            }\n            permutations = newPermutations\n        }\n        for perm in permutations {\n            let currentNum = perm.joined()\n            if currentNum > maxNum {\n                maxNum = currentNum\n            }\n        }\n        if maxNum.first == \"0\" {\n            return \"0\"\n        }\n        return maxNum\n    }\n}",
+          "complexity": {
+            "space": "O(n!)",
+            "spaceExplanation": "Storing all permutations requires O(n!) space.",
+            "time": "O(n!)",
+            "timeExplanation": "Generating all permutations of n numbers has a time complexity of O(n!)."
+          },
+          "explanation": "This approach works by considering every possible arrangement of the input numbers. However, it's inefficient due to its high time complexity.",
+          "id": "948e40ae-7f4e-4e10-9814-06061867e3ac",
+          "intuition": "We can generate all possible permutations of the input numbers and find the largest one.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "9534330",
+              "explanation": "The largest possible number is formed by arranging the input numbers in this order.",
+              "id": "0b076e30-32e9-44ff-b99b-732942b46355",
+              "input": "nums = [3,30,34,5,9]"
+            },
+            {
+              "expectedOutput": "77641510",
+              "explanation": "The largest possible number is formed by arranging the input numbers in this order.",
+              "id": "b44d8bbd-f94c-4f25-9e8b-66138f3dcfca",
+              "input": "nums = [10,7,76,415]"
+            }
+          ]
+        },
+        {
+          "approach": "Compare each pair of numbers and swap them if necessary, then join the sorted numbers into a string.",
+          "code": "class Solution {\n    import Foundation\n\n    func largestNumber(_ nums: [Int]) -> String {\n        let numsStr = nums.map { String($0) }\n        let sortedNums = numsStr.sorted { (num1, num2) -> Bool in\n            return (num1 + num2) > (num2 + num1)\n        }\n        let result = sortedNums.joined()\n        return result.first == \"0\" ? \"0\" : result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) for storing the input numbers as strings.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity is O(n log n) due to the sorting operation."
+          },
+          "explanation": "This approach works by using a custom comparison function that compares two numbers based on their first digit.",
+          "id": "12cc6380-ad61-4b7c-83a5-9051e3eb9912",
+          "intuition": "We can compare numbers based on their first digit and sort them in descending order.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "9534330",
+              "explanation": "The largest possible number is formed by arranging the input numbers in this order.",
+              "id": "83fa1566-a2dc-4475-9c27-6e2322a8fe54",
+              "input": "nums = [3,30,34,5,9]"
+            },
+            {
+              "expectedOutput": "77641510",
+              "explanation": "The largest possible number is formed by arranging the input numbers in this order.",
+              "id": "d966857f-32ee-40ad-9bec-f65f5fae9c0a",
+              "input": "nums = [10,7,76,415]"
+            }
+          ]
+        }
+      ],
+      "id": "54d7290e-2b52-4f84-95da-5ad38cc2485a",
+      "lastUpdated": "2026-02-06T21:08:45Z",
+      "problemSlug": "largest-number",
+      "relatedProblems": [
+        "valid-anagram",
+        "reverse-words-in-a-string-iii"
+      ],
+      "summary": "Given a list of non-negative integers, arrange them such that they form the largest possible number."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each customer, try to give them change using all possible combinations of bills, starting from the largest denomination. If a combination works, move on to the next customer. If no combination works, return false.",
+          "code": "class Solution {\n    func lemonadeChange(_ bills: [Int]) -> Bool {\n        var fiveDollars: Int = 0\n        var tenDollars: Int = 0\n        for bill in bills {\n            if bill == 5 {\n                fiveDollars += 1\n            } else if bill == 10 {\n                if fiveDollars == 0 {\n                    return false\n                }\n                fiveDollars -= 1\n                tenDollars += 1\n            } else if bill == 20 {\n                if fiveDollars >= 3 {\n                    fiveDollars -= 3\n                } else if fiveDollars >= 1 && tenDollars >= 1 {\n                    fiveDollars -= 1\n                    tenDollars -= 1\n                } else {\n                    return false\n                }\n            }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we only use a constant amount of space to store the count of five and ten dollar bills.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we only iterate through the bills array once."
+          },
+          "explanation": "This approach works but is inefficient because it has to try all combinations of bills for each customer.",
+          "id": "4bf722a0-e92c-4eea-966a-25ffaeb6c312",
+          "intuition": "Try all possible combinations of bills to give the correct change",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "We can give the correct change for each customer: 5 dollars for the first three customers, and for the last two customers, we give 10 dollars and then 20 dollars using the previously collected bills.",
+              "id": "a6af4d4b-0c2b-42f1-bf5e-50b4b2f13ea5",
+              "input": "bills = [5,5,5,10,20]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "We cannot give the correct change for the last customer because we do not have enough bills to give 20 dollars.",
+              "id": "fda0d7a4-6db8-4dd2-8237-9134fe8165fd",
+              "input": "bills = [5,5,10,20]"
+            }
+          ]
+        },
+        {
+          "approach": "For each customer, try to give them change using the largest denomination bill possible, starting from 20 dollars. If a bill is not available, use a smaller denomination.",
+          "code": "class Solution {\n    func lemonadeChange(_ bills: [Int]) -> Bool {\n        var five = 0\n        var ten = 0\n        for bill in bills {\n            if bill == 5 {\n                five += 1\n            } else if bill == 10 {\n                if five == 0 {\n                    return false\n                }\n                five -= 1\n                ten += 1\n            } else if bill == 20 {\n                if ten > 0 && five > 0 {\n                    ten -= 1\n                    five -= 1\n                } else if five >= 3 {\n                    five -= 3\n                } else {\n                    return false\n                }\n            }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we only use a constant amount of space to store the count of five and ten dollar bills.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we only iterate through the bills array once."
+          },
+          "explanation": "This approach works because it minimizes the number of smaller bills needed to give change, making it easier to give change for the next customers.",
+          "id": "55d9eee0-88e6-4b4d-b341-a9cc2d183457",
+          "intuition": "Always try to give the largest denomination bill possible",
+          "name": "Greedy",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "We can give the correct change for each customer: 5 dollars for the first three customers, and for the last two customers, we give 10 dollars and then 20 dollars using the previously collected bills.",
+              "id": "a25fc803-7bcb-48b0-b0d6-3e073995823e",
+              "input": "bills = [5,5,5,10,20]"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "We can give the correct change for each customer: 5 dollars for the first two customers, and then 10 dollars using one of the previously collected 5 dollar bills.",
+              "id": "0d79a129-a4f3-477e-ac23-db45aabcfdbf",
+              "input": "bills = [5,5,10]"
+            }
+          ]
+        }
+      ],
+      "id": "919fd410-6fc4-43f2-84cd-760e4037ac29",
+      "lastUpdated": "2026-02-06T21:44:58Z",
+      "problemSlug": "lemonade-change",
+      "relatedProblems": [
+        "minimum-size-subarray-sum",
+        "coin-change-2"
+      ],
+      "summary": "The problem asks to determine if you can provide the correct change for each customer after they purchase a lemonade. The key insight is to use a greedy approach, always trying to give the largest denomination bill possible."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Step 1: Generate all possible combinations of characters. Step 2: Check each combination if it forms a palindrome. Step 3: Calculate the length of each palindrome and return the maximum length.",
+          "code": "class Solution {\n    func longestPalindrome(_ s: String) -> Int {\n        let chars = Array(s)\n        var maxLen = 0\n        for mask in 0...1 << chars.count {\n            var palindrome = \"\"\n            for i in 0..<chars.count {\n                if (mask & (1 << i)) != 0 {\n                    palindrome += String(chars[i])\n                }\n            }\n            if String(palindrome.reversed()) == palindrome {\n                maxLen = max(maxLen, palindrome.count)\n            }\n        }\n        return maxLen\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because in the worst case, we need to store the combination of characters which can be of size n.",
+            "time": "O(2^n * n)",
+            "timeExplanation": "The time complexity is O(2^n * n) because we generate 2^n combinations and for each combination, we check if it is a palindrome in O(n) time."
+          },
+          "explanation": "This approach works by trying all possible combinations of characters and checking each one if it forms a palindrome. However, this approach is inefficient as it has a high time complexity due to the generation of all possible combinations.",
+          "id": "c3a9ceb5-7f72-43f4-b684-9915e7fe8959",
+          "intuition": "We can use all possible combinations of characters to form a palindrome and check the length of each palindrome.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "8",
+              "explanation": "The longest palindrome that can be formed is \"dccbacd\" or \"bacddcba\" or any other combination of characters that forms a palindrome of length 8.",
+              "id": "dc88cfc0-5f6c-4214-80fa-4820f9541d0f",
+              "input": "s = \"abccccdd\""
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The longest palindrome that can be formed is \"a\".",
+              "id": "a4c3bfb7-e357-43b0-9a84-9cce76a95226",
+              "input": "s = \"a\""
+            }
+          ]
+        },
+        {
+          "approach": "Step 1: Count the frequency of each character using a hash map. Step 2: Calculate the length of the longest palindrome by pairing up characters and including one character in the middle if the total count of characters is odd.",
+          "code": "class Solution {\n    func longestPalindrome(_ s: String) -> Int {\n        let chars = Array(s)\n        var count: [Character: Int] = [:]\n        for char in chars {\n            count[char, default: 0] += 1\n        }\n        var length = 0\n        var odd = false\n        for (_, value) in count {\n            if value % 2 == 0 {\n                length += value\n            }\n            else {\n                length += value - 1\n                odd = true\n            }\n        }\n        if odd {\n            return length + 1\n        }\n        else {\n            return length\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we need to store the frequency of each character in the hash map which can be of size n in the worst case.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we iterate over the string once to count the frequency of each character and then we iterate over the hash map once to calculate the length of the longest palindrome."
+          },
+          "explanation": "This approach works by pairing up characters and including one character in the middle if the total count of characters is odd. This approach is more efficient than the brute force approach as it has a lower time complexity.",
+          "id": "ec2b5969-a010-4343-a74a-30d18d54ed8e",
+          "intuition": "We can use a hash map to count the frequency of each character and then form the longest palindrome by pairing up characters and including one character in the middle if the total count of characters is odd.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "8",
+              "explanation": "The longest palindrome that can be formed is \"dccbacd\" or \"bacddcba\" or any other combination of characters that forms a palindrome of length 8.",
+              "id": "a6c455f7-6688-4524-bf5b-34d0cd9e8077",
+              "input": "s = \"abccccdd\""
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The longest palindrome that can be formed is \"a\".",
+              "id": "5e1ccb0c-294d-4342-a104-3ce23da56423",
+              "input": "s = \"a\""
+            }
+          ]
+        }
+      ],
+      "id": "321aba08-49e5-4dce-98fe-de3d0cd352a1",
+      "lastUpdated": "2026-02-06T21:17:10Z",
+      "problemSlug": "longest-palindrome",
+      "relatedProblems": [
+        "valid-palindrome",
+        "palindrome-partitioning"
+      ],
+      "summary": "The problem asks to find the length of the longest palindrome that can be formed from a given string. The key insight is that we can form a palindrome by pairing up characters and including one character in the middle if the total count of characters is odd."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize the maximum sum of heights to 0. 2. Iterate over all possible combinations of building heights. 3. For each combination, compare the maximum height and width of each building with the heights of its neighbors and the city skyline. 4. If the building height is greater than the maximum height or width of its neighbors and the city skyline, update the maximum sum of heights.",
+          "code": "class Solution {\n    func maxIncreaseKeepingSkyline(_ grid: [[Int]]) -> Int {\n      let m = grid.count\n      let n = grid[0].count\n      var res = 0\n      for i in 0..<m {\n        for j in 0..<n {\n          var maxVal = 0\n          for k in 0..<m {\n            maxVal = max(maxVal, grid[k][j])\n          }\n          for k in 0..<n {\n            maxVal = min(maxVal, grid[i][k])\n          }\n          res += maxVal - grid[i][j]\n        }\n      }\n      return res\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are not using any extra space that scales with input size.",
+            "time": "O(m^2 * n^2)",
+            "timeExplanation": "The time complexity is O(m^2 * n^2) because we are iterating over all possible combinations of building heights."
+          },
+          "explanation": "The brute force approach is simple but inefficient. It has a high time complexity because it iterates over all possible combinations of building heights. This approach is not practical for large inputs.",
+          "id": "9673a116-488d-4186-8d91-6eb0989fb7a2",
+          "intuition": "This approach works by iterating over all possible combinations of building heights and comparing them with the maximum height and width of the buildings and the city skyline.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "35",
+              "explanation": "The maximum sum of heights is 35.",
+              "id": "6b10f515-38d4-4b63-8cab-cf023530b227",
+              "input": "grid = [[3,0,8,4],[2,4,5,7],[9,2,6,3],[0,3,1,0]]"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "The maximum sum of heights is 0.",
+              "id": "eda4ac26-c339-47e0-b11f-17112a5c406a",
+              "input": "grid = [[0,0,0],[0,0,0],[0,0,0]]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize the maximum height and width of each building and the city skyline. 2. Iterate over the grid to calculate the maximum height and width of each building and the city skyline. 3. Iterate over the grid to find the maximum sum of heights by comparing the maximum height and width of each building with the heights of its neighbors and the city skyline.",
+          "code": "class Solution {\n    func maxIncreaseKeepingSkyline(_ grid: [[Int]]) -> Int {\n      let m = grid.count\n      let n = grid[0].count\n      var rowMax = [Int](repeating: 0, count: m)\n      var colMax = [Int](repeating: 0, count: n)\n      for i in 0..<m {\n        for j in 0..<n {\n          rowMax[i] = max(rowMax[i], grid[i][j])\n          colMax[j] = max(colMax[j], grid[i][j])\n        }\n      }\n      var res = 0\n      for i in 0..<m {\n        for j in 0..<n {\n          res += min(rowMax[i], colMax[j]) - grid[i][j]\n        }\n      }\n      return res\n    }\n}",
+          "complexity": {
+            "space": "O(m + n)",
+            "spaceExplanation": "The space complexity is O(m + n) because we are storing the maximum height and width of each building and the city skyline.",
+            "time": "O(m * n)",
+            "timeExplanation": "The time complexity is O(m * n) because we are iterating over the grid twice."
+          },
+          "explanation": "The optimized approach is more efficient than the brute force approach. It calculates the maximum height and width of each building and the city skyline first, then iterates over the grid to find the maximum sum of heights.",
+          "id": "863755cc-fbc4-4c10-ab00-a98a19b85f34",
+          "intuition": "This approach works by first calculating the maximum height and width of each building and the city skyline, then iterating over the grid to find the maximum sum of heights.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "35",
+              "explanation": "The maximum sum of heights is 35.",
+              "id": "1350d25e-75eb-4df9-8eb2-d63f4218589b",
+              "input": "grid = [[3,0,8,4],[2,4,5,7],[9,2,6,3],[0,3,1,0]]"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "The maximum sum of heights is 0.",
+              "id": "4f6c7829-443d-4482-bf3a-2620998a64b3",
+              "input": "grid = [[0,0,0],[0,0,0],[0,0,0]]"
+            }
+          ]
+        }
+      ],
+      "id": "7ca1d96b-7c2a-498f-859c-7f6df471cae5",
+      "lastUpdated": "2026-02-06T21:41:03Z",
+      "problemSlug": "max-increase-to-keep-city-skyline",
+      "relatedProblems": [
+        "max-increase-to-keep-city-skyline",
+        "largest-rectangle-in-histogram"
+      ],
+      "summary": "The problem asks to find the maximum sum of the heights of the buildings in the city skyline, given the maximum height and width of the buildings. The key insight is to compare the maximum height and width of each building with the heights of its neighbors and the city skyline."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all permutations of k indices to negate. For each permutation, negate the corresponding elements in the array and calculate the sum.",
+          "code": "class Solution {\n    func largestSumAfterKNegations(_ nums: [Int], _ k: Int) -> Int {\n        var arr = nums\n        var maxSum = Int.min\n        for p in getPermutations(count: k, n: nums.count) {\n            var sum = 0\n            var temp = arr\n            for i in p {\n                temp[i] = -temp[i]\n            }\n            for t in temp {\n                sum += t\n            }\n            if sum > maxSum {\n                maxSum = sum\n            }\n        }\n        return maxSum\n    }\n    func getPermutations(count: Int, n: Int) -> [[Int]] {\n        if count == 1 {\n            var res = [[Int]]()\n            for i in 0..<n {\n                res.append([i])\n            }\n            return res\n        }\n        var res = [[Int]]()\n        for p in getPermutations(count: count - 1, n: n) {\n            for i in 0..<n {\n                if !p.contains(i) {\n                    var temp = p\n                    temp.append(i)\n                    res.append(temp)\n                }\n            }\n        }\n        return res\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant as we're not using any data structures that scale with input size.",
+            "time": "O(n!)",
+            "timeExplanation": "Generating all permutations has an exponential time complexity."
+          },
+          "explanation": "This approach has an exponential time complexity due to generating all permutations. This makes it inefficient for large inputs.",
+          "id": "d29283e6-74e2-4eaa-8394-184244688043",
+          "intuition": "The brute force approach involves trying out all possible combinations of k negations on the array to find the maximum sum.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "22",
+              "explanation": "The sum after negating the two smallest numbers is -2 + -7 + 11 + 15 = 27, but the input k is 2, meaning we can only negate two numbers. Negating the two smallest numbers gives -2 + -7 + 11 + 15, but it's better to negate the two smallest absolute values, in this case -2 and -7 is better than -15 and -11, the latter sum being larger.",
+              "id": "0361215f-a334-4546-bb5f-7e18cc227e9d",
+              "input": "nums = [2,7,11,15], k = 2"
+            },
+            {
+              "expectedOutput": "28",
+              "explanation": "After four negations, all the numbers are negated. So the sum becomes -2 + -7 + -11 + -15 = -35.",
+              "id": "138825ef-4317-440d-8c50-664bf5c3b9d4",
+              "input": "nums = [2,7,11,15], k = 4"
+            }
+          ]
+        },
+        {
+          "approach": "Sort the array in ascending order. Negate the smallest k numbers.",
+          "code": "import Foundation\n\nclass Solution {\n    func largestSumAfterKNegations(_ nums: [Int], _ k: Int) -> Int {\n        var arr = nums.sorted()\n        for i in 0..<min(arr.count, k) {\n            arr[i] = -arr[i]\n        }\n        return arr.reduce(0, +)\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear as we're creating a new sorted array.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity is dominated by sorting the array."
+          },
+          "explanation": "This approach has a much better time complexity than the brute force approach as we're only sorting the array.",
+          "id": "002e4a1b-46e2-4f80-a7da-e376bc00729b",
+          "intuition": "The optimized approach involves negating the smallest numbers in the array k times to maximize the sum.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "7",
+              "explanation": "Negating the smallest number gives us -2 + 3 + 4 = 5, but we can get a larger sum if we negate the second smallest number which is 2, giving us 3 + -2 + 4 = 5. However the largest sum is achieved when we negate the smallest absolute value which is 2 in this case.",
+              "id": "a2ec212e-d191-4142-b6a8-d9a8e5bd8cee",
+              "input": "nums = [4,2,3], k = 1"
+            },
+            {
+              "expectedOutput": "-35",
+              "explanation": "The array after four negations is -2, -7, -11, -15. Sum is -35",
+              "id": "5d162d74-a80b-4bf2-9d17-e2f7f90c32be",
+              "input": "nums = [2,7,11,15], k = 4"
+            }
+          ]
+        }
+      ],
+      "id": "2ccc2c54-9fe7-4343-90ad-e75003a22960",
+      "lastUpdated": "2026-02-06T21:54:53Z",
+      "problemSlug": "maximize-sum-of-array-after-k-negations",
+      "relatedProblems": [
+        "single-number-iii",
+        "missing-number"
+      ],
+      "summary": "This problem involves negating the smallest numbers in an array a specified number of times to maximize the sum. The key insight is that we should prioritize negating smaller numbers to maximize the overall sum."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Step 1: Initialize the maximum distance to 0. Step 2: Iterate over each array. Step 3: For each array, iterate over each element. Step 4: For each element, iterate over all other arrays to find the same element and calculate the distance. Step 5: Update the maximum distance if a larger distance is found.",
+          "code": "class Solution {\n    func maxDistToClosest(people: [Int]) -> Int {\n        let n = people.count\n        var left = [Int](repeating: n, count: n)\n        var right = [Int](repeating: -1, count: n)\n        var index = n\n        for i in 0..<n {\n            if people[i] == 1 {\n                index = 0\n            }\n            left[i] = index\n            index += 1\n        }\n        index = -1\n        for i in (0...n-1).reversed() {\n            if people[i] == 1 {\n                index = 0\n            }\n            right[i] = index\n            index += 1\n        }\n        var maxDist = 0\n        for i in 0..<n {\n            if people[i] == 1 {\n                continue\n            }\n            maxDist = max(maxDist, min(left[i], right[i]))\n        }\n        return maxDist\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) for storing the left and right arrays.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) due to the nested loops over the arrays."
+          },
+          "explanation": "This brute-force approach has a high time complexity due to the nested loops, but it ensures that all possible distances are considered.",
+          "id": "c2984de7-737d-465c-aea8-9bfc641ab0c0",
+          "intuition": "This approach works by iterating over each array and each element in the array, and then checking all other arrays to find the maximum distance.",
+          "name": "brute-force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The maximum distance is between the first 1 and the second 1, which is 2.",
+              "id": "1d740042-949b-4b18-94f6-9040ef1349c8",
+              "input": "people = [1,0,0,0,1,0,0,1]"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "The maximum distance is between the first 1 and the right boundary, which is 3.",
+              "id": "19a2a6a4-ca11-48d8-bed4-d73531a0642f",
+              "input": "people = [1,0,0,0]"
+            }
+          ]
+        },
+        {
+          "approach": "Step 1: Count the number of people in each section. Step 2: Initialize the maximum distance to 0. Step 3: Iterate over each section and calculate the distance to the nearest 1. Step 4: Update the maximum distance if a larger distance is found.",
+          "code": "import Foundation\n\nclass Solution {\n    func maxDistToClosest(seats: [Int]) -> Int {\n        var maxDist = 0\n        var last1 = -1\n        for i in 0..<seats.count {\n            if seats[i] == 1 {\n                if last1 == -1 {\n                    maxDist = max(maxDist, i)\n                } else {\n                    maxDist = max(maxDist, (i - last1) / 2)\n                }\n                last1 = i\n            }\n        }\n        maxDist = max(maxDist, seats.count - 1 - last1)\n        return maxDist\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) as no additional space is used.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) due to the single loop over the array."
+          },
+          "explanation": "This optimized approach reduces the time complexity by avoiding nested loops and directly calculating the maximum distance.",
+          "id": "3ae36663-d483-4423-bded-dcaf29d047e2",
+          "intuition": "This approach works by counting the number of people in each section between two 1s and then calculating the maximum distance by considering the boundaries and the sections.",
+          "name": "optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The maximum distance is between the first 1 and the second 1, which is 2.",
+              "id": "78c4e289-b2b5-46ea-a85e-6929fe870c0f",
+              "input": "seats = [1,0,0,0,1,0,0,1]"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "The maximum distance is between the first 1 and the right boundary, which is 3.",
+              "id": "2199fb1e-e9b6-46e8-afea-186c9fcad3a8",
+              "input": "seats = [1,0,0,0]"
+            }
+          ]
+        }
+      ],
+      "id": "9b800bd2-fc76-4f41-b881-b5148a6e6c1c",
+      "lastUpdated": "2026-02-06T21:29:30Z",
+      "problemSlug": "maximum-distance-in-arrays",
+      "relatedProblems": [
+        "maximum-gap",
+        "minimum-window-substring"
+      ],
+      "summary": "This problem requires finding the maximum distance between two arrays in a given list, where the maximum distance is defined as the maximum absolute difference between the indices of two arrays that contain the same element. The key insight is to use a greedy approach to track the minimum and maximum indices of each element across all arrays."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each domino, try rotating it to show either of the two numbers. Then, iterate through the row to count the number of rotations required to make all dominoes show the same number.",
+          "code": "class Solution {\n    func minDominoRotations(_ A: [Int], _ B: [Int]) -> Int {\n        let n = A.count\n        func check(x: Int) -> Int {\n            var rotationsA = 0\n            var rotationsB = 0\n            for i in 0..<n {\n                if A[i] != x && B[i] != x {\n                    return -1\n                } else if A[i] != x {\n                    rotationsA += 1\n                } else if B[i] != x {\n                    rotationsB += 1\n                }\n            }\n            return min(rotationsA, rotationsB)\n        }\n        return min(check(x: A[0]), check(x: B[0]))\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We only use a constant amount of space to store the count of rotations.",
+            "time": "O(n)",
+            "timeExplanation": "We only iterate through the row once for each possible number."
+          },
+          "explanation": "This approach works by exhaustively trying all possible rotations for each domino. However, it is inefficient due to its high time complexity.",
+          "id": "2280e2cc-9076-4b63-86c0-54bc1d1abbf9",
+          "intuition": "Try all possible rotations for each domino and count the minimum number of rotations required to achieve uniformity.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "We can rotate the first, third, and fifth dominoes to make all dominoes show the number 2.",
+              "id": "0b757558-2aa3-451d-9b99-f36cf788d7db",
+              "input": "A = [2,1,2,4,2,2], B = [5,2,6,2,3,2]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "We can rotate the second domino to make all dominoes show the number 3.",
+              "id": "f7658a5e-ecc2-4e16-95f3-da9e7229ecfd",
+              "input": "A = [3,5,1,2,3], B = [3,6,3,3,4]"
+            }
+          ]
+        },
+        {
+          "approach": "Check if the first number of the first domino can be shown by all dominoes, then check if the second number can be shown by all dominoes. Return the minimum number of rotations required.",
+          "code": "class Solution {\n    func minDominoRotations(_ A: [Int], _ B: [Int]) -> Int {\n        let n = A.count\n        func check(x: Int) -> Int {\n            var rotationsA = 0\n            var rotationsB = 0\n            for i in 0..<n {\n                if A[i] != x && B[i] != x {\n                    return -1\n                } else if A[i] != x {\n                    rotationsA += 1\n                } else if B[i] != x {\n                    rotationsB += 1\n                }\n            }\n            return min(rotationsA, rotationsB)\n        }\n        let rotationsA = check(x: A[0])\n        let rotationsB = check(x: B[0])\n        if rotationsA == -1 && rotationsB == -1 {\n            return -1\n        }\n        if rotationsA == -1 {\n            return rotationsB\n        }\n        if rotationsB == -1 {\n            return rotationsA\n        }\n        return min(rotationsA, rotationsB)\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We only use a constant amount of space to store the count of rotations.",
+            "time": "O(n)",
+            "timeExplanation": "We only iterate through the row once for each possible number."
+          },
+          "explanation": "This approach works by directly checking if it's possible to make all dominoes show either of the numbers on the first domino, without trying all possible rotations.",
+          "id": "a4e2788e-afb2-4873-a73e-d88b7fe07cd9",
+          "intuition": "Check if it's possible to make all dominoes show either of the numbers on the first domino, and return the minimum number of rotations required.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "We can rotate the first, third, and fifth dominoes to make all dominoes show the number 2.",
+              "id": "207aea2c-dc7c-42cc-86c4-00d0a637b8a8",
+              "input": "A = [2,1,2,4,2,2], B = [5,2,6,2,3,2]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "We can rotate the second domino to make all dominoes show the number 3.",
+              "id": "c2cb31f6-774f-4315-8dc1-62d29517860a",
+              "input": "A = [3,5,1,2,3], B = [3,6,3,3,4]"
+            }
+          ]
+        }
+      ],
+      "id": "1e6e97b0-ac57-4f81-a32c-40cd3695187f",
+      "lastUpdated": "2026-02-06T21:55:02Z",
+      "problemSlug": "minimum-domino-rotations-for-equal-row",
+      "relatedProblems": [
+        "minimum-window-substring",
+        "rotate-array"
+      ],
+      "summary": "The problem asks to find the minimum number of rotations required to make all dominoes in a row show the same number. The key insight is to consider whether we can make all dominoes show either of the numbers on the first domino."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all possible increments, apply increments and track uniqueness of the array, stop when array is unique",
+          "code": "class Solution {\n    func minIncrementForUnique(_ A: [Int]) -> Int { \n        let sorted = A.sorted() \n        var result = 0 \n        for i in 1..<sorted.count { \n            if sorted[i] <= sorted[i-1] { \n                let increment = sorted[i-1] - sorted[i] + 1 \n                result += increment \n                sorted[i] += increment \n            } \n        } \n        return result \n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Because at worst case, we have to store n elements in the array",
+            "time": "O(n^2 * n!)",
+            "timeExplanation": "Because for each element in the array, we may end up generating n! permutations of increments to check."
+          },
+          "explanation": "This method involves generating all permutations of increments, then checking which permutations yield a unique array. This method is inefficient and does not scale.",
+          "id": "d4e4317c-c495-437d-b201-29692f8d1e25",
+          "intuition": "Try all possible increments and track which makes the array unique",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "6",
+              "explanation": "This test case makes sure that we are correctly able to identify the minimum number of increments required.",
+              "id": "719097cb-0db3-4d2a-918d-9847c10f9491",
+              "input": "nums = [3, 2, 1, 2, 1, 7]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "This test case ensures that our code works for the smallest of array sizes and that the greedy approach holds.",
+              "id": "ac0ea3bf-0f3e-42be-aaf4-ee77688c453b",
+              "input": "nums = [1, 1, 2]"
+            }
+          ]
+        },
+        {
+          "approach": "Sort array, track the minimum possible value the next element can be to ensure uniqueness",
+          "code": "class Solution {\n    func minIncrementForUnique(_ A: [Int]) -> Int { \n        let sorted = A.sorted() \n        var maxSeen = -1 \n        var result = 0 \n        for num in sorted { \n            if num <= maxSeen { \n                let increment = maxSeen - num + 1 \n                result += increment \n                maxSeen += 1 \n            } else { \n                maxSeen = num \n            } \n        } \n        return result \n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Because we make a copy of the array for sorting.",
+            "time": "O(n log n)",
+            "timeExplanation": "Because we first sort the array and then make a single pass over it."
+          },
+          "explanation": "By sorting and applying a greedy algorithm that always chooses the smallest possible value to ensure the next element is larger, we minimize increments.",
+          "id": "d68266ab-9928-4183-b9ad-29c613c4a01d",
+          "intuition": "Sorting and then applying a greedy algorithm allows us to minimize increments",
+          "name": "Optimized Greedy Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "6",
+              "explanation": "Test case to verify that our greedy algorithm works as expected",
+              "id": "72f9eeba-d549-466e-ba80-4b00e925f6b2",
+              "input": "nums = [3, 2, 1, 2, 1, 7]"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "Ensure that even when all numbers are the same, it correctly calculates and applies the minimum number of increments",
+              "id": "2ce3acb6-e9f8-4137-8b23-ba8e21f65d54",
+              "input": "nums = [1,1,1]"
+            }
+          ]
+        }
+      ],
+      "id": "760d2fe2-6634-4a2d-a7be-dd5d8ca8a9d4",
+      "lastUpdated": "2026-02-06T21:50:25Z",
+      "problemSlug": "minimum-increment-to-make-array-unique",
+      "relatedProblems": [
+        "distribute-candies",
+        "assign-cookies"
+      ],
+      "summary": "Make all elements in an array unique by applying the minimum number of increments, key insight is using a greedy approach with sorting."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Generate all possible combinations of arrows, 2. For each combination, simulate the burst of each balloon, 3. Check if all balloons are burst",
+          "code": "class Solution {\n    import Foundation\n\n    func findMinArrowShots(_ points: [[Int]]) -> Int {\n        let n = points.count\n        var ans = n\n\n        for mask in 0..<1<<n {\n            var good = true\n            var cnt = 0\n\n            for i in 0..<n {\n                if (mask & (1 << i)) == 0 {\n                    continue\n                }\n\n                var left = points[i][0]\n                var right = points[i][1]\n\n                cnt += 1\n\n                for j in 0..<n {\n                    if j == i || (mask & (1 << j)) == 0 {\n                        continue\n                    }\n\n                    if left <= points[j][1] && points[j][0] <= right {\n                        left = max(left, points[j][0])\n                        right = min(right, points[j][1])\n                    } else {\n                        good = false\n                        break\n                    }\n                }\n\n                if !good {\n                    break\n                }\n            }\n\n            if good {\n                ans = min(ans, cnt)\n            }\n        }\n\n        return ans\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) as we are not using any additional data structures.",
+            "time": "O(n * 2^n)",
+            "timeExplanation": "Generating all combinations of arrows takes O(2^n) time. For each combination, checking if all balloons are burst takes O(n) time."
+          },
+          "explanation": "The brute force approach is not efficient as it has to try all possible combinations of arrows, resulting in an exponential time complexity.",
+          "id": "caeb8b9d-b82a-4aaa-80eb-92dc389e8108",
+          "intuition": "This approach tries all possible combinations of arrows to burst the balloons. It works by simulating the burst of each balloon with an arrow and then checking if all balloons are burst.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The minimum number of arrows to burst all balloons is 2, one at position 6 and one at position 11.",
+              "id": "7f277fa7-1e30-45a7-9e65-09419e085a54",
+              "input": "points = [[10,16],[2,8],[1,6],[7,12]]"
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "The minimum number of arrows to burst all balloons is 4, one for each balloon.",
+              "id": "46ad28cb-6af4-4de9-80b7-2584cb98b0f7",
+              "input": "points = [[1,2],[3,4],[5,6],[7,8]]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Sort the balloons by their end position, 2. Initialize the end position of the previous burst balloon and the count of arrows, 3. Iterate through the sorted balloons and burst the ones that are closest together",
+          "code": "class Solution {\n    import Foundation\n\n    func findMinArrowShots(_ points: [[Int]]) -> Int {\n        if points.count == 0 {\n            return 0\n        }\n\n        let sortedPoints = points.sorted { $0[1] < $1[1] }\n        var arrowPos = sortedPoints[0][1]\n        var arrowCount = 1\n\n        for point in sortedPoints {\n            if point[0] > arrowPos {\n                arrowPos = point[1]\n                arrowCount += 1\n            }\n        }\n\n        return arrowCount\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) due to the sorting.",
+            "time": "O(n log n)",
+            "timeExplanation": "Sorting the balloons takes O(n log n) time. Iterating through the sorted balloons takes O(n) time."
+          },
+          "explanation": "The greedy approach works by always bursting the balloons that are closest together, this way we minimize the number of arrows needed.",
+          "id": "dde03257-edc8-4d42-ae3a-1938ac1c514d",
+          "intuition": "This approach sorts the balloons by their end position and then iterates through them, bursting the ones that are closest together.",
+          "name": "Greedy Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The minimum number of arrows to burst all balloons is 2, one at position 6 and one at position 11.",
+              "id": "a1652133-f437-4d8a-a4f1-5229bbc5f0d2",
+              "input": "points = [[10,16],[2,8],[1,6],[7,12]]"
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "The minimum number of arrows to burst all balloons is 4, one for each balloon.",
+              "id": "5dbb86d2-33c6-4578-8628-8a54bb52dbab",
+              "input": "points = [[1,2],[3,4],[5,6],[7,8]]"
+            }
+          ]
+        }
+      ],
+      "id": "8919430b-7bc3-402a-a3e4-3d615a7bd272",
+      "lastUpdated": "2026-02-06T21:19:45Z",
+      "problemSlug": "minimum-number-of-arrows-to-burst-balloons",
+      "relatedProblems": [
+        "insert-interval",
+        "merge-intervals"
+      ],
+      "summary": "The problem requires finding the minimum number of arrows to burst all balloons, key insight being sorting the balloons by end position and using a greedy approach to minimize the number of arrows. This approach sorts the balloons and then iterates through them, bursting the ones that are closest together."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, calculate the total sum of the array and divide it by 3 to get the target sum for each partition. Then, iterate over all possible partitions and check if the sum of each partition is equal to the target sum. If a valid partition is found, return true.",
+          "code": "class Solution {\n    func canThreePartsEqualSum(_ A: [Int]) -> Bool {\n        let sum = A.reduce(0, +)\n        if sum % 3 != 0 {\n            return false\n        }\n        let target = sum / 3\n        var count = 0\n        var currentSum = 0\n        for num in A {\n            currentSum += num\n            if currentSum == target {\n                count += 1\n                currentSum = 0\n            }\n            if count == 2 {\n                return true\n            }\n        }\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are using a constant amount of space to store the target sum and the count of valid partitions.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are iterating over the array once."
+          },
+          "explanation": "The brute force approach is not efficient because it involves trying all possible partitions, which has a time complexity of O(2^n). However, it provides a baseline for understanding the problem.",
+          "id": "3c327c45-052d-4837-9d42-f9c0006046f1",
+          "intuition": "This approach involves trying all possible partitions of the array and checking if the sum of each partition is equal to the target sum.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The array can be partitioned into [0, 2, 1, -6, 6, -7], [9, 1], and [2, 0, 1] with sums [0], [10], and [3] respectively, which is not correct, however [0,2,1,-6,6,-7,9,1,2,0,1] = [0, 2, 1, -6, 6, -7] + [9, 1, 2] + [0, 1] with sums [0-0] [9] and [1] respectively, does not solve this. The array can actually be divided into [0, 2, 1, -6, 6, -7] + [9] + [1, 2, 0, 1]. Which are [0] + [9] + [4]. Hence true.",
+              "id": "21e676e4-75a9-4fe3-905b-9221aec8419f",
+              "input": "A = [0,2,1,-6,6,-7,9,1,2,0,1]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "No valid partition exists.",
+              "id": "61b688af-358a-4260-89a3-5b9103e11a74",
+              "input": "A = [0,2,1,-6,6,7,9,-1,2,0,4,4,6]"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "A valid partition exists: [3, 3, 6], [-2, 2, 5], and [1, -9, 4].",
+              "id": "ccaf8315-5141-4e82-ad3b-333232a68dea",
+              "input": "A = [3,3,6,5,-2,2,5,1,-9,4]"
+            }
+          ]
+        },
+        {
+          "approach": "First, calculate the total sum of the array and divide it by 3 to get the target sum for each partition. Then, calculate the prefix sum of the array and iterate over it to find the valid partitions.",
+          "code": "class Solution {\n    func canThreePartsEqualSum(_ A: [Int]) -> Bool {\n        let sum = A.reduce(0, +)\n        if sum % 3 != 0 {\n            return false\n        }\n        let target = sum / 3\n        var prefixSum = 0\n        var count = 0\n        for num in A {\n            prefixSum += num\n            if prefixSum == target {\n                count += 1\n                prefixSum = 0\n            }\n            if count == 3 {\n                return true\n            }\n        }\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are using a constant amount of space to store the target sum and the count of valid partitions.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are iterating over the array once."
+          },
+          "explanation": "The optimized approach is more efficient because it involves using the prefix sum to reduce the number of iterations.",
+          "id": "59fff7d0-5674-4fd8-9d10-89960414c5d9",
+          "intuition": "This approach involves calculating the prefix sum of the array and checking if the sum of each partition is equal to the target sum.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "A valid partition exists: [0, 2, 1, -6, 6, -7], [9, 1], and [2, 0, 1].",
+              "id": "3ccbf282-6536-407f-8959-1aedc41b012d",
+              "input": "A = [0,2,1,-6,6,-7,9,1,2,0,1]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "No valid partition exists.",
+              "id": "6586f907-f056-4b7e-a9e9-df8bc92a59e2",
+              "input": "A = [0,2,1,-6,6,7,9,-1,2,0,4,4,6]"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "A valid partition exists: [3, 3, 6], [-2, 2, 5], and [1, -9, 4].",
+              "id": "557fc696-165c-44d5-865b-6798b4c4812e",
+              "input": "A = [3,3,6,5,-2,2,5,1,-9,4]"
+            }
+          ]
+        }
+      ],
+      "id": "0390ff09-b9bc-4677-9f4d-e15b2bcbea2d",
+      "lastUpdated": "2026-02-06T21:55:35Z",
+      "problemSlug": "partition-array-into-three-parts-with-equal-sum",
+      "relatedProblems": [
+        "split-array-largest-sum",
+        "partition-equal-subset-sum",
+        "minimum-size-subarray-sum"
+      ],
+      "summary": "The problem asks us to partition an array into three parts with equal sum. The key insight is that the sum of each part should be equal to the total sum of the array divided by 3."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Map each char to last occurrence\n2. For each char, extend partition end to max(end, last[char])\n3. When i == end, partition complete",
+          "code": "class Solution {\n    func partitionLabels(_ s: String) -> [Int] {\n        let chars = Array(s)\n        var last: [Character: Int] = [:]\n        for (i, c) in chars.enumerated() { last[c] = i }\n        var result: [Int] = []\n        var start = 0, end = 0\n        for (i, c) in chars.enumerated() {\n            end = max(end, last[c]!)\n            if i == end {\n                result.append(end - start + 1)\n                start = i + 1\n            }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "26 letters max",
+            "time": "O(n)",
+            "timeExplanation": "Two passes"
+          },
+          "explanation": "A partition is valid when we've included all occurrences of all its characters. We track the furthest 'last occurrence' and cut when we reach it.",
+          "id": "3e33e68c-5cfa-428c-bbc5-a7c4f3470948",
+          "intuition": "For each char in partition, we must extend to its last occurrence. Track the furthest last occurrence seen.",
+          "name": "Greedy with Last Occurrence",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[9,7,8]",
+              "explanation": "\"ababcbaca\", \"defegde\", \"hijhklij\"",
+              "id": "b3d7d941-7b07-442c-8c05-d5a20113bcc3",
+              "input": "s = \"ababcbacadefegdehijhklij\""
+            }
+          ]
+        }
+      ],
+      "id": "2797689b-71ad-4ab0-987f-e57600535c0f",
+      "lastUpdated": "2026-02-06T00:56:20.970Z",
+      "problemSlug": "partition-labels",
+      "relatedProblems": [
+        "merge-intervals"
+      ],
+      "summary": "Partition string so each letter appears in at most one part. Track last occurrence, extend partition until position equals last occurrence of all chars in it."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all possible combinations of row and column flips, calculate the score for each combination, and keep track of the maximum score.",
+          "code": "class Solution {\n    func matrixScore(_ A: [[Int]]) -> Int {\n        var A = A\n        let rows = A.count\n        let cols = A[0].count\n        var res = 0\n        for i in 0..<rows {\n            if A[i][0] == 0 {\n                A[i] = A[i].map { 1 - $0 }\n            }\n        }\n        for j in 1..<cols {\n            var ones = 0\n            for i in 0..<rows {\n                if A[i][j] == 1 {\n                    ones += 1\n                }\n            }\n            if ones < rows - ones {\n                for i in 0..<rows {\n                    A[i][j] = 1 - A[i][j]\n                }\n            }\n        }\n        for i in 0..<rows {\n            for j in 0..<cols {\n                res += A[i][j]\n            }\n        }\n        return res\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are not using any additional data structures that scale with input size.",
+            "time": "O(2^(rows+cols))",
+            "timeExplanation": "The time complexity is O(2^(rows+cols)) because we are generating all possible combinations of row and column flips."
+          },
+          "explanation": "This approach is straightforward but not efficient for large inputs. We start by generating all possible combinations of row and column flips, which can be done using bit manipulation. For each combination, we calculate the score by counting the number of ones in the top left corner of the matrix.",
+          "id": "a4716257-a9b7-4f13-b490-68abb1cc6cf4",
+          "intuition": "This approach works by trying all possible combinations of row and column flips and calculating the score for each combination.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "39",
+              "explanation": "The maximum score can be achieved by flipping the first row and the second column.",
+              "id": "767dfd46-8638-419d-a0d0-6badb822548d",
+              "input": "[[0,0,1,1],[1,0,1,0],[1,1,0,0]]"
+            },
+            {
+              "expectedOutput": "33",
+              "explanation": "The maximum score can be achieved by flipping the first row.",
+              "id": "975991f1-880e-4264-a9eb-4428a1afe07a",
+              "input": "[[0,1,1,0],[1,1,1,1],[0,1,0,0]]"
+            }
+          ]
+        },
+        {
+          "approach": "Flip rows and columns to maximize the number of ones in the top left corner of the matrix.",
+          "code": "class Solution {\n    func matrixScore(_ A: [[Int]]) -> Int {\n        var A = A\n        let rows = A.count\n        let cols = A[0].count\n        var res = 0\n        for i in 0..<rows {\n            if A[i][0] == 0 {\n                A[i] = A[i].map { 1 - $0 }\n            }\n        }\n        for j in 1..<cols {\n            var ones = 0\n            for i in 0..<rows {\n                if A[i][j] == 1 {\n                    ones += 1\n                }\n            }\n            if ones < rows - ones {\n                for i in 0..<rows {\n                    A[i][j] = 1 - A[i][j]\n                }\n            }\n        }\n        for i in 0..<rows {\n            for j in 0..<cols {\n                res += A[i][j]\n            }\n        }\n        return res\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are not using any additional data structures that scale with input size.",
+            "time": "O(rows*cols)",
+            "timeExplanation": "The time complexity is O(rows*cols) because we are iterating over each element in the matrix once."
+          },
+          "explanation": "This approach is efficient and works by first flipping rows to maximize the number of ones in the first column. Then, for each remaining column, it checks if flipping the column would increase the number of ones in that column and flips it if so.",
+          "id": "a95cf204-a106-4176-98d5-de7fc4e50d14",
+          "intuition": "This approach works by greedily flipping rows and columns to maximize the number of ones in the top left corner of the matrix.",
+          "name": "Greedy Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "39",
+              "explanation": "The maximum score can be achieved by flipping the first row and the second column.",
+              "id": "b683a901-554e-4f74-821c-b76b79b1b4fd",
+              "input": "[[0,0,1,1],[1,0,1,0],[1,1,0,0]]"
+            },
+            {
+              "expectedOutput": "33",
+              "explanation": "The maximum score can be achieved by flipping the first row.",
+              "id": "e7444c5f-9207-433e-887b-28e8d59d9cb5",
+              "input": "[[0,1,1,0],[1,1,1,1],[0,1,0,0]]"
+            },
+            {
+              "expectedOutput": "30",
+              "explanation": "The maximum score can be achieved by flipping the first row.",
+              "id": "b49b155b-a53a-4320-8142-be8bad9feea7",
+              "input": "[[0,0,0,0],[1,0,1,0],[1,1,0,0]]"
+            }
+          ]
+        }
+      ],
+      "id": "7303e516-c3f5-436a-80fe-5d9202aeb953",
+      "lastUpdated": "2026-02-06T21:45:03Z",
+      "problemSlug": "score-after-flipping-matrix",
+      "relatedProblems": [
+        "max-increase-to-fit-no-extra-space",
+        "minimum-cost-to-fill-pit"
+      ],
+      "summary": "The problem involves finding the maximum score that can be achieved by flipping rows and columns of a matrix. The key insight here is that we want to maximize the number of ones in the top left corner of the matrix."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Generate all possible subsequences of the input array. 2. For each subsequence, check if it is consecutive by comparing each element with its previous element plus one. 3. If a subsequence is found to be consecutive, remove its elements from the original array. 4. Repeat steps 1-3 until the array is empty or no more consecutive subsequences can be found.",
+          "code": "class Solution {\n    import Foundation\n\n    func isPossible(_ nums: [Int]) -> Bool {\n        var freq: [Int: Int] = [:]\n        var tails: [Int: Int] = [:]\n\n        for num in nums {\n            freq[num, default: 0] += 1\n        }\n\n        for num in nums {\n            if freq[num] ?? 0 == 0 {\n                continue\n            }\n            freq[num]? -= 1\n            if tails[num - 1] ?? 0 > 0 {\n                tails[num - 1]? -= 1\n                tails[num, default: 0] += 1\n            } else if freq[num + 1] ?? 0 > 0 && freq[num + 2] ?? 0 > 0 {\n                freq[num + 1]? -= 1\n                freq[num + 2]? -= 1\n                tails[num + 2, default: 0] += 1\n            } else {\n                return false\n            }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is also linear due to the use of hash tables to store the frequency of each number and the tails of subsequences.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we iterate over the array twice."
+          },
+          "explanation": "The brute force approach involves checking all possible subsequences, which leads to an inefficient solution with high time complexity. It serves as a starting point for understanding the problem and can be optimized further.",
+          "id": "b372d59c-7685-45e0-8295-13c1de9d6008",
+          "intuition": "This approach works by generating all possible subsequences and checking if they are consecutive. It is not efficient but provides a baseline understanding of the problem.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The array can be split into two consecutive subsequences: [1,2,3] and [3,4,5].",
+              "id": "683fe432-23e7-4203-91c9-50b41defd015",
+              "input": "nums = [1,2,3,3,4,5]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The array cannot be split into consecutive subsequences because there is no number that can follow 4 to form a consecutive sequence.",
+              "id": "0ff5e3c1-29ad-44ce-8f0e-0b397af1fdf4",
+              "input": "nums = [1,2,3,4,4,5]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Create a hash table to store the frequency of each number in the array. 2. Create another hash table to store the tails of subsequences. 3. Iterate over the array and for each number, check if it can be added to an existing subsequence or start a new one. 4. If a number can be added to an existing subsequence, decrement its frequency and increment the frequency of the next number in the sequence. 5. If a number cannot be added to an existing subsequence, check if it can start a new subsequence.",
+          "code": "class Solution {\n    import Foundation\n\n    func isPossible(_ nums: [Int]) -> Bool {\n        var freq: [Int: Int] = [:]\n        var tails: [Int: Int] = [:]\n\n        for num in nums {\n            freq[num, default: 0] += 1\n        }\n\n        for num in nums {\n            if freq[num] ?? 0 == 0 {\n                continue\n            }\n            freq[num]? -= 1\n            if tails[num - 1] ?? 0 > 0 {\n                tails[num - 1]? -= 1\n                tails[num, default: 0] += 1\n            } else if freq[num + 1] ?? 0 > 0 && freq[num + 2] ?? 0 > 0 {\n                freq[num + 1]? -= 1\n                freq[num + 2]? -= 1\n                tails[num + 2, default: 0] += 1\n            } else {\n                return false\n            }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is also linear due to the use of hash tables to store the frequency of each number and the tails of subsequences.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we iterate over the array twice."
+          },
+          "explanation": "The optimized approach is more efficient than the brute force approach because it uses hash tables to store the frequency of each number and the tails of subsequences. This allows it to avoid checking all possible subsequences and instead focus on constructing the subsequences greedily.",
+          "id": "574b38ac-1b8d-4e42-8a98-de70bda3cee1",
+          "intuition": "The optimized approach uses a hash table to store the frequency of each number and greedily constructs the subsequences. It is more efficient than the brute force approach.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The array can be split into two consecutive subsequences: [1,2,3] and [3,4,5].",
+              "id": "a5d03d32-c776-4b1d-a18d-cdc81e5a1ce2",
+              "input": "nums = [1,2,3,3,4,5]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The array cannot be split into consecutive subsequences because there is no number that can follow 4 to form a consecutive sequence.",
+              "id": "80fa7579-d085-42b8-a918-ca5db74b9ad4",
+              "input": "nums = [1,2,3,4,4,5]"
+            }
+          ]
+        }
+      ],
+      "id": "3154c852-f97b-4e45-990a-e7a7a1c2b7fb",
+      "lastUpdated": "2026-02-06T21:31:57Z",
+      "problemSlug": "split-array-into-consecutive-subsequences",
+      "relatedProblems": [
+        "valid-tic-tac-toe-state",
+        "unique-binary-search-trees-ii"
+      ],
+      "summary": "The problem requires splitting an array of distinct integers into consecutive subsequences. The key insight is to use a hash table to store the frequency of each number and greedily construct the subsequences."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all possible strings of A's and B's of length n. Check each string to see if it contains the substring 'AAA' or 'BBB'. If not, it is a valid solution.",
+          "code": "class Solution {\n    func strWithout3a3b(_ A: Int, _ B: Int) -> String {\n        let a = String(repeating: \"A\", count: A)\n        let b = String(repeating: \"B\", count: B)\n        let n = a.count + b.count\n        var result = \"/\"\n        var idx = 0\n        while idx < n {\n            if result.count >= 2 && result[result.index(result.startIndex, offsetBy: result.count - 1)] == result[result.index(result.startIndex, offsetBy: result.count - 2)] {\n                if result.last == \"A\" {\n                    result += \"B\"\n                }\n                else {\n                    result += \"A\"\n                }\n            }\n            else {\n                if a.count > b.count {\n                    result += \"A\"\n                    a.removeLast()\n                }\n                else {\n                    result += \"B\"\n                    b.removeLast()\n                }\n            }\n            idx += 1\n        }\n        return String(result.dropFirst())\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) for storing the generated strings.",
+            "time": "O(n!)",
+            "timeExplanation": "The time complexity is O(n!) because generating all permutations of a string of length n requires n! operations."
+          },
+          "explanation": "Start by generating all possible strings of A's and B's of length n. Then, check each string for the disallowed substrings 'AAA' and 'BBB'. If a string is found to contain either of these substrings, discard it; otherwise, it is a valid solution and can be included in the result set.",
+          "id": "91f99176-42e2-4e0e-ac88-c71b231ef5d3",
+          "intuition": "This approach involves generating all possible strings of A's and B's of length n and checking each string for validity. It works because we exhaustively check all possibilities.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "BAB",
+              "explanation": "The function should return \"BAB\" because it is a valid string without 'AAA' or 'BBB' and has length A + B = 3.",
+              "id": "490617de-ec50-40df-9ad0-d82a4878853b",
+              "input": "A = 1, B = 2"
+            },
+            {
+              "expectedOutput": "AABB",
+              "explanation": "The function should return \"AABB\" because it is a valid string without 'AAA' or 'BBB' and has length A + B = 4.",
+              "id": "5408464b-ef67-4c76-b5ce-ba981bdbb7e5",
+              "input": "A = 2, B = 2"
+            }
+          ]
+        },
+        {
+          "approach": "Use a greedy approach to construct the string, ensuring that no three consecutive characters are the same.",
+          "code": "class Solution {\n    func strWithout3a3b(_ A: Int, _ B: Int) -> String {\n        var res = String()\n        var a = A\n        var b = B\n        while a > 0 || b > 0 {\n            if res.count >= 2, res.last == res[res.index(before: res.index(before: res.endIndex))] {\n                if res.last == \"A\" {\n                    if b > 0 {\n                        res += \"B\"\n                        b -= 1\n                    }\n                    else {\n                        res += \"A\"\n                        a -= 1\n                    }\n                }\n                else {\n                    if a > 0 {\n                        res += \"A\"\n                        a -= 1\n                    }\n                    else {\n                        res += \"B\"\n                        b -= 1\n                    }\n                }\n            }\n            else {\n                if a >= b {\n                    if a > 0 {\n                        res += \"A\"\n                        a -= 1\n                    }\n                }\n                else {\n                    if b > 0 {\n                        res += \"B\"\n                        b -= 1\n                    }\n                }\n            }\n        }\n        return res\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) for storing the constructed string.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we construct the string one character at a time."
+          },
+          "explanation": "Start with an empty string. While there are still A's and B's to add, always add the character that appears less frequently in the string so far, unless doing so would create three consecutive identical characters. In that case, add the opposite character.",
+          "id": "6b4c01c9-263c-4a8e-9368-d2fc96f25877",
+          "intuition": "This approach involves directly constructing a valid string by ensuring that no three consecutive characters are the same, using a greedy strategy.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "BAB",
+              "explanation": "The function should return \"BAB\" because it is a valid string without 'AAA' or 'BBB' and has length A + B = 3.",
+              "id": "22f0ee4f-dde7-473a-9a6b-11f954338c38",
+              "input": "A = 1, B = 2"
+            },
+            {
+              "expectedOutput": "ABABABAA",
+              "explanation": "The function should return \"ABABABAA\" because it is a valid string without 'AAA' or 'BBB' and has length A + B = 5.",
+              "id": "3fd7500e-93b6-4b97-adc1-b02526f4e4aa",
+              "input": "A = 4, B = 1"
+            }
+          ]
+        }
+      ],
+      "id": "be231674-7f9b-494c-822b-7d8192ff4f0a",
+      "lastUpdated": "2026-02-06T21:53:03Z",
+      "problemSlug": "string-without-aaa-or-bbb",
+      "relatedProblems": [
+        "valid-tic-tac-toe-state",
+        "number-of-rectangles-containing-each-point"
+      ],
+      "summary": "The problem asks to generate a string of length n consisting only of A's and B's, such that no three consecutive characters are the same. The key insight is to avoid having three consecutive A's or B's by always appending the opposite character when a sequence of two identical characters is about to be formed."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, sort the array. Then generate all permutations of the array and check each one to see if it satisfies the wiggle sort condition.",
+          "code": "import Foundation\n\nclass Solution {\n    func wiggleSort(_ nums: [Int]) -> [Int] {\n        let sortedNums = nums.sorted()\n        let n = nums.count\n        var result = [Int](repeating: 0, count: n)\n\n        var smaller = n / 2\n        var larger = n / 2\n\n        for i in stride(from: n - 1, to: -1, by: -1) {\n            if i % 2 == 1 {\n                result[i] = sortedNums[smaller - 1]\n                smaller -= 1\n            } else {\n                result[i] = sortedNums[larger]\n                larger -= 1\n            }\n        }\n\n        return result\n    }\n}\n\nlet solution = Solution()\nlet nums = [1, 5, 1, 1, 6, 4]\nlet wiggleSortedNums = solution.wiggleSort(nums)\nprint(wiggleSortedNums)",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity comes from the extra space needed to store the sorted array.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity comes from sorting the array, which takes O(n log n) time."
+          },
+          "explanation": "This approach is straightforward but not efficient for large inputs because generating all permutations has a time complexity of O(n!), where n is the number of elements in the array.",
+          "id": "43f8e5c0-f6bd-4ef4-bee3-2b30ce7d5524",
+          "intuition": "This approach works by checking every possible permutation of the array to see if it satisfies the wiggle sort condition.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,6,1,5,1,4]",
+              "explanation": "This test case checks that the function correctly rearranges the array to achieve the wiggle sort order.",
+              "id": "41f72109-8861-4096-95f5-c7c981d601fc",
+              "input": "nums = [1,5,1,1,6,4]"
+            },
+            {
+              "expectedOutput": "[2,1,3,2,3,1]",
+              "explanation": "This test case checks that the function correctly handles arrays with repeated elements.",
+              "id": "d1452e50-d23f-4323-a481-82b96874d2a2",
+              "input": "nums = [1,3,2,2,3,1]"
+            }
+          ]
+        },
+        {
+          "approach": "First, sort the array. Then, initialize two pointers, one at the beginning of the sorted array and one at the end. Then, iterate over the result array and place the elements at the current index from the sorted array, alternating between the two pointers.",
+          "code": "import Foundation\n\nclass Solution {\n    func wiggleSort(_ nums: [Int]) -> [Int] {\n        let sortedNums = nums.sorted()\n        let n = nums.count\n        var result = [Int](repeating: 0, count: n)\n\n        var smaller = 0\n        var larger = n - 1\n\n        for i in 0...n - 1 {\n            if i % 2 == 0 {\n                result[i] = sortedNums[smaller]\n                smaller += 1\n            } else {\n                result[i] = sortedNums[larger]\n                larger -= 1\n            }\n        }\n\n        return result\n    }\n}\n\nlet solution = Solution()\nlet nums = [1, 5, 1, 1, 6, 4]\nlet wiggleSortedNums = solution.wiggleSort(nums)\nprint(wiggleSortedNums)",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity comes from the extra space needed to store the sorted array.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity comes from sorting the array, which takes O(n log n) time."
+          },
+          "explanation": "This approach is more efficient than the brute force approach because it only needs to sort the array once and then it can place the elements in the correct order in a single pass.",
+          "id": "0e814261-9a0d-4437-903b-c764790b5fd3",
+          "intuition": "This approach works by first sorting the array, then using two pointers to place the elements in the correct order.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1,6,1,5,1,4]",
+              "explanation": "This test case checks that the function correctly rearranges the array to achieve the wiggle sort order.",
+              "id": "4e498c28-fbaa-4510-a9ae-7b27e2858929",
+              "input": "nums = [1,5,1,1,6,4]"
+            },
+            {
+              "expectedOutput": "[1,3,1,3,2,2]",
+              "explanation": "This test case checks that the function correctly handles arrays with repeated elements.",
+              "id": "69d82b37-d056-46d7-a5e3-2c704fd52449",
+              "input": "nums = [1,3,2,2,3,1]"
+            }
+          ]
+        }
+      ],
+      "id": "b074dc02-0951-4f97-a68a-95800da625a3",
+      "lastUpdated": "2026-02-06T21:13:05Z",
+      "problemSlug": "wiggle-sort-ii",
+      "relatedProblems": [
+        "array-partition-i",
+        "array-partition-ii"
+      ],
+      "summary": "Wiggle Sort II is a problem where we need to reorder an array so that the elements alternate between being greater than and less than the adjacent elements. The key insight here is to sort the array first, and then rearrange it to achieve the wiggle sort order."
+    }
+  ],
+  "topic": "greedy",
+  "version": "2.0.0"
+}

@@ -1,0 +1,2591 @@
+{
+  "solutions": [
+    {
+      "approaches": [
+        {
+          "approach": "1. For each asteroid:\n   a. If positive, push to stack\n   b. If negative, resolve collisions with stack:\n      - While stack top is positive and smaller, pop (it explodes)\n      - If stack top is positive and equal, pop and don't push (both explode)\n      - If stack empty or top is negative, push (survives)\n2. Return stack as array",
+          "code": "class Solution {\n    func asteroidCollision(_ asteroids: [Int]) -> [Int] {\n        var stack: [Int] = []\n\n        for asteroid in asteroids {\n            if asteroid > 0 {\n                stack.append(asteroid)\n            } else {\n                // asteroid < 0, resolve collisions\n                while !stack.isEmpty && stack.last! > 0 && stack.last! < -asteroid {\n                    stack.removeLast()  // Stack asteroid explodes\n                }\n\n                if stack.isEmpty || stack.last! < 0 {\n                    stack.append(asteroid)  // Survives\n                } else if stack.last! == -asteroid {\n                    stack.removeLast()  // Both explode\n                }\n                // else: stack.last! > -asteroid, incoming asteroid explodes (don't push)\n            }\n        }\n\n        return stack\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Stack can hold all asteroids in worst case",
+            "time": "O(n)",
+            "timeExplanation": "Each asteroid pushed and popped at most once"
+          },
+          "explanation": "Only right-moving (positive) and left-moving (negative) can collide. Two left-movers never collide (both going left). The stack holds surviving asteroids. When we see a negative asteroid, it can only collide with positive ones on the stack. We keep destroying stack asteroids until the negative one is destroyed or survives.",
+          "id": "67155985-058b-4e25-9765-927480dad570",
+          "intuition": "Right-moving asteroids wait on stack for potential collision. Left-moving asteroids collide with stack (right-movers) until destroyed or survives.",
+          "name": "Stack Simulation",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[5,10]",
+              "explanation": "10 and -5 collide, 10 survives. 5 and 10 don't collide (same direction).",
+              "id": "1831cc38-dde5-4ed2-9e43-35c09d414259",
+              "input": "asteroids = [5,10,-5]"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "Equal size, both explode.",
+              "id": "0a8f32d9-ac07-482e-ad2f-440a97f52ac6",
+              "input": "asteroids = [8,-8]"
+            },
+            {
+              "expectedOutput": "[10]",
+              "explanation": "-5 destroys 2, then collides with 10 and explodes.",
+              "id": "323c831c-7e40-4a2b-82d2-a1f5993b7617",
+              "input": "asteroids = [10,2,-5]"
+            },
+            {
+              "expectedOutput": "[-2,-1,1,2]",
+              "explanation": "Left-movers go left, right-movers go right. No collisions.",
+              "id": "50acb1d7-41cc-4eeb-912a-951d1d9c70b7",
+              "input": "asteroids = [-2,-1,1,2]"
+            }
+          ]
+        },
+        {
+          "approach": "1. For each asteroid:\n   a. Set alive = true\n   b. While alive and asteroid < 0 and stack top > 0:\n      - If |asteroid| > stack top: pop, continue\n      - If |asteroid| == stack top: pop, alive = false\n      - If |asteroid| < stack top: alive = false\n   c. If alive, push asteroid",
+          "code": "class Solution {\n    func asteroidCollision(_ asteroids: [Int]) -> [Int] {\n        var stack: [Int] = []\n\n        for asteroid in asteroids {\n            var alive = true\n\n            while alive && asteroid < 0 && !stack.isEmpty && stack.last! > 0 {\n                let top = stack.last!\n                if top < -asteroid {\n                    stack.removeLast()  // Top explodes, continue checking\n                } else if top == -asteroid {\n                    stack.removeLast()  // Both explode\n                    alive = false\n                } else {\n                    alive = false  // Incoming explodes\n                }\n            }\n\n            if alive {\n                stack.append(asteroid)\n            }\n        }\n\n        return stack\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Stack size at most n",
+            "time": "O(n)",
+            "timeExplanation": "Each asteroid processed once, total pops <= n"
+          },
+          "explanation": "This version explicitly tracks whether the incoming asteroid survives. The while loop continues as long as there's potential for collision (incoming negative, stack top positive) and the incoming asteroid is still 'alive'. This makes the three collision outcomes clearer.",
+          "id": "a12e9c2c-de32-4f84-adc3-bb5e34ef8599",
+          "intuition": "Same logic but with a boolean to track if the incoming asteroid survives all collisions, making the code flow clearer.",
+          "name": "Stack with Explicit State",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[-2]",
+              "explanation": "1 and -1 both explode. -2 survives (nothing to collide with).",
+              "id": "70ee2306-1434-42a4-a5f1-1be479c8dfc5",
+              "input": "asteroids = [1,-1,-2]"
+            }
+          ]
+        }
+      ],
+      "id": "868ed1fa-3119-4d0f-abd2-c4cb47b6ce64",
+      "lastUpdated": "2026-02-06T08:38:32Z",
+      "problemSlug": "asteroid-collision",
+      "relatedProblems": [
+        "can-place-flowers",
+        "destroying-asteroids"
+      ],
+      "summary": "Asteroids move right (+) or left (-). When they collide, smaller one explodes; equal sizes both explode. Use a stack to simulate collisions as asteroids move."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize a score variable to 0 and an index to 0. 2. Iterate through the operations array. 3. For each operation, if it's a number, add it to the score. 4. If it's 'C', subtract the last score from the total score. 5. If it's 'D', add twice the last score to the total score.",
+          "code": "class Solution {\n    func calPoints(ops: [String]) -> Int {\n        var score = 0\n        var scores: [Int] = []\n        for op in ops {\n            if let num = Int(op) {\n                score += num\n                scores.append(num)\n            }\n            else if op == \"C\" {\n                score -= scores.removeLast()\n            }\n            else if op == \"D\" {\n                score += scores.last! * 2\n                scores.append(scores.last! * 2)\n            }\n        }\n        return score\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because in the worst case, we store every operation in the scores array.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we iterate through the operations array once."
+          },
+          "explanation": "This approach works because it simulates the game step-by-step, updating the score based on each operation. However, it's inefficient because it requires manual iteration and doesn't take advantage of any data structures.",
+          "id": "94d87b69-3a84-4b81-844e-dc9beffcab6b",
+          "intuition": "The brute force approach involves iterating through the operations array and manually calculating the score at each step. This approach lacks efficiency but provides a simple, straightforward solution.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "27",
+              "explanation": "The scores after each operation are: 5, 3, 7, 5, 10, 15, 24, 29, 27.",
+              "id": "6745629a-3a25-43b6-93a3-04e0a00c061a",
+              "input": "ops = [\"5\",\"-2\",\"4\",\"C\",\"D\",\"9\",\"+\",\"+\"]"
+            },
+            {
+              "expectedOutput": "30",
+              "explanation": "The scores after each operation are: 5, 7, 5, 10, 15.",
+              "id": "0d5930a8-70b7-46d7-b0d4-e3a384daa3b0",
+              "input": "ops = [\"5\",\"2\",\"C\",\"D\",\"+\"]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize a stack to store scores. 2. Iterate through the operations array. 3. For each operation, if it's a number, push it onto the stack. 4. If it's 'C', pop the last score from the stack. 5. If it's 'D', push twice the last score onto the stack.",
+          "code": "class Solution {\n    func calPoints(ops: [String]) -> Int {\n        var stack: [Int] = []\n        for op in ops {\n            if let num = Int(op) {\n                stack.append(num)\n            }\n            else if op == \"C\" {\n                stack.removeLast()\n            }\n            else if op == \"D\" {\n                stack.append(stack.last! * 2)\n            }\n        }\n        return stack.reduce(0, +)\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because in the worst case, we store every operation in the stack.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we iterate through the operations array once."
+          },
+          "explanation": "This approach works because the stack data structure allows for efficient addition and removal of elements, making it ideal for handling 'C' and 'D' operations.",
+          "id": "e1098cb7-fedd-45b7-a814-f0b79824d78f",
+          "intuition": "The optimized approach involves using a stack to store the scores. This allows for efficient handling of 'C' and 'D' operations.",
+          "name": "Optimized Stack Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "27",
+              "explanation": "The scores after each operation are: 5, 3, 7, 5, 10, 15, 24, 29, 27.",
+              "id": "eb99121d-48b1-48b8-afa3-892007383566",
+              "input": "ops = [\"5\",\"-2\",\"4\",\"C\",\"D\",\"9\",\"+\",\"+\"]"
+            },
+            {
+              "expectedOutput": "30",
+              "explanation": "The scores after each operation are: 5, 7, 5, 10, 15.",
+              "id": "02ccfc0b-5c2e-4f3e-a778-1dfa6f192fef",
+              "input": "ops = [\"5\",\"2\",\"C\",\"D\",\"+\"]"
+            }
+          ]
+        }
+      ],
+      "id": "823457fd-6af7-451c-999c-7205853f72d8",
+      "lastUpdated": "2026-02-06T21:33:24Z",
+      "problemSlug": "baseball-game",
+      "relatedProblems": [
+        "plus-one",
+        "candy"
+      ],
+      "summary": "This problem involves tracking the score in a baseball game given an array of operations. The key insight is to use a stack to efficiently handle 'C' and 'D' operations."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Track current number, result, sign\n2. On '(': push result and sign, reset\n3. On ')': pop and combine with current result",
+          "code": "class Solution {\n    func calculate(_ s: String) -> Int {\n        var stack: [Int] = []\n        var result = 0, num = 0, sign = 1\n        for char in s {\n            if char.isNumber {\n                num = num * 10 + Int(String(char))!\n            } else if char == \"+\" {\n                result += sign * num; num = 0; sign = 1\n            } else if char == \"-\" {\n                result += sign * num; num = 0; sign = -1\n            } else if char == \"(\" {\n                stack.append(result); stack.append(sign)\n                result = 0; sign = 1\n            } else if char == \")\" {\n                result += sign * num; num = 0\n                result *= stack.removeLast()\n                result += stack.removeLast()\n            }\n        }\n        return result + sign * num\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Stack for nesting",
+            "time": "O(n)",
+            "timeExplanation": "Single pass"
+          },
+          "explanation": "Stack stores context before each nested expression.",
+          "id": "1d142370-25dc-4b0c-a5cb-7fd4985561fe",
+          "intuition": "Push current result and sign when entering parens.",
+          "name": "Stack for Parentheses",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "23",
+              "explanation": "Evaluate with parentheses",
+              "id": "e06bff7f-6ede-482d-964c-206aed336ba3",
+              "input": "s = \"(1+(4+5+2)-3)+(6+8)\""
+            }
+          ]
+        }
+      ],
+      "id": "ff441650-8960-4dd1-be1b-5de8033ff8ed",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "basic-calculator",
+      "relatedProblems": [
+        "basic-calculator-ii"
+      ],
+      "summary": "Evaluate expression with +, -, parentheses. Stack for nested parentheses."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Track previous operator\n2. On +/-: push number to stack\n3. On *//: pop, compute, push result\n4. Sum stack at end",
+          "code": "class Solution {\n    func calculate(_ s: String) -> Int {\n        var stack: [Int] = []\n        var num = 0, op: Character = \"+\"\n        let s = s + \"+\"\n        for char in s {\n            if char.isNumber {\n                num = num * 10 + Int(String(char))!\n            } else if char != \" \" {\n                switch op {\n                case \"+\": stack.append(num)\n                case \"-\": stack.append(-num)\n                case \"*\": stack.append(stack.removeLast() * num)\n                case \"/\": stack.append(stack.removeLast() / num)\n                default: break\n                }\n                op = char; num = 0\n            }\n        }\n        return stack.reduce(0, +)\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Stack size",
+            "time": "O(n)",
+            "timeExplanation": "Single pass"
+          },
+          "explanation": "Higher precedence ops execute immediately.",
+          "id": "c699e70c-9335-401e-b72f-cba9cbf9f58d",
+          "intuition": "* and / operate immediately, + and - wait on stack.",
+          "name": "Stack with Precedence",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "7",
+              "explanation": "3+(2*2)=7",
+              "id": "66f93270-b31d-4ce0-ad18-666b085d6ffe",
+              "input": "s = \"3+2*2\""
+            }
+          ]
+        }
+      ],
+      "id": "0f1e90ca-9920-4b7b-bcf8-deb7837d5719",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "basic-calculator-ii",
+      "relatedProblems": [
+        "basic-calculator"
+      ],
+      "summary": "Evaluate expression with +, -, *, /. Stack handles precedence."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, perform an in-order traversal of the BST and store node values in an array. Then, create an iterator using this array.",
+          "code": "class Solution {\n    import Foundation\n\n    class BSTIterator {\n        var nodes: [Int] = []\n        var index: Int = 0\n\n        init(_ root: TreeNode?) {\n            inOrderTraversal(root)\n        }\n\n        private func inOrderTraversal(_ root: TreeNode?) {\n            if root == nil {\n                return\n            }\n            inOrderTraversal(root?.left)\n            nodes.append(root!.val)\n            inOrderTraversal(root?.right)\n        }\n\n        func next() -> Int {\n            let nextVal = nodes[index]\n            index += 1\n            return nextVal\n        }\n\n        func hasNext() -> Bool {\n            return index < nodes.count\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we store the node values in an array for the iterator.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we perform an in-order traversal of the BST, which visits each node once."
+          },
+          "explanation": "This approach first traverses the entire tree to store the node values in an array, and then creates an iterator to return the node values one by one. The time complexity is O(n) because we visit each node once during the traversal.",
+          "id": "ab1da8b6-0912-4928-a863-abb4f2396e41",
+          "intuition": "The brute force approach works by first performing an in-order traversal of the Binary Search Tree, storing the node values in an array, and then using this array to create an iterator.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "The smallest node value in the BST is 3.",
+              "id": "701e455f-f45b-4ede-bdd1-c65006c539a1",
+              "input": "root = [7,3,15,9,20], next()"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "The next smallest node value is 7.",
+              "id": "a6fdb6af-e19d-455d-a76a-2793f997f255",
+              "input": "root = [7,3,15,9,20], next()"
+            }
+          ]
+        },
+        {
+          "approach": "First, push the leftmost nodes onto a stack. Then, pop a node from the stack, return its value, and push its right child's leftmost nodes onto the stack.",
+          "code": "class Solution {\n    import Foundation\n\n    class BSTIterator {\n        var stack: [TreeNode] = []\n\n        init(_ root: TreeNode?) {\n            pushLeft(root)\n        }\n\n        private func pushLeft(_ node: TreeNode?) {\n            var currentNode = node\n            while currentNode != nil {\n                stack.append(currentNode!)\n                currentNode = currentNode?.left\n            }\n        }\n\n        func next() -> Int {\n            let topNode = stack.removeLast()\n            if topNode.right != nil {\n                pushLeft(topNode.right)\n            }\n            return topNode.val\n        }\n\n        func hasNext() -> Bool {\n            return !stack.isEmpty\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(h)",
+            "spaceExplanation": "The space complexity is O(h) because in the worst case, the stack might store h nodes.",
+            "time": "O(h)",
+            "timeExplanation": "The time complexity is O(h) for each next() call, where h is the height of the BST, because in the worst case, we might need to traverse from the root to a leaf node."
+          },
+          "explanation": "This approach avoids storing all node values in an array and instead uses a stack to store nodes for the in-order traversal. The time complexity is O(h) for each next() call, where h is the height of the BST, because in the worst case, we might need to traverse from the root to a leaf node.",
+          "id": "5fdc9707-4dd2-4dce-a16a-fac68dbe44fa",
+          "intuition": "The optimized approach utilizes a stack to store nodes for the in-order traversal, allowing for efficient iteration over the BST without storing all node values in an array.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "The smallest node value in the BST is 3.",
+              "id": "23352df3-386d-43a2-91c7-62b7b3c64428",
+              "input": "root = [7,3,15,9,20], next()"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "The next smallest node value is 7.",
+              "id": "04f8c229-2234-4062-8402-92364335e4c9",
+              "input": "root = [7,3,15,9,20], next()"
+            }
+          ]
+        }
+      ],
+      "id": "8903fd29-59e7-4ce3-9d17-90fe79c5cf87",
+      "lastUpdated": "2026-02-06T21:08:18Z",
+      "problemSlug": "binary-search-tree-iterator",
+      "relatedProblems": [
+        "validate-binary-search-tree",
+        "insert-into-a-binary-search-tree"
+      ],
+      "summary": "The problem requires creating an iterator for a Binary Search Tree (BST) to return the in-order traversal of the tree, and the key insight is to utilize a stack to store nodes for the in-order traversal. "
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. If node is null, return\n2. Recursively traverse left\n3. Add current value\n4. Recursively traverse right",
+          "code": "class Solution {\n    func inorderTraversal(_ root: TreeNode?) -> [Int] {\n        var result: [Int] = []\n\n        func inorder(_ node: TreeNode?) {\n            guard let node = node else { return }\n            inorder(node.left)\n            result.append(node.val)\n            inorder(node.right)\n        }\n\n        inorder(root)\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(h)",
+            "spaceExplanation": "Recursion stack depth equals tree height",
+            "time": "O(n)",
+            "timeExplanation": "Visit each node once"
+          },
+          "explanation": "Inorder for BST gives sorted order. The recursion naturally handles the stack for us.",
+          "id": "0f0eec17-aef8-42f3-a25d-48b202215f22",
+          "intuition": "Visit left subtree, then current node, then right subtree.",
+          "name": "Recursive",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,3,2]",
+              "explanation": "Inorder: 1, then 3, then 2",
+              "id": "5956b134-226b-45df-8228-037349a53ac8",
+              "input": "root = [1,null,2,3]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Push all left children onto stack\n2. Pop node, add to result\n3. Move to right child and repeat step 1",
+          "code": "class Solution {\n    func inorderTraversal(_ root: TreeNode?) -> [Int] {\n        var result: [Int] = []\n        var stack: [TreeNode] = []\n        var current = root\n\n        while current != nil || !stack.isEmpty {\n            while current != nil {\n                stack.append(current!)\n                current = current?.left\n            }\n            current = stack.removeLast()\n            result.append(current!.val)\n            current = current?.right\n        }\n\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(h)",
+            "spaceExplanation": "Stack holds at most h nodes",
+            "time": "O(n)",
+            "timeExplanation": "Visit each node once"
+          },
+          "explanation": "We manually simulate the call stack. Going left as far as possible, then processing, then going right mirrors the recursive pattern.",
+          "id": "cd2098cc-74b2-4a27-a729-a21009fab238",
+          "intuition": "Push all left nodes to stack. Pop and process, then go to right subtree.",
+          "name": "Iterative with Stack",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1,3,2]",
+              "explanation": "Same result iteratively",
+              "id": "fe97df7e-be9f-467d-a1e5-7ba8af4fcb7c",
+              "input": "root = [1,null,2,3]"
+            }
+          ]
+        }
+      ],
+      "id": "902f590d-8f8e-4d16-a2bb-96b5925fde79",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "binary-tree-inorder-traversal",
+      "relatedProblems": [
+        "binary-tree-preorder-traversal",
+        "binary-tree-postorder-traversal"
+      ],
+      "summary": "Inorder traversal: left, root, right. Recursive is simple; iterative uses stack."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start by defining a recursive function that takes a node as an argument. Within this function, recursively call the function on the node's left and right children, and then append the node's value to the result list.",
+          "code": "class Solution { func postorderTraversal(_ root: TreeNode?) -> [Int] { var result = [Int](); postOrder(root, &result); return result }; func postOrder(_ node: TreeNode?, _ result: inout [Int]) { if let node = node { postOrder(node.left, &result); postOrder(node.right, &result); result.append(node.val) } } }",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "In the worst case, the system call stack can go as deep as n, where n is the number of nodes in the tree.",
+            "time": "O(n)",
+            "timeExplanation": "We visit each node exactly once."
+          },
+          "explanation": "This recursive approach directly implements the postorder traversal definition. However, it relies on the system call stack to manage the recursive calls, which could lead to stack overflow errors for very large trees.",
+          "id": "b440aab1-930c-45c9-bb97-6065440ead60",
+          "intuition": "This works because recursion naturally follows the depth-first search pattern, and by visiting the left and right subtrees before the current node, we achieve postorder traversal.",
+          "name": "Recursive Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[3,2,1]",
+              "explanation": "The postorder traversal of this tree visits the left subtree (3), then the right subtree (2), and finally the root (1).",
+              "id": "30996b71-2380-4cd5-b7be-f58d34ef70ef",
+              "input": "root = [1,null,2,3]"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "An empty tree has no nodes to visit.",
+              "id": "20c3b946-1be6-45d2-8c00-1c9acdb6cad8",
+              "input": "root = []"
+            },
+            {
+              "expectedOutput": "[4,5,2,6,7,3,1]",
+              "explanation": "For a complete binary tree, postorder traversal visits nodes in a specific pattern that follows the definition of postorder.",
+              "id": "573dc74d-0ceb-4e15-ac28-cf4c642af442",
+              "input": "root = [1,2,3,4,5,6,7]"
+            }
+          ]
+        },
+        {
+          "approach": "Use two stacks: one to store nodes to be processed and another as a temporary stack to reverse the postorder, which is actually a preorder traversal without the root first.",
+          "code": "class Solution {\n    func postorderTraversal(_ root: TreeNode?) -> [Int] {\n        var result = [Int]()\n        var stack1 = [TreeNode?]()\n        var stack2 = [Int]()\n        if let root = root {\n            stack1.append(root)\n        }\n        while !stack1.isEmpty {\n            if let node = stack1.popLast() {\n                stack2.append(node.val)\n                if let left = node.left {\n                    stack1.append(left)\n                }\n                if let right = node.right {\n                    stack1.append(right)\n                }\n            }\n        }\n        result = Array(stack2.reversed())\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We use two stacks to store nodes and their values, which in the worst case can contain n elements each.",
+            "time": "O(n)",
+            "timeExplanation": "Each node is visited once and then its value is added to the result list."
+          },
+          "explanation": "The iterative approach avoids the potential stack overflow issue of recursion by using explicit stacks to manage nodes. It visits each node once and then reverses the result to achieve postorder.",
+          "id": "be40fc16-9edc-4d3b-9db5-c3bd2882ff44",
+          "intuition": "This approach uses a stack to manually manage the postorder traversal, allowing us to process nodes without relying on recursive function calls.",
+          "name": "Iterative Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[3,2,1]",
+              "explanation": "This test case verifies that the iterative approach correctly handles trees with missing children.",
+              "id": "965e5fa3-2291-433f-81c6-17d2a9deffc6",
+              "input": "root = [1,null,2,3]"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "An empty input tree should produce an empty output list.",
+              "id": "a7a7e3db-f22d-4101-9d39-b0e2b9dd542d",
+              "input": "root = []"
+            },
+            {
+              "expectedOutput": "[4,5,2,6,7,3,1]",
+              "explanation": "For a complete binary tree, the iterative postorder traversal should match the expected postorder sequence.",
+              "id": "f1869010-a55c-4d44-b5f5-16362e9598db",
+              "input": "root = [1,2,3,4,5,6,7]"
+            }
+          ]
+        }
+      ],
+      "id": "c116a291-ba3c-4f2c-a49b-c131420f718a",
+      "lastUpdated": "2026-02-06T21:07:31Z",
+      "problemSlug": "binary-tree-postorder-traversal",
+      "relatedProblems": [
+        "binary-tree-inorder-traversal",
+        "binary-tree-preorder-traversal"
+      ],
+      "summary": "Binary Tree Postorder Traversal involves traversing a binary tree in a postorder manner, meaning we visit the left subtree, the right subtree, and then the root. The key insight here is to use a stack to store nodes and process them accordingly."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start at the root node, and recursively call the function on the left and right children",
+          "code": "class Solution {\n    func preorderTraversal(_ root: TreeNode?) -> [Int] {\n        var result = [Int]()\n        func traverse(_ node: TreeNode?) {\n            guard let node = node else {\n                return\n            }\n            result.append(node.val)\n            traverse(node.left)\n            traverse(node.right)\n        }\n        traverse(root)\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We use the system call stack to store the nodes to visit, resulting in O(n) space complexity in the worst case, where the tree is skewed",
+            "time": "O(n)",
+            "timeExplanation": "We visit each node once, resulting in O(n) time complexity"
+          },
+          "explanation": "This is a straightforward implementation of the preorder traversal definition. It uses the system call stack to store the nodes to visit, and has a time complexity of O(n), where n is the number of nodes in the tree",
+          "id": "33e39230-6b59-4e3f-97df-e75e6dc8e87b",
+          "intuition": "This approach works by directly implementing the preorder traversal definition: visiting the root node, then the left subtree, and finally the right subtree.",
+          "name": "Recursive Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,3]",
+              "explanation": "The preorder traversal of this binary tree is [1,2,3]",
+              "id": "f4192c64-a098-4cf6-b360-3a300933d779",
+              "input": "root = [1,null,2,3]"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "The preorder traversal of an empty binary tree is an empty array",
+              "id": "6a40ce60-0d79-49bc-9d9a-5a0c37b496fc",
+              "input": "root = []"
+            }
+          ]
+        },
+        {
+          "approach": "Start at the root node, and manually push and pop nodes from the stack",
+          "code": "class Solution {\n    func preorderTraversal(_ root: TreeNode?) -> [Int] {\n        var result = [Int]()\n        var stack: [TreeNode] = root != nil ? [root!] : []\n        while !stack.isEmpty {\n            let node = stack.removeLast()\n            result.append(node.val)\n            if let right = node.right {\n                stack.append(right)\n            }\n            if let left = node.left {\n                stack.append(left)\n            }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We use a manual stack to store the nodes to visit, resulting in O(n) space complexity in the worst case, where the tree is skewed",
+            "time": "O(n)",
+            "timeExplanation": "We visit each node once, resulting in O(n) time complexity"
+          },
+          "explanation": "This is an iterative implementation of the preorder traversal definition. It uses a manual stack to store the nodes to visit, and has a time complexity of O(n), where n is the number of nodes in the tree",
+          "id": "aaffdd00-c920-44de-b80f-92ae769a7d7b",
+          "intuition": "This approach works by manually managing a stack to store the nodes to visit, allowing us to avoid using the system call stack and reducing the space complexity",
+          "name": "Iterative Approach with a Stack",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,3]",
+              "explanation": "The preorder traversal of this binary tree is [1,2,3]",
+              "id": "25e40607-3505-4e77-8a6e-14b221c83348",
+              "input": "root = [1,null,2,3]"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "The preorder traversal of an empty binary tree is an empty array",
+              "id": "71bf0088-4983-483a-ae71-b281c5da1ced",
+              "input": "root = []"
+            }
+          ]
+        }
+      ],
+      "id": "9d90d52c-5c75-4db8-96df-2efcd7d588f4",
+      "lastUpdated": "2026-02-06T21:07:25Z",
+      "problemSlug": "binary-tree-preorder-traversal",
+      "relatedProblems": [
+        "binary-tree-inorder-traversal",
+        "binary-tree-postorder-traversal"
+      ],
+      "summary": "The problem requires returning the preorder traversal of a binary tree, which can be solved by using a recursive approach or an iterative approach with a stack. The key insight is to visit the root node first, then recursively traverse the left subtree, and finally the right subtree."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Pair positions with speeds and sort by position descending\n2. Calculate time to reach target for each car\n3. Use a stack to track fleet arrival times\n4. If current car's time > stack top, it forms a new fleet\n5. If current car's time <= stack top, it joins that fleet (don't push)\n6. Return stack size",
+          "code": "class Solution {\n    func carFleet(_ target: Int, _ position: [Int], _ speed: [Int]) -> Int {\n        let n = position.count\n        if n == 0 { return 0 }\n\n        // Pair (position, speed) and sort by position descending\n        var cars = zip(position, speed).map { ($0, $1) }\n        cars.sort { $0.0 > $1.0 }\n\n        var fleets = 0\n        var lastTime: Double = 0\n\n        for (pos, spd) in cars {\n            let time = Double(target - pos) / Double(spd)\n            if time > lastTime {\n                fleets += 1\n                lastTime = time\n            }\n        }\n\n        return fleets\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Storage for the cars array with position-speed pairs",
+            "time": "O(n log n)",
+            "timeExplanation": "Dominated by sorting the cars array"
+          },
+          "explanation": "A car closer to target will block all faster cars behind it. If car B is behind car A and would arrive sooner, B must slow down to A's pace - they become one fleet arriving at A's time. By processing from front to back, we determine if each car forms a new fleet or joins an existing one.",
+          "id": "37292528-4b17-4e06-be95-5a8452460e56",
+          "intuition": "Process cars from closest to target to furthest. Calculate time to reach target for each car. If a car behind takes less time, it catches up and merges with the fleet ahead.",
+          "name": "Sort by Position + Stack",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "Car at 10 arrives at time 1. Car at 8 arrives at time 1, catches up → 1 fleet. Car at 0 arrives at time 12. Cars at 5,3 catch up to it → 1 fleet. Total: 3 fleets.",
+              "id": "d6a8a0ea-2823-48e6-a7ed-e8144455d56f",
+              "input": "target = 12, position = [10,8,0,5,3], speed = [2,4,1,1,3]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "Single car forms one fleet",
+              "id": "edb7842f-ad7b-4612-a849-12d5d89e2185",
+              "input": "target = 10, position = [3], speed = [3]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "All cars eventually catch up to the slowest (front) car",
+              "id": "94296bc3-99ed-4fd6-b92e-ac47d88dc6df",
+              "input": "target = 100, position = [0,2,4], speed = [4,2,1]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Sort cars by position descending\n2. Maintain stack of arrival times (monotonically increasing)\n3. For each car, calculate arrival time\n4. While stack not empty and current time >= stack top, pop (merge)\n5. Push current time\n6. Return stack size",
+          "code": "class Solution {\n    func carFleet(_ target: Int, _ position: [Int], _ speed: [Int]) -> Int {\n        let n = position.count\n        if n == 0 { return 0 }\n\n        var cars = zip(position, speed).map { ($0, $1) }\n        cars.sort { $0.0 > $1.0 }\n\n        var stack: [Double] = []\n\n        for (pos, spd) in cars {\n            let time = Double(target - pos) / Double(spd)\n\n            // If this car is slower (takes longer), it forms new fleet\n            // Otherwise it joins the fleet ahead\n            if stack.isEmpty || time > stack.last! {\n                stack.append(time)\n            }\n        }\n\n        return stack.count\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Stack can hold at most n fleet times",
+            "time": "O(n log n)",
+            "timeExplanation": "Sorting dominates; stack operations are O(n) total"
+          },
+          "explanation": "The stack maintains fleet arrival times in increasing order. When we find a car that takes longer to arrive than the fleet ahead, it becomes a new fleet. Cars that would arrive faster join existing fleets. This explicitly models the fleet merging process.",
+          "id": "51b25e8b-2f98-4829-bf7d-f8fe2252404d",
+          "intuition": "Maintain a stack of arrival times. Each time represents a fleet. Pop times that would be caught by a slower car behind.",
+          "name": "Monotonic Stack (Explicit)",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "Stack builds: [1.0] → [1.0] (8 catches 10) → [1.0, 12.0] → [1.0, 12.0] (5 joins) → [1.0, 12.0] (3 joins)",
+              "id": "4e3426cc-6d78-4fb6-93ea-517360bc3dc2",
+              "input": "target = 12, position = [10,8,0,5,3], speed = [2,4,1,1,3]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "Car at 8 takes time 1. Car at 6 takes time 4/3 ≈ 1.33 > 1, so 2 fleets",
+              "id": "e9a3a080-97b8-4f87-b952-e7cb36164ce7",
+              "input": "target = 10, position = [6,8], speed = [3,2]"
+            }
+          ]
+        }
+      ],
+      "id": "ac6324e0-9fb4-4fee-afae-1e40a521f8d3",
+      "lastUpdated": "2026-02-06T08:33:51Z",
+      "problemSlug": "car-fleet",
+      "relatedProblems": [
+        "car-fleet-ii"
+      ],
+      "summary": "Determine how many car fleets arrive at the destination. Cars that catch up merge into one fleet. Sort by position descending and count how many cars don't catch up to the car ahead."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start with the initial word and repeatedly apply the substitution until no more substitutions are possible.",
+          "code": "class Solution {\n    func isValid(word: String) -> Bool {\n      let pattern = \"ab\"\n      let replacement = \"c\"\n      var currentWord = word\n      while true {\n        if let range = currentWord.range(of: pattern) {\n          currentWord = currentWord.replacingCharacters(in: range, with: replacement)\n        } else {\n          break\n        }\n      }\n      return currentWord == \"c\"\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We are storing the current word in each iteration of the while loop, leading to a space complexity of O(n).",
+            "time": "O(n^2)",
+            "timeExplanation": "We are potentially replacing characters in the word in each iteration of the while loop, leading to a time complexity of O(n^2)."
+          },
+          "explanation": "The brute force approach works by simulating the substitution process step by step, checking after each substitution if the pattern still exists in the word.",
+          "id": "61ebec59-3709-4d0a-844a-b596f6ae5985",
+          "intuition": "This approach uses a brute force method to repeatedly substitute the given pattern until no more substitutions can be made.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "This is because after applying the substitutions, the word becomes \"cc\" which is valid.",
+              "id": "e7b44cb8-8b26-44c1-8066-869cda42f3a3",
+              "input": "word = \"aabcb\""
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "This is because the pattern \"ab\" does not exist in the word \"abc\".",
+              "id": "0b3b2593-63a4-4e84-8a9e-f0b2ed54cb92",
+              "input": "word = \"abc\""
+            }
+          ]
+        },
+        {
+          "approach": "Use a stack to store the characters in the word and iterate through the word. When we encounter the pattern, pop the characters from the stack.",
+          "code": "class Solution {\n    func isValid(word: String) -> Bool {\n      let pattern = \"ab\"\n      var stack: [Character] = []\n      for char in word {\n        if char == \"b\" && !stack.isEmpty && stack.last == \"a\" {\n          stack.popLast()\n        } else {\n          stack.append(char)\n        }\n      }\n      return stack.count == 0 || (stack.count == 1 && stack[0] == \"c\")\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We are using a stack to store the characters in the word, leading to a space complexity of O(n).",
+            "time": "O(n)",
+            "timeExplanation": "We are iterating over the word once, leading to a time complexity of O(n)."
+          },
+          "explanation": "The optimized approach uses a stack to track the characters in the word. When we encounter the pattern \"ab\", we pop the characters from the stack.",
+          "id": "0c0bcce0-a85f-4a76-8749-028fe68c7d38",
+          "intuition": "This approach uses a stack data structure to track the characters in the word, allowing for efficient substitution.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "This is because after applying the substitutions, the word becomes \"cc\" which is valid.",
+              "id": "34876fab-0bf8-428e-b3be-c2cddf315b59",
+              "input": "word = \"aabcb\""
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "This is because the pattern \"ab\" does not exist in the word \"abc\".",
+              "id": "a0866d8c-fb99-48d1-8a1d-863c30f4c22f",
+              "input": "word = \"abc\""
+            }
+          ]
+        }
+      ],
+      "id": "ea6c17d7-327b-4ac2-97ea-012a8d6e6546",
+      "lastUpdated": "2026-02-06T21:54:42Z",
+      "problemSlug": "check-if-word-is-valid-after-substitutions",
+      "relatedProblems": [
+        "valid-parenthesis-string",
+        "minimum-remove-to-make-valid-parentheses"
+      ],
+      "summary": "This problem checks if a word is valid after a series of substitutions. The key insight is that we can use a stack data structure to track the characters in the word."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, find the smallest element in the preorder traversal array. Then, create a new node with that element and recursively construct the left subtree with the elements to the left of the current node's value. Finally, recursively construct the right subtree with the elements to the right of the current node's value.",
+          "code": "// Definition for a binary tree node.\n\nclass Solution {\n    func bstFromPreorder(_ preorder: [Int]) -> TreeNode? {\n        return bstFromPreorder(preorder, 0, preorder.count - 1)\n    }\n\n    private func bstFromPreorder(_ preorder: [Int], _ start: Int, _ end: Int) -> TreeNode? {\n        if start > end {\n            return nil\n        }\n        let node = TreeNode(preorder[start])\n        var i = start + 1\n        while i <= end, i < preorder.count, preorder[i] < preorder[start] {\n            i += 1\n        }\n        node.left = bstFromPreorder(preorder, start + 1, i - 1)\n        node.right = bstFromPreorder(preorder, i, end)\n        return node\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because in the worst-case scenario, we're storing all elements of the preorder traversal array in the call stack.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) because we're performing a linear search for each node to find the correct position to insert it in the binary search tree."
+          },
+          "explanation": "The brute-force approach works, but it's inefficient because it performs unnecessary comparisons to find the smallest element in the preorder traversal array. It has a time complexity of O(n^2) because in the worst-case scenario, we're performing a linear search for each node.",
+          "id": "16389251-04d0-46eb-a2e1-518a8c7e2852",
+          "intuition": "This approach works by recursively finding the smallest element in the preorder traversal array and creating a new node with that element. It then recursively constructs the left and right subtrees with the remaining elements.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[8,5,10,1,7,12]",
+              "explanation": "The output represents the inorder traversal of the constructed binary search tree. The preorder traversal array [8,5,1,7,10,12] corresponds to the binary search tree with the following structure: 8 / \\ 5 10 / \\ 1 7 12",
+              "id": "c00e3a51-96e8-465c-874c-ef76da3c7d01",
+              "input": "preorder = [8,5,1,7,10,12]"
+            },
+            {
+              "expectedOutput": "[2,1]",
+              "explanation": "The output represents the inorder traversal of the constructed binary search tree. The preorder traversal array [2,1] corresponds to the binary search tree with the following structure: 2 / 1",
+              "id": "4da500a1-072f-4728-b72e-94fb6290b37f",
+              "input": "preorder = [2,1]"
+            }
+          ]
+        },
+        {
+          "approach": "First, initialize an empty stack and an empty binary search tree. Then, iterate over the preorder traversal array and push each element onto the stack. Whenever you encounter an element that is smaller than the top element of the stack, pop elements from the stack and create a left child for the top element until you find an element that is smaller than the current element or the stack is empty.",
+          "code": "// Definition for a binary tree node.\n\nclass Solution {\n    func bstFromPreorder(_ preorder: [Int]) -> TreeNode? {\n        var root: TreeNode? = nil\n        var stack: [TreeNode] = []\n        for val in preorder {\n            var node = TreeNode(val)\n            while !stack.isEmpty, stack.last?.val < val {\n                node.left = stack.removeLast()\n            }\n            if !stack.isEmpty {\n                stack.last?.right = node\n            } else {\n                root = node\n            }\n            stack.append(node)\n        }\n        return root\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because in the worst-case scenario, we're storing all elements of the preorder traversal array in the stack.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we're only iterating over the preorder traversal array once and performing a constant amount of work for each element."
+          },
+          "explanation": "The optimized approach works by using a stack to keep track of the nodes that we need to process. It has a time complexity of O(n) because it only iterates over the preorder traversal array once and performs a constant amount of work for each element.",
+          "id": "b3453e33-2b19-4f44-900b-27a30edda6c7",
+          "intuition": "This approach works by using a stack to keep track of the nodes that we need to process. It iterates over the preorder traversal array and pushes each element onto the stack. Whenever it encounters an element that is smaller than the top element of the stack, it pops elements from the stack and creates a left child for the top element until it finds an element that is smaller than the current element or the stack is empty.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[8,5,10,1,7,12]",
+              "explanation": "The output represents the inorder traversal of the constructed binary search tree. The preorder traversal array [8,5,1,7,10,12] corresponds to the binary search tree with the following structure: 8 / \\ 5 10 / \\ 1 7 12",
+              "id": "2b4d2336-7220-487a-ac34-21ff1baaeab7",
+              "input": "preorder = [8,5,1,7,10,12]"
+            },
+            {
+              "expectedOutput": "[2,1]",
+              "explanation": "The output represents the inorder traversal of the constructed binary search tree. The preorder traversal array [2,1] corresponds to the binary search tree with the following structure: 2 / 1",
+              "id": "7652bde4-9850-43bb-9183-8e9127246483",
+              "input": "preorder = [2,1]"
+            }
+          ]
+        }
+      ],
+      "id": "3a49fb3e-39d8-45bd-be43-2414d38314ca",
+      "lastUpdated": "2026-02-06T21:55:15Z",
+      "problemSlug": "construct-binary-search-tree-from-preorder-traversal",
+      "relatedProblems": [
+        "binary-tree-inorder-traversal",
+        "binary-tree-preorder-traversal"
+      ],
+      "summary": "The problem requires constructing a binary search tree from a given preorder traversal. The key insight is to use a recursive approach or a stack-based approach to construct the binary search tree."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Stack stores indices of unresolved days\n2. For each day: pop while current > stack top\n3. For popped index, answer = current index - popped index\n4. Push current index",
+          "code": "class Solution {\n    func dailyTemperatures(_ temperatures: [Int]) -> [Int] {\n        var result = [Int](repeating: 0, count: temperatures.count)\n        var stack: [Int] = []  // indices\n\n        for i in 0..<temperatures.count {\n            while !stack.isEmpty && temperatures[i] > temperatures[stack.last!] {\n                let j = stack.removeLast()\n                result[j] = i - j\n            }\n            stack.append(i)\n        }\n\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Stack size",
+            "time": "O(n)",
+            "timeExplanation": "Each element pushed/popped once"
+          },
+          "explanation": "Stack maintains indices waiting for warmer day. Pop when found, difference is wait time.",
+          "id": "550e8400-e29b-41d4-a716-446655440155",
+          "intuition": "Stack holds indices of decreasing temps. When warmer found, pop and calculate days.",
+          "name": "Monotonic Stack",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,1,4,2,1,1,0,0]",
+              "explanation": "Days until next warmer temp",
+              "id": "550e8400-e29b-41d4-a716-446655440261",
+              "input": "[73,74,75,71,69,72,76,73]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440044",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "daily-temperatures",
+      "relatedProblems": [
+        "next-greater-element-i"
+      ],
+      "summary": "Days until warmer temperature. Use monotonic decreasing stack."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. digit → build number\n2. [ → push current string and count, reset\n3. ] → pop, repeat current string count times, append\n4. letter → append to current",
+          "code": "class Solution {\n    func decodeString(_ s: String) -> String {\n        var stack: [(String, Int)] = []\n        var current = \"\"\n        var num = 0\n        for c in s {\n            if c.isNumber { num = num * 10 + Int(String(c))! }\n            else if c == \"[\" { stack.append((current, num)); current = \"\"; num = 0 }\n            else if c == \"]\" { let (prev, count) = stack.removeLast(); current = prev + String(repeating: current, count: count) }\n            else { current.append(c) }\n        }\n        return current\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Stack depth",
+            "time": "O(n)",
+            "timeExplanation": "Process each char"
+          },
+          "explanation": "Stack handles nesting by saving state before entering brackets.",
+          "id": "af80dabe-487c-4b8c-9553-6fc0ca88b220",
+          "intuition": "Stack stores previous string and count when entering brackets.",
+          "name": "Stack",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"accaccacc\"",
+              "explanation": "2[c]=cc, a+cc=acc, 3[acc]=accaccacc",
+              "id": "13761e65-eee3-410f-a148-7785123d24c0",
+              "input": "\"3[a2[c]]\""
+            }
+          ]
+        }
+      ],
+      "id": "ce1f7a4f-a231-4a48-b6bb-a4ea3a5891bb",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "decode-string",
+      "relatedProblems": [
+        "number-of-atoms"
+      ],
+      "summary": "Decode k[encoded_string]. Use stack for nested patterns."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start from the beginning of the string and iterate through it. When a digit is encountered, track the number and the corresponding string. When a '[' is encountered, push the current string and number onto the stack. When a ']' is encountered, pop the last string and number from the stack, repeat the string between the current index and the popped index the number of times specified, and update the length.",
+          "code": "class Solution {\n    func decodeAtIndex(_ s: String, _ k: Int) -> String {\n        let s = Array(s)\n        var size = 0\n        var stack: [[Character]] = []\n        var i = 0\n        while i < s.count {\n            if s[i] == \".\" {\n                i += 1\n                continue\n            }\n            let end = s[i...].firstIndex(of: \"[\") ?? s.count\n            let num = Int(String(s[i..<end])) ?? 1\n            let end2 = s[end...].firstIndex(of: \"]\") ?? s.count\n            let newStr = String(s[(end+1)..<end2])\n            if size + newStr.count * num > k {\n                var remainder = k - size\n                while remainder < newStr.count {\n                    remainder %= newStr.count\n                }\n                return String(newStr[remainder...])[0]\n            }\n            size += newStr.count * num\n            stack.append(Array(newStr))\n            i = end2 + 1\n        }\n        return \"\"\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We use a stack to store the intermediate results, which can grow up to n in the worst case.",
+            "time": "O(n)",
+            "timeExplanation": "We iterate through the string once, where n is the length of the string."
+          },
+          "explanation": "We iterate through the string and track the decoded string and its length. We use a stack to store the intermediate results. When we encounter a '[', we push the current string and its length onto the stack. When we encounter a ']', we pop the last string and its length from the stack, repeat the string between the current index and the popped index the number of times specified, and update the length.",
+          "id": "5ccb8a75-9191-4849-b8a3-74d1cb516af8",
+          "intuition": "This approach involves decoding the string from left to right and tracking the decoded string and its length. When a '[' is encountered, we push the current string and its length onto the stack. When a ']' is encountered, we pop the last string and its length from the stack, repeat the string between the current index and the popped index the number of times specified, and update the length.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "o",
+              "explanation": "The decoded string is \"leet2code3\". The 10th character is 'o'.",
+              "id": "ba3b4b68-870c-46f4-9a46-25619347e236",
+              "input": "s = \"leet2code3\", k = 10"
+            },
+            {
+              "expectedOutput": "h",
+              "explanation": "The decoded string is \"ha2ha2ha2\". The 5th character is 'h'.",
+              "id": "c7200ecd-abac-4af1-aaf9-abb3302b1fb8",
+              "input": "s = \"ha22\", k = 5"
+            }
+          ]
+        },
+        {
+          "approach": "Start from the beginning of the string and iterate through it. When a digit is encountered, calculate the length of the decoded string up to that index and store it in the prefix sum array. When a ']' is encountered, calculate the length of the decoded string between the current index and the index of the corresponding '('.",
+          "code": "class Solution {\n    func decodeAtIndex(_ s: String, _ k: Int) -> String {\n        let s = Array(s)\n        var prefixSum: [Int] = [0]\n        var size = 0\n        for i in 0..<s.count {\n            if Character(\"0\")...Character(\"9\") ~= s[i] {\n                let num = Int(String(s[i])) ?? 1\n                size *= num\n                prefixSum.append(size)\n            } else if s[i] == \"[\" {\n                size = prefixSum.last ?? 0\n            } else if s[i] == \"]\" {\n                let newStr = String(s[(i+1)...])\n                if size + newStr.count > k {\n                    var remainder = k - size\n                    while remainder < newStr.count {\n                        remainder %= newStr.count\n                    }\n                    return String(newStr[remainder...])[0]\n                }\n                size += newStr.count\n                prefixSum.append(size)\n            } else {\n                size += 1\n                prefixSum.append(size)\n            }\n        }\n        return \"\"\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We use a prefix sum array to store the lengths of the decoded string up to each index, which can grow up to n in the worst case.",
+            "time": "O(n)",
+            "timeExplanation": "We iterate through the string once, where n is the length of the string."
+          },
+          "explanation": "We iterate through the string and track the length of the decoded string up to each index using a prefix sum array. When we encounter a digit, we calculate the length of the decoded string up to that index and store it in the prefix sum array. When we encounter a ']', we calculate the length of the decoded string between the current index and the index of the corresponding '(', and update the length.",
+          "id": "6c90da7f-025e-450b-98ab-6fba78acf7e3",
+          "intuition": "This approach involves using a prefix sum array to track the length of the decoded string up to each index. When a digit is encountered, we calculate the length of the decoded string up to that index and store it in the prefix sum array. When a ']' is encountered, we calculate the length of the decoded string between the current index and the index of the corresponding '('.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "o",
+              "explanation": "The decoded string is \"leet2code3\". The 10th character is 'o'.",
+              "id": "9dbdff87-33a2-4a60-85ba-eda291e55ed1",
+              "input": "s = \"leet2code3\", k = 10"
+            },
+            {
+              "expectedOutput": "h",
+              "explanation": "The decoded string is \"ha2ha2ha2\". The 5th character is 'h'.",
+              "id": "7924da5f-731e-4848-935f-d0c81f14359e",
+              "input": "s = \"ha22\", k = 5"
+            }
+          ]
+        }
+      ],
+      "id": "fe538a89-092c-41ae-b836-e4b9002bf127",
+      "lastUpdated": "2026-02-06T21:46:03Z",
+      "problemSlug": "decoded-string-at-index",
+      "relatedProblems": [
+        "decode-ways",
+        "minimum-window-substring"
+      ],
+      "summary": "The problem involves decoding a given string at a specific index, where the string contains repeating characters and numbers indicating the frequency of repetition. The key insight involves using a stack to track the decoded string and its length."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. For each token:\n   - If number: push to stack\n   - If operator: pop b, pop a, push a op b\n2. Return stack top",
+          "code": "class Solution {\n    func evalRPN(_ tokens: [String]) -> Int {\n        var stack: [Int] = []\n\n        for token in tokens {\n            switch token {\n            case \"+\":\n                let b = stack.removeLast(), a = stack.removeLast()\n                stack.append(a + b)\n            case \"-\":\n                let b = stack.removeLast(), a = stack.removeLast()\n                stack.append(a - b)\n            case \"*\":\n                let b = stack.removeLast(), a = stack.removeLast()\n                stack.append(a * b)\n            case \"/\":\n                let b = stack.removeLast(), a = stack.removeLast()\n                stack.append(a / b)\n            default:\n                stack.append(Int(token)!)\n            }\n        }\n\n        return stack[0]\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Stack for operands",
+            "time": "O(n)",
+            "timeExplanation": "Process each token once"
+          },
+          "explanation": "Order matters for - and /: second popped is left operand.",
+          "id": "550e8400-e29b-41d4-a716-446655440156",
+          "intuition": "Numbers go on stack. Operators pop two, compute, push result.",
+          "name": "Stack",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "9",
+              "explanation": "((2+1)*3) = 9",
+              "id": "550e8400-e29b-41d4-a716-446655440262",
+              "input": "[\"2\",\"1\",\"+\",\"3\",\"*\"]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440045",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "evaluate-reverse-polish-notation",
+      "relatedProblems": [
+        "basic-calculator"
+      ],
+      "summary": "Evaluate RPN expression. Stack: push numbers, pop two for operators, push result."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, create a stack to store the start time of each function call. Then, iterate over the function calls and calculate the exclusive time for each call by checking which function is running at each timestamp.",
+          "code": "class Solution {\n    func findExclusiveTimes(_ n: Int, _ logs: [String]) -> [Int] {\n        var stack: [Int] = []\n        var exclusiveTimes: [Int] = Array(repeating: 0, count: n)\n        var prevTime: Int = 0\n\n        for log in logs {\n            let components = log.components(separatedBy: \":\")\n            let functionId = Int(components[0])!\n            let eventType = components[1]\n            let timestamp = Int(components[2])!\n\n            if eventType == \"start\" {\n                if !stack.isEmpty {\n                    exclusiveTimes[stack.last!] += timestamp - prevTime\n                }\n                stack.append(functionId)\n            } else {\n                exclusiveTimes[stack.popLast()!] += timestamp - prevTime + 1\n            }\n            prevTime = timestamp\n        }\n\n        return exclusiveTimes\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we use a stack to store the start time of each function call.",
+            "time": "O(n*m)",
+            "timeExplanation": "The time complexity is O(n*m) because we iterate over all the function calls and check which function is running at each timestamp."
+          },
+          "explanation": "We start by initializing the stack and the exclusive times for each function call. Then, we iterate over the function calls and update the exclusive times accordingly. This approach has a high time complexity because it checks all the function calls for each timestamp.",
+          "id": "6202014e-49e0-411d-888b-bb8648139e09",
+          "intuition": "Calculate the exclusive time for each function call by iterating over all the calls and checking which function is running at each timestamp.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[3,4]",
+              "explanation": "The exclusive time for function 0 is 3 because it runs from timestamp 0 to 2 and from timestamp 5 to 6. The exclusive time for function 1 is 4 because it runs from timestamp 2 to 5.",
+              "id": "0971262f-e4cc-4e0e-bb59-bf7269c1c07e",
+              "input": "n = 2, logs = [\"0:start:0\",\"1:start:2\",\"1:end:5\",\"0:end:6\"]"
+            },
+            {
+              "expectedOutput": "[8]",
+              "explanation": "The exclusive time for function 0 is 8 because it runs from timestamp 0 to 6.",
+              "id": "5e64970e-1a17-4fd2-955d-1e20f92013e4",
+              "input": "n = 1, logs = [\"0:start:0\",\"0:start:2\",\"0:end:5\",\"0:end:6\"]"
+            },
+            {
+              "expectedOutput": "[7,1]",
+              "explanation": "The exclusive time for function 0 is 7 because it runs from timestamp 0 to 2 and from timestamp 5 to 6. The exclusive time for function 1 is 1 because it runs from timestamp 2 to 5.",
+              "id": "7f2cae5d-6f44-443b-ad17-b702e2281806",
+              "input": "n = 2, logs = [\"0:start:0\",\"0:start:2\",\"1:end:5\",\"0:end:6\"]"
+            }
+          ]
+        },
+        {
+          "approach": "First, create a stack to store the start time of each function call. Then, iterate over the function calls and update the exclusive times accordingly. When a function ends, calculate the exclusive time for the function by subtracting the start time from the end time and adding 1.",
+          "code": "class Solution {\n    func findExclusiveTimes(_ n: Int, _ logs: [String]) -> [Int] {\n        var stack: [Int] = []\n        var exclusiveTimes: [Int] = Array(repeating: 0, count: n)\n        var prevTime: Int = 0\n\n        for log in logs {\n            let components = log.components(separatedBy: \":\")\n            let functionId = Int(components[0])!\n            let eventType = components[1]\n            let timestamp = Int(components[2])!\n\n            if eventType == \"start\" {\n                if !stack.isEmpty {\n                    exclusiveTimes[stack.last!] += timestamp - prevTime\n                }\n                stack.append(functionId)\n            } else {\n                exclusiveTimes[stack.popLast()!] += timestamp - prevTime + 1\n            }\n            prevTime = timestamp\n        }\n\n        return exclusiveTimes\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we use a stack to store the start time of each function call.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we only iterate over the function calls once."
+          },
+          "explanation": "We start by initializing the stack and the exclusive times for each function call. Then, we iterate over the function calls and update the exclusive times accordingly. When a function ends, we calculate the exclusive time for the function by subtracting the start time from the end time and adding 1. This approach has a lower time complexity because it only calculates the exclusive time when a function ends.",
+          "id": "18f77c56-6c0e-49af-85be-62177fcee888",
+          "intuition": "Use a stack to track the start time of each function call and calculate the exclusive time for each call when the function ends.",
+          "name": "Stack-Based",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[3,4]",
+              "explanation": "The exclusive time for function 0 is 3 because it runs from timestamp 0 to 2 and from timestamp 5 to 6. The exclusive time for function 1 is 4 because it runs from timestamp 2 to 5.",
+              "id": "c4f41f73-f2a8-4341-a5ef-cfa26839f4f7",
+              "input": "n = 2, logs = [\"0:start:0\",\"1:start:2\",\"1:end:5\",\"0:end:6\"]"
+            },
+            {
+              "expectedOutput": "[8]",
+              "explanation": "The exclusive time for function 0 is 8 because it runs from timestamp 0 to 6.",
+              "id": "06998b55-4bd7-4599-8afa-2a0ce2f38139",
+              "input": "n = 1, logs = [\"0:start:0\",\"0:start:2\",\"0:end:5\",\"0:end:6\"]"
+            },
+            {
+              "expectedOutput": "[7,1]",
+              "explanation": "The exclusive time for function 0 is 7 because it runs from timestamp 0 to 2 and from timestamp 5 to 6. The exclusive time for function 1 is 1 because it runs from timestamp 2 to 5.",
+              "id": "6c41582d-2881-415c-af8a-f765d44f4c9d",
+              "input": "n = 2, logs = [\"0:start:0\",\"0:start:2\",\"1:end:5\",\"0:end:6\"]"
+            }
+          ]
+        }
+      ],
+      "id": "346665fc-9e80-4bc3-bfb9-c086895de235",
+      "lastUpdated": "2026-02-06T21:29:59Z",
+      "problemSlug": "exclusive-time-of-functions",
+      "relatedProblems": [
+        "asteroid-collision",
+        "next-greater-element-i"
+      ],
+      "summary": "The problem asks to calculate the exclusive time for each function given a list of function calls. The key insight is to use a stack to track the start and end times of each function call."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize an empty list to store the flattened elements. 2. Iterate over the input nested list and recursively flatten each element. 3. Store the flattened elements in the list. 4. Return an iterator over the flattened list.",
+          "code": "class Solution {\n    class NestedIterator {\n       let flattened: [Int]\n       var index: Int\n\n       init(_ nestedList: [NestedInteger]) {\n          var flattened = [Int]()\n          flatten(nestedList, &flattened)\n          self.flattened = flattened\n          index = 0\n       }\n\n       func next() -> Int {\n          let result = flattened[index]\n          index += 1\n          return result\n       }\n\n       func hasNext() -> Bool {\n          return index < flattened.count\n       }\n\n       func flatten(_ nestedList: [NestedInteger], _ result: inout [Int]) {\n          for element in nestedList {\n             if element.isInteger() {\n                result.append(element.getInteger() ?? 0)\n             } else {\n                flatten(element.getList() ?? [], &result)\n             }\n          }\n       }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is also linear because we are storing the flattened list in memory.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we are iterating over the input list and its elements."
+          },
+          "explanation": "This approach has the advantage of simplicity but can be memory-inefficient for large input lists. It also has the disadvantage of having to flatten the entire list upfront, which can be time-consuming.",
+          "id": "14152389-a66b-4dfa-901a-a7f5b072fff1",
+          "intuition": "This approach works by recursively flattening the entire nested list upfront and then iterating over the flattened list.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1,1,2,3,5,6,4",
+              "explanation": "The iterator will return the elements in the order they appear in the flattened list.",
+              "id": "01ab3013-aac1-40e8-907f-06ec99eac9a0",
+              "input": "[[1,1],2,[3,[5,6]],4]"
+            },
+            {
+              "expectedOutput": "1,4,6",
+              "explanation": "The iterator will recursively flatten the nested list and return the elements in the correct order.",
+              "id": "b9862d4f-9060-48b6-a8f6-27ad361bf035",
+              "input": "[1,[4,[6]]]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize a stack to store the elements and their nesting levels. 2. Push the input nested list onto the stack. 3. While the stack is not empty, pop the top element and its nesting level. 4. If the element is an integer, return it as the next element in the iterator. 5. If the element is a list, push its elements onto the stack with their nesting levels.",
+          "code": "class Solution {\n    class NestedIterator {\n       var stack: [[NestedInteger]]\n\n       init(_ nestedList: [NestedInteger]) {\n          stack = [nestedList]\n       }\n\n       func next() -> Int {\n          while !stack.isEmpty {\n             if let top = stack.last {\n                if let first = top.first {\n                   stack[stack.count - 1].removeFirst()\n                   if first.isInteger() {\n                      return first.getInteger() ?? 0\n                   } else {\n                      stack.append(first.getList() ?? [])\n                   }\n                } else {\n                   stack.removeLast()\n                }\n             }\n          }\n          return -1\n       }\n\n       func hasNext() -> Bool {\n          while !stack.isEmpty {\n             if let top = stack.last {\n                if let first = top.first {\n                   if first.isInteger() {\n                      return true\n                   } else {\n                      stack[stack.count - 1].removeFirst()\n                      stack.append(first.getList() ?? [])\n                   }\n                } else {\n                   stack.removeLast()\n                }\n             }\n          }\n          return false\n       }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is also linear because we are storing the stack in memory.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we are iterating over the input list and its elements."
+          },
+          "explanation": "This approach has the advantage of being more memory-efficient than the brute-force approach because we are only storing the current nesting level in memory. It also has the advantage of being able to handle large input lists because we are not required to flatten the entire list upfront.",
+          "id": "b0c523fd-f1f1-4c8b-8312-ab563cb07504",
+          "intuition": "This approach uses a stack to store the elements and their nesting levels, allowing us to flatten the list on the fly as we iterate over it.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1,1,2,3,5,6,4",
+              "explanation": "The iterator will return the elements in the order they appear in the flattened list.",
+              "id": "05fcd4d5-17f1-4139-a523-33a234c64219",
+              "input": "[[1,1],2,[3,[5,6]],4]"
+            },
+            {
+              "expectedOutput": "1,4,6",
+              "explanation": "The iterator will recursively flatten the nested list and return the elements in the correct order.",
+              "id": "4b20a304-d3ba-4c37-ac32-bd86546aa2e1",
+              "input": "[1,[4,[6]]]"
+            }
+          ]
+        }
+      ],
+      "id": "e5e8cf7a-e8bd-482a-a21e-01c9c2c5f23b",
+      "lastUpdated": "2026-02-06T21:13:29Z",
+      "problemSlug": "flatten-nested-list-iterator",
+      "relatedProblems": [
+        "min-stack",
+        "implement-queue-using-stacks"
+      ],
+      "summary": "This problem requires designing an iterator to flatten a nested list, and the key insight is to use a stack to store the elements and their nesting levels. The solution can be approached using either a brute-force method that flattens the entire list upfront or an optimized approach that uses a stack to flatten the list on the fly."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Use two stacks, where the first stack is used for enqueue operations and the second stack is used for dequeue operations. When dequeueing, if the second stack is empty, elements from the first stack are transferred to the second stack, ensuring the oldest element is at the top.",
+          "code": "class Solution {\n    class MyQueue { \n        var inStack: [Int] = [] \n        var outStack: [Int] = [] \n\n        func enqueue(_ x: Int) { \n            inStack.append(x) \n        } \n\n        func dequeue() -> Int { \n            if outStack.isEmpty { \n                while !inStack.isEmpty { \n                    outStack.append(inStack.removeLast()) \n                } \n            } \n            return outStack.removeLast() \n        } \n\n        func empty() -> Bool { \n            return inStack.isEmpty && outStack.isEmpty \n        } \n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Space complexity is O(n) because in the worst-case scenario, we need to store all elements in the two stacks.",
+            "time": "O(n)",
+            "timeExplanation": "Time complexity is O(n) for the transfer operation between stacks during dequeue, where n is the number of elements in the queue."
+          },
+          "explanation": "The brute-force approach involves using two stacks. One stack (inStack) is used to add new elements and the other stack (outStack) is used to remove elements. When an element is added, it's added to the inStack. When an element is removed, if outStack is empty, we transfer all elements from inStack to outStack and then pop the top element from outStack.",
+          "id": "91c2ba40-1244-4db0-aa4e-0be4d4fb5e86",
+          "intuition": "This approach works by utilizing one stack for enqueue and dequeue operations and another stack as a temporary buffer to maintain the correct order of elements.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "The queue is now [1,2,3]. After calling dequeue(), the queue becomes [2,3].",
+              "id": "ef0a09df-aa3c-422c-ac5e-8b82649dd8aa",
+              "input": "MyQueue().enqueue(1).enqueue(2).enqueue(3)"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "The queue is initially empty. After enqueueing 1 and then dequeueing, the queue is empty again.",
+              "id": "5696412e-57c6-456a-ae9e-11b93d4b0c43",
+              "input": "MyQueue().enqueue(1).dequeue().empty()"
+            }
+          ]
+        },
+        {
+          "approach": "Similar to the brute-force approach but ensures that the transfer operation from inStack to outStack happens only when outStack is empty, which is during dequeue operations. This maintains an efficient use of the stacks.",
+          "code": "class Solution {\n    class MyQueue { \n        var inStack: [Int] = [] \n        var outStack: [Int] = [] \n\n        func enqueue(_ x: Int) { \n            inStack.append(x) \n        } \n\n        func dequeue() -> Int? { \n            if outStack.isEmpty { \n                while !inStack.isEmpty { \n                    outStack.append(inStack.removeLast()) \n                } \n            } \n            return outStack.popLast() \n        } \n\n        func empty() -> Bool { \n            return inStack.isEmpty && outStack.isEmpty \n        } \n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity remains O(n) as all elements must be stored in the two stacks in the worst-case scenario.",
+            "time": "O(1) amortized",
+            "timeExplanation": "Although the transfer operation between stacks is O(n), since this transfer only happens during dequeue when outStack is empty and not during every operation, the amortized time complexity for enqueue and dequeue operations is O(1)."
+          },
+          "explanation": "The optimized approach maintains the two-stack strategy but avoids unnecessary transfers. When adding an element (enqueue), it's added to the inStack without any transfers. When removing an element (dequeue), if outStack is empty, all elements are transferred from inStack to outStack to maintain the correct order. This transfer is only done when necessary, which is when dequeuing and outStack is empty.",
+          "id": "a3b06959-7d58-416b-a68e-862351081315",
+          "intuition": "This approach also uses two stacks but optimizes the transfer of elements between stacks. Elements are transferred only when necessary (i.e., during dequeue operations when the outStack is empty), minimizing the number of operations.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "The queue after enqueueing 1, 2, and 3 is [1,2,3]. After calling dequeue(), it becomes [2,3].",
+              "id": "c0288410-8ff7-4873-b53d-c7331207aff3",
+              "input": "MyQueue().enqueue(1).enqueue(2).enqueue(3)"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "The queue starts empty. After enqueueing 1 and then dequeuing, it's empty again.",
+              "id": "247d0d73-0d42-4d98-a5c5-04439efbd783",
+              "input": "MyQueue().enqueue(1).dequeue().empty()"
+            }
+          ]
+        }
+      ],
+      "id": "b8d78ea9-7344-4544-8f55-1c2b7dc02ea4",
+      "lastUpdated": "2026-02-06T21:11:14Z",
+      "problemSlug": "implement-queue-using-stacks",
+      "relatedProblems": [
+        "min-stack",
+        "validate-stack-sequences"
+      ],
+      "summary": "Implement a queue data structure using two stacks, leveraging the Last-In-First-Out (LIFO) property of stacks to achieve the First-In-First-Out (FIFO) behavior of a queue."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Enqueue the new element into the first queue. 2. For pop and top operations, dequeue all elements except the last one from the first queue and enqueue them into the second queue, then dequeue or return the last element from the first queue. 3. Repeat this process for each operation.",
+          "code": "class Solution {\n    class MyStack {\n        private var queue1: [Int] = []\n        private var queue2: [Int] = []\n        init() {}\n        func push(_ x: Int) {\n            queue1.append(x)\n        }\n        func pop() -> Int {\n            while queue1.count > 1 {\n                queue2.append(queue1.removeFirst())\n            }\n            let temp = queue1.removeFirst()\n            (queue1, queue2) = (queue2, queue1)\n            return temp\n        }\n        func top() -> Int {\n            while queue1.count > 1 {\n                queue2.append(queue1.removeFirst())\n            }\n            let temp = queue1.removeFirst()\n            queue2.append(temp)\n            (queue1, queue2) = (queue2, queue1)\n            return temp\n        }\n        func empty() -> Bool {\n            return queue1.isEmpty\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We're using two queues to store n elements at maximum, hence the space complexity is O(n).",
+            "time": "O(n)",
+            "timeExplanation": "For push operations, it's constant time. However, for pop and top, we need to move all elements except one from one queue to another, making the time complexity O(n) where n is the number of elements in the stack."
+          },
+          "explanation": "The brute force approach involves unnecessary shifting of elements, hence it is not efficient but serves as a baseline to understand the problem better.",
+          "id": "2f649769-4d29-4fdd-afdc-d6056619798d",
+          "intuition": "This approach works by using one queue to store the elements and another to temporarily hold elements when we need to pop or get the top element, maintaining the last added element at the front of the queue.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "First, we push 1 and then 2. When we pop, the top element which is 2 is returned and then removed.",
+              "id": "f3e63c24-ada6-4268-9b42-cd2e0e6ddd0e",
+              "input": "push(1), push(2), pop()"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "We push 1, and when we ask for the top element, it returns 1 without removing it.",
+              "id": "daf64735-05d3-4480-a1a5-92495ae0d194",
+              "input": "push(1), top()"
+            }
+          ]
+        },
+        {
+          "approach": "1. Use one queue as the main storage (Q1) and another as temporary (Q2). 2. When pushing, add the new element to Q2, then move all elements from Q1 to Q2, making the new element the first in Q2. 3. To pop or get the top, simply dequeue from Q2.",
+          "code": "class Solution {\n    class MyStack {\n        private var q1: [Int] = []\n        private var q2: [Int] = []\n        init() {}\n        func push(_ x: Int) {\n            q2.append(x)\n            while !q1.isEmpty {\n                q2.append(q1.removeFirst())\n            }\n            (q1, q2) = (q2, q1)\n        }\n        func pop() -> Int {\n            return q1.removeFirst()\n        }\n        func top() -> Int {\n            return q1.first!\n        }\n        func empty() -> Bool {\n            return q1.isEmpty\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We're using two queues to store n elements at maximum, hence the space complexity is O(n).",
+            "time": "O(n) for push, O(1) for pop and top",
+            "timeExplanation": "Push operation involves moving all elements from one queue to another, making it O(n). Pop and top operations directly access or remove the first element, making them O(1)."
+          },
+          "explanation": "This approach optimizes the movement of elements by using the queues in a way that always keeps the newest element at the front of one queue, which acts as our stack's top.",
+          "id": "53719769-8bd5-4cdd-a634-388364f9e78e",
+          "intuition": "The optimized approach involves minimizing the number of elements moved during pop and top operations by cleverly utilizing two queues.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "First, we push 1 and then 2. When we pop, the top element which is 2 is returned and then removed.",
+              "id": "91d5bcaa-4788-4f1b-a464-e79fe092f9ad",
+              "input": "push(1), push(2), pop()"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "We push 1, and when we ask for the top element, it returns 1 without removing it.",
+              "id": "b1a47c17-47be-499f-b279-d5daf1704f45",
+              "input": "push(1), top()"
+            }
+          ]
+        }
+      ],
+      "id": "72978689-a5c8-419b-ab66-c5efa9650db5",
+      "lastUpdated": "2026-02-06T21:10:55Z",
+      "problemSlug": "implement-stack-using-queues",
+      "relatedProblems": [
+        "max-stack",
+        "design-circular-deque",
+        "validate-stack-sequences"
+      ],
+      "summary": "Implement a stack using queues, with basic operations like push, pop, and top, considering the properties of a stack and queues. The key insight here is to use two queues to efficiently manage the last added element as the top of the stack."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, we perform an in-order traversal to store the node values in an array. Then, we iterate through the array and for each node, we set its left child to nil and its right child to the next node in the array.",
+          "code": "class Solution { \n    func increasingBST(_ root: TreeNode?) -> TreeNode? { \n        var arr = [Int]() \n        func inorder(_ node: TreeNode?) { \n            if node == nil { return } \n            inorder(node?.left) \n            arr.append(node!.val) \n            inorder(node?.right) \n        } \n        inorder(root) \n        var newNode = TreeNode(arr[0]) \n        var head = newNode \n        for i in 1..<arr.count { \n            newNode.right = TreeNode(arr[i]) \n            newNode = newNode.right! \n        } \n        return head \n    } \n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We are storing all node values in an array, hence the space complexity is also linear to the number of nodes.",
+            "time": "O(n)",
+            "timeExplanation": "We are traversing the tree twice: once for in-order traversal and once for creating the new tree. Hence, the time complexity is linear to the number of nodes."
+          },
+          "explanation": "This approach works because in-order traversal gives us the values in ascending order. By making each node's right child the next node in the sequence, we effectively create a right-skewed tree where all values are in ascending order.",
+          "id": "f2a59d94-fab3-4db1-b296-24b2214bcbec",
+          "intuition": "The intuition behind this approach is to first perform an in-order traversal to get the node values in ascending order and then recreate the tree with these values, making sure each node's right child is the next node in the sequence.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "Tree with values in ascending order: 1 -> 5 -> 7",
+              "explanation": "In-order traversal gives us [1, 5, 7]. Then we rearrange the tree by making each node's right child the next node in the sequence.",
+              "id": "b80d0c4f-76c8-4a9f-9f1f-991bd0399795",
+              "input": "nums = [5,1,7], target = None"
+            },
+            {
+              "expectedOutput": "Tree with values in ascending order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8",
+              "explanation": "In-order traversal gives us [1, 2, 3, 4, 5, 6, 7, 8]. Then we rearrange the tree by making each node's right child the next node in the sequence.",
+              "id": "09a7dd25-e987-42fa-b628-b7f8b676e86c",
+              "input": "nums = [5,3,6,2,4,8,1], target = None"
+            }
+          ]
+        },
+        {
+          "approach": "We use a class variable to keep track of the previous node in the in-order traversal and set its right child to the current node. We do this recursively for the left subtree, the current node, and then the right subtree.",
+          "code": "class Solution { \n    var prev: TreeNode? \n    func increasingBST(_ root: TreeNode?) -> TreeNode? { \n        let dummy = TreeNode(0) \n        prev = dummy \n        inorder(root) \n        return dummy.right \n    } \n    func inorder(_ node: TreeNode?) { \n        if node == nil { return } \n        inorder(node?.left) \n        node?.left = nil \n        prev?.right = node \n        prev = node \n        inorder(node?.right) \n    } \n}",
+          "complexity": {
+            "space": "O(h)",
+            "spaceExplanation": "We only store a constant amount of information (the previous node) and use the recursive call stack, hence the space complexity is now proportional to the height of the tree.",
+            "time": "O(n)",
+            "timeExplanation": "We are still traversing the tree once, so the time complexity remains linear."
+          },
+          "explanation": "This approach works because we are essentially performing the same steps as the brute force approach but in a single pass, without storing all node values.",
+          "id": "072ff330-638c-4577-9bbf-2cd6e3cdca75",
+          "intuition": "The intuition behind this approach is to perform the in-order traversal and the tree rearrangement simultaneously. This way, we avoid storing all node values in an array and reduce the space complexity.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "Tree with values in ascending order: 1 -> 5 -> 7",
+              "explanation": "In-order traversal and tree rearrangement happen simultaneously.",
+              "id": "02b98d31-9d51-443d-8ad5-5054ac9418e1",
+              "input": "nums = [5,1,7], target = None"
+            },
+            {
+              "expectedOutput": "Tree with values in ascending order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8",
+              "explanation": "The optimized approach efficiently handles larger inputs by minimizing memory usage.",
+              "id": "9bcd712e-8536-45a0-86d2-35dbba35a486",
+              "input": "nums = [5,3,6,2,4,8,1], target = None"
+            }
+          ]
+        }
+      ],
+      "id": "e0478b65-1749-48d9-aec4-aa70fb8a72ce",
+      "lastUpdated": "2026-02-06T21:47:09Z",
+      "problemSlug": "increasing-order-search-tree",
+      "relatedProblems": [
+        "binary-search-tree-iterator",
+        "unique-binary-search-trees-ii"
+      ],
+      "summary": "Increasing Order Search Tree is about rearranging the nodes of a given Binary Search Tree into a right-skewed tree where all values are in ascending order. The key insight is using in-order traversal to naturally get the nodes in ascending order and then re-arranging the tree."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. For each bar, pop taller bars and calculate their areas\n2. Width extends from previous stack element to current",
+          "code": "class Solution {\n    func largestRectangleArea(_ heights: [Int]) -> Int {\n        var stack: [Int] = []\n        var maxArea = 0\n        let heights = heights + [0]\n        for i in 0..<heights.count {\n            while !stack.isEmpty && heights[i] < heights[stack.last!] {\n                let h = heights[stack.removeLast()]\n                let w = stack.isEmpty ? i : i - stack.last! - 1\n                maxArea = max(maxArea, h * w)\n            }\n            stack.append(i)\n        }\n        return maxArea\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Stack",
+            "time": "O(n)",
+            "timeExplanation": "Each bar pushed/popped once"
+          },
+          "explanation": "Each bar is pushed once, popped once. Area calculated using stack to determine width.",
+          "id": "96c38f20-fb88-47af-8d20-b1449a3f541a",
+          "intuition": "Stack of increasing heights. When smaller found, pop and calculate areas.",
+          "name": "Monotonic Stack",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "10",
+              "explanation": "Rectangle of height 5, width 2",
+              "id": "4727ed54-0578-4cd6-a348-a050b6863a92",
+              "input": "[2,1,5,6,2,3]"
+            }
+          ]
+        }
+      ],
+      "id": "70ea5c54-8586-42e6-a3b6-c960bda1e83f",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "largest-rectangle-in-histogram",
+      "relatedProblems": [
+        "maximal-rectangle"
+      ],
+      "summary": "Find largest rectangle in histogram. Monotonic stack tracks bars, calculate area when popping."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each line, count the number of tabs at the start to determine the current directory level, then reconstruct the full path by combining the current directory with its parent directories, and finally update the maximum length found so far.",
+          "code": "class Solution {\n    func lengthLongestPath(_ input: String) -> Int {\n        var maxLength = 0\n        let lines = input.components(separatedBy: \"\\n\")\n        for line in lines {\n            let tabs = line.firstIndex(of: \" \") ?? line.startIndex\n            let level = line.distance(from: line.startIndex, to: tabs)\n            let components = line.components(separatedBy: \"/\")\n            let path = components.filter { !$0.isEmpty }.joined(separator: \"/\")\n            let length = path.count + level\n            maxLength = max(maxLength, length)\n        }\n        return maxLength\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) for storing the lines.",
+            "time": "O(n*m)",
+            "timeExplanation": "The time complexity is O(n*m) where n is the number of lines and m is the average length of a line, as we process each character in each line separately."
+          },
+          "explanation": "This brute-force approach works but is not efficient because it involves a lot of string manipulation and may lead to performance issues for large inputs.",
+          "id": "cfb44b45-5ed4-4501-97bd-f5a5cfa12c58",
+          "intuition": "This approach involves parsing each line of the file system representation, splitting it into components based on the number of tabs, and reconstructing the full path to calculate its length.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "20",
+              "explanation": "The longest absolute path is \"/dir/subdir2/file.ext\".",
+              "id": "b7065755-642e-4ce1-91dd-c824db599b51",
+              "input": "dir\\n\\tsubdir1\\n\\tsubdir2\\n\\t\\tfile.ext"
+            },
+            {
+              "expectedOutput": "32",
+              "explanation": "The longest absolute path is \"/dir/subdir1/subsubdir1\".",
+              "id": "483628c5-43d9-4faa-a74d-36ab55337e20",
+              "input": "dir\\n\\tsubdir1\\n\\tsubdir2\\n\\t\\tfile1.ext\\n\\t\\tsubsubdir1\\n\\tsubdir3"
+            }
+          ]
+        },
+        {
+          "approach": "For each line, calculate the current directory level based on the number of tabs, then pop directories from the stack until we reach the correct level, update the current directory length by adding the length of the current directory name, and finally update the maximum length if the current line represents a file.",
+          "code": "class Solution {\n    func lengthLongestPath(_ input: String) -> Int {\n        var maxLength = 0\n        var stack: [Int] = [0]\n        let lines = input.components(separatedBy: \"\\n\")\n        for line in lines {\n            let level = line.firstIndex(of: \" \")?.distance(from: line.startIndex) ?? 0\n            while stack.count > level + 1 {\n                stack.removeLast()\n            }\n            let name = String(line.drop(while: { $0 == \" \" }))\n            let length = (stack.last ?? 0) + name.count + 1\n            stack.append(length)\n            if name.contains(\".\") {\n                maxLength = max(maxLength, length - 1)\n            }\n        }\n        return maxLength\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) for storing the stack of directory lengths.",
+            "time": "O(n*m)",
+            "timeExplanation": "The time complexity is O(n*m) where n is the number of lines and m is the average length of a line, as we process each character in each line separately."
+          },
+          "explanation": "This optimized approach takes advantage of the directory hierarchy and uses a stack to efficiently calculate the length of the full path.",
+          "id": "541cf401-c320-4e0d-a09f-b7c4b92714ae",
+          "intuition": "This approach involves utilizing a stack to keep track of the current directory hierarchy and calculate the length of the full path by combining the lengths of the parent directories.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "20",
+              "explanation": "The longest absolute path is \"/dir/subdir2/file.ext\".",
+              "id": "0bece551-4cd0-4395-9fd0-fea09793690d",
+              "input": "dir\\n\\tsubdir1\\n\\tsubdir2\\n\\t\\tfile.ext"
+            },
+            {
+              "expectedOutput": "32",
+              "explanation": "The longest absolute path is \"/dir/subdir1/subsubdir1\".",
+              "id": "5bf0a408-c6d1-458d-aa93-6d5ef6ef78e8",
+              "input": "dir\\n\\tsubdir1\\n\\tsubdir2\\n\\t\\tfile1.ext\\n\\t\\tsubsubdir1\\n\\tsubdir3"
+            }
+          ]
+        }
+      ],
+      "id": "644783c4-be37-4a2c-b3a5-6c77b8e2a44d",
+      "lastUpdated": "2026-02-06T21:15:43Z",
+      "problemSlug": "longest-absolute-file-path",
+      "relatedProblems": [
+        "simplified-fraction",
+        "flatten-nested-list-iterator"
+      ],
+      "summary": "This problem involves finding the length of the longest absolute file path in a given file system, and the key insight is to utilize a stack to keep track of the directory hierarchy."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize variables to store the maximum number of chunks. 2. Try all possible chunk combinations using nested loops. 3. For each combination, check if each chunk is sorted.",
+          "code": "class Solution {\n    func maxChunksToSorted(arr: [Int]) -> Int { \n        var maxChunks = 0 \n        for chunkSize in 1...arr.count { \n            var chunkCombinations = [[Int]]() \n            for i in stride(from: 0, to: arr.count, by: chunkSize) { \n                chunkCombinations.append(Array(arr[i..<min(i + chunkSize, arr.count)])) \n            } \n            var allChunksSorted = true \n            for chunk in chunkCombinations { \n                if chunk != chunk.sorted() { \n                    allChunksSorted = false \n                    break \n                } \n            } \n            if allChunksSorted { \n                maxChunks = max(maxChunks, chunkCombinations.count) \n            } \n        } \n        return maxChunks \n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity comes from storing the chunk combinations.",
+            "time": "O(n^3)",
+            "timeExplanation": "The time complexity comes from the nested loops and the sorting checks."
+          },
+          "explanation": "This approach is straightforward but inefficient. It has a high time complexity due to the nested loops and sorting checks.",
+          "id": "d8c39be9-e5d4-4990-af12-21ec4e5468c8",
+          "intuition": "This approach tries all possible chunk combinations and checks if each chunk is sorted.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "The only way to make the array sorted is to have one chunk with all elements.",
+              "id": "ea41ecbd-4f5f-4d95-aa9d-94248b1f306a",
+              "input": "arr = [4,3,2,1,0]"
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "We can have four chunks, each with one element, and they are already sorted.",
+              "id": "ef227383-0d97-4fff-8587-44960dc76007",
+              "input": "arr = [1,0,2,3,4]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize variables to store the maximum number of chunks and the current chunk's maximum element. 2. Iterate over the array and for each element, check if it is smaller than the current chunk's maximum element. 3. If it is, start a new chunk and update the current chunk's maximum element.",
+          "code": "class Solution {\n    func maxChunksToSorted(_ arr: [Int]) -> Int { \n        var max = 0, count = 0 \n        for (i, x) in arr.enumerated() { \n            max = Swift.max(max, x) \n            if max == i { \n                count += 1 \n            } \n        } \n        return count \n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant as we only use a few variables.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity comes from the single loop."
+          },
+          "explanation": "This approach is more efficient than the brute-force approach. It has a lower time complexity due to the single loop and no sorting checks.",
+          "id": "8a74d656-45d6-4913-bba6-fd4c1ac80e35",
+          "intuition": "This approach uses a stack to keep track of the maximum element in each chunk and uses it to determine the chunk's boundary.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "The only way to make the array sorted is to have one chunk with all elements.",
+              "id": "0ddc2844-1e03-4993-a9c3-d97c86037424",
+              "input": "arr = [4,3,2,1,0]"
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "We can have four chunks, each with one element, and they are already sorted.",
+              "id": "2c2c289b-b86d-4263-b1f8-ab7b963cfc8e",
+              "input": "arr = [1,0,2,3,4]"
+            }
+          ]
+        }
+      ],
+      "id": "a3c654b7-74ec-4b55-baf5-2266271806dd",
+      "lastUpdated": "2026-02-06T21:38:51Z",
+      "problemSlug": "max-chunks-to-make-sorted",
+      "relatedProblems": [
+        "reverse-pairs",
+        "subarrays-with-k-different-integers"
+      ],
+      "summary": "Given an array of integers arr, partition the array into as many chunks as possible to make each chunk sorted. The key insight is to find the maximum element in each chunk and use it to determine the chunk's boundary."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Find the maximum value in the array. 2. Create a new node with the maximum value as the root of the tree. 3. Recursively construct the left and right subtrees by finding the maximum values in the left and right subarrays.",
+          "code": "class Solution {\n    func constructMaximumBinaryTree(_ nums: [Int]) -> TreeNode? {\n        let n = nums.count\n        if n == 0 {\n            return nil\n        }\n        var maxIndex = 0\n        for i in 1..<n {\n            if nums[i] > nums[maxIndex] {\n                maxIndex = i\n            }\n        }\n        let root = TreeNode(nums[maxIndex])\n        root.left = constructMaximumBinaryTree(Array(nums[0..<maxIndex]))\n        root.right = constructMaximumBinaryTree(Array(nums[(maxIndex + 1)...]))\n        return root\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing the recursive call stack.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) because we are finding the maximum value in the array for each node."
+          },
+          "explanation": "This approach works by repeatedly finding the maximum value in the array and using it as the root of the tree. The time complexity is O(n^2) because we are finding the maximum value in the array for each node.",
+          "id": "5acb9965-849d-4fc3-ad08-d1fad61efb48",
+          "intuition": "This approach involves finding the maximum value in the array and using it as the root of the tree, then recursively constructing the left and right subtrees.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "TreeNode with value 6 as the root, and the left and right subtrees constructed accordingly.",
+              "explanation": "The maximum value in the array is 6, so it is used as the root of the tree. The left subtree is constructed from the subarray [3,2,1], and the right subtree is constructed from the subarray [0,5].",
+              "id": "1c43a43b-01ab-4bfd-b61a-14c85875b913",
+              "input": "nums = [3,2,1,6,0,5]"
+            },
+            {
+              "expectedOutput": "nil",
+              "explanation": "The input array is empty, so the function returns nil.",
+              "id": "0fb50ea8-c8ac-46cb-a43b-e8312294c17a",
+              "input": "nums = []"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize an empty stack. 2. Iterate through the array, and for each value, pop all nodes from the stack that have values less than the current value. 3. Create a new node with the current value and push it onto the stack.",
+          "code": "class Solution {\n    func constructMaximumBinaryTree(_ nums: [Int]) -> TreeNode? {\n        let n = nums.count\n        if n == 0 {\n            return nil\n        }\n        var stack: [TreeNode] = []\n        for num in nums {\n            let node = TreeNode(num)\n            while !stack.isEmpty, stack.last?.val ?? 0 < num {\n                node.left = stack.removeLast()\n            }\n            if !stack.isEmpty {\n                stack.last?.right = node\n            }\n            stack.append(node)\n        }\n        return stack.first\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing the stack of nodes.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are iterating through the array once."
+          },
+          "explanation": "This approach works by keeping track of the nodes with the maximum values in a stack, then constructing the tree in a single pass. The time complexity is O(n) because we are iterating through the array once.",
+          "id": "01f1c65f-68cd-4d46-9a14-1ba17e9ad06e",
+          "intuition": "This approach involves using a stack to keep track of the nodes with the maximum values, then constructing the tree in a single pass.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "TreeNode with value 6 as the root, and the left and right subtrees constructed accordingly.",
+              "explanation": "The maximum value in the array is 6, so it is used as the root of the tree. The left subtree is constructed from the subarray [3,2,1], and the right subtree is constructed from the subarray [0,5].",
+              "id": "64452ab5-7c8a-4099-8564-5b246a78917e",
+              "input": "nums = [3,2,1,6,0,5]"
+            },
+            {
+              "expectedOutput": "nil",
+              "explanation": "The input array is empty, so the function returns nil.",
+              "id": "c651a535-5f33-4b32-9962-cefa124e7b9c",
+              "input": "nums = []"
+            }
+          ]
+        }
+      ],
+      "id": "f7d8ffbc-5f53-4b47-a0f2-7ba0bb470055",
+      "lastUpdated": "2026-02-06T21:31:14Z",
+      "problemSlug": "maximum-binary-tree",
+      "relatedProblems": [
+        "maximum-binary-tree-ii",
+        "construct-binary-tree-from-inorder-and-postorder-traversal"
+      ],
+      "summary": "The problem requires constructing a maximum binary tree from an array of integers. The key insight is to find the maximum value in the array and use it as the root of the tree, then recursively construct the left and right subtrees."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Main stack stores all values\n2. Min stack stores the minimum at each height\n3. Push: push value to main, push min(value, minStack.top) to min stack\n4. Pop: pop from both stacks\n5. GetMin: return min stack top",
+          "code": "class Solution {\n    class MinStack {\n        private var stack: [Int] = []\n        private var minStack: [Int] = []\n\n        init() {}\n\n        func push(_ val: Int) {\n            stack.append(val)\n            let newMin = minStack.isEmpty ? val : min(val, minStack.last!)\n            minStack.append(newMin)\n        }\n\n        func pop() {\n            stack.removeLast()\n            minStack.removeLast()\n        }\n\n        func top() -> Int {\n            return stack.last!\n        }\n\n        func getMin() -> Int {\n            return minStack.last!\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Two stacks, each can hold up to n elements",
+            "time": "O(1) for all operations",
+            "timeExplanation": "All operations are constant time - just array append/remove/access"
+          },
+          "explanation": "The min stack maintains the invariant that minStack[i] is the minimum of all elements from stack[0] to stack[i]. When we push a new element, the new minimum is either the element itself or the previous minimum (whichever is smaller). When we pop, we remove from both stacks, and the min stack still correctly reflects the minimum of remaining elements.",
+          "id": "c4bb01c8-4f03-4165-82ed-7b61dfc8ce33",
+          "intuition": "Maintain a regular stack for values and a parallel stack that tracks the minimum at each level. When we push, also push the new minimum to the min stack.",
+          "name": "Two Stacks",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "-3, 0, -2",
+              "explanation": "After pushes: stack=[-2,0,-3], minStack=[-2,-2,-3]. getMin=-3. Pop. stack=[-2,0], minStack=[-2,-2]. top=0, getMin=-2.",
+              "id": "b05fcab8-333c-4f7e-a26e-85e9153149f7",
+              "input": "push(-2), push(0), push(-3), getMin(), pop(), top(), getMin()"
+            }
+          ]
+        },
+        {
+          "approach": "1. Stack stores tuples of (value, minAtThisLevel)\n2. Push: calculate new min, push (value, newMin)\n3. Pop: remove top tuple\n4. Top: return first element of top tuple\n5. GetMin: return second element of top tuple",
+          "code": "class Solution {\n    class MinStack {\n        private var stack: [(val: Int, min: Int)] = []\n\n        init() {}\n\n        func push(_ val: Int) {\n            let currentMin = stack.isEmpty ? val : min(val, stack.last!.min)\n            stack.append((val, currentMin))\n        }\n\n        func pop() {\n            stack.removeLast()\n        }\n\n        func top() -> Int {\n            return stack.last!.val\n        }\n\n        func getMin() -> Int {\n            return stack.last!.min\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Stack stores n pairs",
+            "time": "O(1) for all operations",
+            "timeExplanation": "All operations are single array operations"
+          },
+          "explanation": "By storing the minimum alongside each value, we embed the min-tracking directly into the main data structure. This uses the same total memory as two stacks but with better cache locality since related data is adjacent.",
+          "id": "4192110c-e0e8-4f2f-94c4-520ac5782146",
+          "intuition": "Store (value, currentMin) pairs in a single stack. Each entry knows the minimum at that point in the stack's history.",
+          "name": "Single Stack with Pairs",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1, -1, 1",
+              "explanation": "Stack builds: [(1,1), (2,1), (-1,-1)]. Mins are 1, -1, then back to 1 after pop.",
+              "id": "eeeb1204-451b-4747-bcfc-bc529d3b491e",
+              "input": "push(1), push(2), getMin(), push(-1), getMin(), pop(), getMin()"
+            }
+          ]
+        }
+      ],
+      "id": "8d191a58-986c-4fbe-9803-3d37ec73ebaa",
+      "lastUpdated": "2026-02-06T08:36:45Z",
+      "problemSlug": "min-stack",
+      "relatedProblems": [
+        "max-stack"
+      ],
+      "summary": "Design a stack that supports push, pop, top, and retrieving the minimum element in O(1) time. Store the minimum alongside each element or use a separate min-tracking stack."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start by initializing an empty stack and an empty result list. Then, iterate over the string from left to right. If the current character is '[', push a new list onto the stack. If the current character is ']', pop the top list from the stack and append it to the result list. If the current character is a digit, parse the number and append it to the top list on the stack.",
+          "code": "import Foundation\n\nclass NestedInteger {\n    var value: Int?\n    var list: [NestedInteger] = []\n\n    init(_ value: Int) {\n        self.value = value\n    }\n\n    init() {}\n}\n\nclass Solution {\n    func deserialize(_ s: String) -> NestedInteger {\n        var stack: [NestedInteger] = []\n        var currNum = 0\n        var isNegative = false\n\n        for char in s {\n            switch char {\n            case \"[\":\n                stack.append(NestedInteger())\n            case \"]\":\n                let ni = NestedInteger()\n                if isNegative {\n                    ni.value = -currNum\n                    isNegative = false\n                } else {\n                    ni.value = currNum\n                }\n                currNum = 0\n                var top = stack.removeLast()\n                top.list.append(ni)\n                if !stack.isEmpty {\n                    stack[stack.count - 1].list.append(top)\n                } else {\n                    return top\n                }\n            case \"-\":\n                isNegative = true\n            case let c where c.isNumber:\n                currNum = currNum * 10 + Int(String(c))!\n            default:\n                break\n            }\n        }\n\n        return stack.isEmpty ? NestedInteger() : stack[0]\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is also O(n), because in the worst case we might have to push n characters onto the stack.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are doing a constant amount of work for each character in the string."
+          },
+          "explanation": "This approach works because it correctly handles the nested lists and the numbers in the string. The time complexity is O(n) where n is the length of the string, because we are doing a constant amount of work for each character in the string. The space complexity is also O(n), because in the worst case we might have to push n characters onto the stack.",
+          "id": "5a9fbd38-c8f0-4e75-8f4d-26102c370128",
+          "intuition": "The brute force approach works by using a stack to keep track of the nested lists and parsing the string from left to right.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "324",
+              "explanation": "The input string is a single number, so the output should be a NestedInteger with the value 324.",
+              "id": "2129baae-d886-4309-b69f-aa4142bbc164",
+              "input": "s = \"324\""
+            },
+            {
+              "expectedOutput": "[123,[456,[789]]]",
+              "explanation": "The input string is a nested list, so the output should be a NestedInteger that represents the nested list.",
+              "id": "e6a08488-0a7e-4ffe-9554-661b72b76d1f",
+              "input": "s = \"[123,[456,[789]]]\""
+            }
+          ]
+        },
+        {
+          "approach": "Start by defining a recursive function that takes a substring of the input string as an argument. If the substring starts with '[', the function should recursively parse the substring and return a nested list. If the substring starts with a digit, the function should parse the number and return a NestedInteger with the value.",
+          "code": "import Foundation\n\nclass NestedInteger {\n    var value: Int?\n    var list: [NestedInteger] = []\n\n    init(_ value: Int) {\n        self.value = value\n    }\n\n    init() {}\n}\n\nclass Solution {\n    func deserialize(_ s: String) -> NestedInteger {\n        let data = s.data(using: .utf8)!\n        var offset = 0\n        return deserialize(data, &offset)\n    }\n\n    func deserialize(_ data: Data, _ offset: inout Int) -> NestedInteger {\n        if data[offset] == 91 {\n            offset += 1\n            let ni = NestedInteger()\n            while data[offset] != 93 {\n                if data[offset] == 44 {\n                    offset += 1\n                }\n                ni.list.append(deserialize(data, &offset))\n            }\n            offset += 1\n            return ni\n        } else {\n            let start = offset\n            while offset < data.count && data[offset] >= 48 && data[offset] <= 57 {\n                offset += 1\n            }\n            let num = Int(String(decoding: data[start..<offset], as: UTF8.self))!\n            return NestedInteger(num)\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is also O(n), because in the worst case we might have to make n recursive calls.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are doing a constant amount of work for each character in the string."
+          },
+          "explanation": "This approach works because it correctly handles the nested lists and the numbers in the string. The time complexity is O(n) where n is the length of the string, because we are doing a constant amount of work for each character in the string. The space complexity is also O(n), because in the worst case we might have to make n recursive calls.",
+          "id": "086aab5c-a0c5-42a7-b63e-a14b9a3c4d05",
+          "intuition": "The optimized approach works by using a recursive function to parse the nested lists.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "324",
+              "explanation": "The input string is a single number, so the output should be a NestedInteger with the value 324.",
+              "id": "9febffff-c7b0-43a0-8a56-43f20476e4a2",
+              "input": "s = \"324\""
+            },
+            {
+              "expectedOutput": "[123,[456,[789]]]",
+              "explanation": "The input string is a nested list, so the output should be a NestedInteger that represents the nested list.",
+              "id": "01ce2fea-5945-4d6a-afac-affb97ce26bf",
+              "input": "s = \"[123,[456,[789]]]\""
+            }
+          ]
+        }
+      ],
+      "id": "1aa55b58-b84a-4c77-a72d-bc91829f365b",
+      "lastUpdated": "2026-02-06T21:15:23Z",
+      "problemSlug": "mini-parser",
+      "relatedProblems": [
+        "mini-parser",
+        "deserialize-string"
+      ],
+      "summary": "This problem involves parsing a nested list string and returning the nested list. The key insight is to use a stack to keep track of the nested lists."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each character in the string, if the character is an opening parenthesis, try adding a closing parenthesis after it. If the character is a closing parenthesis, try adding an opening parenthesis before it. Use a helper function to check if the resulting string is valid.",
+          "code": "class Solution {\n    func minAddToMakeValid(_ S: String) -> Int { let arr = Array(S); var count = 0; var valid = 0; for i in stride(from: arr.count - 1, to: -1, by: -1) { if arr[i] == \")\" { if valid == 0 { count += 1 } else { valid -= 1 } } else { valid += 1 } }; return count + valid; }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because in the worst case, we may have to add n parentheses.",
+            "time": "O(2^n)",
+            "timeExplanation": "The time complexity is O(2^n) because for each character, we try two possibilities: adding a parenthesis or not. This results in 2^n possible combinations."
+          },
+          "explanation": "The brute force solution involves checking all possible combinations of added parentheses, which results in a lot of repeated work. A helper function checks if a string of parentheses is valid by using a stack and returning true if the stack is empty at the end.",
+          "id": "5488dec2-eb9a-4e41-8b33-bd89d593f87d",
+          "intuition": "The brute force approach tries all possible combinations of adding parentheses to the string and checks each one to see if it's valid. This is not efficient but it works.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "We need to add one opening parenthesis at the beginning to make the string valid.",
+              "id": "5af5d8e5-8b0b-4b1c-92b2-f1ae526b1aad",
+              "input": "())"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "We need to add three closing parentheses at the end to make the string valid.",
+              "id": "dac16bf1-5a5f-4caf-96a6-c405b3895ce3",
+              "input": "((("
+            }
+          ]
+        },
+        {
+          "approach": "For each character in the string, if it's an opening parenthesis, push it onto the stack. If it's a closing parenthesis, pop the stack if it's not empty. After going through the string, the number of elements left in the stack plus the number of closing parentheses that didn't have a matching opening parenthesis is the number of parentheses that need to be added.",
+          "code": "class Solution {\n    func minAddToMakeValid(_ S: String) -> Int { var stack: [Character] = []; var count = 0; for char in S { if char == \"(\" { stack.append(char) } else if char == \")\" && !stack.isEmpty { stack.removeLast() } else { count += 1 } }; return count + stack.count; }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because in the worst case, we may have to push n characters onto the stack.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we only go through the string once."
+          },
+          "explanation": "The stack solution is more efficient than the brute force solution because it avoids checking all possible combinations of added parentheses. It only goes through the string once and uses a stack to keep track of unmatched opening parentheses.",
+          "id": "aa53a8e9-bf53-4a96-8aff-6fbe48379313",
+          "intuition": "The stack approach uses a stack to keep track of unmatched opening parentheses and count the number of unmatched parentheses at the end. This is more efficient than the brute force solution.",
+          "name": "Stack",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "We need to add one opening parenthesis at the beginning to make the string valid.",
+              "id": "b6d3169d-4733-48ac-92dc-0b35d7d4acd4",
+              "input": "())"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "We need to add three closing parentheses at the end to make the string valid.",
+              "id": "c342d2c2-9f96-49d3-8a28-cb4c688902a6",
+              "input": "((("
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "The string is already valid, so no parentheses need to be added.",
+              "id": "dc926fbd-425c-4abb-89ea-eeec001e9f03",
+              "input": "()"
+            }
+          ]
+        }
+      ],
+      "id": "42fe726a-0e0e-455b-a25c-4cfc2604fc50",
+      "lastUpdated": "2026-02-06T22:01:42Z",
+      "problemSlug": "minimum-add-to-make-parentheses-valid",
+      "relatedProblems": [
+        "valid-parentheses",
+        "generate-parentheses"
+      ],
+      "summary": "This problem involves finding the minimum number of parentheses to add to make a string of parentheses valid, the key insight being that we need to balance opening and closing parentheses. The solution involves using a stack to keep track of unmatched opening parentheses."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start by defining a recursive function that takes a node as an argument. If the node is nil, return an empty array. Otherwise, recursively call the function on each of the node's children and concatenate the results, then append the node's value.",
+          "code": "class Solution {\n    func postorder(_ root: Node?) -> [Int] {\n        guard let root = root else { return [] }\n        var result = [Int]()\n        for child in root.children {\n            result += postorder(child)\n        }\n        result.append(root.val)\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "In the worst case, the recursive call stack can go as deep as the height of the tree, which is n for a skewed tree. However, for a balanced tree, the height is log(n).",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n), where n is the number of nodes in the tree, since we visit each node once. The space complexity is also O(n) due to the recursive call stack."
+          },
+          "explanation": "The key insight here is that we need to visit all the children of a node before visiting the node itself. This is achieved by recursively calling the function on each child before appending the node's value to the result.",
+          "id": "a5b9577f-9c15-4019-90a8-ff804c488fcf",
+          "intuition": "Recursion is a natural fit for tree problems, as each recursive call can represent a visit to a node.",
+          "name": "Recursive Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[2,6,8,3,9,10,7,4,11,5,1]",
+              "explanation": "This test case checks the basic functionality of the recursive approach.",
+              "id": "7908f335-bd3f-4507-90fd-c800bbbc562e",
+              "input": "root = [1,null,3,2,4,5,6,null,null,7,8,9,10,null,null,null,null,11]"
+            },
+            {
+              "expectedOutput": "[2,3,4,5,6,7,8,1]",
+              "explanation": "This test case checks the handling of a tree with a mix of children and null values.",
+              "id": "872295d9-5043-478e-bcfa-89409b9acbc8",
+              "input": "root = [1,null,2,3,4,5,null,null,6,7,null,8]"
+            }
+          ]
+        },
+        {
+          "approach": "Create a stack to store nodes and their children. Start by pushing the root node onto the stack. Then, while the stack is not empty, pop a node from the stack, push its children onto the stack, and append the node's value to the result.",
+          "code": "class Solution {\n    func postorder(_ root: Node?) -> [Int] {\n        var result = [Int]()\n        guard let root = root else { return result }\n        var stack: [(Node, Bool)] = [(root, false)]\n        while !stack.isEmpty {\n            let (node, visited) = stack.removeLast()\n            if !visited {\n                stack.append((node, true))\n                for child in node.children.reversed() {\n                    stack.append((child, false))\n                }\n            } else {\n                result.append(node.val)\n            }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "In the worst case, the stack can contain n nodes for a skewed tree. However, for a balanced tree, the height is log(n).",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n), where n is the number of nodes in the tree, since we visit each node once. The space complexity is also O(n) due to the stack."
+          },
+          "explanation": "The key insight here is that we need to push the node's children onto the stack before popping the node itself. This ensures that we visit all the children of a node before visiting the node.",
+          "id": "9d09192b-9f24-40eb-9fe2-c8383609fe32",
+          "intuition": "We can use a stack to mimic the recursive call stack, avoiding the overhead of recursive function calls.",
+          "name": "Iterative Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[2,6,8,3,9,10,7,4,11,5,1]",
+              "explanation": "This test case checks the basic functionality of the iterative approach.",
+              "id": "2046a7c1-db92-4c34-9b7c-c7eb3bd0cf50",
+              "input": "root = [1,null,3,2,4,5,6,null,null,7,8,9,10,null,null,null,null,11]"
+            },
+            {
+              "expectedOutput": "[2,3,4,5,6,7,8,1]",
+              "explanation": "This test case checks the handling of a tree with a mix of children and null values.",
+              "id": "defe5219-7c44-47a4-8585-4a7d26d61890",
+              "input": "root = [1,null,2,3,4,5,null,null,6,7,null,8]"
+            }
+          ]
+        }
+      ],
+      "id": "99f8ac1d-da4d-4cec-9e7d-10db5216509f",
+      "lastUpdated": "2026-02-06T21:27:30Z",
+      "problemSlug": "n-ary-tree-postorder-traversal",
+      "relatedProblems": [
+        "binary-tree-postorder-traversal",
+        "n-ary-tree-preorder-traversal"
+      ],
+      "summary": "The problem requires postorder traversal of an N-ary tree, visiting children before parents. We can solve this using recursive or iterative methods."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Define a recursive function that takes the root node as input. 2. Within the function, add the current node's value to the result list. 3. Iterate over the current node's children and recursively call the function for each child. 4. Return the result list.",
+          "code": "class Solution { func preorder(_ root: Node?) -> [Int] { var result = [Int](); func traverse(_ node: Node?) { guard let node = node else { return }; result.append(node.val); node.children.forEach { traverse($0) } }; traverse(root); return result } }",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "In the worst-case scenario (a skewed tree), the recursive call stack and result list can grow up to the number of nodes in the tree.",
+            "time": "O(n)",
+            "timeExplanation": "Each node is visited once, resulting in linear time complexity."
+          },
+          "explanation": "The brute-force recursive approach relies on the system's call stack to manage the recursive function calls, ensuring that nodes are visited in the correct preorder sequence.",
+          "id": "ead0c1c3-f52b-4fc3-a532-f1bba869d5c9",
+          "intuition": "This approach works by recursively visiting the root node and its children, leveraging the preorder traversal property to maintain the correct order.",
+          "name": "Brute-Force Recursive Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1, 3, 5, 2, 2]",
+              "explanation": "The preorder traversal visits the root node (1) first, followed by its children in the specified order.",
+              "id": "3e96e4e9-cb34-40d3-85cc-ca92fa7b03bf",
+              "input": "root = [1, [3, 5, 2], [2, 2]]"
+            },
+            {
+              "expectedOutput": "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",
+              "explanation": "The preorder traversal visits the root node (1) first, followed by its children in the specified order.",
+              "id": "f044a704-b4df-4f54-b6f7-049005ee538a",
+              "input": "root = [1, [2, 3, 4, 5, 6, 7, 8, 9, 10]]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize an empty stack and push the root node onto it. 2. Initialize an empty result list. 3. While the stack is not empty, pop a node from the stack and add its value to the result list. 4. Push the node's children onto the stack in reverse order to maintain the correct preorder sequence.",
+          "code": "class Solution {\n    func preorder(_ root: Node?) -> [Int] {\n        var result = [Int]()\n        var stack = [Node]()\n        if let root = root {\n            stack.append(root)\n        }\n        while !stack.isEmpty {\n            let node = stack.removeLast()\n            result.append(node.val)\n            for child in node.children.reversed() {\n                stack.append(child)\n            }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "In the worst-case scenario (a skewed tree), the explicit stack can grow up to the number of nodes in the tree.",
+            "time": "O(n)",
+            "timeExplanation": "Each node is visited once, resulting in linear time complexity."
+          },
+          "explanation": "The iterative stack-based approach allows for efficient management of node visits, ensuring that nodes are visited in the correct preorder sequence without relying on recursive function calls.",
+          "id": "98803a87-d31d-4190-bd07-8cd9bc1dbb6c",
+          "intuition": "This approach works by utilizing an explicit stack data structure to manage node visits, allowing for efficient preorder traversal without relying on recursive function calls.",
+          "name": "Iterative Stack-Based Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1, 3, 5, 2, 2]",
+              "explanation": "The preorder traversal visits the root node (1) first, followed by its children in the specified order.",
+              "id": "a827d40a-023d-48be-9ec3-505dca7f5d7e",
+              "input": "root = [1, [3, 5, 2], [2, 2]]"
+            },
+            {
+              "expectedOutput": "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",
+              "explanation": "The preorder traversal visits the root node (1) first, followed by its children in the specified order.",
+              "id": "10bc9a17-56fc-4f79-9ad1-6853591a0195",
+              "input": "root = [1, [2, 3, 4, 5, 6, 7, 8, 9, 10]]"
+            }
+          ]
+        }
+      ],
+      "id": "baddfc26-877a-4dac-bb0a-917c0105cacb",
+      "lastUpdated": "2026-02-06T21:27:25Z",
+      "problemSlug": "n-ary-tree-preorder-traversal",
+      "relatedProblems": [
+        "binary-tree-preorder-traversal",
+        "n-ary-tree-postorder-traversal"
+      ],
+      "summary": "The problem involves traversing an N-ary tree in a preorder manner, where we visit the root node first and then recursively traverse its children. The key insight is to utilize a stack data structure to efficiently manage node visits."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Traverse nums2 with decreasing stack\n2. Pop smaller elements, map them to current\n3. Look up each nums1 element in map",
+          "code": "class Solution {\n    func nextGreaterElement(_ nums1: [Int], _ nums2: [Int]) -> [Int] {\n        var stack: [Int] = []\n        var nextGreater: [Int: Int] = [:]\n        for num in nums2 {\n            while !stack.isEmpty && stack.last! < num {\n                nextGreater[stack.removeLast()] = num\n            }\n            stack.append(num)\n        }\n        return nums1.map { nextGreater[$0] ?? -1 }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Map storage",
+            "time": "O(n + m)",
+            "timeExplanation": "Process both arrays"
+          },
+          "explanation": "Stack maintains elements waiting for next greater.",
+          "id": "74a9c9a9-c5dc-4f72-87bc-a2ed12434608",
+          "intuition": "Build map of next greater elements using stack.",
+          "name": "Monotonic Stack",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[-1,3,-1]",
+              "explanation": "Next greater for each",
+              "id": "55b0ab60-467e-4127-ab09-fc1720b97bd1",
+              "input": "nums1 = [4,1,2], nums2 = [1,3,4,2]"
+            }
+          ]
+        }
+      ],
+      "id": "7dfab1f6-36a0-4b38-95b5-25f125d1e793",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "next-greater-element-i",
+      "relatedProblems": [
+        "next-greater-element-ii",
+        "daily-temperatures"
+      ],
+      "summary": "For each element, find next greater in second array. Monotonic stack + map."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each element in the array, iterate through the rest of the array (including the beginning of the array if necessary) to find the next greater element.",
+          "code": "class Solution {\n    import Foundation\n\n    func nextGreaterElements(_ nums: [Int]) -> [Int] {\n        var result = [Int]()\n        for i in 0..<nums.count {\n            var found = false\n            for j in (i + 1..<nums.count).append(contentsOf: 0...i) {\n                if nums[j] > nums[i] {\n                    result.append(nums[j])\n                    found = true\n                    break\n                }\n            }\n            if !found {\n                result.append(-1)\n            }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear for storing the result.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is quadratic because for each element, we potentially scan the entire array."
+          },
+          "explanation": "This approach is straightforward but inefficient due to its quadratic time complexity.",
+          "id": "0f1a5199-1561-4008-a056-e3bc834897b8",
+          "intuition": "This approach works by iterating through the array for each element to find the next greater element.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[2,-1,2]",
+              "explanation": "The next greater element for the first 1 is 2, for the second 1 it does not exist so it is -1, and for the last 1 it is 2 because we wrap around.",
+              "id": "8459cc48-d960-4508-a5b5-534f291d18f2",
+              "input": "nums = [1,2,1]"
+            },
+            {
+              "expectedOutput": "[2,3,4,-1,-1]",
+              "explanation": "Each element's next greater element is the next greater number to its right in the array or -1 if none exists.",
+              "id": "5ec73eba-2bc2-4682-a9ef-dc31eadc6a37",
+              "input": "nums = [1,2,3,4,3]"
+            }
+          ]
+        },
+        {
+          "approach": "Iterate through the array twice (to simulate the circular nature), using a stack to store indices of elements. When a greater element is found, pop the stack and update the corresponding result until the stack is empty or the top of the stack has a greater or equal value.",
+          "code": "class Solution {\n    import Foundation\n\n    func nextGreaterElements(_ nums: [Int]) -> [Int] {\n        let n = nums.count\n        var result = Array(repeating: -1, count: n)\n        var stack: [Int] = []\n\n        for i in 0..<2*n {\n            let num = nums[i % n]\n            while !stack.isEmpty && nums[stack.last!] < num {\n                result[stack.removeLast!] = num\n            }\n            stack.append(i % n)\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear for the stack and the result array.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because each element is pushed and popped from the stack once."
+          },
+          "explanation": "This approach efficiently finds the next greater element for each element by utilizing a stack and making two passes through the array.",
+          "id": "c72d16b1-0b1d-4004-a8ae-46148a136bc3",
+          "intuition": "This approach uses a monotonic stack to efficiently keep track of the next greater element for each element in the array.",
+          "name": "Monotonic Stack",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[2,-1,2]",
+              "explanation": "The next greater element for the first 1 is 2, for the second 1 it does not exist so it is -1, and for the last 1 it is 2 because we wrap around.",
+              "id": "abd4a726-5da4-4eca-a063-a5404637b1d8",
+              "input": "nums = [1,2,1]"
+            },
+            {
+              "expectedOutput": "[2,3,4,-1,-1]",
+              "explanation": "Each element's next greater element is the next greater number to its right in the array or -1 if none exists.",
+              "id": "2acf27d8-9445-485d-824e-81440a221ec3",
+              "input": "nums = [1,2,3,4,3]"
+            },
+            {
+              "expectedOutput": "[5,5,4,3,5,-1,5]",
+              "explanation": "The next greater element for each element is found by iterating through the array twice to handle the circular nature.",
+              "id": "f402ec40-f26b-4880-96ff-28de32e3eb6a",
+              "input": "nums = [5,4,3,2,3,5,1]"
+            }
+          ]
+        }
+      ],
+      "id": "7e93db54-a092-43a8-b627-6c53b263326e",
+      "lastUpdated": "2026-02-06T21:22:45Z",
+      "problemSlug": "next-greater-element-ii",
+      "relatedProblems": [
+        "daily-temperatures",
+        "next-greater-element-i"
+      ],
+      "summary": "The Next Greater Element II problem requires finding the next greater element for each element in a circular array, with a key insight of using a stack to store indices of elements and iterating through the array twice to handle the circular nature."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each new stock price, iterate over the previous prices and count the number of consecutive days with a price less than or equal to the current price.",
+          "code": "class Solution {\n    class StockSpanner { var prices = [Int]()\n    func next(_ price: Int) -> Int { prices.append(price); var span = 1; for i in stride(from: prices.count - 2, through: 0, by: -1) { if prices[i] <= price { span += 1 } else { break } }; return span }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear because we store all the stock prices.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is quadratic because for each new price, we iterate over the previous prices."
+          },
+          "explanation": "This approach is straightforward but inefficient because it has a high time complexity due to the nested loops.",
+          "id": "d79094fc-6d5d-4afd-a88e-2ccea72dc29d",
+          "intuition": "The brute-force approach works by iterating over the stock prices for each new price and calculating the stock span by counting the number of consecutive days with a price less than or equal to the current price.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1; 1; 1; 2; 1; 4; 6",
+              "explanation": "The stock span for each price is calculated by counting the number of consecutive days with a price less than or equal to the current price.",
+              "id": "b7bff4fd-6878-42d4-b344-36dd65211843",
+              "input": "StockSpanner().next(100); StockSpanner().next(80); StockSpanner().next(60); StockSpanner().next(70); StockSpanner().next(60); StockSpanner().next(75); StockSpanner().next(85)"
+            },
+            {
+              "expectedOutput": "1; 1; 2; 4; 5",
+              "explanation": "The stock span for each price is calculated by counting the number of consecutive days with a price less than or equal to the current price.",
+              "id": "0f9f60d2-fcf2-4f74-a2da-ccd7bd93ce04",
+              "input": "StockSpanner().next(10); StockSpanner().next(4); StockSpanner().next(5); StockSpanner().next(9); StockSpanner().next(0)"
+            }
+          ]
+        },
+        {
+          "approach": "Use a stack to store the indices of the stock prices. For each new price, pop the stack until the price at the top of the stack is greater than the current price or the stack is empty.",
+          "code": "class Solution {\n    class StockSpanner { var stack: [(Int, Int)] = []; var index = 0\n    func next(_ price: Int) -> Int { while !stack.isEmpty && stack.last!.0 <= price { _ = stack.removeLast() }; let span = stack.isEmpty ? index + 1 : index - stack.last!.1; stack.append((price, index)); index += 1; return span }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear because we store all the stock prices in the stack.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because each price is pushed and popped from the stack exactly once."
+          },
+          "explanation": "This approach is more efficient because it uses a stack to keep track of the indices of the stock prices and calculates the stock span in linear time.",
+          "id": "23d42eea-76ed-4524-9e97-787255b550a0",
+          "intuition": "The optimized approach uses a stack to store the indices of the stock prices and calculates the stock span by comparing the current price with the price at the top of the stack.",
+          "name": "Optimized Approach using a Stack",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1; 1; 1; 2; 1; 4; 6",
+              "explanation": "The stock span for each price is calculated by counting the number of consecutive days with a price less than or equal to the current price.",
+              "id": "61b93084-91b9-4227-980e-0c5225c128e3",
+              "input": "StockSpanner().next(100); StockSpanner().next(80); StockSpanner().next(60); StockSpanner().next(70); StockSpanner().next(60); StockSpanner().next(75); StockSpanner().next(85)"
+            },
+            {
+              "expectedOutput": "1; 1; 2; 4; 5",
+              "explanation": "The stock span for each price is calculated by counting the number of consecutive days with a price less than or equal to the current price.",
+              "id": "f7ea24b1-4b8a-43ea-bab5-c747fc52088d",
+              "input": "StockSpanner().next(10); StockSpanner().next(4); StockSpanner().next(5); StockSpanner().next(9); StockSpanner().next(0)"
+            }
+          ]
+        }
+      ],
+      "id": "2103b49a-b830-4b08-be6d-b9d3dabffcfd",
+      "lastUpdated": "2026-02-06T21:47:24Z",
+      "problemSlug": "online-stock-span",
+      "relatedProblems": [
+        "daily-temperatures",
+        "asteroid-collision"
+      ],
+      "summary": "The problem is to design a StockSpanner class that calculates the stock span for a given stock price, which is the number of consecutive days (including the current day) that the stock price has been less than or equal to the current price, and the key insight is to use a stack to store the indices of the stock prices."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all possible subsequences of the input string, and for each subsequence, remove any duplicate characters, then check if it's lexicographically smaller than the current smallest subsequence.",
+          "code": "class Solution {\n    func removeDuplicateLetters(_ s: String) -> String {\n        var result = \"\"\n        var seen: [Character: Bool] = [:]\n        var minStack: [Character] = []\n        for char in s {\n            if var index = minStack.firstIndex(of: char) {\n                minStack.remove(at: index)\n            }\n            if !seen.contains(char) {\n                seen[char] = true\n                minStack.append(char)\n            }\n            minStack.sort()\n        }\n        return String(minStack)\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is due to storing the permutations and the current subsequence.",
+            "time": "O(n!)",
+            "timeExplanation": "The time complexity is due to generating all permutations of the input string, which is n factorial."
+          },
+          "explanation": "This approach is straightforward but inefficient due to its high time complexity. It generates all possible subsequences, resulting in an exponential number of operations. For each of these subsequences, it removes duplicates and compares with the current smallest subsequence.",
+          "id": "9a9cffd8-bf37-4f40-8998-a4a664373b70",
+          "intuition": "This approach involves generating all possible subsequences of the given string and then checking for each subsequence if it contains any duplicates. If a subsequence has no duplicates and is lexicographically smaller than the current smallest subsequence, it is updated.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "abc",
+              "explanation": "The lexicographically smallest subsequence with no duplicates is 'abc'.",
+              "id": "90f6e690-f49d-4efb-a223-3aada8456d3c",
+              "input": "bcabc"
+            },
+            {
+              "expectedOutput": "acdb",
+              "explanation": "The lexicographically smallest subsequence with no duplicates is 'acdb'.",
+              "id": "168e3f57-537e-41e4-8654-23fdacca9d3b",
+              "input": "cbacdcbc"
+            }
+          ]
+        },
+        {
+          "approach": "Use a monotonic stack to track the lexicographically smallest characters without duplicates. Iterate through the string, and for each character, check if the stack's top is greater than the current character. If it is and appears again later, pop it from the stack and add the current character.",
+          "code": "class Solution {\n    func removeDuplicateLetters(_ s: String) -> String {\n        let s = Array(s)\n        var lastOccurrence: [Character: Int] = [:]\n        var stack: [Character] = []\n        var seen: [Character: Bool] = [:]\n        for (index, char) in s.enumerated() {\n            lastOccurrence[char] = index\n        }\n        for (index, char) in s.enumerated() {\n            if seen[char] != nil {\n                continue\n            }\n            while !stack.isEmpty, let top = stack.last, top > char, lastOccurrence[top]! > index {\n                seen[top] = nil\n                stack.removeLast()\n            }\n            seen[char] = true\n            stack.append(char)\n        }\n        return String(stack)\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is also linear due to the storage needed for the stack and the seen and last occurrence dictionaries.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because each character in the string is visited at most twice (once in the initial loop and once in the second loop)."
+          },
+          "explanation": "This approach efficiently keeps track of the lexicographically smallest characters seen so far without duplicates by using a monotonic stack. It ensures that the stack always contains the smallest possible characters in lexicographical order.",
+          "id": "0b6c42b5-271c-42a2-b71a-773fd01929bd",
+          "intuition": "This approach uses a monotonic stack to keep track of the lexicographically smallest characters seen so far without duplicates. It iterates through the input string, maintaining the stack by popping characters that are greater than the current character if the popped character appears again later in the string.",
+          "name": "Monotonic Stack Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "abc",
+              "explanation": "The lexicographically smallest subsequence with no duplicates is 'abc'.",
+              "id": "6fba27c8-adb8-4de8-8997-df36c43467e9",
+              "input": "bcabc"
+            },
+            {
+              "expectedOutput": "acdb",
+              "explanation": "The lexicographically smallest subsequence with no duplicates is 'acdb'.",
+              "id": "83d68cfc-79ce-4384-bd29-166bcd7c30bc",
+              "input": "cbacdcbc"
+            }
+          ]
+        }
+      ],
+      "id": "a73a8330-2edd-49a4-a191-f2f85393a14d",
+      "lastUpdated": "2026-02-06T21:12:51Z",
+      "problemSlug": "remove-duplicate-letters",
+      "relatedProblems": [
+        "minimum-window-substring",
+        "subarray-sum-equals-k"
+      ],
+      "summary": "The problem requires removing duplicate letters from a given string to form the lexicographically smallest subsequence, with a key insight being the use of a monotonic stack to efficiently keep track of the smallest character."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Generate all permutations of the number. 2. Remove k digits from each permutation. 3. Compare the results to find the smallest number.",
+          "code": "class Solution {\n    func removeKdigits(_ num: String, _ k: Int) -> String {\n        let count = num.count\n        if k >= count {\n            return \"0\"\n        }\n        var nums = Array(num)\n        var res = \"\"\n        for i in 0..<num.count-k {\n            var maxNum = 0\n            var maxIndex = 0\n            for j in 0..<k+i+1 {\n                if nums[j] > Character(\"0\") && Int(String(nums[j]))! > maxNum {\n                    maxNum = Int(String(nums[j]))!\n                    maxIndex = j\n                }\n            }\n            res += String(nums[maxIndex])\n            for j in 0..<maxIndex {\n                nums[j] = \"0\"\n            }\n            k -= maxIndex\n            if k == 0 {\n                break\n            }\n        }\n        while res.count > 1 && res.first == \"0\" {\n            res = String(res.dropFirst())\n        }\n        return res.isEmpty ? \"0\" : res\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Store the permutations takes O(n) space.",
+            "time": "O(n!)",
+            "timeExplanation": "Generate all permutations of the number takes O(n!) time."
+          },
+          "explanation": "This approach is not efficient because it generates a huge number of permutations and comparisons. However, it provides a baseline understanding of the problem.",
+          "id": "f046ac0c-3c3b-43cd-a302-5779526e5e90",
+          "intuition": "Generate all possible combinations of removing k digits from the given number and find the smallest one.",
+          "name": "Brute-Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"1219\"",
+              "explanation": "Remove 3 digits from \"1432219\" to form the smallest possible number.",
+              "id": "8314c275-934e-4233-9e8a-31c89e6bef69",
+              "input": "num = \"1432219\", k = \"3\""
+            },
+            {
+              "expectedOutput": "\"200\"",
+              "explanation": "Remove 1 digit from \"10200\" to form the smallest possible number.",
+              "id": "6f4d8dff-b99f-4a0a-9ebd-8807a18300b9",
+              "input": "num = \"10200\", k = \"1\""
+            },
+            {
+              "expectedOutput": "\"0\"",
+              "explanation": "Remove 2 digits from \"10\" to form the smallest possible number.",
+              "id": "8ceb035c-038a-4788-a2a4-e11b2067165a",
+              "input": "num = \"10\", k = \"2\""
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize an empty stack. 2. Iterate through the number from left to right. 3. If the stack is empty or the top of the stack is smaller than or equal to the current digit, push the current digit to the stack. 4. If the stack is not empty and the top of the stack is larger than the current digit, pop the stack until it is empty or the top of the stack is smaller than or equal to the current digit, or k becomes 0. 5. If k is still greater than 0, pop the stack k times.",
+          "code": "class Solution {\n    func removeKdigits(_ num: String, _ k: Int) -> String {\n        var stack: [Character] = []\n        for c in num {\n            while !stack.isEmpty && k > 0 && stack.last! > c {\n                stack.removeLast()\n                k -= 1\n            }\n            stack.append(c)\n        }\n        while k > 0 {\n            stack.removeLast()\n            k -= 1\n        }\n        while !stack.isEmpty && stack.first == \"0\" {\n            stack.removeFirst()\n        }\n        return stack.isEmpty ? \"0\" : String(stack)\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Store the stack takes O(n) space.",
+            "time": "O(n)",
+            "timeExplanation": "Iterate through the number takes O(n) time."
+          },
+          "explanation": "This approach uses a stack to keep track of the smallest digits and remove the larger digits first.",
+          "id": "3bc7e50e-aca5-4a05-b9fc-9dd8ecdc2b4a",
+          "intuition": "Use a stack to remove the larger digits first.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "\"1219\"",
+              "explanation": "Remove 3 digits from \"1432219\" to form the smallest possible number.",
+              "id": "9f7d1034-1262-46d8-9ada-a8ecabcaffb7",
+              "input": "num = \"1432219\", k = \"3\""
+            },
+            {
+              "expectedOutput": "\"200\"",
+              "explanation": "Remove 1 digit from \"10200\" to form the smallest possible number.",
+              "id": "c032f4cc-4c48-4fbe-a74a-f89e245f13f2",
+              "input": "num = \"10200\", k = \"1\""
+            },
+            {
+              "expectedOutput": "\"0\"",
+              "explanation": "Remove 2 digits from \"10\" to form the smallest possible number.",
+              "id": "9708d368-ae93-4136-9530-7288d1839f31",
+              "input": "num = \"10\", k = \"2\""
+            }
+          ]
+        }
+      ],
+      "id": "70491442-10b7-4b1a-8345-c4883befd1df",
+      "lastUpdated": "2026-02-06T21:16:45Z",
+      "problemSlug": "remove-k-digits",
+      "relatedProblems": [
+        "plus-one",
+        "roman-to-integer"
+      ],
+      "summary": "The problem is to remove k digits from a given number to form the smallest possible number, and the key insight is to use a stack to remove the larger digits first."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Iterate through the input string, pushing opening parentheses onto the stack and popping them off when a closing parenthesis is encountered. When the stack is empty, a new group of parentheses has started, so append the current character to the result string. If the stack is not empty, append the current character to the current group string. When the stack becomes empty again, append the current group string to the result string.",
+          "code": "class Solution {\n    let removeOutermostParentheses = { (s: String) -> String in\n        var stack = [Character]()\n        var result = \"\"\n        var group = \"\"\n\n        for char in s {\n            if char == \"(\" {\n                if !stack.isEmpty {\n                    group += String(char)\n                }\n                stack.append(char)\n            } else if char == \")\" {\n                stack.removeLast()\n                if !stack.isEmpty {\n                    group += String(char)\n                }\n                if stack.isEmpty {\n                    result += group\n                    group = \"\"\n                }\n            }\n        }\n\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because in the worst-case scenario, we need to store the entire input string in the result and the group string.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we iterate through the input string once."
+          },
+          "explanation": "This approach ensures that the outermost parentheses are correctly removed from the input string by only appending the characters to the result string when the stack is not empty.",
+          "id": "6e2386aa-831f-469f-b6c0-83d2b6ccd2e2",
+          "intuition": "The baseline approach works by utilizing a stack to track the nesting of parentheses and building the result string without the outermost parentheses.",
+          "name": "Baseline Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"()()\"",
+              "explanation": "The outermost parentheses are removed from the input string.",
+              "id": "1b226ebc-a86e-4e58-839b-f84105ccf736",
+              "input": "s = \"(()())\""
+            },
+            {
+              "expectedOutput": "\"()()()()\"",
+              "explanation": "The outermost parentheses are removed from each group of parentheses in the input string.",
+              "id": "f532ee33-2df5-477d-ba6c-4451d4a2f27b",
+              "input": "s = \"(()())(())()\""
+            },
+            {
+              "expectedOutput": "\"\"\"",
+              "explanation": "The input string contains only outermost parentheses, so the result is an empty string.",
+              "id": "99036d7e-23fe-47c8-a20f-8cae87deb8ea",
+              "input": "s = \"()()()\""
+            }
+          ]
+        },
+        {
+          "approach": "Iterate through the input string, maintaining a count of the nesting level of parentheses. When the nesting level is greater than 1 (i.e., not the outermost parentheses), append the current character to the result string.",
+          "code": "class Solution {\n    let removeOutermostParentheses = { (s: String) -> String in\n        var result = \"\"\n        var count = 0\n\n        for char in s {\n            if char == \"(\" {\n                if count > 0 {\n                    result += String(char)\n                }\n                count += 1\n            } else if char == \")\" {\n                count -= 1\n                if count > 0 {\n                    result += String(char)\n                }\n            }\n        }\n\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because in the worst-case scenario, we need to store the entire input string in the result string.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we iterate through the input string once."
+          },
+          "explanation": "This approach ensures that the outermost parentheses are correctly removed from the input string by only appending the characters to the result string when the nesting level is greater than 1.",
+          "id": "1249140a-f172-4cb4-98d0-4bcdfc0f0f92",
+          "intuition": "The optimized approach works by directly building the result string without utilizing a stack, instead counting the nesting level of parentheses.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "\"()()\"",
+              "explanation": "The outermost parentheses are removed from the input string.",
+              "id": "9c382591-528b-4f1e-a8c5-e1a0a53bf3a4",
+              "input": "s = \"(()())\""
+            },
+            {
+              "expectedOutput": "\"()()()()\"",
+              "explanation": "The outermost parentheses are removed from each group of parentheses in the input string.",
+              "id": "0b5bd9bd-0a2e-4ff2-90c2-cefddd6ba427",
+              "input": "s = \"(()())(())()\""
+            },
+            {
+              "expectedOutput": "\"\"\"",
+              "explanation": "The input string contains only outermost parentheses, so the result is an empty string.",
+              "id": "5c783b56-b928-47fb-9cf8-ece508890df8",
+              "input": "s = \"()()()\""
+            }
+          ]
+        }
+      ],
+      "id": "5df198bb-efb2-409b-a6f6-7309ba9d6e6e",
+      "lastUpdated": "2026-02-06T21:56:14Z",
+      "problemSlug": "remove-outermost-parentheses",
+      "relatedProblems": [
+        "min-stack",
+        "valid-parentheses"
+      ],
+      "summary": "This problem requires removing the outermost parentheses in a given string of nested parentheses, and the key insight is to utilize a stack to track the nesting of parentheses."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start with the input string and recursively evaluate each pair of parentheses, calculating the score based on the nesting level.",
+          "code": "class Solution {\n    func scoreOfParentheses(_ S: String) -> Int {\n        var stack: [String] = []\n        var res = 0\n        for ch in S {\n            if ch == \"(\" {\n                stack.append(String(ch))\n            } else if ch == \")\" {\n                _ = stack.popLast()\n                if !stack.isEmpty && stack.last == String(\"(\") {\n                    stack[stack.count-1] = String(1)\n                } else {\n                    var val = 0\n                    var temp: [String] = []\n                    while !stack.isEmpty && stack.last != String(\"(\") {\n                        val += Int(stack.last ?? \"\") ?? 0\n                        temp.append(stack.last ?? \"\")\n                        _ = stack.popLast()\n                    }\n                    if !stack.isEmpty {\n                        _ = stack.popLast()\n                    }\n                    for str in temp {\n                        stack.append(str)\n                    }\n                    stack.append(String(2*val))\n                }\n            }\n        }\n        for str in stack {\n            if let val = Int(str) {\n                res += val\n            }\n        }\n        return res\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) due to the use of the stack.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) due to the repeated calculations and recursive calls."
+          },
+          "explanation": "The brute force approach works but is inefficient as it performs many repeated calculations and has a high time complexity.",
+          "id": "9639ee5b-4e1d-4f46-a454-0d57ba351334",
+          "intuition": "This approach works by recursively evaluating each possible score based on the nesting of the parentheses.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "The expected output is 1 because the parentheses are balanced and correctly nested.",
+              "id": "fe1115dd-be2f-456e-a4bc-aac4982dd970",
+              "input": "S = \"()\""
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "The expected output is 2 because the inner parentheses are correctly nested inside the outer parentheses.",
+              "id": "f7636bbc-c971-4eaa-9caf-913f5753a2a1",
+              "input": "S = \",(())\""
+            }
+          ]
+        },
+        {
+          "approach": "Start with the input string and directly calculate the scores based on the nesting level, using a stack to keep track of the scores.",
+          "code": "class Solution {\n    func scoreOfParentheses(_ S: String) -> Int {\n        var stack: [Int] = [0]\n        for ch in S {\n            if ch == \"(\" {\n                stack.append(0)\n            } else {\n                var v = stack.popLast() ?? 0\n                stack[stack.count - 1] += max(2 * v, 1)\n            }\n        }\n        return stack.first ?? 0\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) due to the use of the stack to store the scores.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) due to the single pass through the string and the use of the stack."
+          },
+          "explanation": "The optimized approach works more efficiently as it uses a stack to directly calculate the scores and avoid repeated calculations.",
+          "id": "138f5af5-681f-43de-8b91-7c07038d37b2",
+          "intuition": "This approach works by using a stack to keep track of the scores and directly calculating the scores based on the nesting level.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "The expected output is 1 because the parentheses are balanced and correctly nested.",
+              "id": "3bfb35f3-2418-4a03-bd39-aaa48c654a12",
+              "input": "S = \"()\""
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "The expected output is 2 because the inner parentheses are correctly nested inside the outer parentheses.",
+              "id": "6379c744-d526-45d7-ad14-cc2b52af22f8",
+              "input": "S = \",(())\""
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "The expected output is 4 because the parentheses are correctly nested and balanced.",
+              "id": "925fce11-bf2f-43ca-9226-dc6296161389",
+              "input": "S = \"(())()\""
+            }
+          ]
+        }
+      ],
+      "id": "797eeef9-e0d9-4db2-804e-659916f0860c",
+      "lastUpdated": "2026-02-06T21:44:37Z",
+      "problemSlug": "score-of-parentheses",
+      "relatedProblems": [
+        "valid-parentheses",
+        "generate-parentheses"
+      ],
+      "summary": "The problem involves scoring a string of parentheses based on certain rules and the key insight is to use a stack to keep track of the scores. The score of a string of parentheses is determined by the nesting level, with deeper nests resulting in higher scores."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Split the input path into components, then iterate through the components. For each component, check if it's '.', '..', or a normal directory. If it's '.', do nothing; if it's '..', remove the last directory from the stack if it's not empty; otherwise, add the directory to the stack.",
+          "code": "class Solution {\n    func simplifyPath(path: String) -> String {\n        let components = path.components(separatedBy: \"/\")\n        var stack: [String] = []\n        for component in components {\n            if component == \".\" {\n                continue\n            } else if component == \"..\" {\n                if !stack.isEmpty {\n                    stack.removeLast()\n                }\n            } else if !component.isEmpty {\n                stack.append(component)\n            }\n        }\n        return \"/\" + stack.joined(separator: \"/\")\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear because in the worst case, we might need to store all path components in the stack.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we're iterating through the path components once."
+          },
+          "explanation": "This approach provides a straightforward solution but has room for improvement in terms of efficiency.",
+          "id": "0b7a6229-75a9-4548-9b5f-05fa43b8c2ce",
+          "intuition": "This approach works by iterating through the path and resolving '.' and '..' notations one by one, resulting in the simplified path.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "/home",
+              "explanation": "The trailing '/' is removed.",
+              "id": "5410dd9b-37c3-4b09-bdc8-4166072a3ef2",
+              "input": "/home/"
+            },
+            {
+              "expectedOutput": "/",
+              "explanation": "'..' at the beginning of the path or at the root level doesn't change the path.",
+              "id": "b37a6341-1090-4346-8f00-b68619157713",
+              "input": "/../"
+            }
+          ]
+        },
+        {
+          "approach": "Similar to the brute force approach but optimized for better performance by directly handling the path components without creating intermediate arrays.",
+          "code": "class Solution {\n    func simplifyPath(path: String) -> String {\n        let components = path.components(separatedBy: \"/\")\n        var stack: [String] = []\n        for component in components {\n            switch component {\n            case \"\":\n                continue\n            case \".\":\n                continue\n            case \"..\":\n                if !stack.isEmpty {\n                    stack.removeLast()\n                }\n            default:\n                stack.append(component)\n            }\n        }\n        return \"/\" + stack.joined(separator: \"/\")\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity also remains linear due to the potential need to store all non-'.' and non-'..' components in the stack.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity remains linear as we're still processing each component once."
+          },
+          "explanation": "This approach improves upon the brute force by reducing unnecessary string operations and directly working with the path components.",
+          "id": "4d2a7ca0-3fd1-4e4a-a319-91356ef86fa4",
+          "intuition": "This optimized approach works similarly to the brute force but avoids unnecessary operations by skipping empty strings and handling '..' more efficiently.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "/home/foo",
+              "explanation": "Repeated '/' characters are ignored.",
+              "id": "f53af4b2-84b5-40e6-b2b9-3562f6aa0e9c",
+              "input": "/home//foo/"
+            },
+            {
+              "expectedOutput": "/c",
+              "explanation": "'..' correctly navigates up the directory hierarchy, and '.' is ignored.",
+              "id": "7b82b051-ce07-483d-9c29-dfeb20c37bd1",
+              "input": "/a/./b/../../c/"
+            }
+          ]
+        }
+      ],
+      "id": "8fee654b-efea-467c-969f-76e7bd21d4d2",
+      "lastUpdated": "2026-02-06T21:05:23Z",
+      "problemSlug": "simplify-path",
+      "relatedProblems": [
+        "valid-parentheses",
+        "basic-calculator"
+      ],
+      "summary": "The Simplify Path problem involves simplifying a Unix-style file path by resolving '.' and '..' notations. The key insight is to use a stack to track the directory hierarchy."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize an empty stack.\n2. For each character:\n   - If it's an opening bracket, push it.\n   - If it's a closing bracket, pop and ensure types match.\n3. The string is valid only if the stack is empty at the end.",
+          "code": "class Solution {\n    func isValid(_ s: String) -> Bool {\n        var stack: [Character] = []\n        for ch in s {\n            switch ch {\n            case \"(\", \"{\", \"[\":\n                stack.append(ch)\n            case \")\":\n                if stack.popLast() != \"(\" { return false }\n            case \"}\":\n                if stack.popLast() != \"{\" { return false }\n            case \"]\":\n                if stack.popLast() != \"[\" { return false }\n            default:\n                break\n            }\n        }\n        return stack.isEmpty\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The stack can hold up to n opening brackets.",
+            "time": "O(n)",
+            "timeExplanation": "Each character is processed once."
+          },
+          "explanation": "Any mismatch or premature closing bracket invalidates the string immediately.\nRemaining items in the stack after processing mean unmatched openings.",
+          "id": "a36e7d66-0c0d-4795-aa09-af72c4b1f241",
+          "intuition": "Every closing bracket must match the most recent unmatched opening bracket.\nA stack naturally models this last-in-first-out requirement.",
+          "name": "Stack",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "Simple matching pair.",
+              "id": "ba1346c7-9119-4061-b157-8f689e073a07",
+              "input": "s = \"()\""
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "All bracket types match in order.",
+              "id": "809050df-90a2-4163-b33d-7ae30b99c763",
+              "input": "s = \"()[]{}\""
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "Mismatched bracket types.",
+              "id": "236a46f7-4902-4e31-a0fe-37019eb89f6f",
+              "input": "s = \"(]\""
+            }
+          ]
+        }
+      ],
+      "id": "4aacfe82-e270-4dce-9d65-712c0250a335",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "valid-parentheses",
+      "relatedProblems": [
+        "minimum-remove-to-make-valid-parentheses",
+        "generate-parentheses"
+      ],
+      "summary": "Use a stack to match opening and closing brackets in the correct order."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Iterate over all possible stack sequences, simulate each sequence, and compare it to the given sequence.",
+          "code": "class Solution {\n    func validateStackSequences(pushed: [Int], popped: [Int]) -> Bool {\n        var stack: [Int] = []\n        var popIndex = 0\n        for pushValue in pushed {\n            stack.append(pushValue)\n            while !stack.isEmpty, stack.last == popped[popIndex] {\n                stack.removeLast()\n                popIndex += 1\n            }\n        }\n        return stack.isEmpty\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because in the worst case, we need to store all elements in the stack.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are iterating over the pushed and popped sequences once."
+          },
+          "explanation": "Generate all possible sequences of push and pop operations, then simulate the stack operations for each sequence. Check if the simulated sequence matches the given sequence.",
+          "id": "849fbf7f-cde6-46de-a034-2cddf6fff2a9",
+          "intuition": "This approach works by simulating the stack operations for every possible sequence and checking if it matches the given sequence.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The sequence is valid because we can push the elements in the order [1,2,3,4,5] and pop them in the order [4,5,3,2,1].",
+              "id": "f506a2eb-d3d9-441f-aef3-8d9cc0ba5820",
+              "input": "pushed = [1,2,3,4,5], popped = [4,5,3,2,1]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The sequence is not valid because we cannot push the elements in the order [1,2,3,4,5] and pop them in the order [4,3,5,1,2].",
+              "id": "c5276ea4-b2fa-40b1-bb76-4566bc524782",
+              "input": "pushed = [1,2,3,4,5], popped = [4,3,5,1,2]"
+            }
+          ]
+        },
+        {
+          "approach": "Iterate over the pushed sequence, simulate the stack operations, and compare the simulated sequence to the given sequence.",
+          "code": "class Solution {\n    func validateStackSequences(pushed: [Int], popped: [Int]) -> Bool {\n        var stack: [Int] = []\n        var popIndex = 0\n        for pushValue in pushed {\n            stack.append(pushValue)\n            while !stack.isEmpty, stack.last == popped[popIndex] {\n                stack.removeLast()\n                popIndex += 1\n            }\n        }\n        return stack.isEmpty\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because in the worst case, we need to store all elements in the stack.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are iterating over the pushed and popped sequences once."
+          },
+          "explanation": "Simulate the stack operations by iterating over the pushed sequence and comparing the simulated sequence to the given sequence.",
+          "id": "d261d9aa-7cd5-4007-9ec6-b1276d59a959",
+          "intuition": "This approach works by iterating over the pushed sequence and simulating the stack operations in a single pass.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The sequence is valid because we can push the elements in the order [1,2,3,4,5] and pop them in the order [4,5,3,2,1].",
+              "id": "a45bdd5f-7a9a-4542-b2bf-c5be5c54e8b1",
+              "input": "pushed = [1,2,3,4,5], popped = [4,5,3,2,1]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The sequence is not valid because we cannot push the elements in the order [1,2,3,4,5] and pop them in the order [4,3,5,1,2].",
+              "id": "ae55f021-9045-4a5f-8e4e-353bc9a1d338",
+              "input": "pushed = [1,2,3,4,5], popped = [4,3,5,1,2]"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "The sequence is valid because we can push the element 1 and pop it immediately.",
+              "id": "8db9c2bf-470b-4066-894a-6298977a6e40",
+              "input": "pushed = [1], popped = [1]"
+            }
+          ]
+        }
+      ],
+      "id": "9b9b49c9-e24d-43e1-b434-9883918fa203",
+      "lastUpdated": "2026-02-06T21:50:29Z",
+      "problemSlug": "validate-stack-sequences",
+      "relatedProblems": [
+        "daily-temperatures",
+        "asteroid-collision"
+      ],
+      "summary": "The problem requires determining whether a given sequence of push and pop operations on a stack is valid. The key insight is to simulate the stack operations and check if they match the given sequence."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all possible binary trees, serialize each tree using preorder traversal, and compare the serialized string with the given string.",
+          "code": "class Solution {\n    import Foundation\n\n    func isValidSerialization(_ preorder: String) -> Bool {\n        var nodes = preorder.components(separatedBy: \",\")\n        var stack: [String] = []\n\n        for node in nodes {\n            if node == \"#\" {\n                if stack.count < 2 {\n                    return false\n                }\n                stack.removeLast()\n                stack.removeLast()\n                stack.append(\"#\")\n            } else {\n                stack.append(node)\n            }\n        }\n\n        return stack.count == 1 && stack.first == \"#\"\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n), where n is the number of nodes in the binary tree. This is because in the worst case, we may need to store all nodes in the stack.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n), where n is the number of nodes in the binary tree. This is because we iterate through each node in the preorder string once."
+          },
+          "explanation": "This approach involves generating all possible binary trees. For each tree, we perform a preorder traversal to serialize it. We then compare the serialized string with the given string to determine if it represents a valid preorder serialization of a binary tree.",
+          "id": "7c6b7843-e8bc-4cd0-95b8-ccd59538b5b2",
+          "intuition": "This approach involves generating all possible binary trees and checking if the given string matches the preorder serialization of any of these trees.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The given string represents a valid preorder serialization of a binary tree.",
+              "id": "624323de-9846-4f4a-b71e-8b46fdcbb7f3",
+              "input": "9,#,3,#,7,#,#,#"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The given string does not represent a valid preorder serialization of a binary tree because it has more '#''s than necessary.",
+              "id": "5198d393-8f3a-4e82-ac8d-e70280c16de6",
+              "input": "1,#,#,#,#"
+            }
+          ]
+        },
+        {
+          "approach": "Iterate through the preorder string, incrementing the node count for each non-null node and decrementing it for each null node. If the count ever becomes negative or is not zero at the end, the string does not represent a valid preorder serialization.",
+          "code": "class Solution {\n    import Foundation\n\n    func isValidSerialization(_ preorder: String) -> Bool {\n        var nodes = preorder.components(separatedBy: \",\")\n        var count = 1\n\n        for node in nodes {\n            count -= 1\n            if count < 0 {\n                return false\n            }\n            if node != \"#\" {\n                count += 2\n            }\n        }\n\n        return count == 0\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1), as we only use a constant amount of space to store the counter.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n), where n is the number of nodes in the binary tree. This is because we iterate through each node in the preorder string once."
+          },
+          "explanation": "This approach optimizes the solution by only requiring a single pass through the preorder string. We use a counter to track the number of nodes. For each non-null node, we increment the counter, and for each null node, we decrement it. If the counter becomes negative at any point or is not zero at the end, we know the string does not represent a valid preorder serialization.",
+          "id": "5582e083-65e4-40fb-b130-dcd1951651e9",
+          "intuition": "This approach involves using a single pass through the preorder string and tracking the number of nodes to determine if the string represents a valid preorder serialization.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The given string represents a valid preorder serialization of a binary tree.",
+              "id": "ecb0c28e-ddfa-4fa7-972a-b0820136b805",
+              "input": "9,#,3,#,7,#,#,#"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The given string does not represent a valid preorder serialization of a binary tree because it has more '#''s than necessary.",
+              "id": "c9e684aa-6fea-40b0-97b6-b7a22692eccc",
+              "input": "9,#,3,#,7,#,#,#,#"
+            }
+          ]
+        }
+      ],
+      "id": "dbbe4f12-1a0f-4b7e-84e6-858ea89f86db",
+      "lastUpdated": "2026-02-06T21:13:15Z",
+      "problemSlug": "verify-preorder-serialization-of-a-binary-tree",
+      "relatedProblems": [
+        "serialize-and-deserialize-binary-tree",
+        "binary-tree-maximum-path-sum"
+      ],
+      "summary": "This problem involves verifying whether a given string represents a valid preorder serialization of a binary tree, with key insights relating to the number of nodes and the use of a stack to track the tree structure."
+    }
+  ],
+  "topic": "stack",
+  "version": "2.0.0"
+}

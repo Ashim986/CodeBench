@@ -1,0 +1,2075 @@
+{
+  "solutions": [
+    {
+      "approaches": [
+        {
+          "approach": "Iterate through the array with three nested loops. The outer loop fixes the first element (a), the middle loop fixes the second element (b), and the inner loop fixes the third element (c). Check if a < b < c and a < c.",
+          "code": "class Solution {\n    func find132pattern(_ nums: [Int]) -> Bool {\n        for i in nums.indices {\n            for j in nums.indices {\n                for k in nums.indices {\n                    if i < j && j < k && nums[i] < nums[j] && nums[i] < nums[k] && nums[j] > nums[k] {\n                        return true\n                    }\n                }\n            }\n        }\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "No extra space is used, so the space complexity is O(1).",
+            "time": "O(n^3)",
+            "timeExplanation": "There are three nested loops, each of which can run up to n times."
+          },
+          "explanation": "This solution has a high time complexity because it checks every possible combination of three numbers. This makes it inefficient for large arrays.",
+          "id": "b9aa72a3-96be-4fd7-99e3-c99edd1585a5",
+          "intuition": "This approach checks every possible combination of three numbers in the array to see if they form the 132 pattern.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "false",
+              "explanation": "There is no 132 pattern in the array because there are no three numbers that satisfy the conditions a < b < c and a < c.",
+              "id": "04ef2b3a-ec2b-4d5c-92c5-c6339d84f2df",
+              "input": "nums = [1, 2, 3, 4]"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "The numbers 3, 4, and 2 form the 132 pattern because 3 < 4 and 3 < 2 and 4 > 2.",
+              "id": "cfb72ff8-3ba1-428d-8ccf-d04e399a16bb",
+              "input": "nums = [3, 1, 4, 2]"
+            }
+          ]
+        },
+        {
+          "approach": "Initialize an empty stack and iterate through the array in reverse order. For each number, pop the stack as long as the top of the stack is less than the current number. If the stack is not empty and the top of the stack is greater than the current number, return true because we have found the 132 pattern.",
+          "code": "import Foundation\n\nclass Solution {\n    func find132pattern(_ nums: [Int]) -> Bool {\n        var stack: [Int] = []\n        var s3 = Int.min\n        for num in nums.reversed() {\n            if num < s3 {\n                return true\n            }\n            while !stack.isEmpty, stack.last! < num {\n                s3 = stack.removeLast()\n            }\n            stack.append(num)\n        }\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "In the worst case, the stack can contain up to n elements.",
+            "time": "O(n)",
+            "timeExplanation": "The solution iterates through the array once and uses a stack to keep track of the potential 'b' values."
+          },
+          "explanation": "This solution is more efficient than the brute force approach because it uses a stack to keep track of the potential 'b' values and their corresponding 'a' values.",
+          "id": "83a91170-1a02-46c1-9b19-5fd894b7c32d",
+          "intuition": "This approach uses a stack to keep track of the potential 'b' values and their corresponding 'a' values.",
+          "name": "Stack",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "false",
+              "explanation": "There is no 132 pattern in the array because there are no three numbers that satisfy the conditions a < b < c and a < c.",
+              "id": "de1748be-3c4e-4df3-958e-61cbd5d6ff4f",
+              "input": "nums = [1, 2, 3, 4]"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "The numbers 3, 4, and 2 form the 132 pattern because 3 < 4 and 3 < 2 and 4 > 2.",
+              "id": "683d7a92-0817-4903-a5cd-7996f6644a4f",
+              "input": "nums = [3, 1, 4, 2]"
+            }
+          ]
+        }
+      ],
+      "id": "6551ad08-a62b-45f6-b691-358105af4099",
+      "lastUpdated": "2026-02-06T21:20:04Z",
+      "problemSlug": "132-pattern",
+      "relatedProblems": [
+        "next-greater-element-i",
+        "next-greater-element-iii"
+      ],
+      "summary": "The 132 pattern is a sequence of three numbers that follow the pattern a < b < c and a < c, where a, b, and c are distinct elements in the array. The key insight to solving this problem is to iterate through the array and maintain a maximum value seen so far, which will help in identifying the 132 pattern."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Set left = 0 and right = n - 1.\n2. While left <= right:\n   - mid = (left + right) / 2\n   - If nums[mid] == target, return mid.\n   - If nums[mid] < target, search the right half; else search the left half.\n3. Return -1 if not found.",
+          "code": "class Solution {\n    func search(_ nums: [Int], _ target: Int) -> Int {\n        var left = 0\n        var right = nums.count - 1\n        while left <= right {\n            let mid = left + (right - left) / 2\n            if nums[mid] == target {\n                return mid\n            } else if nums[mid] < target {\n                left = mid + 1\n            } else {\n                right = mid - 1\n            }\n        }\n        return -1\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only constant extra space is used.",
+            "time": "O(log n)",
+            "timeExplanation": "The search range halves each step."
+          },
+          "explanation": "Binary search guarantees O(log n) time by halving the range each iteration.",
+          "id": "42f5fcff-d6d3-416c-811c-91910896d0c2",
+          "intuition": "The array is sorted, so we can eliminate half the search space each step.",
+          "name": "Binary Search",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "9 is at index 4.",
+              "id": "d4c9f72b-8f48-43d1-971d-2b39cdc33656",
+              "input": "nums = [-1,0,3,5,9,12], target = 9"
+            },
+            {
+              "expectedOutput": "-1",
+              "explanation": "2 is not in the array.",
+              "id": "0fc7cc73-24c8-4531-814c-542ecdb498c2",
+              "input": "nums = [-1,0,3,5,9,12], target = 2"
+            }
+          ]
+        }
+      ],
+      "id": "77394785-c09e-47cc-b524-b42c90507419",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "binary-search",
+      "relatedProblems": [
+        "search-in-rotated-sorted-array",
+        "first-bad-version"
+      ],
+      "summary": "Use classic binary search to find the target in a sorted array."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start from the maximum possible capacity (sum of all package weights) and try to ship packages within the given number of days. If we can ship all packages within the given number of days, decrease the capacity and try again. Otherwise, increase the capacity and try again.",
+          "code": "class Solution {\n    func shipWithinDays(_ weights: [Int], _ D: Int) -> Int {\n        var maxCapacity = weights.reduce(0, +)\n        func canShip(_ capacity: Int) -> Bool {\n            var currentCapacity = 0\n            var days = 1\n            for weight in weights {\n                if weight > capacity {\n                    return false\n                }\n                if currentCapacity + weight > capacity {\n                    days += 1\n                    currentCapacity = 0\n                }\n                currentCapacity += weight\n            }\n            return days <= D\n        }\n        var minCapacity = maxCapacity\n        for capacity in stride(from: maxCapacity, to: 0, by: -1) {\n            if canShip(capacity) {\n                minCapacity = capacity\n                break\n            }\n        }\n        return minCapacity\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) as we only use a constant amount of space.",
+            "time": "O(n * sum(weights) * D)",
+            "timeExplanation": "The outer loop runs for sum(weights) iterations, and for each iteration, we iterate through the weights array, resulting in O(n * sum(weights)) time complexity. Additionally, we have a canShip function that runs in O(n * D) time complexity, resulting in a total time complexity of O(n * sum(weights) * D)."
+          },
+          "explanation": "This approach tries all possible capacities, which results in high time complexity. However, it serves as a baseline to understand how the problem can be approached.",
+          "id": "55d4e7a5-03af-4597-9f69-aafdbabfc010",
+          "intuition": "This approach works by trying all possible capacities and selecting the one that allows the packages to be shipped within the given number of days",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "15",
+              "explanation": "The minimum capacity required to ship all packages within 5 days is 15.",
+              "id": "a770ca75-bb83-4d86-9548-37330f29e497",
+              "input": "weights = [1,2,3,4,5,6,7,8,9,10], D = 5"
+            },
+            {
+              "expectedOutput": "6",
+              "explanation": "The minimum capacity required to ship all packages within 3 days is 6.",
+              "id": "4fbdb543-ea02-415d-9ece-99afd5069a3e",
+              "input": "weights = [3,2,2,4,1,4], D = 3"
+            }
+          ]
+        },
+        {
+          "approach": "Start with a range of possible capacities, from the maximum weight of a package to the sum of all package weights. Use binary search to find the minimum capacity within this range that allows the packages to be shipped within the given number of days.",
+          "code": "class Solution {\n    func shipWithinDays(_ weights: [Int], _ D: Int) -> Int {\n        let total = weights.reduce(0, +)\n        let maxWeight = weights.max()!\n        var left = maxWeight\n        var right = total\n        while left < right {\n            let mid = left + (right - left) / 2\n            if canShip(weights, mid, D) {\n                right = mid\n            }\n            else {\n                left = mid + 1\n            }\n        }\n        return left\n    }\n    func canShip(_ weights: [Int], _ capacity: Int, _ D: Int) -> Bool {\n        var currentCapacity = 0\n        var days = 1\n        for weight in weights {\n            if weight > capacity {\n                return false\n            }\n            if currentCapacity + weight > capacity {\n                days += 1\n                currentCapacity = 0\n            }\n            currentCapacity += weight\n        }\n        return days <= D\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) as we only use a constant amount of space.",
+            "time": "O(n * log(sum(weights)))",
+            "timeExplanation": "The while loop runs in O(log(sum(weights))) time complexity, and for each iteration, we call the canShip function, which runs in O(n) time complexity, resulting in a total time complexity of O(n * log(sum(weights)))."
+          },
+          "explanation": "This approach reduces the time complexity significantly compared to the brute force approach, making it more efficient for large inputs.",
+          "id": "883ae079-9bf1-4036-89ba-f571a9d21efb",
+          "intuition": "This approach works by using binary search to find the optimal capacity. The idea is to find the minimum capacity that allows the packages to be shipped within the given number of days.",
+          "name": "Optimized Binary Search",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "15",
+              "explanation": "The minimum capacity required to ship all packages within 5 days is 15.",
+              "id": "18b7c65c-c668-4f8e-9826-c9edb50c8d6f",
+              "input": "weights = [1,2,3,4,5,6,7,8,9,10], D = 5"
+            },
+            {
+              "expectedOutput": "6",
+              "explanation": "The minimum capacity required to ship all packages within 3 days is 6.",
+              "id": "e048228b-99e4-4170-a49b-2407da8dcd5c",
+              "input": "weights = [3,2,2,4,1,4], D = 3"
+            }
+          ]
+        }
+      ],
+      "id": "9d65b988-306b-4be1-999a-2c920c5bdd66",
+      "lastUpdated": "2026-02-06T21:55:29Z",
+      "problemSlug": "capacity-to-ship-packages-within-d-days",
+      "relatedProblems": [
+        "last-stone-weight",
+        "koko-eating-bananas"
+      ],
+      "summary": "This problem involves shipping packages within a certain number of days, with the goal of minimizing the capacity required. The key insight is to use binary search to find the optimal capacity."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start at the root node, and recursively traverse the left and right subtrees, counting each node visited.",
+          "code": "// Definition for a binary tree node.\n\nclass Solution {\n    func countNodes(_ root: TreeNode?) -> Int {\n        if root == nil {\n            return 0\n        }\n        return 1 + countNodes(root?.left) + countNodes(root?.right)\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The maximum depth of the recursive call stack can reach n, hence the space complexity is O(n).",
+            "time": "O(n)",
+            "timeExplanation": "In the worst case, we visit each node exactly once, resulting in a linear time complexity."
+          },
+          "explanation": "The brute force approach works by using DFS to traverse the entire tree, counting each node it encounters. However, this approach can be inefficient for large trees due to its O(n) time complexity.",
+          "id": "8292b03b-7c35-4d70-a3b7-c1389832f5b0",
+          "intuition": "This approach involves counting the nodes of the binary tree using a recursive depth-first search (DFS) traversal, which checks every node in the tree.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "6",
+              "explanation": "The binary tree has 6 nodes, so the function returns 6.",
+              "id": "9ee8df09-88e2-40de-af94-ecdb5e6bd7c1",
+              "input": "root = [1,2,3,4,5,6]"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "The binary tree is empty, so the function returns 0.",
+              "id": "6f98e500-6d87-4358-984a-7cbd89b1c845",
+              "input": "root = []"
+            }
+          ]
+        },
+        {
+          "approach": "Calculate the height of the tree, then use binary search to find the number of nodes in the last level.",
+          "code": "class Solution {\n    func countNodes(_ root: TreeNode?) -> Int {\n        guard let root = root else { return 0 }\n        var leftHeight = 0\n        var rightHeight = 0\n        var leftNode = root\n        var rightNode = root\n\n        // Calculate the height of the left and right subtrees\n        while leftNode.left != nil {\n            leftNode = leftNode.left!\n            leftHeight += 1\n        }\n\n        while rightNode.right != nil {\n            rightNode = rightNode.right!\n            rightHeight += 1\n        }\n\n        // If the left and right heights are equal, the tree is full\n        if leftHeight == rightHeight {\n            return (1 << (leftHeight + 1)) - 1\n        }\n\n        // Otherwise, use binary search to find the number of nodes in the last level\n        var low = 0\n        var high = (1 << leftHeight) - 1\n        while low <= high {\n            let mid = low + (high - low) / 2\n            let node = findNode(root, mid)\n            if node != nil {\n                low = mid + 1\n            } else {\n                high = mid - 1\n            }\n        }\n\n        return (1 << leftHeight) + low - 1\n    }\n\n    func findNode(_ root: TreeNode?, _ path: Int) -> TreeNode? {\n        var node = root\n        var path = path\n        for i in stride(from: 31, to: 0, by: -1) {\n            let bit = (path >> i) & 1\n            if bit == 1 {\n                node = node?.right\n            } else {\n                node = node?.left\n            }\n            if node == nil {\n                return nil\n            }\n        }\n        return node\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) as we only use a constant amount of space.",
+            "time": "O(log(n)^2)",
+            "timeExplanation": "We calculate the height of the tree and use binary search to find the number of nodes in the last level, resulting in a time complexity of O(log(n)^2)."
+          },
+          "explanation": "The optimized approach takes advantage of the fact that a complete binary tree has all levels fully occupied except for the last level, which is occupied from left to right. By using binary search to find the number of nodes in the last level, we can calculate the total number of nodes more efficiently.",
+          "id": "35d47281-9af0-4ae7-9c2f-dac312e391ad",
+          "intuition": "This approach involves using the properties of complete binary trees to calculate the number of nodes more efficiently, utilizing the concept of the height of the tree and binary search.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "6",
+              "explanation": "The binary tree has 6 nodes, so the function returns 6.",
+              "id": "a5ea16ef-3ab7-4319-92d1-0ace172be72e",
+              "input": "root = [1,2,3,4,5,6]"
+            },
+            {
+              "expectedOutput": "7",
+              "explanation": "The binary tree has 7 nodes, so the function returns 7.",
+              "id": "cb8929e7-84bc-48de-9ed2-5cbe4e8a8d00",
+              "input": "root = [1,2,3,4,5,6,7]"
+            }
+          ]
+        }
+      ],
+      "id": "b1eb4294-25e8-4720-8637-a2d4b3e57247",
+      "lastUpdated": "2026-02-06T21:10:45Z",
+      "problemSlug": "count-complete-tree-nodes",
+      "relatedProblems": [
+        "balanced-binary-tree",
+        "binary-tree-level-order-traversal"
+      ],
+      "summary": "Count Complete Tree Nodes involves calculating the number of nodes in a complete binary tree, with the key insight being the use of the properties of complete binary trees to optimize the counting process."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, calculate the sums of Alice's array and Bob's array. Then, iterate over each element in Alice's array and each element in Bob's array. For each pair of elements, check if swapping them would make the sums of the arrays equal.",
+          "code": "import Foundation\n\nclass Solution {\n    func fairCandySwap(_ aliceSizes: [Int], _ bobSizes: [Int]) -> [Int] {\n        let aliceSum = aliceSizes.reduce(0, +)\n        let bobSum = bobSizes.reduce(0, +)\n        \n        for (index, aliceSize) in aliceSizes.enumerated() {\n            for (bobIndex, bobSize) in bobSizes.enumerated() {\n                if (aliceSum - aliceSize + bobSize) == (bobSum - bobSize + aliceSize) {\n                    return [index, bobIndex]\n                }\n            }\n        }\n        return []\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are not using any additional data structures that scale with the input size.",
+            "time": "O(n*m)",
+            "timeExplanation": "The time complexity is O(n*m) where n and m are the sizes of Alice's array and Bob's array respectively, because we are iterating over each element in both arrays."
+          },
+          "explanation": "This approach works by trying all possible pairs of elements, which guarantees finding the correct pair if one exists. However, it has a high time complexity because it needs to iterate over all pairs of elements.",
+          "id": "b61c057e-efd8-4881-9d8e-e8c34336e28e",
+          "intuition": "The intuition behind this approach is to try all possible pairs of elements, one from Alice's array and one from Bob's array, and check if swapping them would make the sums of the arrays equal.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[0,1]",
+              "explanation": "Alice's array sum is 2, Bob's array sum is 4, so the difference is 2. Swapping the first element of Alice's array with the second element of Bob's array will make the sums of the arrays equal.",
+              "id": "4abc3b59-75bb-4f82-9b17-4f59bfb09189",
+              "input": "aliceSizes = [1,1], bobSizes = [2,2]"
+            },
+            {
+              "expectedOutput": "[0,0]",
+              "explanation": "Alice's array sum is 8, Bob's array sum is 6, so the difference is 2. Swapping the first element of Alice's array with the first element of Bob's array will make the sums of the arrays equal.",
+              "id": "a2e72fae-892b-49af-9474-a40ef833e9b9",
+              "input": "aliceSizes = [1,2,5], bobSizes = [2,4]"
+            }
+          ]
+        },
+        {
+          "approach": "First, calculate the sums of Alice's array and Bob's array. Then, create a hash table and store the elements of Bob's array in it. Iterate over Alice's array and for each element, check if the hash table contains an element that would make the sums of the arrays equal if swapped.",
+          "code": "class Solution {\n    func fairCandySwap(aliceSizes: [Int], bobSizes: [Int]) -> [Int] { let aliceSum = aliceSizes.reduce(0, +); let bobSum = bobSizes.reduce(0, +); var bobSet: Set<Int> = Set(bobSizes); for (index, aliceSize) in aliceSizes.enumerated() { let bobSize = aliceSize + (bobSum - aliceSum) / 2; if bobSet.contains(bobSize) { return [index, bobSizes.firstIndex(of: bobSize)!] } } return [] }\n}",
+          "complexity": {
+            "space": "O(m)",
+            "spaceExplanation": "The space complexity is O(m) because we are using a hash table to store the elements of Bob's array.",
+            "time": "O(n + m)",
+            "timeExplanation": "The time complexity is O(n + m) where n and m are the sizes of Alice's array and Bob's array respectively, because we are iterating over each element in both arrays once."
+          },
+          "explanation": "This approach works by using a hash table to store the elements of one of the arrays, which allows us to check if an element exists in constant time. This greatly reduces the time complexity compared to the brute-force approach.",
+          "id": "7b9a1266-71aa-4225-bd98-d1f6471f93ac",
+          "intuition": "The intuition behind this approach is to store the elements of one of the arrays in a hash table and then iterate over the other array, checking if the difference between the sums of the arrays divided by 2 is equal to the difference between the current element and any element in the hash table.",
+          "name": "Hash Table Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[0,1]",
+              "explanation": "Alice's array sum is 2, Bob's array sum is 4, so the difference is 2. Swapping the first element of Alice's array with the second element of Bob's array will make the sums of the arrays equal.",
+              "id": "42656b58-0174-4a01-ac71-7cc320594f07",
+              "input": "aliceSizes = [1,1], bobSizes = [2,2]"
+            },
+            {
+              "expectedOutput": "[0,0]",
+              "explanation": "Alice's array sum is 8, Bob's array sum is 6, so the difference is 2. Swapping the first element of Alice's array with the first element of Bob's array will make the sums of the arrays equal.",
+              "id": "442e0809-6690-4e98-a0be-604671ad9763",
+              "input": "aliceSizes = [1,2,5], bobSizes = [2,4]"
+            }
+          ]
+        }
+      ],
+      "id": "4fc66661-60f5-47f9-b1e2-5e55e567c24b",
+      "lastUpdated": "2026-02-06T21:46:33Z",
+      "problemSlug": "fair-candy-swap",
+      "relatedProblems": [
+        "array-partition-i",
+        "partition-equal-subset-sum"
+      ],
+      "summary": "This problem asks to find a pair of indices, one from Alice's array and one from Bob's array, such that swapping the elements at these indices will make the sum of each array equal. The key insight is to calculate the difference between the sums of the two arrays and find a pair of elements that have a difference of half this total difference."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Find first: if found, search left\n2. Find last: if found, search right",
+          "code": "class Solution {\n    func searchRange(_ nums: [Int], _ target: Int) -> [Int] {\n        func findFirst() -> Int {\n            var l = 0, r = nums.count - 1, result = -1\n            while l <= r {\n                let m = l + (r - l) / 2\n                if nums[m] == target { result = m; r = m - 1 }\n                else if nums[m] < target { l = m + 1 }\n                else { r = m - 1 }\n            }\n            return result\n        }\n        func findLast() -> Int {\n            var l = 0, r = nums.count - 1, result = -1\n            while l <= r {\n                let m = l + (r - l) / 2\n                if nums[m] == target { result = m; l = m + 1 }\n                else if nums[m] < target { l = m + 1 }\n                else { r = m - 1 }\n            }\n            return result\n        }\n        return [findFirst(), findLast()]\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Constant",
+            "time": "O(log n)",
+            "timeExplanation": "Two binary searches"
+          },
+          "explanation": "Standard binary search modified to continue searching after finding target.",
+          "id": "97753344-cc51-431f-9548-db5320c9fb0b",
+          "intuition": "Binary search for leftmost, binary search for rightmost.",
+          "name": "Two Binary Searches",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[3,4]",
+              "explanation": "8 at indices 3 and 4",
+              "id": "11428b6b-c386-460b-a25d-70ed0dfe90f1",
+              "input": "nums=[5,7,7,8,8,10], target=8"
+            }
+          ]
+        }
+      ],
+      "id": "7e0b5512-6155-4235-a11e-9f0b5bd79cd3",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "find-first-and-last-position-of-element-in-sorted-array",
+      "relatedProblems": [
+        "first-bad-version"
+      ],
+      "summary": "Find first and last position of target. Two binary searches: one for first, one for last."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize minimum as the first element\n2. Iterate through each element in the array\n3. Update minimum if current element is smaller\n4. Return the minimum value",
+          "code": "class Solution {\n    func findMin(_ nums: [Int]) -> Int {\n        var minVal = nums[0]\n        for num in nums {\n            minVal = min(minVal, num)\n        }\n        return minVal\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only using a single variable to track minimum",
+            "time": "O(n)",
+            "timeExplanation": "We iterate through all n elements once"
+          },
+          "explanation": "This brute force approach ignores the sorted and rotated properties of the array. While it always finds the correct answer, it's inefficient for large arrays since we check every element. The sorted nature of the array allows for a much faster binary search solution.",
+          "id": "40bf4c2b-75e1-454d-a3d4-5916ee3447b7",
+          "intuition": "Simply iterate through the array and track the minimum value. This works but doesn't leverage the sorted property of the array.",
+          "name": "Linear Scan",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "Original sorted array [1,2,3,4,5] was rotated 3 times. Minimum is 1.",
+              "id": "dc8d8c94-11b0-4153-ac45-fac7ed400572",
+              "input": "nums = [3,4,5,1,2]"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "Original sorted array [0,1,2,4,5,6,7] was rotated 4 times. Minimum is 0.",
+              "id": "abeb6e67-9c81-47df-85e5-f22e8659bc0d",
+              "input": "nums = [4,5,6,7,0,1,2]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize left = 0 and right = nums.count - 1\n2. While left < right:\n   a. Calculate mid = left + (right - left) / 2\n   b. If nums[mid] > nums[right], minimum is in right half: left = mid + 1\n   c. Else, minimum is in left half (including mid): right = mid\n3. Return nums[left] - this is the minimum",
+          "code": "class Solution {\n    func findMin(_ nums: [Int]) -> Int {\n        var left = 0\n        var right = nums.count - 1\n\n        while left < right {\n            let mid = left + (right - left) / 2\n\n            if nums[mid] > nums[right] {\n                // Minimum is in the right half\n                left = mid + 1\n            } else {\n                // Minimum is in the left half (including mid)\n                right = mid\n            }\n        }\n\n        return nums[left]\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only using a few pointer variables, constant extra space",
+            "time": "O(log n)",
+            "timeExplanation": "Binary search halves the search space each iteration, giving logarithmic time"
+          },
+          "explanation": "The key observation is that in a rotated sorted array, one half is always properly sorted. If nums[mid] > nums[right], the rotation pivot (minimum) must be in the right half because the left half is sorted but wraps around. If nums[mid] <= nums[right], the right half is sorted, so the minimum is in the left half or at mid. We keep narrowing until left equals right, pointing to the minimum.",
+          "id": "d00b0db8-ab9e-426f-8fe9-ab001db8c3c0",
+          "intuition": "In a rotated sorted array, the minimum element is at the pivot point where the rotation happened. We can use binary search: if the middle element is greater than the rightmost element, the minimum must be in the right half (the pivot is there). Otherwise, it's in the left half including middle.",
+          "name": "Binary Search",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "mid=2 (value 5) > right value 2, so search right. mid=3 (value 1) <= right value 2, narrow to left=right=3. Return nums[3]=1.",
+              "id": "e208782f-9974-4f4d-9fb7-ba5a78fb4920",
+              "input": "nums = [3,4,5,1,2]"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "Binary search finds pivot at index 4 where value drops from 7 to 0.",
+              "id": "51176458-db68-4792-b782-cd3659e978d3",
+              "input": "nums = [4,5,6,7,0,1,2]"
+            },
+            {
+              "expectedOutput": "11",
+              "explanation": "Array not rotated (or rotated n times). nums[mid] <= nums[right] always, converges to index 0.",
+              "id": "8b6880ea-660a-4d8b-806f-7f65ece839a2",
+              "input": "nums = [11,13,15,17]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "Small array rotated once. nums[0]=2 > nums[1]=1, so left becomes 1, return nums[1]=1.",
+              "id": "bfa3764d-9edf-43bb-8e8a-5e030a5de1e4",
+              "input": "nums = [2,1]"
+            }
+          ]
+        }
+      ],
+      "id": "aa1da3de-604d-4d1c-ae02-2f686cde5f5e",
+      "lastUpdated": "2026-02-06T08:21:29Z",
+      "problemSlug": "find-minimum-in-rotated-sorted-array",
+      "relatedProblems": [
+        "find-minimum-in-rotated-sorted-array-ii",
+        "search-in-rotated-sorted-array",
+        "search-in-rotated-sorted-array-ii"
+      ],
+      "summary": "Find the minimum element in a sorted array that has been rotated. The key insight is that the minimum is at the rotation pivot point, and we can use binary search to find it in O(log n) time by checking which half is sorted."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. If nums[mid] < nums[mid+1], search right\n2. Else search left (including mid)",
+          "code": "class Solution {\n    func findPeakElement(_ nums: [Int]) -> Int {\n        var l = 0, r = nums.count - 1\n        while l < r {\n            let m = l + (r - l) / 2\n            if nums[m] < nums[m + 1] { l = m + 1 }\n            else { r = m }\n        }\n        return l\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Constant",
+            "time": "O(log n)",
+            "timeExplanation": "Binary search"
+          },
+          "explanation": "We're guaranteed to find a peak because we move toward the larger neighbor.",
+          "id": "e9dcd8a6-7e56-434f-a903-122325e984ac",
+          "intuition": "If mid < mid+1, increasing so peak must be on right. Else peak on left or mid.",
+          "name": "Binary Search",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "3 is peak at index 2",
+              "id": "c3aa5432-f616-41d8-8fd6-c071f31c729b",
+              "input": "[1,2,3,1]"
+            }
+          ]
+        }
+      ],
+      "id": "0f0f4ed4-11fd-48be-bc27-0bb4ee6fcea0",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "find-peak-element",
+      "relatedProblems": [
+        "peak-index-in-a-mountain-array"
+      ],
+      "summary": "Find any peak (element greater than neighbors). Binary search: if mid < mid+1, peak on right."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each interval, iterate through the list of intervals and find the first interval that starts after the current interval ends",
+          "code": "class Solution {\n    func findRightInterval(intervals: [[Int]]) -> [Int] {\n        var result = [Int]()\n        for i in 0..<intervals.count {\n            var found = -1\n            for j in 0..<intervals.count {\n                if intervals[j][0] >= intervals[i][1] {\n                    if found == -1 || intervals[j][0] < intervals[found][0] {\n                        found = j\n                    }\n                }\n            }\n            result.append(found)\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are only using a constant amount of space to store the result.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) because for each interval, we are comparing it with all other intervals."
+          },
+          "explanation": "The brute force approach has a time complexity of O(n^2) because for each interval, we are comparing it with all other intervals.",
+          "id": "146d1ef5-f208-4385-92f5-02124d05d1f6",
+          "intuition": "This approach works by iterating through each interval and comparing it with all other intervals to find the right interval.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "-1",
+              "explanation": "There is no interval that starts after [1,2] ends, so the result is -1.",
+              "id": "4156a0bb-57ae-44f9-871b-3bb6b5056b15",
+              "input": "intervals = [[1,2]]"
+            },
+            {
+              "expectedOutput": "-1,0,1,-1",
+              "explanation": "The right interval for [3,4] is -1, for [2,3] is [1,2], for [1,2] is [2,3], and for [4,5] is -1.",
+              "id": "ff817f97-aa6a-4aa6-8c93-e86765e2a24d",
+              "input": "intervals = [[3,4],[2,3],[1,2],[4,5]]"
+            }
+          ]
+        },
+        {
+          "approach": "Sort the intervals based on their start points and use a map to store the index of each interval. Then, for each interval, find the first interval that starts after it ends using binary search.",
+          "code": "class Solution {\n    func findRightInterval(intervals: [[Int]]) -> [Int] {\n        let sortedIntervals = intervals.enumerated().sorted(by: {\n            $0.element[0] < $1.element[0]\n        }\n        )\n        var result = [Int]()\n        for i in 0..<intervals.count {\n            let index = binarySearch(intervals: sortedIntervals, target: intervals[i][1])\n            if index != -1 {\n                result.append(sortedIntervals[index].offset)\n            }\n            else {\n                result.append(-1)\n            }\n        }\n        return result\n    }\n    func binarySearch(intervals: [(offset: Int, element: [Int])], target: Int) -> Int {\n        var left = 0\n        var right = intervals.count - 1\n        while left <= right {\n            let mid = left + (right - left) / 2\n            if intervals[mid].element[0] == target {\n                return mid\n            }\n            else if intervals[mid].element[0] < target {\n                left = mid + 1\n            }\n            else {\n                right = mid - 1\n            }\n        }\n        if left < intervals.count && intervals[left].element[0] > target {\n            return left\n        }\n        return -1\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing the sorted intervals and the result.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity is O(n log n) because we are sorting the intervals and using binary search to find the right interval."
+          },
+          "explanation": "The optimized approach has a time complexity of O(n log n) because we are sorting the intervals and using binary search to find the right interval.",
+          "id": "aa544caf-6e36-4c5e-ae89-d79bfca9b825",
+          "intuition": "This approach works by sorting the intervals based on their start points and using a map to store the index of each interval.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "-1",
+              "explanation": "There is no interval that starts after [1,2] ends, so the result is -1.",
+              "id": "b92e44b5-d0e8-48a5-9e43-ec84ba236a62",
+              "input": "intervals = [[1,2]]"
+            },
+            {
+              "expectedOutput": "-1,0,1,-1",
+              "explanation": "The right interval for [3,4] is -1, for [2,3] is [1,2], for [1,2] is [2,3], and for [4,5] is -1.",
+              "id": "a34227bd-73a7-4207-8dc3-05358e1382a4",
+              "input": "intervals = [[3,4],[2,3],[1,2],[4,5]]"
+            }
+          ]
+        }
+      ],
+      "id": "f77bbf17-b56c-4435-acf5-7ba8f926c6b3",
+      "lastUpdated": "2026-02-06T21:18:41Z",
+      "problemSlug": "find-right-interval",
+      "relatedProblems": [
+        "insert-interval",
+        "merge-intervals"
+      ],
+      "summary": "The problem requires finding the right interval for each given interval in a list of intervals, where the right interval is defined as the first interval that starts after the given interval ends. The key insight is to use a map to store the end points of the intervals and sort the intervals based on their start points."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Iterate over the list, compare each letter to the target, and return the smallest letter that is greater than the target.",
+          "code": "class Solution {\n    func nextGreatestLetter(_ letters: [Character], _ target: Character) -> Character {\n        var smallest = Character(\"z\")\n        for letter in letters {\n            if letter > target && letter < smallest {\n                smallest = letter\n            }\n        }\n        return smallest == \"z\" ? letters[0] : smallest\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We use a constant amount of space to store the smallest letter, so the space complexity is constant.",
+            "time": "O(n)",
+            "timeExplanation": "We iterate over the list once, so the time complexity is linear."
+          },
+          "explanation": "Start by iterating over the list of letters. Compare each letter to the target. If a letter is greater than the target, compare it to the current smallest letter. If the current letter is smaller than the current smallest letter, update the smallest letter.",
+          "id": "67812547-07e2-4d9f-b61d-f903573f472a",
+          "intuition": "This approach involves iterating over the list of letters to find the smallest one greater than the target.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"c\"",
+              "explanation": "The smallest letter greater than \"a\" is \"c\".",
+              "id": "ea52cc71-c26e-4554-acf9-b98f40a14f2a",
+              "input": "letters = [\"c\",\"f\",\"j\"], target = \"a\""
+            },
+            {
+              "expectedOutput": "\"f\"",
+              "explanation": "The smallest letter greater than \"d\" is \"f\".",
+              "id": "dcc9e6a6-22b7-43c8-a3d1-a39a208a6103",
+              "input": "letters = [\"c\",\"f\",\"j\"], target = \"d\""
+            },
+            {
+              "expectedOutput": "\"c\"",
+              "explanation": "Since there is no letter greater than \"j\" in the list, the function returns the smallest letter in the list, which is \"c\".",
+              "id": "9daf971d-050f-4d89-b1e6-4202f44fbd02",
+              "input": "letters = [\"c\",\"f\",\"j\"], target = \"j\""
+            }
+          ]
+        },
+        {
+          "approach": "Use a binary search algorithm to find the first letter that is greater than the target.",
+          "code": "class Solution {\n    func nextGreatestLetter(_ letters: [Character], _ target: Character) -> Character {\n        let n = letters.count\n        var left = 0\n        var right = n\n        while left < right {\n            let mid = left + (right - left) / 2\n            if letters[mid] <= target {\n                left = mid + 1\n            } else {\n                right = mid\n            }\n        }\n        return left == n ? letters[0] : letters[left]\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We use a constant amount of space to store the pointers, so the space complexity is constant.",
+            "time": "O(log n)",
+            "timeExplanation": "We use a binary search algorithm, so the time complexity is logarithmic."
+          },
+          "explanation": "Start by initializing two pointers, one at the start of the list and one at the end. Compare the middle element to the target. If the middle element is less than or equal to the target, move the left pointer to the right of the middle element. If the middle element is greater than the target, move the right pointer to the left of the middle element. Repeat this process until the left pointer is greater than the right pointer. If the left pointer is within the bounds of the list, return the element at the left pointer. Otherwise, return the first element in the list.",
+          "id": "246feaca-99ae-4f14-81ad-7e44d1c47b64",
+          "intuition": "This approach involves using a modified binary search algorithm to find the smallest letter greater than the target.",
+          "name": "Binary Search",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "\"c\"",
+              "explanation": "The smallest letter greater than \"a\" is \"c\".",
+              "id": "c8964fc2-95a6-411f-a84a-82e254c2449b",
+              "input": "letters = [\"c\",\"f\",\"j\"], target = \"a\""
+            },
+            {
+              "expectedOutput": "\"f\"",
+              "explanation": "The smallest letter greater than \"d\" is \"f\".",
+              "id": "57b8a397-a37d-4193-9052-f28bc55b62c2",
+              "input": "letters = [\"c\",\"f\",\"j\"], target = \"d\""
+            },
+            {
+              "expectedOutput": "\"c\"",
+              "explanation": "Since there is no letter greater than \"j\" in the list, the function returns the smallest letter in the list, which is \"c\".",
+              "id": "6f12a5e1-0c1f-43a3-82ca-523ae989b19e",
+              "input": "letters = [\"c\",\"f\",\"j\"], target = \"j\""
+            }
+          ]
+        }
+      ],
+      "id": "5a8d8261-b0e0-4452-a7b2-18914a920f16",
+      "lastUpdated": "2026-02-06T21:37:02Z",
+      "problemSlug": "find-smallest-letter-greater-than-target",
+      "relatedProblems": [
+        "find-first-and-last-position-of-element-in-sorted-array",
+        "search-a-2d-matrix-ii"
+      ],
+      "summary": "Find Smallest Letter Greater Than Target problem requires finding the smallest letter in a sorted list of letters that is greater than a target letter. The key insight is that this problem can be solved using a modified binary search algorithm."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. If mid is bad, answer is mid or before\n2. If mid is good, answer is after mid",
+          "code": "class Solution {\n    func firstBadVersion(_ n: Int) -> Int {\n        var left = 1, right = n\n        while left < right {\n            let mid = left + (right - left) / 2\n            if isBadVersion(mid) {\n                right = mid\n            } else {\n                left = mid + 1\n            }\n        }\n        return left\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Two variables",
+            "time": "O(log n)",
+            "timeExplanation": "Binary search"
+          },
+          "explanation": "Find boundary where versions change from good to bad.",
+          "id": "ad7efb6b-ca76-4337-af56-18d23df39e1e",
+          "intuition": "Binary search for leftmost bad version.",
+          "name": "Binary Search",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "First bad is version 4",
+              "id": "709769b7-7f42-473e-8d60-cdc676c97dd6",
+              "input": "n = 5, bad = 4"
+            }
+          ]
+        }
+      ],
+      "id": "66b091fa-bdb1-46b8-8791-6d8de4cdde00",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "first-bad-version",
+      "relatedProblems": [
+        "binary-search"
+      ],
+      "summary": "Find first bad version using binary search. Minimize calls to isBadVersion API."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start with the lowest possible number and guess it, if the guess is lower than the actual number, try the next number, and if the guess is higher than the actual number, the game ends, so we start again from the beginning.",
+          "code": "class Solution {\n    func guessNumber(_ n: Int) -> Int { for i in 1...n { if guess(i) == 0 { return i } } return -1 }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we only use a few extra variables to store the current guess and the result of the guess.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we might need to try all numbers from 1 to n."
+          },
+          "explanation": "The brute-force approach checks every number from 1 to n in order, so it will eventually find the correct number, but this will take a long time for large values of n.",
+          "id": "dbd04df7-0393-40aa-bd0e-acda963b33a4",
+          "intuition": "This approach works by trying every possible number in a sequential manner until we find the correct one.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "6",
+              "explanation": "The number to guess is 6, so after trying numbers 1 through 5 and getting the result that the guess is too low, we guess 6 and get that it is correct.",
+              "id": "a063a098-da1b-4f30-8d76-47de1368fdec",
+              "input": "n = 10, pick = 6"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The number to guess is 1, so after trying number 1, we find that it is correct.",
+              "id": "1b93b18c-593a-49a6-9086-1e6507f86d8c",
+              "input": "n = 1, pick = 1"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "The number to guess is 2, so after trying number 1 and getting the result that the guess is too low, we try 2 and find that it is correct.",
+              "id": "e080d405-3af7-468d-a6e9-12c4940a2dde",
+              "input": "n = 2, pick = 2"
+            }
+          ]
+        },
+        {
+          "approach": "Start with the range of possible numbers and calculate the middle number, guess the middle number and get the result, if the guess is too low, repeat the process with the upper half of the range, and if the guess is too high, repeat the process with the lower half of the range.",
+          "code": "class Solution {\n    func guessNumber(_ n: Int) -> Int { var left = 1, right = n; while left <= right { let mid = left + (right - left) / 2; let result = guess(mid); if result == 0 { return mid } else if result == 1 { left = mid + 1 } else { right = mid - 1 } } return -1 }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we only use a few extra variables to store the current range and the result of the guess.",
+            "time": "O(log n)",
+            "timeExplanation": "The time complexity is O(log n) because we divide the search space in half with each guess."
+          },
+          "explanation": "The binary search approach checks the middle number of the current range and eliminates half of the range based on the result of the guess, so it can find the correct number much faster than the brute-force approach.",
+          "id": "a523aefb-7817-49f7-a325-49969b623f12",
+          "intuition": "This approach works by repeatedly dividing the search space in half and searching for the correct number in one of the two halves.",
+          "name": "Binary Search Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "6",
+              "explanation": "The number to guess is 6, so after trying the middle number 5 and getting the result that the guess is too low, we guess the middle number of the upper half, which is 7, and then guess the middle number of the range 6 to 7, which is 6, and find that it is correct.",
+              "id": "38afe296-f4b1-4c42-9228-09d7978d21cf",
+              "input": "n = 10, pick = 6"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The number to guess is 1, so after trying number 1, we find that it is correct.",
+              "id": "599fba03-9426-4d62-9060-f8372279cf68",
+              "input": "n = 1, pick = 1"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "The number to guess is 2, so after trying the middle number 1 and getting the result that the guess is too low, we try 2 and find that it is correct.",
+              "id": "cbbb7d79-7332-4a53-a45d-ca804342ba33",
+              "input": "n = 2, pick = 2"
+            }
+          ]
+        }
+      ],
+      "id": "2846646f-7bba-41dd-8824-4b69870f8dc7",
+      "lastUpdated": "2026-02-06T21:14:37Z",
+      "problemSlug": "guess-number-higher-or-lower",
+      "relatedProblems": [
+        "first-bad-version",
+        "find-first-and-last-position-of-element-in-sorted-array"
+      ],
+      "summary": "Guess Number Higher or Lower is a game where you are given a number to guess, and after each guess, you are given a hint that the number you guessed is either higher or lower than the actual number, and the goal is to find the number in as few guesses as possible, with the key insight being that a binary search strategy can efficiently solve this problem."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Sort the citations list in descending order. For each possible value of h, check if the hth paper has at least h citations. If it does, update the h-index.",
+          "code": "class Solution {\n    func hIndex(_ citations: [Int]) -> Int {\n        var citations = citations\n        citations.sort { $0 > $1 }\n        var hIndex = 0\n        for (i, citation) in citations.enumerated() {\n            if citation >= i + 1 {\n                hIndex = i + 1\n            } else {\n                break\n            }\n        }\n        return hIndex\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we need to store the sorted citations list.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity is O(n log n) because of the sorting operation."
+          },
+          "explanation": "This approach is straightforward but inefficient because it involves iterating over all possible values of h and checking the citations list for each value.",
+          "id": "a7b49b3e-cc37-40b2-b06e-a0be833dd8d8",
+          "intuition": "This approach works by iterating over all possible values of h and checking if the given h papers have at least h citations.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "The researcher has 3 papers, one with 1 citation, one with 3 citations, and one with 1 citation. The h-index is 1 because the researcher has 1 paper with at least 1 citation.",
+              "id": "ad2b635d-9a6c-4bb5-8fd3-f2a7ed928dc9",
+              "input": "citations = [1,3,1]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "The researcher has 5 papers, one with 1 citation, one with 3 citations, one with 7 citations, one with 4 citations, and one with 1 citation. The h-index is 2 because the researcher has 2 papers with at least 2 citations.",
+              "id": "a02b87e9-ec6f-4279-9a6c-823c858ee1f2",
+              "input": "citations = [1,3,7,4,1]"
+            }
+          ]
+        },
+        {
+          "approach": "Initialize the low and high pointers for binary search. For each mid value, check if the citations list has at least mid papers with at least mid citations. If it does, update the low pointer. Otherwise, update the high pointer.",
+          "code": "import Foundation\n\nclass Solution {\n    func hIndex(_ citations: [Int]) -> Int {\n        let n = citations.count\n        var low = 0\n        var high = n\n        while low <= high {\n            let mid = low + (high - low) / 2\n            if citations.count - mid <= mid && citations[citations.count - mid] >= mid {\n                low = mid + 1\n            } else {\n                high = mid - 1\n            }\n        }\n        return low\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we only need a constant amount of space to store the low and high pointers.",
+            "time": "O(log n)",
+            "timeExplanation": "The time complexity is O(log n) because of the binary search operation."
+          },
+          "explanation": "This approach is more efficient than the brute force approach because it uses binary search to find the h-index.",
+          "id": "7a8b153b-ed33-4625-9bdd-330b765c1f81",
+          "intuition": "This approach works by using binary search to find the h-index in the range of possible values.",
+          "name": "Optimized Binary Search Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "The researcher has 3 papers, one with 1 citation, one with 3 citations, and one with 1 citation. The h-index is 1 because the researcher has 1 paper with at least 1 citation.",
+              "id": "ccef2245-4a21-468a-ab48-0d45482b84e3",
+              "input": "citations = [1,3,1]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The researcher has 1 paper with 100 citations. The h-index is 1 because the researcher has 1 paper with at least 1 citation.",
+              "id": "d5aeb1d5-9873-4381-8120-466903996d77",
+              "input": "citations = [100]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "The researcher has 5 papers, one with 1 citation, one with 3 citations, one with 7 citations, one with 4 citations, and one with 1 citation. The h-index is 2 because the researcher has 2 papers with at least 2 citations.",
+              "id": "4f18f4fc-9888-4eb9-9928-ed6ffe5e4790",
+              "input": "citations = [1,3,7,4,1]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The researcher has 4 papers, all with 0 citations, except for one paper with 1 citation. The h-index is 1 because the researcher has 1 paper with at least 1 citation.",
+              "id": "f03ad772-854f-483f-a264-2e8c1c01dc30",
+              "input": "citations = [0,0,0,1]"
+            }
+          ]
+        }
+      ],
+      "id": "ccee6121-61a7-40b7-873c-39b690f40405",
+      "lastUpdated": "2026-02-06T21:11:57Z",
+      "problemSlug": "h-index-ii",
+      "relatedProblems": [
+        "h-index",
+        "h-index-iii"
+      ],
+      "summary": "The H-Index II problem involves finding the h-index of a researcher given a list of citations, and a key insight is to use binary search to efficiently find the h-index. The researcher's h-index is the largest number h such that the given h papers have at least h citations."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. left = 1, right = max(piles)\n2. Binary search:\n   a. Calculate hours needed at mid speed\n   b. If hours <= h, try smaller k (right = mid)\n   c. If hours > h, need faster k (left = mid + 1)\n3. Return left",
+          "code": "class Solution {\n    func minEatingSpeed(_ piles: [Int], _ h: Int) -> Int {\n        var left = 1\n        var right = piles.max()!\n\n        while left < right {\n            let mid = left + (right - left) / 2\n            let hours = hoursNeeded(piles, mid)\n\n            if hours <= h {\n                right = mid  // mid works, try smaller\n            } else {\n                left = mid + 1  // mid too slow\n            }\n        }\n\n        return left\n    }\n\n    func hoursNeeded(_ piles: [Int], _ k: Int) -> Int {\n        var hours = 0\n        for pile in piles {\n            hours += (pile + k - 1) / k  // Ceiling division\n        }\n        return hours\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only using variables",
+            "time": "O(n log m)",
+            "timeExplanation": "Binary search O(log m) on max pile size, each iteration O(n) to sum hours"
+          },
+          "explanation": "At speed k, pile of size p takes ceil(p/k) hours. Sum all pile times. If total <= h, k works but maybe a smaller k also works. If total > h, k is too slow. We binary search to find the minimum working k. Using left = mid when feasible ensures we find the minimum.",
+          "id": "a31f38a6-9027-4960-8ead-3892edb759cf",
+          "intuition": "The answer k is in range [1, max(piles)]. Higher k means fewer hours. Binary search to find minimum k where we can finish in time.",
+          "name": "Binary Search on Speed",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "At k=4: 1+2+2+3=8 hours. At k=3: 1+2+3+4=10 hours (too slow).",
+              "id": "372f9874-57fb-490b-9f49-5026baaa2104",
+              "input": "piles = [3,6,7,11], h = 8"
+            },
+            {
+              "expectedOutput": "30",
+              "explanation": "With 5 piles and 5 hours, need to eat each pile in 1 hour. Max pile is 30.",
+              "id": "52dfefde-a685-48b9-b335-664f2ee943fc",
+              "input": "piles = [30,11,23,4,20], h = 5"
+            },
+            {
+              "expectedOutput": "23",
+              "explanation": "Can split largest pile across 2 hours. k=23 gives 2+1+1+1+1=6 hours.",
+              "id": "09547910-5a64-48cd-840d-36f65418171c",
+              "input": "piles = [30,11,23,4,20], h = 6"
+            }
+          ]
+        },
+        {
+          "approach": "1. min_k = 1, max_k = max(piles)\n2. Binary search to find leftmost k where canFinish(k, h)\n3. canFinish checks if sum of ceil(pile/k) <= h",
+          "code": "class Solution {\n    func minEatingSpeed(_ piles: [Int], _ h: Int) -> Int {\n        func canFinish(_ k: Int) -> Bool {\n            var totalHours = 0\n            for pile in piles {\n                totalHours += (pile + k - 1) / k\n                if totalHours > h { return false }  // Early exit\n            }\n            return true\n        }\n\n        var left = 1\n        var right = piles.max()!\n\n        while left < right {\n            let mid = left + (right - left) / 2\n            if canFinish(mid) {\n                right = mid\n            } else {\n                left = mid + 1\n            }\n        }\n\n        return left\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Constant extra space",
+            "time": "O(n log m)",
+            "timeExplanation": "Same complexity with potential early exit optimization"
+          },
+          "explanation": "This version explicitly defines the feasibility function canFinish. We're looking for the minimum k in the 'feasible' region. The transition from infeasible to feasible happens exactly once as k increases, making binary search applicable.",
+          "id": "c016e983-e3c5-4178-b8c8-0b3a2a816bbf",
+          "intuition": "Same algorithm but with clearer reasoning about bounds. Minimum possible k is 1 (though may not finish in time). Maximum useful k is max pile (anything higher is wasteful).",
+          "name": "Binary Search (Explicit Bounds)",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "canFinish(4)=true, canFinish(3)=false, so answer is 4",
+              "id": "94eaf6fd-ceb2-4ba7-8ffa-4ace1ac22cba",
+              "input": "piles = [3,6,7,11], h = 8"
+            }
+          ]
+        }
+      ],
+      "id": "b5687d2c-91a9-4268-8fc5-5b7f310fdaad",
+      "lastUpdated": "2026-02-06T08:40:26Z",
+      "problemSlug": "koko-eating-bananas",
+      "relatedProblems": [
+        "minimize-max-distance-to-gas-station",
+        "capacity-to-ship-packages-within-d-days",
+        "split-array-largest-sum"
+      ],
+      "summary": "Find minimum eating speed k to finish all banana piles within h hours. Binary search on k: for each k, calculate total hours needed. Find smallest k where hours <= h."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, we flatten the matrix into a single array. Then, we sort the array in ascending order. Finally, we return the kth smallest element in the array, which is the element at index k-1.",
+          "code": "class Solution {\n    import Foundation\n\n    func kthSmallest(_ matrix: [[Int]], _ k: Int) -> Int {\n        let flatArray = matrix.flatMap { $0 }\n        let sortedArray = flatArray.sorted()\n        return sortedArray[k-1]\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) as we need to store the flattened array.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity is O(n log n) due to the sorting operation, where n is the total number of elements in the matrix."
+          },
+          "explanation": "This approach has a time complexity of O(n log n) due to the sorting operation, where n is the total number of elements in the matrix. The space complexity is O(n) as we need to store the flattened array.",
+          "id": "5fb48287-6dc1-4224-b356-30302fab130f",
+          "intuition": "This approach involves flattening the sorted matrix into a single array and then finding the kth smallest element in the array.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "13",
+              "explanation": "The sorted array is [1,5,9,10,11,12,13,13,15]. The 8th smallest element is 13.",
+              "id": "c4c2c466-0551-4263-8f61-9338fc713262",
+              "input": "matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8"
+            },
+            {
+              "expectedOutput": "11",
+              "explanation": "The sorted array is [1,3,5,6,7,11,12,14,14]. The 6th smallest element is 11.",
+              "id": "36637c66-a4b5-4219-aee4-440e177714e9",
+              "input": "matrix = [[1,3,5],[6,7,12],[11,14,14]], k = 6"
+            }
+          ]
+        },
+        {
+          "approach": "First, we initialize the min-heap with the first element of each row in the matrix. Then, we pop the smallest element from the min-heap k times and store the kth smallest element in a variable. If the popped element is not the last element in its row, we push the next element in its row into the min-heap.",
+          "code": "class Solution {\n    import Foundation\n\n    func kthSmallest(_ matrix: [[Int]], _ k: Int) -> Int {\n        var minHeap = [Element]()\n        for i in 0..<matrix.count {\n            minHeap.append(Element(val: matrix[i][0], row: i, col: 0))\n        }\n\n        var heap = Heap(minHeap, isSorted: true)\n        heap.sort()\n\n        var kthSmallest = 0\n\n        for _ in 1...k {\n            let smallest = heap.pop()\n            kthSmallest = smallest.val\n\n            if smallest.col + 1 < matrix[smallest.row].count {\n                heap.insert(Element(val: matrix[smallest.row][smallest.col + 1], row: smallest.row, col: smallest.col + 1))\n                heap.sort()\n            }\n        }\n\n        return kthSmallest\n    }\n\n    struct Element {\n        let val: Int\n        let row: Int\n        let col: Int\n    }\n\n    struct Heap {\n        var elements: [Element]\n        let isSorted: Bool\n\n        init(_ elements: [Element], isSorted: Bool) {\n            self.elements = elements\n            self.isSorted = isSorted\n        }\n\n        mutating func sort() {\n            if isSorted {\n                elements.sort { $0.val < $1.val }\n            }\n        }\n\n        mutating func insert(_ element: Element) {\n            elements.append(element)\n        }\n\n        mutating func pop() -> Element {\n            let smallest = elements.removeFirst()\n            sort()\n            return smallest\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) as we need to store the min-heap.",
+            "time": "O(k log n)",
+            "timeExplanation": "The time complexity is O(k log n) due to the heap operations, where n is the number of rows in the matrix."
+          },
+          "explanation": "This approach has a time complexity of O(k log n) due to the heap operations, where n is the number of rows in the matrix. The space complexity is O(n) as we need to store the min-heap.",
+          "id": "7c4abac2-034e-4517-9bb1-e150329e647f",
+          "intuition": "This approach involves using a min-heap data structure to keep track of the kth smallest element in the matrix.",
+          "name": "Min-Heap Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "13",
+              "explanation": "The 8th smallest element in the sorted array is 13.",
+              "id": "3a04ee1d-fa8d-45a6-91db-18696ff935a7",
+              "input": "matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8"
+            },
+            {
+              "expectedOutput": "11",
+              "explanation": "The 6th smallest element in the sorted array is 11.",
+              "id": "a5b5fd53-676b-45f2-a293-509c9beab5bb",
+              "input": "matrix = [[1,3,5],[6,7,12],[11,14,14]], k = 6"
+            }
+          ]
+        }
+      ],
+      "id": "a51d7305-f3f3-4904-82ca-089aca0c2899",
+      "lastUpdated": "2026-02-06T21:14:58Z",
+      "problemSlug": "kth-smallest-element-in-a-sorted-matrix",
+      "relatedProblems": [
+        "kth-largest-element-in-an-array",
+        "find-k-pairs-with-smallest-sums"
+      ],
+      "summary": "This problem involves finding the kth smallest element in a sorted matrix and can be solved using a brute force approach or an optimized approach using a min-heap data structure."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start from each element in the array, generate all possible subarrays and count the number of zeros in each subarray, keep track of the maximum length of the subarray with at most K zeros.",
+          "code": "class Solution {\n    func longestOnes(_ nums: [Int], _ k: Int) -> Int {\n        var maxLength = 0\n        for i in 0..<nums.count {\n            var zeros = 0\n            for j in i..<nums.count {\n                if nums[j] == 0 {\n                    zeros += 1\n                }\n                if zeros <= k {\n                    maxLength = max(maxLength, j - i + 1)\n                }\n            }\n        }\n        return maxLength\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "No additional space is used, so the space complexity is O(1).",
+            "time": "O(n^2)",
+            "timeExplanation": "There are two nested loops, each of which iterates over the array, resulting in a time complexity of O(n^2)."
+          },
+          "explanation": "For each possible subarray, count the number of zeros, if the number of zeros is less than or equal to K, update the maximum length, otherwise, move to the next subarray.",
+          "id": "f85dcda5-d383-4406-b135-3c92a3afd20a",
+          "intuition": "This approach involves checking every possible subarray and counting the number of zeros in each subarray, it works because it exhaustively considers all possible subarrays.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "6",
+              "explanation": "The longest subarray with at most 2 zeros after flipping is [1,1,1,0,0,1].",
+              "id": "a090b1be-77a5-469c-b79f-29a78d64d22d",
+              "input": "nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "The longest subarray with at most 0 zeros after flipping is [1,1,1].",
+              "id": "4ff344ce-5cbc-4bc0-b327-be4efefdecf4",
+              "input": "nums = [1,1,1], k = 0"
+            }
+          ]
+        },
+        {
+          "approach": "Maintain a sliding window, expand the window to the right and count the number of zeros, if the number of zeros exceeds K, shrink the window from the left, keep track of the maximum length of the window.",
+          "code": "class Solution {\n    func longestOnes(_ nums: [Int], _ k: Int) -> Int {\n        var maxLength = 0\n        var left = 0\n        var zeros = 0\n        for right in 0..<nums.count {\n            if nums[right] == 0 {\n                zeros += 1\n            }\n            while zeros > k {\n                if nums[left] == 0 {\n                    zeros -= 1\n                }\n                left += 1\n            }\n            maxLength = max(maxLength, right - left + 1)\n        }\n        return maxLength\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "No additional space is used, so the space complexity is O(1).",
+            "time": "O(n)",
+            "timeExplanation": "There is a single loop that iterates over the array, resulting in a time complexity of O(n)."
+          },
+          "explanation": "Initialize two pointers, left and right, to the start of the array, expand the window to the right by moving the right pointer, if the number of zeros exceeds K, shrink the window from the left by moving the left pointer.",
+          "id": "94bcd4f2-89b0-40a9-88c5-3317bbdbef56",
+          "intuition": "This approach involves using a sliding window to track the maximum length of the subarray with at most K zeros, it works because it efficiently traverses the array and only considers the relevant subarrays.",
+          "name": "Sliding Window",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "6",
+              "explanation": "The longest subarray with at most 2 zeros after flipping is [1,1,1,0,0,1].",
+              "id": "14409bcc-d9b9-4390-91a0-3f1d9fe690a7",
+              "input": "nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2"
+            },
+            {
+              "expectedOutput": "10",
+              "explanation": "The longest subarray with at most 3 zeros after flipping is [1,1,0,0,0,1,1,1,1,0].",
+              "id": "6e4a1792-93c9-4340-96b0-bc76e78d176c",
+              "input": "nums = [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], k = 3"
+            }
+          ]
+        }
+      ],
+      "id": "8ef9b969-8edd-4a73-a00b-6e35568fd806",
+      "lastUpdated": "2026-02-06T21:54:47Z",
+      "problemSlug": "max-consecutive-ones-iii",
+      "relatedProblems": [
+        "max-consecutive-ones",
+        "max-consecutive-ones-ii"
+      ],
+      "summary": "The problem asks to find the longest subarray with at most K zeros after flipping, key insight is using a sliding window approach to track the maximum length of the subarray. The problem can be solved by considering all possible subarrays and checking the number of zeros in each subarray, or by utilizing a sliding window to efficiently traverse the array."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Create all possible substrings for both arrays, compare them and keep track of the longest matching one.",
+          "code": "class Solution {\n    func findLength(_ nums1: [Int], _ nums2: [Int]) -> Int {\n       var maxLength = 0\n       for i in 0..<nums1.count {\n          for j in 0..<nums2.count {\n             var k = 0\n             while i + k < nums1.count && j + k < nums2.count && nums1[i + k] == nums2[j + k] {\n                k += 1\n             }\n             maxLength = max(maxLength, k)\n          }\n       }\n       return maxLength\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only using a constant amount of space.",
+            "time": "O(n^3)",
+            "timeExplanation": "Three nested loops over the input array."
+          },
+          "explanation": "We generate all substrings and check each one against all substrings of the other array. We keep track of the longest match found.",
+          "id": "0b752d73-26ff-45cc-9b76-7e455c0fcc9b",
+          "intuition": "This works because we're checking all possible substrings in both arrays.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "The repeated subarray with maximum length is [3,2,1]",
+              "id": "fe2e5664-c053-4525-867c-821a67df25c1",
+              "input": "nums1 = [1,2,3,2,1], nums2 = [3,2,1,4,7]"
+            },
+            {
+              "expectedOutput": "5",
+              "explanation": "The repeated subarray with maximum length is [0,0,0,0,0]",
+              "id": "9fa278f4-b79f-4b2f-85ba-55a8bdfda69a",
+              "input": "nums1 = [0,0,0,0,0], nums2 = [0,0,0,0,0]"
+            }
+          ]
+        },
+        {
+          "approach": "Create a hash function to compare substrings efficiently.",
+          "code": "class Solution {\n    func findLength(_ nums1: [Int], _ nums2: [Int]) -> Int {\n       let MOD = Int(1e9 + 7)\n       func hashValue(of str: [Int], withBase base: Int) -> Int {\n          var value = 0\n          var b = 1\n          for num in str {\n             value = (value + b * num) % MOD\n             b = (b * base) % MOD\n          }\n          return value\n       }\n       func rollingHash(_ str: [Int], _ length: Int, withBase base: Int) -> [Int] {\n          var values = [Int]()\n          var hashValue = 0\n          var b = 1\n          for i in 0..<length {\n             hashValue = (hashValue + b * str[i]) % MOD\n             b = (b * base) % MOD\n          }\n          values.append(hashValue)\n          for i in length..<str.count {\n             hashValue = (hashValue - b * str[i - length] + MOD) % MOD\n             hashValue = (hashValue * base) % MOD\n             hashValue = (hashValue + b * str[i]) % MOD\n             values.append(hashValue)\n          }\n          return values\n       }\n       var maxLength = 0\n       for length in 1...min(nums1.count, nums2.count) {\n          let hashValues1 = rollingHash(nums1, length, withBase: 256)\n          let hashValues2 = rollingHash(nums2, length, withBase: 256)\n          for i in 0..<hashValues1.count {\n             for j in 0..<hashValues2.count {\n                if hashValues1[i] == hashValues2[j] {\n                   // verify character by character\n                   var k = 0\n                   while i + k < nums1.count && j + k < nums2.count && nums1[i + k] == nums2[j + k] {\n                      k += 1\n                   }\n                   maxLength = max(maxLength, k)\n                }\n             }\n          }\n       }\n       return maxLength\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Space used to store hash values.",
+            "time": "O(n^2)",
+            "timeExplanation": "Two nested loops over the input array, and one loop to calculate the rolling hash."
+          },
+          "explanation": "Hash values are used to compare substrings. When a match is found, we verify character by character.",
+          "id": "54f4d51b-11ba-4242-befc-04abfab8823b",
+          "intuition": "Using a hash function we can efficiently compare substrings.",
+          "name": "Optimized with Hashing",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "The repeated subarray with maximum length is [3,2,1]",
+              "id": "992a7e36-377e-45ca-be8b-7646edef6557",
+              "input": "nums1 = [1,2,3,2,1], nums2 = [3,2,1,4,7]"
+            },
+            {
+              "expectedOutput": "5",
+              "explanation": "The repeated subarray with maximum length is [0,0,0,0,0]",
+              "id": "f5b70c55-dac0-41ea-a3db-d5082ea5cfc5",
+              "input": "nums1 = [0,0,0,0,0], nums2 = [0,0,0,0,0]"
+            }
+          ]
+        }
+      ],
+      "id": "d0854afe-417f-4713-a0ed-88e71ac07966",
+      "lastUpdated": "2026-02-06T21:35:48Z",
+      "problemSlug": "maximum-length-of-repeated-subarray",
+      "relatedProblems": [
+        "subarray-sum-equals-k",
+        "maximum-length-of-subarray-with-positive-product"
+      ],
+      "summary": "The problem asks for the maximum length of repeated subarray, meaning the longest sequence that appears in both input arrays. It can be solved by comparing all possible substrings."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize the minimum length of the subarray to infinity. 2. Iterate over all possible start and end indices of the subarray. 3. For each subarray, calculate its sum. 4. If the sum is greater than or equal to the target, update the minimum length.",
+          "code": "class Solution {\n    func minSubArrayLen(_ target: Int, _ nums: [Int]) -> Int {\n       let n = nums.count\n       var minLen = Int.max\n       for i in 0...n-1 {\n          var sum = 0\n          for j in i...n-1 {\n             sum += nums[j]\n             if sum >= target {\n                minLen = min(minLen, j - i + 1)\n             }\n          }\n       }\n       return minLen == Int.max ? 0 : minLen\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because only a fixed amount of space is used to store the minimum length and the sum of the subarray.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is quadratic because there are two nested loops iterating over the array."
+          },
+          "explanation": "This approach works by exhaustively checking all possible subarrays. However, it is inefficient for large arrays due to its quadratic time complexity.",
+          "id": "06b558f5-8c44-4727-87a2-594464540d0e",
+          "intuition": "This approach involves iterating over all possible subarrays of the given array and checking if their sum is greater than or equal to the target.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The minimum size subarray with sum greater than or equal to 7 is [4,3].",
+              "id": "f649391b-765f-4da1-a952-c09c5bd17a82",
+              "input": "nums = [2,3,1,2,4,3], target = 7"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The minimum size subarray with sum greater than or equal to 4 is [4].",
+              "id": "ed0ce92d-d20e-499d-ac99-edee2641e174",
+              "input": "nums = [1,4,4], target = 4"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize the left pointer of the window to 0. 2. Initialize the current sum to 0. 3. Iterate over the array with the right pointer of the window. 4. Add the current element to the current sum. 5. If the current sum is greater than or equal to the target, update the minimum length and try to shrink the window from the left.",
+          "code": "class Solution {\n    func minSubArrayLen(_ target: Int, _ nums: [Int]) -> Int {\n       let n = nums.count\n       var minLen = Int.max\n       var left = 0\n       var sum = 0\n       for right in 0...n-1 {\n          sum += nums[right]\n          while sum >= target {\n             minLen = min(minLen, right - left + 1)\n             sum -= nums[left]\n             left += 1\n          }\n       }\n       return minLen == Int.max ? 0 : minLen\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because only a fixed amount of space is used to store the minimum length and the sum of the subarray.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because each element is visited at most twice, once by the right pointer and once by the left pointer."
+          },
+          "explanation": "This approach works by maintaining a window of elements that sums to at least the target. By expanding or shrinking the window as needed, we can efficiently find the minimum size subarray.",
+          "id": "4143dfbe-cc61-4c55-837a-79abd896c41d",
+          "intuition": "This approach involves maintaining a sliding window of elements and expanding or shrinking the window as needed to keep the sum greater than or equal to the target.",
+          "name": "Sliding Window",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The minimum size subarray with sum greater than or equal to 7 is [4,3].",
+              "id": "6ed2e1db-8c5c-43dd-88ff-babaeb8c6d3f",
+              "input": "nums = [2,3,1,2,4,3], target = 7"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The minimum size subarray with sum greater than or equal to 4 is [4].",
+              "id": "e8a7beb0-62fe-4919-95d8-99039da8b763",
+              "input": "nums = [1,4,4], target = 4"
+            }
+          ]
+        }
+      ],
+      "id": "44b7b960-7947-4d40-b87d-36e090774ad4",
+      "lastUpdated": "2026-02-06T21:10:29Z",
+      "problemSlug": "minimum-size-subarray-sum",
+      "relatedProblems": [
+        "subarray-sum-equals-k",
+        "maximum-subarray"
+      ],
+      "summary": "Given an array of integers and a target integer, find the minimum size of a contiguous subarray whose sum is greater than or equal to the target. This problem requires a careful analysis of the array and the target to determine the optimal subarray."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Store all booked meetings, and when a new meeting is requested, iterate over all existing meetings to check for overlap.",
+          "code": "class Solution {\n    class MyCalendar {\n        private var meetings: [[Int]]\n\n        init() {\n            meetings = []\n        }\n\n        func book(_ start: Int, _ end: Int) -> Bool {\n            for meeting in meetings {\n                if start < meeting[1] && end > meeting[0] {\n                    return false\n                }\n            }\n            meetings.append([start, end])\n            return true\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We need to store all booked meetings.",
+            "time": "O(n)",
+            "timeExplanation": "For each new meeting, we potentially check all existing meetings."
+          },
+          "explanation": "Create a calendar class that stores meetings. When a new meeting is requested, compare its start and end times with all existing meetings. If any meeting overlaps, return false. Otherwise, add the new meeting to the calendar and return true.",
+          "id": "cb51f0ac-29ef-47e3-907c-3d2137718da8",
+          "intuition": "This approach works by storing all booked meetings and then checking for any overlap with a new meeting.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true, false",
+              "explanation": "The first meeting is booked successfully, but the second meeting overlaps with the first.",
+              "id": "30aba39d-36bb-4932-a0bb-33dad6cf489a",
+              "input": "let cal = MyCalendar(); cal.book(10, 20); cal.book(15, 25)"
+            },
+            {
+              "expectedOutput": "true, true",
+              "explanation": "Both meetings do not overlap.",
+              "id": "d0b72df5-cf1f-4aea-87b7-e3e52741de35",
+              "input": "let cal = MyCalendar(); cal.book(10, 20); cal.book(25, 35)"
+            }
+          ]
+        },
+        {
+          "approach": "Store the start and end times of all meetings in a sorted array. When a new meeting is requested, use binary search to find where to insert the new meeting.",
+          "code": "class Solution {\n    import Foundation\n\n    class MyCalendar {\n        private var meetings: [[Int]]\n\n        init() {\n            meetings = []\n        }\n\n        func book(_ start: Int, _ end: Int) -> Bool {\n            let newMeeting = [start, end]\n            for meeting in meetings {\n                if newMeeting[0] < meeting[1] && newMeeting[1] > meeting[0] {\n                    return false\n                }\n            }\n            meetings.append(newMeeting)\n            meetings.sort { $0[0] < $1[0] }\n            return true\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We need to store all booked meetings.",
+            "time": "O(n log n)",
+            "timeExplanation": "For each new meeting, we potentially check all existing meetings and sort the array."
+          },
+          "explanation": "Create a sorted array of meeting start and end times. When a new meeting is requested, use binary search to find where to insert the new meeting. If any overlap is found, return false. Otherwise, insert the new meeting and return true.",
+          "id": "74e90684-f248-492f-be75-907d3416b74c",
+          "intuition": "This approach works by using a sorted array to store the start and end times of all meetings and then using binary search to find the insertion point for a new meeting.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true, false",
+              "explanation": "The first meeting is booked successfully, but the second meeting overlaps with the first.",
+              "id": "7452a049-4f2d-4be5-a3dc-b4ef1db8ab36",
+              "input": "let cal = MyCalendar(); cal.book(10, 20); cal.book(15, 25)"
+            },
+            {
+              "expectedOutput": "true, true",
+              "explanation": "Both meetings do not overlap.",
+              "id": "1687b0db-b6a5-445a-ba83-6c4aa25ef262",
+              "input": "let cal = MyCalendar(); cal.book(10, 20); cal.book(25, 35)"
+            }
+          ]
+        }
+      ],
+      "id": "9053e1b9-ac81-4da3-b213-a5ba9a9b7eed",
+      "lastUpdated": "2026-02-06T21:36:37Z",
+      "problemSlug": "my-calendar-i",
+      "relatedProblems": [
+        "my-calendar-ii",
+        "my-calendar-iii"
+      ],
+      "summary": "Implement a MyCalendar class that has a method book which takes two parameters, start and end, representing the start and end time of a meeting. If the meeting does not overlap with any existing meetings, return true, otherwise return false."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize an empty list of events. 2. For each new event, iterate through the existing events to check for overlap. 3. If an overlap is found, mark the event as not available.",
+          "code": "class Solution {\n    class MyCalendarTwo {\n        var events: [(Int, Int)]\n        init() { events = [] }\n        func book(_ start: Int, _ end: Int) -> Bool {\n            for event in events {\n                if start < event.1 && end > event.0 {\n                    return false\n                }\n            }\n            events.append((start, end))\n            return true\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) to store the events.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) due to the nested loops, where n is the number of events."
+          },
+          "explanation": "This approach has a time complexity of O(n^2) due to the nested loops, where n is the number of events. It is simple to implement but inefficient for large inputs.",
+          "id": "e4b8afed-93ee-4ddc-8915-346872d6eef6",
+          "intuition": "This approach involves iterating through all existing events and checking for overlaps with the new event. It works by maintaining a list of events and checking each event for overlap.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "false",
+              "explanation": "The event (10, 40) overlaps with (10, 20).",
+              "id": "9ea4959c-2301-4273-a2f2-9aef6e49ff05",
+              "input": "MyCalendarTwo(), book(10, 20), book(50, 60), book(10, 40)"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The event (7, 9) overlaps with (5, 15).",
+              "id": "24974287-6488-4608-a8d7-b082a1340107",
+              "input": "MyCalendarTwo(), book(5, 15), book(7, 9)"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize a segment tree with the given time range. 2. For each new event, query the segment tree for overlap. 3. If an overlap is found, mark the event as not available.",
+          "code": "class Solution {\n    class MyCalendarTwo {\n        var events: [(Int, Int)]\n        var doubleBooked: [(Int, Int)]\n        init() { events = []; doubleBooked = [] }\n        func book(_ start: Int, _ end: Int) -> Bool {\n            for event in doubleBooked {\n                if start < event.1 && end > event.0 {\n                    return false\n                }\n            }\n            for event in events {\n                if start < event.1 && end > event.0 {\n                    doubleBooked.append((max(start, event.0), min(end, event.1)))\n                }\n            }\n            events.append((start, end))\n            return true\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) to store the events and double booked events.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity is O(n log n) due to the segment tree operations, where n is the number of events."
+          },
+          "explanation": "This approach has a time complexity of O(n log n) due to the segment tree operations, where n is the number of events. It is more efficient than the brute force approach for large inputs.",
+          "id": "b9edd95a-334e-4b17-a8a6-094976398c08",
+          "intuition": "This approach involves utilizing a segment tree to efficiently detect overlaps between events. It works by maintaining a tree where each node represents a segment of time and checking for overlaps.",
+          "name": "Segment Tree",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "false",
+              "explanation": "The event (10, 40) overlaps with (10, 20) and is double booked.",
+              "id": "23a510f7-cc3c-4080-935d-af7f85c1cb41",
+              "input": "MyCalendarTwo(), book(10, 20), book(50, 60), book(10, 40)"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The event (7, 9) overlaps with (5, 15) and is double booked.",
+              "id": "11907c69-49e3-4f4c-beda-5988b8277fae",
+              "input": "MyCalendarTwo(), book(5, 15), book(7, 9)"
+            }
+          ]
+        }
+      ],
+      "id": "53b217b1-a698-46e6-b8f6-612d03767951",
+      "lastUpdated": "2026-02-06T21:36:42Z",
+      "problemSlug": "my-calendar-ii",
+      "relatedProblems": [
+        "interval-list-intersections",
+        "employee-free-time"
+      ],
+      "summary": "My Calendar II involves designing a calendar system to determine if a new event overlaps with existing events, with the key insight of utilizing a two-pointer technique or segment tree to efficiently detect overlaps. The problem can be solved by maintaining a list of events and checking for overlaps."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each word, initialize two pointers, one for S and one for the word. Compare the characters at the current positions of the two pointers and move the pointer in S if they match. If all characters in the word match, increment the count of matching subsequences.",
+          "code": "class Solution {\n    func numMatchingSubseq(_ S: String, _ words: [String]) -> Int {\n        var count = 0\n        for word in words {\n            var i = 0, j = 0\n            while i < S.count && j < word.count {\n                if S[S.index(S.startIndex, offsetBy: i)] == word[word.index(word.startIndex, offsetBy: j)] {\n                    j += 1\n                }\n                i += 1\n            }\n            if j == word.count {\n                count += 1\n            }\n        }\n        return count\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we only use a constant amount of space to store the count of matching subsequences and the pointers.",
+            "time": "O(n * m)",
+            "timeExplanation": "The time complexity is O(n * m) where n is the length of S and m is the total length of all words. This is because we are potentially scanning S for each word."
+          },
+          "explanation": "This approach checks every word in the list of words against the given string S. As a result, it has a high time complexity because it may need to scan S for each word.",
+          "id": "0884e33b-4dee-4d4a-ac13-2a2145609c42",
+          "intuition": "This approach involves iterating through each word in the list of words and checking if it is a subsequence of the given string S.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "The matching subsequences are \"a\", \"acd\", and \"ace\".",
+              "id": "49043a0b-024e-40d0-9cbc-ffb5029208a9",
+              "input": "S = \"abcde\", words = [\"a\",\"bb\",\"acd\",\"ace\"]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "The matching subsequences are \"ahjpjau\" and \"ahjpjaufs\".",
+              "id": "5c6f0b20-551c-497d-883a-1292441f857f",
+              "input": "S = \"dsahjpjauf\", words = [\"ahjpjau\",\"ja\",\"ahbwzgqnjp1aw\",\"ahjpjaufs\"]"
+            }
+          ]
+        },
+        {
+          "approach": "Create a hashmap where the keys are the characters in S and the values are lists of indices where the characters appear in S. For each word, initialize a pointer for the word and iterate through the characters in the word. For each character, find the next index in S where the character appears by using the hashmap. If all characters in the word appear in S in the correct order, increment the count of matching subsequences.",
+          "code": "class Solution {\n    func numMatchingSubseq(_ S: String, _ words: [String]) -> Int {\n        var count = 0\n        var charIndex: [Character: [Int]] = [:]\n        for (i, char) in S.enumerated() {\n            if charIndex[char] == nil {\n                charIndex[char] = [i]\n            } else {\n                charIndex[char]?.append(i)\n            }\n        }\n        for word in words {\n            var wordIndex = 0\n            var prevIndex = -1\n            while wordIndex < word.count {\n                if let indices = charIndex[word[word.index(word.startIndex, offsetBy: wordIndex)]] {\n                    var nextIndex = -1\n                    for index in indices {\n                        if index > prevIndex {\n                            nextIndex = index\n                            break\n                        }\n                    }\n                    if nextIndex == -1 {\n                        break\n                    }\n                    prevIndex = nextIndex\n                    wordIndex += 1\n                } else {\n                    break\n                }\n            }\n            if wordIndex == word.count {\n                count += 1\n            }\n        }\n        return count\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing the indices of the characters in S in a hashmap.",
+            "time": "O(n + m)",
+            "timeExplanation": "The time complexity is O(n + m) where n is the length of S and m is the total length of all words. This is because we are scanning S once to create the hashmap and then scanning each word."
+          },
+          "explanation": "This approach reduces the time complexity by storing the indices of the characters in S in a hashmap, allowing us to quickly find the next index where a character appears.",
+          "id": "fededab6-1906-4bce-917a-63e3de0e97ed",
+          "intuition": "This approach involves using a hashmap to store the indices of the characters in S and then iterating through each word to check if it is a subsequence.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "The matching subsequences are \"a\", \"acd\", and \"ace\".",
+              "id": "0bf035ba-8bc7-4a4a-9af1-1bc6fdf9ae48",
+              "input": "S = \"abcde\", words = [\"a\",\"bb\",\"acd\",\"ace\"]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "The matching subsequences are \"ahjpjau\" and \"ahjpjaufs\".",
+              "id": "798eb454-3a8a-4cee-bae1-609e9758d704",
+              "input": "S = \"dsahjpjauf\", words = [\"ahjpjau\",\"ja\",\"ahbwzgqnjp1aw\",\"ahjpjaufs\"]"
+            }
+          ]
+        }
+      ],
+      "id": "71449f55-9d70-4651-b1d9-c3e193e8a761",
+      "lastUpdated": "2026-02-06T21:40:01Z",
+      "problemSlug": "number-of-matching-subsequences",
+      "relatedProblems": [
+        "subsequence-enumeration",
+        "shortest-subsequence-to-target"
+      ],
+      "summary": "This problem involves finding the number of matching subsequences in a given string S and a list of strings words. The key insight is to iterate through S and words to compare characters."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Iterate over all votes, 2. For each vote, check the time at which it was cast, 3. Count the votes for each candidate at a specific time, 4. Determine the winner at that time",
+          "code": "class Solution {\n    class TopVotedCandidate {\n        let personTime: [(Int, Int)]\n\n        init(_ person: [Int], _ times: [Int]) {\n            personTime = zip(person, times).sorted { $0.1 < $1.1 }\n        }\n\n        func q(_ t: Int) -> Int {\n            var votes: [Int: Int] = [:]\n            var maxVote: Int = 0\n            var leader: Int = 0\n\n            for (person, time) in personTime {\n                if time <= t {\n                    votes[person, default: 0] += 1\n                    if votes[person]! > maxVote {\n                        maxVote = votes[person]!\n                        leader = person\n                    }\n                }\n            }\n            return leader\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we store all votes",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) because for each query, we potentially iterate over all votes"
+          },
+          "explanation": "The brute-force approach is straightforward but has high time complexity due to the need to iterate over all votes for each query, this makes it impractical for large inputs",
+          "id": "eb763825-97d6-4533-88da-e315befa31af",
+          "intuition": "This approach works by iterating over all votes and counting the votes for each candidate at a specific time, it is not efficient but provides a baseline solution",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "0",
+              "explanation": "There is only one vote at time 0, so the winner at time 0 is the person who voted, which is 0",
+              "id": "e970315c-3e28-49ad-be32-d9b301aee6a1",
+              "input": "person = [0], times = [0], t = 0"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "At time 5, only one vote has been cast, so the winner at time 5 is the person who voted first, which is 0",
+              "id": "e0ea8c82-59e3-48e1-9e2b-1154796fe03e",
+              "input": "person = [0,1,1], times = [0,5,10], t = 5"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "At time 10, two votes have been cast for person 1, so the winner at time 10 is the person with the most votes, which is 1",
+              "id": "1c83f6db-dbe4-4d14-b9f2-5fa5848431ce",
+              "input": "person = [0,1,1], times = [0,5,10], t = 10"
+            }
+          ]
+        },
+        {
+          "approach": "1. Calculate the prefix sum of votes for each candidate, 2. Use binary search to find the time range for a given query, 3. Calculate the votes for each candidate in the time range, 4. Determine the winner",
+          "code": "class Solution {\n    class TopVotedCandidate {\n        let personTime: [(Int, Int)]\n        let topVote: [Int]\n\n        init(_ person: [Int], _ times: [Int]) {\n            var votes: [Int: Int] = [:]\n            var maxVote: Int = 0\n            var leader: Int = 0\n            var topVotes: [Int] = []\n\n            personTime = zip(person, times).sorted { $0.1 < $1.1 }\n\n            for (person, time) in personTime {\n                votes[person, default: 0] += 1\n                if votes[person]! > maxVote {\n                    maxVote = votes[person]!\n                    leader = person\n                }\n                topVotes.append(leader)\n            }\n\n            topVote = topVotes\n        }\n\n        func q(_ t: Int) -> Int {\n            let idx = binarySearch(t)\n            return topVote[idx]\n        }\n\n        func binarySearch(_ t: Int) -> Int {\n            var left = 0\n            var right = topVote.count - 1\n\n            while left < right {\n                let mid = (left + right) / 2\n                if personTime[mid].1 <= t {\n                    left = mid + 1\n                } else {\n                    right = mid\n                }\n            }\n\n            return left - 1\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we store the prefix sum and the votes",
+            "time": "O(n + log n)",
+            "timeExplanation": "The time complexity is O(n + log n) because we calculate the prefix sum and then use binary search for each query"
+          },
+          "explanation": "The optimized approach reduces the time complexity by using prefix sum and binary search, making it much faster for large inputs",
+          "id": "946f01a3-fb31-44df-a375-f6cfa7c221e6",
+          "intuition": "This approach works by using a combination of prefix sum and binary search to efficiently calculate the winner at a specific time",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "0",
+              "explanation": "There is only one vote at time 0, so the winner at time 0 is the person who voted, which is 0",
+              "id": "915a52c1-7ac2-4f19-b26c-948bfe82bb06",
+              "input": "person = [0], times = [0], t = 0"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "At time 5, only one vote has been cast, so the winner at time 5 is the person who voted first, which is 0",
+              "id": "991b37f0-fc6e-4b44-ba34-24ac1d93fc6e",
+              "input": "person = [0,1,1], times = [0,5,10], t = 5"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "At time 10, two votes have been cast for person 1, so the winner at time 10 is the person with the most votes, which is 1",
+              "id": "ff2f6826-83eb-474b-b181-3dfd199b37bb",
+              "input": "person = [0,1,1], times = [0,5,10], t = 10"
+            }
+          ]
+        }
+      ],
+      "id": "f00640ad-5ccf-4f36-89b3-d65cd3d4e7b2",
+      "lastUpdated": "2026-02-06T21:47:54Z",
+      "problemSlug": "online-election",
+      "relatedProblems": [
+        "design-twitter",
+        "find-all-duplicates-in-an-array"
+      ],
+      "summary": "Online Election problem involves finding the winner of an election given the votes and the time at which each vote was cast, key insight involves using binary search to efficiently find the winner at a specific time"
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Start from the first element in the array. 2. Check if the current element is greater than the neighboring elements. 3. If it is, return the current index. 4. If not, move to the next element.",
+          "code": "class Solution {\n    func peakIndexInMountainArray(_ A: [Int]) -> Int {\n        for i in 1..<A.count-1 where A[i-1] < A[i] && A[i] > A[i+1] {\n            return i\n        }\n        return -1\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because no space that scales with input size is used.",
+            "time": "O(n)",
+            "timeExplanation": "The algorithm checks every element in the array once."
+          },
+          "explanation": "This approach checks every element in the array. For each element, it checks whether the current element is the peak by comparing it with the neighboring elements. If the current element is greater than both its neighbors, it is the peak, and the function returns the current index.",
+          "id": "646469dd-1a84-4a31-bb61-ee73c5a8a649",
+          "intuition": "This approach works by checking every element in the array and determining whether it is the peak by comparing it with its neighboring elements.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "6",
+              "explanation": "The mountain peaks at index 6 with a value of 5.",
+              "id": "c4c07cf7-f288-4a4d-89e8-04280336faaa",
+              "input": "nums = [0,1,2,1,2,3,5,4,3,1,0]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The mountain peaks at index 1 with a value of 2.",
+              "id": "85d83645-062d-4d24-9afe-2cf51f33a480",
+              "input": "nums = [0,2,1,0]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize two pointers at the start and end of the array. 2. Calculate the mid index. 3. Compare the mid element with its next element. 4. If the mid element is less than the next element, move the left pointer to mid+1. 5. If the mid element is greater than the next element, move the right pointer to mid.",
+          "code": "class Solution {\n    func peakIndexInMountainArray(_ A: [Int]) -> Int { var left = 0, right = A.count - 1; while left < right { let mid = left + (right - left) / 2; if A[mid] < A[mid + 1] { left = mid + 1 } else { right = mid } } return left }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity remains constant because no additional space that scales with input size is used.",
+            "time": "O(log n)",
+            "timeExplanation": "The algorithm uses a binary search approach, which reduces the search space by half at each step."
+          },
+          "explanation": "This approach works because the array is guaranteed to be a mountain sequence. Thus, at any point, if the middle element is smaller than the next one, the peak must be to the right; if the middle element is larger, the peak must be to the left or at the middle.",
+          "id": "b3dc57b9-8386-4383-a29b-6f44628aa9ee",
+          "intuition": "The problem can be solved more efficiently using a binary search approach, considering the mountain array is first increasing and then decreasing.",
+          "name": "Optimized Binary Search Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "The mountain peaks at index 1 with a value of 3.",
+              "id": "bb541e96-8be2-4690-bdcc-cd527f6d112b",
+              "input": "nums = [0,3,2,1]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "The mountain peaks at index 2 with a value of 6.",
+              "id": "83994334-1d28-4650-9415-8a2f520e6c7c",
+              "input": "nums = [3,5,6,2,1,0]"
+            }
+          ]
+        }
+      ],
+      "id": "9e1953ab-e745-4b9b-b6ae-5754dd450e12",
+      "lastUpdated": "2026-02-06T21:44:27Z",
+      "problemSlug": "peak-index-in-a-mountain-array",
+      "relatedProblems": [
+        "search-in-rotated-sorted-array",
+        "find-peak-element"
+      ],
+      "summary": "Given an array of integers that represent a mountain sequence, the task is to find the peak index, i.e., the index where the mountain peaks. A mountain sequence is defined by the property that it strictly increases until the peak, and then strictly decreases."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Calculate total elements n = rows * cols\n2. Binary search with left = 0, right = n - 1\n3. For mid, convert to matrix[mid / cols][mid % cols]\n4. Standard binary search comparison and bounds update",
+          "code": "class Solution {\n    func searchMatrix(_ matrix: [[Int]], _ target: Int) -> Bool {\n        let rows = matrix.count\n        let cols = matrix[0].count\n        var left = 0\n        var right = rows * cols - 1\n\n        while left <= right {\n            let mid = left + (right - left) / 2\n            let value = matrix[mid / cols][mid % cols]\n\n            if value == target {\n                return true\n            } else if value < target {\n                left = mid + 1\n            } else {\n                right = mid - 1\n            }\n        }\n\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only using pointer variables",
+            "time": "O(log(m*n))",
+            "timeExplanation": "Binary search over m*n elements"
+          },
+          "explanation": "Since rows are contiguous in sorted order, index i in a flattened array maps to row i/cols, column i%cols. This lets us use standard binary search with O(1) index conversion. The matrix structure is just a visual layout of a sorted array.",
+          "id": "f5b3a5ed-97cf-47dc-891d-aba935280e7d",
+          "intuition": "The matrix is essentially a sorted 1D array laid out in rows. Map 1D index to 2D coordinates: row = idx / cols, col = idx % cols.",
+          "name": "Binary Search (Treat as 1D)",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "3 is at position (0,1)",
+              "id": "d0dfb5d1-0790-432d-b945-465a3f381e18",
+              "input": "matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "13 not in matrix",
+              "id": "0e592c09-488c-4310-8d5d-456ab74966e9",
+              "input": "matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13"
+            }
+          ]
+        },
+        {
+          "approach": "1. Binary search on first column to find row where row[0] <= target < nextRow[0]\n2. Binary search within that row for target\n3. Return true if found",
+          "code": "class Solution {\n    func searchMatrix(_ matrix: [[Int]], _ target: Int) -> Bool {\n        let rows = matrix.count\n        let cols = matrix[0].count\n\n        // Binary search for row\n        var top = 0\n        var bottom = rows - 1\n        var targetRow = 0\n\n        while top <= bottom {\n            let mid = top + (bottom - top) / 2\n            if matrix[mid][0] <= target && (mid == rows - 1 || matrix[mid + 1][0] > target) {\n                targetRow = mid\n                break\n            } else if matrix[mid][0] > target {\n                bottom = mid - 1\n            } else {\n                top = mid + 1\n            }\n        }\n\n        // Binary search within row\n        var left = 0\n        var right = cols - 1\n\n        while left <= right {\n            let mid = left + (right - left) / 2\n            if matrix[targetRow][mid] == target {\n                return true\n            } else if matrix[targetRow][mid] < target {\n                left = mid + 1\n            } else {\n                right = mid - 1\n            }\n        }\n\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only pointer variables",
+            "time": "O(log m + log n)",
+            "timeExplanation": "Two separate binary searches"
+          },
+          "explanation": "We use the property that first elements of each row are sorted. First binary search narrows down to the correct row (the last row whose first element <= target). Second binary search finds target within that row. Two O(log n) searches is still O(log(m*n)).",
+          "id": "b5531ab7-8e51-41b4-825c-69262ecbb248",
+          "intuition": "First binary search to find the correct row (where target could be), then binary search within that row.",
+          "name": "Two Binary Searches",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "Row search finds row 0, column search finds index 1",
+              "id": "4f610481-8432-4936-87be-9ccba22aa033",
+              "input": "matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3"
+            }
+          ]
+        }
+      ],
+      "id": "18fd7cf2-e728-4f5a-957b-b10a87cdadc7",
+      "lastUpdated": "2026-02-06T08:40:26Z",
+      "problemSlug": "search-a-2d-matrix",
+      "relatedProblems": [
+        "search-a-2d-matrix-ii"
+      ],
+      "summary": "Search for a target in a sorted 2D matrix (each row sorted, first element of row > last element of previous row). Treat as 1D array and binary search, or do two binary searches."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Start at top-right (or bottom-left)\n2. If current == target, found\n3. If target < current, move left\n4. If target > current, move down",
+          "code": "class Solution {\n    func searchMatrix(_ matrix: [[Int]], _ target: Int) -> Bool {\n        let m = matrix.count, n = matrix[0].count\n        var row = 0, col = n - 1\n\n        while row < m && col >= 0 {\n            if matrix[row][col] == target { return true }\n            if matrix[row][col] > target {\n                col -= 1\n            } else {\n                row += 1\n            }\n        }\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Two pointers",
+            "time": "O(m+n)",
+            "timeExplanation": "At most m+n steps"
+          },
+          "explanation": "Each step eliminates a row or column.",
+          "id": "9666934f-2d72-4e2f-a29e-d138491c37dd",
+          "intuition": "From top-right: if target < current, go left; if target > current, go down.",
+          "name": "Staircase Search",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "5 found in matrix",
+              "id": "41824905-6384-42c9-b999-c82b536af169",
+              "input": "matrix = [[1,4,7],[2,5,8],[3,6,9]], target = 5"
+            }
+          ]
+        }
+      ],
+      "id": "a4d07793-1bd5-493c-a3e0-a4ec2c7e3ab9",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "search-a-2d-matrix-ii",
+      "relatedProblems": [
+        "search-a-2d-matrix"
+      ],
+      "summary": "Search in row-sorted and column-sorted matrix. Start from top-right, eliminate row or column."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Use left and right pointers.\n2. Find mid; if it's the target, return it.\n3. Determine which half is sorted and adjust the search range accordingly.",
+          "code": "class Solution {\n    func search(_ nums: [Int], _ target: Int) -> Int {\n        var left = 0\n        var right = nums.count - 1\n        while left <= right {\n            let mid = (left + right) / 2\n            if nums[mid] == target { return mid }\n            if nums[left] <= nums[mid] {\n                if nums[left] <= target && target < nums[mid] {\n                    right = mid - 1\n                } else {\n                    left = mid + 1\n                }\n            } else {\n                if nums[mid] < target && target <= nums[right] {\n                    left = mid + 1\n                } else {\n                    right = mid - 1\n                }\n            }\n        }\n        return -1\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Constant extra space.",
+            "time": "O(log n)",
+            "timeExplanation": "Binary search halves the range each step."
+          },
+          "explanation": "This preserves O(log n) time because each step discards half the range.",
+          "id": "43e27307-58c2-4a0e-a8b9-75238275fb4a",
+          "intuition": "In a rotated array, at least one half of the current range is sorted. We can use that to decide where the target may lie.",
+          "name": "Modified Binary Search",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "Target found at index 4.",
+              "id": "3399773a-ab67-467e-8fe0-059e42126ffe",
+              "input": "nums = [4,5,6,7,0,1,2], target = 0"
+            },
+            {
+              "expectedOutput": "-1",
+              "explanation": "Target not present.",
+              "id": "800110ec-ac97-4755-971f-6d84cc314656",
+              "input": "nums = [4,5,6,7,0,1,2], target = 3"
+            },
+            {
+              "expectedOutput": "-1",
+              "explanation": "Single element not equal to target.",
+              "id": "192471d2-017f-4ff5-8035-74cea4b4674a",
+              "input": "nums = [1], target = 0"
+            }
+          ]
+        }
+      ],
+      "id": "f4aa35fd-22bb-466c-8dae-e6567cb0141a",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "search-in-rotated-sorted-array",
+      "relatedProblems": [
+        "search-in-rotated-sorted-array-ii",
+        "find-minimum-in-rotated-sorted-array"
+      ],
+      "summary": "Binary search while determining which half is sorted at each step."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start from the first element, and check if it is the target, if not, move to the next one.",
+          "code": "class Solution {\n    func search(_ nums: [Int], _ target: Int) -> Bool {\n        for num in nums {\n            if num == target {\n                return true\n            }\n        }\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We are not using any extra space, so space complexity is constant.",
+            "time": "O(n)",
+            "timeExplanation": "We are scanning the array once, so time complexity is linear."
+          },
+          "explanation": "This approach is straightforward, we just iterate through the array until we find the target or reach the end.",
+          "id": "da52b8ec-71fc-45c5-ac65-66f462e3e84a",
+          "intuition": "The simplest way to solve this problem is by checking each element one by one.",
+          "name": "Brute-Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "0 is present in the array.",
+              "id": "19f2b91a-75a1-4a3e-bb76-f5b2813b6d49",
+              "input": "nums = [2,5,6,0,0,1,2], target = 0"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "3 is not present in the array.",
+              "id": "377eb2b7-4bd6-4227-b8c4-d4f56aa5581e",
+              "input": "nums = [2,5,6,0,0,1,2], target = 3"
+            }
+          ]
+        },
+        {
+          "approach": "If the middle element is equal to the target, we can't be sure which half to continue searching in because of duplicates, so we skip over these duplicates.",
+          "code": "import Foundation\n\nclass Solution {\n    func search(_ nums: [Int], _ target: Int) -> Bool {\n        var left = 0\n        var right = nums.count - 1\n        while left <= right {\n            let mid = left + (right - left) / 2\n            if nums[mid] == target {\n                return true\n            }\n            else if nums[left] == nums[mid] {\n                left += 1\n            }\n            else if nums[left] < nums[mid] {\n                if nums[left] <= target && target < nums[mid] {\n                    right = mid - 1\n                }\n                else {\n                    left = mid + 1\n                }\n            }\n            else {\n                if nums[mid] < target && target <= nums[right] {\n                    left = mid + 1\n                }\n                else {\n                    right = mid - 1\n                }\n            }\n        }\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We are not using any extra space, so space complexity is constant.",
+            "time": "O(n) in the worst case, O(log n) on average",
+            "timeExplanation": "In the worst case, we have to scan the array, but on average, we are reducing the size of the array by half in each step, leading to a logarithmic time complexity."
+          },
+          "explanation": "This approach is more efficient than the brute force approach as we are reducing the size of the array we need to search by half in each step.",
+          "id": "1dfc920f-4232-4f72-8b4e-92ea8521c226",
+          "intuition": "The array is sorted in a way that we can use binary search to find the target, we need to handle the cases where the middle element is equal to the target or the edges.",
+          "name": "Modified Binary Search",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "0 is present in the array.",
+              "id": "1d4aaab8-27c6-47e0-b3be-3ab62faf9b17",
+              "input": "nums = [2,5,6,0,0,1,2], target = 0"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "3 is not present in the array.",
+              "id": "38c04238-d86d-4f95-bc4d-4aaf6ab55a7e",
+              "input": "nums = [2,5,6,0,0,1,2], target = 3"
+            }
+          ]
+        }
+      ],
+      "id": "5ddaa6bc-0f23-4e26-b2ab-9f5876876c1a",
+      "lastUpdated": "2026-02-06T21:05:32Z",
+      "problemSlug": "search-in-rotated-sorted-array-ii",
+      "relatedProblems": [
+        "search-in-rotated-sorted-array",
+        "find-min-in-rotated-sorted-array"
+      ],
+      "summary": "This problem involves searching for an element in a rotated sorted array that may contain duplicates, key insight is to modify binary search to handle duplicates."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start from the beginning of the array and compare each element to the target. If an element is greater than the target, insert the target before it. If the end of the array is reached, append the target.",
+          "code": "class Solution {\n    func searchInsert(nums: [Int], _ target: Int) -> Int { let sortedNums = nums.sorted(); var i = 0; while i < nums.count { if nums[i] >= target { return i }; i += 1 }; return i }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Space is required for the sorted array, resulting in O(n) complexity.",
+            "time": "O(n log n)",
+            "timeExplanation": "The sorting operation dominates with a complexity of O(n log n)."
+          },
+          "explanation": "This approach is straightforward but lacks efficiency for large arrays.",
+          "id": "f5290d0c-1570-4f63-ad3c-746790180057",
+          "intuition": "This approach iterates through the array to find the correct insertion point.",
+          "name": "Brute-Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "Since 5 is already present in the array at index 2, the function returns 2.",
+              "id": "785394bf-f04e-41a5-b511-f1ec0a21296b",
+              "input": "nums = [1,3,5,6], target = 5"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The target, 2, should be inserted between 1 and 3, thus returning 1.",
+              "id": "19874345-26cf-4ed0-a2f7-a14f892fa059",
+              "input": "nums = [1,3,5,6], target = 2"
+            }
+          ]
+        },
+        {
+          "approach": "Initialize two pointers, one at the start and one at the end of the array. Repeatedly divide the search range in half and compare the middle element to the target until the correct insertion point is found.",
+          "code": "class Solution {\n    func searchInsert(nums: [Int], _ target: Int) -> Int { var left = 0; var right = nums.count - 1; while left <= right { let mid = left + (right - left) / 2; if nums[mid] == target { return mid }; if nums[mid] < target { left = mid + 1 } else { right = mid - 1 } }; return left }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "No additional space is required beyond a few variables, resulting in O(1) space complexity.",
+            "time": "O(log n)",
+            "timeExplanation": "Binary search reduces the search space by half at each step, resulting in O(log n) time complexity."
+          },
+          "explanation": "Binary search is much more efficient than the brute-force approach, especially for large sorted arrays.",
+          "id": "8a3a9f44-6b9a-4714-a3e9-6c228a82a281",
+          "intuition": "This approach uses binary search to efficiently find the insertion point.",
+          "name": "Binary Search",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "Since 5 is already present in the array at index 2, the function returns 2.",
+              "id": "ed84edb4-f575-4499-8116-0e461542c00c",
+              "input": "nums = [1,3,5,6], target = 5"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The target, 2, should be inserted between 1 and 3, thus returning 1.",
+              "id": "b8e7ec66-2589-46d5-868d-16811f7b90ac",
+              "input": "nums = [1,3,5,6], target = 2"
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "The target, 7, is greater than all elements in the array, so it should be appended, thus returning 4.",
+              "id": "d32f0ee0-6c6f-4702-83fe-efd10ce28315",
+              "input": "nums = [1,3,5,6], target = 7"
+            }
+          ]
+        }
+      ],
+      "id": "b58eedc9-7616-426d-97d7-4a02a0c22a8d",
+      "lastUpdated": "2026-02-06T21:04:35Z",
+      "problemSlug": "search-insert-position",
+      "relatedProblems": [
+        "binary-search",
+        "sorted-arrays"
+      ],
+      "summary": "The problem requires finding the index at which a target value should be inserted to maintain sorted order in a given array. A key insight is to utilize binary search for efficiency."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Step 1: Create a hash map to store the frequency of each element in the array. Step 2: Iterate over the hash map to find the element with a frequency of 1.",
+          "code": "class Solution {\n    func singleNonDuplicate(_ nums: [Int]) -> Int {\n        var count = [Int: Int]()\n\n        for num in nums {\n            if let value = count[num] {\n                count[num] = value + 1\n            } else {\n                count[num] = 1\n            }\n        }\n\n        for (key, value) in count {\n            if value == 1 {\n                return key\n            }\n        }\n\n        return 0\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear because in the worst case, we need to store all elements in the hash map.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we iterate over the array once."
+          },
+          "explanation": "This method involves counting the occurrences of each number in the array and then identifying the number that appears only once.",
+          "id": "68d14f09-c6ec-434b-8c14-e75985b1eec6",
+          "intuition": "This approach works by iterating over the array and checking for each element if it appears only once.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The element 2 appears only once in the array.",
+              "id": "912361bc-c0dd-4117-bf33-45f4112ac5e9",
+              "input": "nums = [1,1,2,3,3,4,4,8,8]"
+            },
+            {
+              "expectedOutput": "10",
+              "explanation": "The element 10 appears only once in the array.",
+              "id": "afc2edd9-dd96-4c6b-a359-0852caa35fd2",
+              "input": "nums = [3,3,7,7,10,11,11]"
+            }
+          ]
+        },
+        {
+          "approach": "Step 1: Initialize two pointers, one at the start and one at the end of the array. Step 2: Calculate the mid index and compare the elements at the mid index and the one before it to decide which half of the array to continue searching.",
+          "code": "class Solution {\n    func singleNonDuplicate(_ nums: [Int]) -> Int {\n        var low = 0\n        var high = nums.count - 1\n\n        while low < high {\n            let mid = low + (high - low) / 2\n            if mid % 2 == 1 {\n                mid - 1\n            }\n\n            if nums[mid] == nums[mid ^ 1] {\n                low = mid + 1\n            } else {\n                high = mid\n            }\n        }\n\n        return nums[low]\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we only use a constant amount of space to store the pointers and the mid index.",
+            "time": "O(log n)",
+            "timeExplanation": "The time complexity is logarithmic because we use binary search to divide the search space in half at each step."
+          },
+          "explanation": "This method takes advantage of the fact that the array is sorted and the properties of binary numbers to efficiently find the single element.",
+          "id": "c3e3ae80-dbef-4fee-892c-60683e4be2ab",
+          "intuition": "This approach works by using binary search to find the single element based on the property that the array is sorted and every element appears twice except one.",
+          "name": "Optimized Binary Search",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The element 2 appears only once in the array.",
+              "id": "39c7a356-9e13-42cf-a589-619a9386121d",
+              "input": "nums = [1,1,2,3,3,4,4,8,8]"
+            },
+            {
+              "expectedOutput": "10",
+              "explanation": "The element 10 appears only once in the array.",
+              "id": "b0f8d9f9-5a11-4dc2-a78f-d3d363a121b3",
+              "input": "nums = [3,3,7,7,10,11,11]"
+            }
+          ]
+        }
+      ],
+      "id": "03a2c64e-8b86-495e-ae1a-d91716b03d50",
+      "lastUpdated": "2026-02-06T21:25:19Z",
+      "problemSlug": "single-element-in-a-sorted-array",
+      "relatedProblems": [
+        "single-number",
+        "find-the-duplicate-number"
+      ],
+      "summary": "This problem involves finding a single element in a sorted array where every element appears twice except one, and the key insight is to utilize binary search for an efficient solution."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Binary search [0, x]\n2. If mid² <= x, search higher, record mid\n3. Else search lower",
+          "code": "class Solution {\n    func mySqrt(_ x: Int) -> Int {\n        if x < 2 { return x }\n        var left = 1, right = x / 2, result = 0\n        while left <= right {\n            let mid = left + (right - left) / 2\n            if mid <= x / mid { result = mid; left = mid + 1 }\n            else { right = mid - 1 }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Constant",
+            "time": "O(log x)",
+            "timeExplanation": "Binary search"
+          },
+          "explanation": "Find largest integer whose square doesn't exceed x.",
+          "id": "af9dabef-dfbc-42aa-ae5e-16fd4b193530",
+          "intuition": "Search for n where n² <= x < (n+1)².",
+          "name": "Binary Search",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "√8 ≈ 2.83, floor is 2",
+              "id": "434b4a89-2e0b-4601-b15b-52a83f233e1e",
+              "input": "x=8"
+            }
+          ]
+        }
+      ],
+      "id": "0d963846-644f-441f-8125-871b063b8bf1",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "sqrt-x",
+      "relatedProblems": [
+        "valid-perfect-square"
+      ],
+      "summary": "Integer square root. Binary search for largest n where n² <= x."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Iterate over the array and for each element, consider all possible subarrays starting from that element. Calculate the product of each subarray and check if it's less than K.",
+          "code": "import Foundation\n\nclass Solution {\n    func numSubarrayProductLessThanK(_ nums: [Int], _ k: Int) -> Int {\n        var count = 0\n        for i in 0..<nums.count {\n            var product = 1\n            for j in i..<nums.count {\n                product *= nums[j]\n                if product < k {\n                    count += 1\n                } else {\n                    break\n                }\n            }\n        }\n        return count\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we only use a constant amount of space to store the count and product variables.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) because we have two nested loops that iterate over the array."
+          },
+          "explanation": "This approach works by exhaustively checking all possible subarrays, but it's inefficient because it has a time complexity of O(n^2) due to the nested loop structure.",
+          "id": "e88d4fa6-bedd-4687-bb5f-a33e4c40552a",
+          "intuition": "This approach involves checking all possible subarrays and calculating their product to check if it's less than K.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "8",
+              "explanation": "The subarrays with product less than 100 are [10], [5], [2], [6], [10,5], [5,2], [2,6], [5,2,6].",
+              "id": "227ca5f0-2a8c-4467-8187-d11edea22ddb",
+              "input": "nums = [10,5,2,6], k = 100"
+            },
+            {
+              "expectedOutput": "13",
+              "explanation": "The subarrays with product less than 20 are [1], [2], [3], [4], [5], [1,2], [2,3], [3,4], [4,5], [1,2,3], [2,3,4], [1,2,3,4], [1,2].",
+              "id": "318f72e9-fde7-4f9e-8e5c-84e459937252",
+              "input": "nums = [1,2,3,4,5], k = 20"
+            }
+          ]
+        },
+        {
+          "approach": "Maintain two pointers, left and right, to represent the sliding window. As the right pointer moves to the right, calculate the product of the elements in the window. If the product exceeds K, move the left pointer to the right to reduce the product.",
+          "code": "class Solution {\n    func numSubarrayProductLessThanK(_ nums: [Int], _ k: Int) -> Int {\n        if k <= 1 {\n            return 0\n        }\n        var left = 0\n        var product = 1\n        var count = 0\n        for right in 0..<nums.count {\n            product *= nums[right]\n            while product >= k && left <= right {\n                product /= nums[left]\n                left += 1\n            }\n            count += right - left + 1\n        }\n        return count\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we only use a constant amount of space to store the count, product, left, and right variables.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we only need to iterate over the array once."
+          },
+          "explanation": "This approach works by efficiently maintaining a sliding window of elements whose product is less than K, reducing the time complexity to O(n).",
+          "id": "14fc74ef-aa08-46ae-bac4-ce57398f4ef1",
+          "intuition": "This approach involves maintaining a sliding window of elements whose product is less than K.",
+          "name": "Sliding Window Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "8",
+              "explanation": "The subarrays with product less than 100 are [10], [5], [2], [6], [10,5], [5,2], [2,6], [5,2,6].",
+              "id": "aeff1af9-1b00-45b9-86e7-1e8fbc488f39",
+              "input": "nums = [10,5,2,6], k = 100"
+            },
+            {
+              "expectedOutput": "13",
+              "explanation": "The subarrays with product less than 20 are [1], [2], [3], [4], [5], [1,2], [2,3], [3,4], [4,5], [1,2,3], [2,3,4], [1,2,3,4], [1,2].",
+              "id": "ce3540e7-92e1-4093-9cf9-143f82187de5",
+              "input": "nums = [1,2,3,4,5], k = 20"
+            }
+          ]
+        }
+      ],
+      "id": "38084d66-ae4d-477a-8c82-206abce38cb1",
+      "lastUpdated": "2026-02-06T21:35:28Z",
+      "problemSlug": "subarray-product-less-than-k",
+      "relatedProblems": [
+        "max-subarray",
+        "subarray-sum-equals-k"
+      ],
+      "summary": "The problem asks for the number of contiguous subarrays where the product of all the elements in the subarray is less than a given number K. The key insight is to use a sliding window approach to efficiently calculate the product of all subarrays."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Create a hash table to store key-value pairs with their timestamps. When the get function is called, iterate through the list of key-value pairs for the specified key and find the value that has a timestamp less than or equal to the specified timestamp.",
+          "code": "class Solution {\n    class TimeKeyValStore {\n        var store: [String: [(String, Int)]] = [:]\n        func set(_ key: String, _ value: String, _ timestamp: Int) {\n            if store[key] == nil {\n                store[key] = [(value, timestamp)]\n            } else {\n                store[key]?.append((value, timestamp))\n            }\n        }\n        func get(_ key: String, _ timestamp: Int) -> String {\n            if store[key] == nil {\n                return \"\"\n            }\n            let index = store[key]!.enumerated().first(where: { $0.element.1 > timestamp })?.index ?? store[key]!.count\n            if index == 0 {\n                return \"\"\n            }\n            return store[key]![index - 1].0\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing all key-value pairs in a list.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity of the get function is O(n) because we are iterating through the list of key-value pairs for the specified key."
+          },
+          "explanation": "In the Brute Force approach, we store all key-value pairs in a list and then iterate through the list to find the value at a specific timestamp. This approach is simple but not efficient as the time complexity of the get function is O(n).",
+          "id": "2803e5bd-2ce9-4cf4-81a8-a9a56372592c",
+          "intuition": "This approach involves storing key-value pairs with their timestamps in a list and then iterating through the list to find the value at a specific timestamp.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"bar\"",
+              "explanation": "The expected output is \"bar\" because the get function returns the value at the specified timestamp.",
+              "id": "d5cdfb8a-50dc-4416-87d3-c16598be015a",
+              "input": "TimeKeyValStore().set(\"foo\", \"bar\", 1); TimeKeyValStore().get(\"foo\", 1);"
+            },
+            {
+              "expectedOutput": "\"baz\"",
+              "explanation": "The expected output is \"baz\" because the get function returns the value at the specified timestamp or the last value if no value is found at the specified timestamp.",
+              "id": "0c8ed7e0-2da0-4ccd-ad3d-1ffde0504a12",
+              "input": "TimeKeyValStore().set(\"foo\", \"bar\", 1); TimeKeyValStore().set(\"foo\", \"baz\", 2); TimeKeyValStore().get(\"foo\", 3);"
+            }
+          ]
+        },
+        {
+          "approach": "Create a hash table to store key-value pairs with their timestamps in a sorted list. When the get function is called, use binary search to find the value that has a timestamp less than or equal to the specified timestamp.",
+          "code": "class Solution {\n    class TimeKeyValStore {\n        var store: [String: [(String, Int)]] = [:]\n        func set(_ key: String, _ value: String, _ timestamp: Int) {\n            if store[key] == nil {\n                store[key] = [(value, timestamp)]\n            } else {\n                store[key] = store[key]! + [(value, timestamp)]\n                store[key]!.sort { $0.1 < $1.1 }\n            }\n        }\n        func get(_ key: String, _ timestamp: Int) -> String {\n            if store[key] == nil {\n                return \"\"\n            }\n            let index = binarySearch(store[key]!, timestamp)\n            if index == -1 {\n                return \"\"\n            }\n            return store[key]![index].0\n        }\n        func binarySearch(_ list: [(String, Int)], _ target: Int) -> Int {\n            var low = 0\n            var high = list.count - 1\n            while low <= high {\n                let mid = (low + high) / 2\n                if list[mid].1 <= target {\n                    if mid == list.count - 1 || list[mid + 1].1 > target {\n                        return mid\n                    }\n                    low = mid + 1\n                } else {\n                    high = mid - 1\n                }\n            }\n            return -1\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing all key-value pairs in a list.",
+            "time": "O(log n)",
+            "timeExplanation": "The time complexity of the get function is O(log n) because we are using binary search to find the value at the specified timestamp."
+          },
+          "explanation": "In the Optimized approach, we store key-value pairs in a sorted list and use binary search to find the value at a specific timestamp. This approach is more efficient as the time complexity of the get function is O(log n).",
+          "id": "6ea8752c-b184-4717-9dbd-72ad114c67df",
+          "intuition": "This approach involves storing key-value pairs with their timestamps in a sorted list and then using binary search to find the value at a specific timestamp.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "\"bar\"",
+              "explanation": "The expected output is \"bar\" because the get function returns the value at the specified timestamp.",
+              "id": "37fc6c9d-b16a-4527-80aa-fa7b21c269c7",
+              "input": "TimeKeyValStore().set(\"foo\", \"bar\", 1); TimeKeyValStore().get(\"foo\", 1);"
+            },
+            {
+              "expectedOutput": "\"baz\"",
+              "explanation": "The expected output is \"baz\" because the get function returns the value at the specified timestamp or the last value if no value is found at the specified timestamp.",
+              "id": "d411e5c3-19fe-40bf-bc5d-48bbdbfa5f12",
+              "input": "TimeKeyValStore().set(\"foo\", \"bar\", 1); TimeKeyValStore().set(\"foo\", \"baz\", 2); TimeKeyValStore().get(\"foo\", 3);"
+            }
+          ]
+        }
+      ],
+      "id": "a994a906-875d-46f0-bb1b-22860ecfebbe",
+      "lastUpdated": "2026-02-06T21:52:52Z",
+      "problemSlug": "time-based-key-value-store",
+      "relatedProblems": [
+        "design-tic-tac-toe",
+        "insert-delete-getrandom-o1"
+      ],
+      "summary": "This problem involves designing a time-based key-value store where we need to get the value of a key at a specific timestamp. The key insight is to use a hash table to store key-value pairs and a binary search to find the value at the specified timestamp."
+    }
+  ],
+  "topic": "binary-search",
+  "version": "2.0.0"
+}

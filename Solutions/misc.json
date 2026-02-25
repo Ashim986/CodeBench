@@ -1,0 +1,2567 @@
+{
+  "solutions": [
+    {
+      "approaches": [
+        {
+          "approach": "1. Compare adjacent words pairwise\n2. First differing char gives edge: words[i][k] -> words[i+1][k]\n3. Build graph and in-degree count\n4. BFS from chars with in-degree 0\n5. If result has all chars, return it; else cycle exists",
+          "code": "class Solution {\n    func alienOrder(_ words: [String]) -> String {\n        var graph = [Character: Set<Character>]()\n        var inDegree = [Character: Int]()\n\n        // Initialize all characters\n        for word in words {\n            for c in word {\n                graph[c] = graph[c] ?? Set()\n                inDegree[c] = inDegree[c] ?? 0\n            }\n        }\n\n        // Build graph from adjacent word pairs\n        for i in 0..<words.count - 1 {\n            let w1 = Array(words[i]), w2 = Array(words[i+1])\n\n            // Check invalid case: prefix comes after longer word\n            if w1.count > w2.count && w1.starts(with: w2) {\n                return \"\"\n            }\n\n            // Find first differing character\n            for j in 0..<min(w1.count, w2.count) {\n                if w1[j] != w2[j] {\n                    if !graph[w1[j]]!.contains(w2[j]) {\n                        graph[w1[j]]!.insert(w2[j])\n                        inDegree[w2[j]]! += 1\n                    }\n                    break\n                }\n            }\n        }\n\n        // BFS topological sort\n        var queue = inDegree.filter { $0.value == 0 }.map { $0.key }\n        var result = \"\"\n\n        while !queue.isEmpty {\n            let c = queue.removeFirst()\n            result.append(c)\n\n            for next in graph[c]! {\n                inDegree[next]! -= 1\n                if inDegree[next] == 0 {\n                    queue.append(next)\n                }\n            }\n        }\n\n        return result.count == inDegree.count ? result : \"\"\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Graph has at most 26 nodes (alphabet size)",
+            "time": "O(C)",
+            "timeExplanation": "C = total chars across all words. Process each char once."
+          },
+          "explanation": "Adjacent sorted words reveal ordering: 'wrt' before 'wrf' means t < f. Edge case: 'abc' before 'ab' is invalid (longer word can't come after prefix).",
+          "id": "550e8400-e29b-41d4-a716-446655440178",
+          "intuition": "Compare adjacent words to find ordering rules (edges). Build directed graph where edge a->b means a comes before b. Topological sort gives valid ordering.",
+          "name": "Topological Sort (BFS)",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"wertf\"",
+              "explanation": "From comparisons: t<f, w<e, r<t, e<r. Order: w->e->r->t->f",
+              "id": "550e8400-e29b-41d4-a716-446655440284",
+              "input": "[\"wrt\",\"wrf\",\"er\",\"ett\",\"rftt\"]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440067",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "alien-dictionary",
+      "relatedProblems": [
+        "course-schedule",
+        "course-schedule-ii"
+      ],
+      "summary": "Derive character ordering from sorted alien words. Build graph from adjacent word comparisons, then topological sort."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Create an empty dictionary to store the frequency of each number. 2. Iterate over the table and count the frequency of each number. 3. Find the maximum number with a frequency of 1.",
+          "code": "class Solution {\n    func biggestSingleNumber(_ num: [Int]) -> Int? { \n        let count: [Int: Int] = Dictionary(num.map { ($0, 1) }, uniquingKeysWith: +) \n        return count.first(where: { $1 == 1 })?.key ?? nil \n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing the frequency of each number in a dictionary.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are iterating over the table twice."
+          },
+          "explanation": "This approach is straightforward but has a high time complexity because it involves iterating over the table twice.",
+          "id": "6cfaa099-c296-4ae7-9f0a-462f8491d75b",
+          "intuition": "This approach works by simply counting the frequency of each number in the table and then finding the maximum number with a frequency of 1.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "The number 3 appears only once in the table, so it is the biggest single number.",
+              "id": "2b4ab512-c0e9-4d61-adc1-7b866f674d38",
+              "input": "nums = [1, 1, 2, 2, 3]"
+            },
+            {
+              "expectedOutput": "6",
+              "explanation": "The number 6 appears only once in the table, so it is the biggest single number.",
+              "id": "7c3467d6-012f-49cc-b718-c778bf553b12",
+              "input": "nums = [4, 4, 5, 6]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Create an empty dictionary to store the frequency of each number. 2. Iterate over the table and count the frequency of each number while keeping track of the maximum number with a frequency of 1.",
+          "code": "class Solution {\n    func biggestSingleNumber(_ num: [Int]) -> Int? { \n        var maxNum: Int? = nil \n        let count: [Int: Int] = Dictionary(num.map { ($0, 1) }, uniquingKeysWith: +) \n        for (key, value) in count { \n            if value == 1 && (maxNum == nil || key > maxNum!) { \n                maxNum = key \n            } \n        } \n        return maxNum \n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing the frequency of each number in a dictionary.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are iterating over the table once."
+          },
+          "explanation": "This approach is more efficient than the brute force approach because it only involves iterating over the table once.",
+          "id": "22037889-a122-471f-af22-6d188f4f0fbf",
+          "intuition": "This approach works by using a dictionary to store the frequency of each number and then finding the maximum number with a frequency of 1 in a single pass.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "The number 3 appears only once in the table, so it is the biggest single number.",
+              "id": "ae216522-973f-4d37-a9bd-c11efb7f7686",
+              "input": "nums = [1, 1, 2, 2, 3]"
+            },
+            {
+              "expectedOutput": "6",
+              "explanation": "The number 6 appears only once in the table, so it is the biggest single number.",
+              "id": "8962a341-5ac9-405f-a069-a949066e554d",
+              "input": "nums = [4, 4, 5, 6]"
+            },
+            {
+              "expectedOutput": "8",
+              "explanation": "The number 8 appears only once in the table, so it is the biggest single number.",
+              "id": "e3b0e71a-ded1-4500-9985-500589882679",
+              "input": "nums = [7, 7, 8]"
+            }
+          ]
+        }
+      ],
+      "id": "8cca389f-e001-49da-bfac-65095f3e55b5",
+      "lastUpdated": "2026-02-06T21:29:09Z",
+      "problemSlug": "biggest-single-number",
+      "relatedProblems": [
+        "single-number",
+        "single-element-in-a-sorted-array"
+      ],
+      "summary": "This problem is about finding the largest number that appears only once in a given table. The key insight is to use a dictionary to store the frequency of each number."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. DFS returns max gain from a node to its parent.\n2. At each node, compute leftGain and rightGain (ignore negatives).\n3. Update global answer with leftGain + node.val + rightGain.\n4. Return node.val + max(leftGain, rightGain).",
+          "code": "class Solution {\n    func maxPathSum(_ root: TreeNode?) -> Int {\n        var best = Int.min\n\n        func dfs(_ node: TreeNode?) -> Int {\n            guard let node = node else { return 0 }\n            let left = max(0, dfs(node.left))\n            let right = max(0, dfs(node.right))\n            best = max(best, left + node.val + right)\n            return node.val + max(left, right)\n        }\n\n        _ = dfs(root)\n        return best\n    }\n}",
+          "complexity": {
+            "space": "O(h)",
+            "spaceExplanation": "Recursion stack depth equals tree height",
+            "time": "O(n)",
+            "timeExplanation": "Each node is visited once"
+          },
+          "explanation": "This separates the path-to-parent (one side only) from the best path through a node (both sides). The global maximum is updated at every node.",
+          "id": "d9d42e75-cc17-4b5e-bfd9-711ee17cc498",
+          "intuition": "For each node, the best path going up can include only one child. But the best path overall might use both children plus the node.",
+          "name": "DFS with Max Gain",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "6",
+              "explanation": "Best path is 2 -> 1 -> 3 with sum 6.",
+              "id": "01213095-ad3e-45dc-9ef2-a463c884ef88",
+              "input": "root = [1,2,3]"
+            },
+            {
+              "expectedOutput": "42",
+              "explanation": "Best path is 15 -> 20 -> 7 with sum 42.",
+              "id": "bc57200e-8fb6-44ce-a318-49381be2bb4c",
+              "input": "root = [-10,9,20,null,null,15,7]"
+            }
+          ]
+        }
+      ],
+      "id": "cd5da6fc-1d62-4a2a-860f-36786c25a511",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "binary-tree-maximum-path-sum",
+      "relatedProblems": [
+        "binary-tree-maximum-path-sum",
+        "binary-tree-maximum-path-sum-ii"
+      ],
+      "summary": "Compute the maximum path sum by tracking the best gain from each node and updating a global maximum for paths that pass through the node."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Map stop to routes\n2. BFS from routes containing source\n3. Count route changes",
+          "code": "class Solution {\n    func numBusesToDestination(_ routes: [[Int]], _ source: Int, _ target: Int) -> Int {\n        if source == target { return 0 }\n        var stopToRoutes: [Int: [Int]] = [:]\n        for (i, route) in routes.enumerated() {\n            for stop in route {\n                stopToRoutes[stop, default: []].append(i)\n            }\n        }\n        var visitedRoutes = Set<Int>()\n        var visitedStops = Set<Int>([source])\n        var queue = [source]\n        var buses = 0\n\n        while !queue.isEmpty {\n            buses += 1\n            var newStops: [Int] = []\n            for stop in queue {\n                for route in stopToRoutes[stop] ?? [] {\n                    if visitedRoutes.contains(route) { continue }\n                    visitedRoutes.insert(route)\n                    for nextStop in routes[route] {\n                        if nextStop == target { return buses }\n                        if !visitedStops.contains(nextStop) {\n                            visitedStops.insert(nextStop)\n                            newStops.append(nextStop)\n                        }\n                    }\n                }\n            }\n            queue = newStops\n        }\n        return -1\n    }\n}",
+          "complexity": {
+            "space": "O(n × m)",
+            "spaceExplanation": "Stop to route mapping",
+            "time": "O(n × m)",
+            "timeExplanation": "n routes, m stops"
+          },
+          "explanation": "Edges are shared stops between routes.",
+          "id": "79b5c5eb-6603-455d-983c-850e07e24b70",
+          "intuition": "Each bus route is a node, connected if they share a stop.",
+          "name": "BFS on Routes",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "Route 0 then route 1",
+              "id": "7fc3d368-925e-4920-bd9a-572f99af96e5",
+              "input": "routes = [[1,2,7],[3,6,7]], source = 1, target = 6"
+            }
+          ]
+        }
+      ],
+      "id": "8da7a0ef-4146-4a04-9aac-cb697c52328d",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "bus-routes",
+      "relatedProblems": [],
+      "summary": "Minimum buses to reach target. BFS on routes (not stops)."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start with the initial string '1'. Then, for each subsequent string, iterate over the previous string to count consecutive repeating characters and write down the count and character.",
+          "code": "class Solution {\n    func countAndSay(_ n: Int) -> String {\n        var result = \"1\"\n        for _ in 1..<n {\n            var temp = \"\"\n            var i = 0\n            while i < result.count {\n                var count = 1\n                while i + 1 < result.count && result[i] == result[i + 1] {\n                    i += 1\n                    count += 1\n                }\n                temp += \"(count)\"\n                temp += \"(result[i])\"\n                i += 1\n            }\n            result = temp\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(m)",
+            "spaceExplanation": "The space complexity is O(m), as we need to store the current and next strings in the sequence, each of which can have up to m characters.",
+            "time": "O(n*m)",
+            "timeExplanation": "The time complexity is O(n*m), where n is the input number and m is the average length of the strings in the sequence."
+          },
+          "explanation": "For example, starting with '1', the next string would be '11' (one 1), then '21' (two 1s), then '1211' (one 2, one 1), and so on. This process can be continued to generate the nth string in the sequence.",
+          "id": "7514913d-0014-48fd-9a7c-daf0266766b9",
+          "intuition": "This approach involves directly generating each string in the sequence by examining the previous string and writing down the count of consecutive repeating characters.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "The first string in the sequence is '1'.",
+              "id": "ba713134-a0ae-48c3-94c4-3933580b9ae0",
+              "input": "1"
+            },
+            {
+              "expectedOutput": "11",
+              "explanation": "The second string in the sequence is '11', which describes the first string '1' as one 1.",
+              "id": "ffd1ce47-6388-4136-94c4-835f698d75e8",
+              "input": "2"
+            },
+            {
+              "expectedOutput": "21",
+              "explanation": "The third string in the sequence is '21', which describes the second string '11' as two 1s.",
+              "id": "5e5220f9-a00c-4fd0-a153-45c74d8117e7",
+              "input": "3"
+            }
+          ]
+        },
+        {
+          "approach": "Use two pointers to track the current character and the next character in the string, and a counter to keep track of consecutive repeating characters.",
+          "code": "class Solution {\n    func countAndSay(_ n: Int) -> String {\n        var result = Array(\"1\".utf8)\n        for _ in 1..<n {\n            var temp = Array<UInt8>(repeating: 0, count: result.count * 2)\n            var i = 0, j = 0\n            while i < result.count {\n                var count = 1\n                while i + 1 < result.count && result[i] == result[i + 1] {\n                    i += 1\n                    count += 1\n                }\n                temp[j] = UInt8(String(count).utf8.first!)\n                j += 1\n                temp[j] = result[i]\n                j += 1\n                i += 1\n            }\n            result = Array(temp[0..<j])\n        }\n        return String(bytes: result, encoding: .utf8)!\n    }\n}",
+          "complexity": {
+            "space": "O(m)",
+            "spaceExplanation": "The space complexity is still O(m), as we use a mutable character array to build the next string in the sequence.",
+            "time": "O(n*m)",
+            "timeExplanation": "The time complexity remains O(n*m), where n is the input number and m is the average length of the strings in the sequence."
+          },
+          "explanation": "The optimized approach avoids creating temporary strings and instead uses a mutable character array to build the next string in the sequence, reducing the space complexity.",
+          "id": "8a868ba5-ec28-4acc-95f4-f146dafbad0b",
+          "intuition": "This approach involves using a similar loop-based strategy as the brute-force approach but with optimizations to reduce the time and space complexity.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1211",
+              "explanation": "The fourth string in the sequence is '1211', which describes the third string '21' as one 2, one 1.",
+              "id": "488e0133-0f09-4aa6-ae65-c1a562113705",
+              "input": "4"
+            },
+            {
+              "expectedOutput": "111221",
+              "explanation": "The fifth string in the sequence is '111221', which describes the fourth string '1211' as one 1, one 2, two 1s.",
+              "id": "9b5168dd-a871-475f-b653-ebd6f7ccf992",
+              "input": "5"
+            },
+            {
+              "expectedOutput": "312211",
+              "explanation": "The sixth string in the sequence is '312211', which describes the fifth string '111221' as three 1s, two 2s, one 1.",
+              "id": "e5b5431e-b18d-467d-8a9c-bc19d817e9b6",
+              "input": "6"
+            }
+          ]
+        }
+      ],
+      "id": "97bf4e71-55b1-474d-a5ab-974d31bf1bd0",
+      "lastUpdated": "2026-02-06T21:04:40Z",
+      "problemSlug": "count-and-say",
+      "relatedProblems": [
+        "generate-parenthesis",
+        "letter-combinations-of-a-phone-number"
+      ],
+      "summary": "The Count and Say problem involves generating a sequence of strings where each string describes the previous string. The key insight is to recognize patterns in the sequence and generate each string based on the previous one. The problem can be solved using either a brute-force approach or an optimized approach using loops to count consecutive repeating characters."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, check if the word is all uppercase or all lowercase. Then, check if the word is title case by verifying that the first character is uppercase and the rest are lowercase.",
+          "code": "class Solution { func detectCapitalUse(_ word: String) -> Bool { let allUpper = word.components(separatedBy: \"\") == word.components(separatedBy: \"\").map({String($0.uppercased())}); let allLower = word.components(separatedBy: \"\") == word.components(separatedBy: \"\").map({String($0.lowercased())}); let titleCase = word.first?.uppercased() ?? \"\" == word.first?.uppercased() && word.dropFirst().components(separatedBy: \"\") == word.dropFirst().components(separatedBy: \"\").map({String($0.lowercased())}); return allUpper || allLower || titleCase; }}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are creating new arrays and strings to store the components of the word in the brute force approach.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are iterating over the characters in the string, where n is the length of the string."
+          },
+          "explanation": "We will iterate over each character in the string to manually check the three possible cases: all uppercase, all lowercase, and title case.",
+          "id": "84516b49-987c-4687-b2a8-993a5b5c1bbd",
+          "intuition": "Check every possible case for the word's capitalization by manually iterating through each character.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"true\"",
+              "explanation": "The word \"USA\" is all uppercase, which is a valid capitalization.",
+              "id": "02d57261-f7e7-489d-a9a3-a6266dd3611e",
+              "input": "\"USA\""
+            },
+            {
+              "expectedOutput": "\"true\"",
+              "explanation": "The word \"leetcode\" is all lowercase, which is a valid capitalization.",
+              "id": "de6bee65-66c4-4e80-a157-5fdb1fcf6864",
+              "input": "\"leetcode\""
+            },
+            {
+              "expectedOutput": "\"true\"",
+              "explanation": "The word \"Google\" is title case, which is a valid capitalization.",
+              "id": "b9164edb-0859-4f22-adfc-b2069c2af1ce",
+              "input": "\"Google\""
+            },
+            {
+              "expectedOutput": "\"false\"",
+              "explanation": "The word \"gOogle\" is not valid because it is not all uppercase, all lowercase, or title case.",
+              "id": "52f453b5-2d87-417d-8c03-71921a50d8b5",
+              "input": "\"gOogle\""
+            }
+          ]
+        },
+        {
+          "approach": "First, check if the word is all uppercase or all lowercase using the uppercased() and lowercased() functions. Then, check if the word is title case by combining the prefix(1).uppercased() function and dropFirst().lowercased() function.",
+          "code": "class Solution {\n    func detectCapitalUse(_ word: String) -> Bool {\n        return word == word.uppercased() || word == word.lowercased() || (word.prefix(1) == word.prefix(1).uppercased() && word.dropFirst() == word.dropFirst().lowercased())\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are not creating any new arrays or strings that scale with the input size.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are iterating over the characters in the string in the optimized approach."
+          },
+          "explanation": "We will utilize Swift's built-in string functions to easily check the three possible cases: all uppercase, all lowercase, and title case.",
+          "id": "e2caf6f8-3231-4b5d-a9d5-b22dde335511",
+          "intuition": "Instead of checking every possible case manually, use Swift's built-in string functions to simplify the process.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "\"true\"",
+              "explanation": "The word \"USA\" is all uppercase, which is a valid capitalization.",
+              "id": "61c7c693-303e-470f-9657-e3dcdca8a1e3",
+              "input": "\"USA\""
+            },
+            {
+              "expectedOutput": "\"true\"",
+              "explanation": "The word \"leetcode\" is all lowercase, which is a valid capitalization.",
+              "id": "d894895b-64f8-45c6-aa47-150339bf06e6",
+              "input": "\"leetcode\""
+            },
+            {
+              "expectedOutput": "\"true\"",
+              "explanation": "The word \"Google\" is title case, which is a valid capitalization.",
+              "id": "62bfd68c-198c-4b85-bc0a-ac56a8796237",
+              "input": "\"Google\""
+            },
+            {
+              "expectedOutput": "\"false\"",
+              "explanation": "The word \"gOogle\" is not valid because it is not all uppercase, all lowercase, or title case.",
+              "id": "654a6eaf-baac-40cd-be88-416b62896a72",
+              "input": "\"gOogle\""
+            }
+          ]
+        }
+      ],
+      "id": "8075d4a2-dbbb-46d5-afd2-cf9ee0b163b0",
+      "lastUpdated": "2026-02-06T21:23:52Z",
+      "problemSlug": "detect-capital",
+      "relatedProblems": [
+        "valid-palindrome",
+        "reverse-string-ii"
+      ],
+      "summary": "The problem asks to determine whether a word's capitalization is correct. The key insight is that a word can be either all uppercase, all lowercase, or title case, where the first letter is uppercase and the rest are lowercase."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Binary search with left and right pointers\n2. If nums[mid] > nums[right]: minimum in right half\n3. If nums[mid] < nums[right]: minimum in left half (including mid)\n4. If nums[mid] == nums[right]: shrink right by 1\n5. Return nums[left]",
+          "code": "class Solution {\n    func findMin(_ nums: [Int]) -> Int {\n        var left = 0\n        var right = nums.count - 1\n\n        while left < right {\n            let mid = left + (right - left) / 2\n\n            if nums[mid] > nums[right] {\n                left = mid + 1\n            } else if nums[mid] < nums[right] {\n                right = mid\n            } else {\n                right -= 1\n            }\n        }\n\n        return nums[left]\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only pointer variables",
+            "time": "O(n) worst, O(log n) average",
+            "timeExplanation": "Worst case all duplicates requires linear scan"
+          },
+          "explanation": "Duplicates create ambiguity. When nums[mid] == nums[right], we safely shrink by 1 since even if right is the minimum, mid has the same value.",
+          "id": "ca3a6049-dd1a-46ce-ae72-10a583e50ff0",
+          "intuition": "When mid equals right, we can't determine which half has minimum, so shrink right by 1.",
+          "name": "Modified Binary Search",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "0",
+              "explanation": "Minimum is 0",
+              "id": "3fa6115f-a503-479c-9478-793862e11595",
+              "input": "nums = [2,2,2,0,1]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "Minimum at start",
+              "id": "15a4dffc-faaf-4d17-9f6e-078d9622f464",
+              "input": "nums = [1,3,3]"
+            }
+          ]
+        }
+      ],
+      "id": "d37eba63-6aed-4646-bf8c-a1020ecfa7f0",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "find-minimum-in-rotated-sorted-array-ii",
+      "relatedProblems": [
+        "find-minimum-in-rotated-sorted-array",
+        "search-in-rotated-sorted-array-ii"
+      ],
+      "summary": "Find minimum in rotated sorted array with duplicates. Binary search with special handling when nums[mid] == nums[right]."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Iterate over all users, then for each user, iterate over all their friends and count them. Keep track of the user who has the most friends.",
+          "code": "import Foundation\n\nclass Solution {\n    func findMostFriends(_ requests: [[Int]]) -> Int? {\n        var friendships: [Int: [Int]] = [:]\n        for request in requests {\n            if let idx = friendships.firstIndex(where: { $0.value == request }) {\n                friendships[idx].value.remove(at: 0)\n            } else {\n                friendships[requests.firstIndex(of: request) ?? 0] = request\n            }\n        }\n\n        var maxCount = 0\n        var maxId: Int?\n\n        for (id, friends) in friendships {\n            if friends.count > maxCount {\n                maxCount = friends.count\n                maxId = id\n            }\n        }\n\n        return maxId\n    }\n}",
+          "complexity": {
+            "space": "O(n^2)",
+            "spaceExplanation": "We store all friendships in a dictionary, resulting in quadratic space complexity.",
+            "time": "O(n^2)",
+            "timeExplanation": "We iterate over all users and their friends, resulting in quadratic time complexity."
+          },
+          "explanation": "For each user, we iterate over all their friends, increment the friend count for each friend, and update the maximum friend count if necessary.",
+          "id": "6e3c835b-37aa-412b-86bc-f5944aa625ba",
+          "intuition": "This approach works by iterating over all users and their corresponding friends to find the user who has the most friends.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "User 1 has the most friends with 2 friends.",
+              "id": "77a97ac6-b774-4e3b-b9e5-fddba4418b09",
+              "input": "requests = [[1,2],[2,3],[3,1],[4,5],[5,4]]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "User 1 has the most friends with 1 friend.",
+              "id": "f461472f-f71b-4d61-82a5-a3ee840121d4",
+              "input": "requests = [[1,2],[3,4],[5,6],[7,8]]"
+            }
+          ]
+        },
+        {
+          "approach": "Create a dictionary to store the friends for each user. Then iterate over the requests and update the friends for each user in the dictionary. Finally, find the user with the most friends.",
+          "code": "import Foundation\n\nclass Solution {\n    func findMostFriends(_ requests: [[Int]]) -> Int? {\n        var friendships: [Int: Set<Int>] = [:]\n\n        for request in requests {\n            let (id1, id2) = (request[0], request[1])\n\n            if friendships[id1] == nil {\n                friendships[id1] = Set()\n            }\n\n            if friendships[id2] == nil {\n                friendships[id2] = Set()\n            }\n\n            friendships[id1]?.insert(id2)\n            friendships[id2]?.insert(id1)\n        }\n\n        var maxCount = 0\n        var maxId: Int?\n\n        for (id, friends) in friendships {\n            if friends.count > maxCount {\n                maxCount = friends.count\n                maxId = id\n            }\n        }\n\n        return maxId\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We store all friendships in a dictionary, resulting in linear space complexity.",
+            "time": "O(n)",
+            "timeExplanation": "We iterate over all requests, resulting in linear time complexity."
+          },
+          "explanation": "We use a dictionary to store the friends for each user, allowing us to efficiently look up and update the friends for each user.",
+          "id": "7cc428a1-9c68-4840-b774-15e557b9499e",
+          "intuition": "This approach works by utilizing a set data structure to efficiently keep track of friendships and count them in O(1) time.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "User 1 has the most friends with 2 friends.",
+              "id": "eab44858-f863-4d25-999f-b3820c160851",
+              "input": "requests = [[1,2],[2,3],[3,1],[4,5],[5,4]]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "User 1 has the most friends with 1 friend.",
+              "id": "c9a45e31-b2bc-4109-9f26-bcdbdb7c4c45",
+              "input": "requests = [[1,2],[3,4],[5,6],[7,8]]"
+            }
+          ]
+        }
+      ],
+      "id": "b658d01d-428f-43af-a824-8b78d2ca94c3",
+      "lastUpdated": "2026-02-06T21:28:22Z",
+      "problemSlug": "friend-requests-ii-who-has-the-most-friends",
+      "relatedProblems": [
+        "friend-requests-i-who-has-the-most-friends",
+        "most-popular-video-creator"
+      ],
+      "summary": "This problem involves a social network where users send and accept friend requests, and the goal is to find the user who has the most friends. The key insight is to create a database to track the friendships."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Split the input string into words. 2. For each word, check if it starts with a vowel. 3. If it starts with a vowel, append 'ma' to the word. 4. If it starts with a consonant, move the consonant to the end and append 'ma'. 5. Append 'a's to the word based on the word's index.",
+          "code": "class Solution {\n    import Foundation\n\n    func toGoatLatin(_ S: String) -> String {\n        var words = S.components(separatedBy: \" \")\n        var result = \"\"\n\n        for (index, word) in words.enumerated() {\n            let firstChar = word.first!\n\n            if \"aeiouAEIOU\".contains(firstChar) {\n                result += word + \"ma\"\n            } else {\n                result += String(word.dropFirst()) + String(firstChar) + \"ma\"\n            }\n\n            result += String(repeating: \"a\", count: index + 1) + \" \"\n        }\n\n        return String(result.dropLast())\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) as we store the result string which can be of length n.",
+            "time": "O(n*m)",
+            "timeExplanation": "The time complexity is O(n*m) where n is the number of words and m is the maximum length of a word. This is because we iterate over each word and its characters."
+          },
+          "explanation": "The brute force approach involves manually checking each word and applying the conversion rules. It's straightforward but not optimized for performance.",
+          "id": "d916030e-33cf-4b85-9bd4-11123347273d",
+          "intuition": "This approach works by iterating over each word in the input string, applying the conversion rules, and appending the results to form the final Goat Latin string.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "heTma uickqma rownbma oxfma umpedjma overma hetma azylma ogdma",
+              "explanation": "Each word is converted to Goat Latin and appended to the result string.",
+              "id": "28f1f796-4ffb-4a87-916b-268f7b4439a3",
+              "input": "The quick brown fox jumped over the lazy dog"
+            },
+            {
+              "expectedOutput": "Ima peaksma Goatma atinLma",
+              "explanation": "The input string is converted to Goat Latin.",
+              "id": "08f49445-0ce0-4c70-a629-70e8d2fe913e",
+              "input": "I speak Goat Latin"
+            }
+          ]
+        },
+        {
+          "approach": "1. Split the input string into words. 2. Use a for loop to iterate over the words and convert each word to Goat Latin. 3. Use Swift's string concatenation and manipulation functions to efficiently build the result string.",
+          "code": "class Solution {\n    import Foundation\n\n    func toGoatLatin(_ S: String) -> String {\n        let words = S.components(separatedBy: \" \")\n        let vowels: [Character] = [\"a\", \"e\", \"i\", \"o\", \"u\", \"A\", \"E\", \"I\", \"O\", \"U\"]\n\n        return words.enumerated().map { index, word -> String in\n            var goatLatin = word\n\n            if !vowels.contains(word.first!) {\n                goatLatin = String(goatLatin.dropFirst()) + String(word.first!)\n            }\n\n            return goatLatin + \"ma\" + String(repeating: \"a\", count: index + 1)\n        }.joined(separator: \" \")\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) as we store the result string which can be of length n.",
+            "time": "O(n*m)",
+            "timeExplanation": "The time complexity is O(n*m) where n is the number of words and m is the maximum length of a word. This is because we iterate over each word and its characters."
+          },
+          "explanation": "The optimized approach takes advantage of Swift's built-in string functions to improve performance and readability.",
+          "id": "57342945-9b80-4b3b-8668-28e752acd014",
+          "intuition": "This approach works by using Swift's built-in string manipulation functions to simplify the conversion process.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "heTma uickqma rownbma oxfma umpedjma overma hetma azylma ogdma",
+              "explanation": "Each word is converted to Goat Latin and appended to the result string.",
+              "id": "27cd9ce4-94a1-493e-8af7-369258a24d92",
+              "input": "The quick brown fox jumped over the lazy dog"
+            },
+            {
+              "expectedOutput": "Ima peaksma Goatma atinLma",
+              "explanation": "The input string is converted to Goat Latin.",
+              "id": "49fec1a2-21c4-4ef7-847e-3babb53cc3c2",
+              "input": "I speak Goat Latin"
+            }
+          ]
+        }
+      ],
+      "id": "923eea12-9f6e-416e-ad65-15c037c92ed4",
+      "lastUpdated": "2026-02-06T21:42:30Z",
+      "problemSlug": "goat-latin",
+      "relatedProblems": [
+        "reverse-words-in-a-string-iii",
+        "reverse-string-ii"
+      ],
+      "summary": "The problem involves converting English words to Goat Latin. The key insight is to apply the conversion rules based on vowel presence and appending 'ma' and 'a's accordingly."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Check if edges == n-1 (required for tree)\n2. Union-Find: if two nodes already connected, cycle exists\n3. After all unions, check if single component",
+          "code": "class Solution {\n    func validTree(_ n: Int, _ edges: [[Int]]) -> Bool {\n        if edges.count != n - 1 { return false }\n\n        var parent = Array(0..<n)\n\n        func find(_ x: Int) -> Int {\n            if parent[x] != x {\n                parent[x] = find(parent[x])\n            }\n            return parent[x]\n        }\n\n        for edge in edges {\n            let p1 = find(edge[0]), p2 = find(edge[1])\n            if p1 == p2 { return false }  // Cycle detected\n            parent[p1] = p2\n        }\n\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Parent array",
+            "time": "O(E * α(n))",
+            "timeExplanation": "Process each edge with near-constant union-find"
+          },
+          "explanation": "Adding an edge between already-connected nodes creates a cycle. Tree must have exactly n-1 edges.",
+          "id": "550e8400-e29b-41d4-a716-446655440169",
+          "intuition": "Tree = connected graph with no cycles. If union finds same root, there's a cycle.",
+          "name": "Union-Find Cycle Detection",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "4 edges for 5 nodes, no cycles, connected",
+              "id": "550e8400-e29b-41d4-a716-446655440275",
+              "input": "n=5, edges=[[0,1],[0,2],[0,3],[1,4]]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440058",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "graph-valid-tree",
+      "relatedProblems": [
+        "number-of-connected-components-in-an-undirected-graph",
+        "redundant-connection"
+      ],
+      "summary": "A valid tree has n-1 edges and is fully connected (no cycles)."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Split the input string into words. If the string is empty or contains only spaces, return 0. Otherwise, return the length of the last word.",
+          "code": "class Solution {\n    func lengthOfLastWord(_ s: String) -> Int { \n        let words = s.components(separatedBy: \" \") \n        let lastWord = words.last { !$0.isEmpty } \n        return lastWord?.count ?? 0 \n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We are creating an array of words which takes O(n) space where n is the number of characters in the string.",
+            "time": "O(n)",
+            "timeExplanation": "We are splitting the string into words which takes O(n) time where n is the number of characters in the string."
+          },
+          "explanation": "We first split the string into words. Then we check if the resulting array is empty. If it is, we return 0 as there are no words in the string. Otherwise, we return the length of the last word in the array.",
+          "id": "0900989f-b784-4e45-9350-d612c71a04dc",
+          "intuition": "This approach works by first splitting the string into words and then returning the length of the last word. It's simple and straightforward but might not be the most efficient solution.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "5",
+              "explanation": "The last word is \"World\" which has a length of 5.",
+              "id": "49c13e22-005b-4849-99a8-83686984dc9e",
+              "input": "Hello World"
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "The last word is \"moon\" which has a length of 4.",
+              "id": "65676d7f-9f9b-456a-88b2-6ca7d9526e30",
+              "input": "   fly me   to   the moon  "
+            }
+          ]
+        },
+        {
+          "approach": "Start from the end of the string. Skip spaces until we find the last word. Then count the length of this word.",
+          "code": "class Solution {\n    func lengthOfLastWord(_ s: String) -> Int { \n        var length = 0 \n        var start = s.count - 1 \n        while start >= 0 && s[start] == \" \" { \n            start -= 1 \n        } \n        while start >= 0 && s[start] != \" \" { \n            length += 1 \n            start -= 1 \n        } \n        return length \n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We are using a constant amount of space to store the length and start variables.",
+            "time": "O(n)",
+            "timeExplanation": "We are traversing the string from the end which takes O(n) time where n is the number of characters in the string."
+          },
+          "explanation": "We start from the end of the string. We keep skipping spaces until we find a non-space character which is the start of the last word. Then we count the length of this word by moving backwards until we find another space or we reach the start of the string.",
+          "id": "01b1b7be-2bd4-41d3-b598-2adee220670c",
+          "intuition": "This approach works by traversing the string from the end and skipping spaces until we find the last word. Then we count the length of this word.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "5",
+              "explanation": "The last word is \"World\" which has a length of 5.",
+              "id": "49daa8bd-5510-48ee-bdb1-ba1752cbc9de",
+              "input": "Hello World"
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "The last word is \"moon\" which has a length of 4.",
+              "id": "c67bfd55-7238-4d87-977a-133812707bf1",
+              "input": "   fly me   to   the moon  "
+            }
+          ]
+        }
+      ],
+      "id": "dadc5ef0-2500-4ad0-9906-3e0bd7dcbb6c",
+      "lastUpdated": "2026-02-06T21:04:49Z",
+      "problemSlug": "length-of-last-word",
+      "relatedProblems": [
+        "reverse-words-in-a-string",
+        "sentence-screen-fitting"
+      ],
+      "summary": "This problem involves finding the length of the last word in a given string. The key insight is that we can traverse the string from the end, skipping spaces and counting the length of the last word."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "The solution starts with initialization steps where we remove all hyphens from the input string. Then, we loop through the string from the end, and every time the group size equals the specified length, we append a hyphen at that position.",
+          "code": "class Solution {\n    func licenseKeyFormatting(_ S: String, _ K: Int) -> String {\n        let s = S.replacingOccurrences(of: \"-\", with: \"\")\n        var res = \"\"\n        var count = 0\n        for (index, ch) in s.enumerated().reversed() {\n            if count == K {\n                res.append(\"-\")\n            }\n            res.append(String(ch))\n            count = (count + 1) % K\n        }\n        return String(res.reversed())\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is also linear because in the worst-case scenario, we may need to store the entire input string.",
+            "time": "O(n)",
+            "timeExplanation": "The solution has a linear time complexity because we perform a constant amount of work for each character in the input string."
+          },
+          "explanation": "We iterate through the string in reverse order. We keep track of the group size and append a hyphen when it equals the specified length. After that, we reverse the resulting string and return it.",
+          "id": "c53db58b-6692-4a4b-8936-66193d49bf21",
+          "intuition": "The brute force approach involves iterating through the license key, grouping the characters in the specified length, and appending them with a hyphen.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"2-4A0-R74K\"",
+              "explanation": "In this case, we group the characters in sets of 4, resulting in the final formatted string.",
+              "id": "824a6866-7bb2-451f-8659-814621af4d71",
+              "input": "S = \"2-4A0r7-4k\", K = 4"
+            },
+            {
+              "expectedOutput": "\"5F3Z-2E9W\"",
+              "explanation": "Here, we remove the hyphens, group the characters in sets of 4, and append the hyphens at the correct positions, resulting in the final formatted string.",
+              "id": "1705dea8-2149-4ce0-88b5-b1f69ae0bcd1",
+              "input": "S = \"5F3Z-2e-9-w\", K = 4"
+            }
+          ]
+        },
+        {
+          "approach": "We iterate over the input string and append each character to the result string. Whenever the length of the result string (excluding the hyphen at the end) is a multiple of the group size, we append a hyphen at that position.",
+          "code": "class Solution {\n    func licenseKeyFormatting(_ S: String, _ K: Int) -> String { let s = S.replacingOccurrences(of: \"-\", with: \"\").uppercased(); var result = \"\"; for (index, ch) in s.enumerated() { if index == s.count - K { result.append(String(ch)) } else if (s.count - index) % K == 0 { result.append(\"-\"); result.append(String(ch)) } else { result.append(String(ch)) } }; return result }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity remains linear, as in the worst-case scenario, we still need to store the entire input string.",
+            "time": "O(n)",
+            "timeExplanation": "This optimized solution has a linear time complexity as it only requires a single pass through the input string."
+          },
+          "explanation": "This approach reduces the number of string concatenations by appending each character directly to the result string, resulting in better performance.",
+          "id": "f8645f2a-264c-462b-8fbf-46dad3495f5f",
+          "intuition": "The optimized approach also involves reformatting the license key but does it by utilizing the power of string manipulation in a more efficient manner.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "\"2-4A0-R74K\"",
+              "explanation": "We start with the last character of the string and keep appending the characters to the result string. Whenever the length of the result string (excluding the hyphen at the end) is a multiple of the group size, we append a hyphen.",
+              "id": "7872c15c-6164-4aa3-b163-a9dfe2e97ad9",
+              "input": "S = \"2-4A0r7-4k\", K = 4"
+            },
+            {
+              "expectedOutput": "\"5F3Z-2E9W\"",
+              "explanation": "Here, we also start with the last character and iterate backwards, grouping characters in sets of 4, resulting in the final formatted string.",
+              "id": "a0f728b6-ff5e-4127-a8bb-8e80ac0c26ae",
+              "input": "S = \"5F3Z-2e-9-w\", K = 4"
+            },
+            {
+              "expectedOutput": "\"2-5G-3J\"",
+              "explanation": "In this case, we remove the hyphens, group the characters in sets of 2, and append the hyphens at the correct positions, resulting in the final formatted string.",
+              "id": "70d49018-89f4-4cf7-bf4c-e171dd2614ab",
+              "input": "S = \"2-5g-3-J\", K = 2"
+            }
+          ]
+        }
+      ],
+      "id": "2af1a7c2-e246-4e75-8f41-059c7bd576fe",
+      "lastUpdated": "2026-02-06T21:21:35Z",
+      "problemSlug": "license-key-formatting",
+      "relatedProblems": [
+        "valid-palindrome",
+        "roman-to-integer"
+      ],
+      "summary": "The problem involves reformatting a given license key to group the characters in a certain length. A key insight is to iterate through the license key and format it accordingly."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all possible subsequences of both strings, then compare them to find the longest one that is not common to both strings",
+          "code": "class Solution {\n    func findLUSlength(_ a: String, _ b: String) -> Int {\n      if a == b {\n        return -1\n      } else {\n        return max(a.count, b.count)\n      }\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) since no additional data structures are used that scale with input size",
+            "time": "O(n)",
+            "timeExplanation": "Time complexity depends on the string comparison operation, which is O(n) for Swift strings"
+          },
+          "explanation": "This approach involves generating all possible subsequences of both strings, which can be done using bit manipulation or recursion, then comparing each subsequence to see if it exists in the other string",
+          "id": "61205019-f23c-447d-ad94-186f4029daab",
+          "intuition": "Compare every possible subsequence of both strings to determine the longest uncommon subsequence",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "Because the longest uncommon subsequence is \"aba\" and its length is 3",
+              "id": "4a45739c-6d81-41b5-9a37-47c758a353f2",
+              "input": "a = \"aba\", b = \"cdc\""
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "Because the longest uncommon subsequence is \"aaa\" and its length is 3",
+              "id": "32cdc70c-0492-426a-83df-cd5203ef4370",
+              "input": "a = \"aaa\", b = \"bbb\""
+            }
+          ]
+        },
+        {
+          "approach": "Directly compare the two strings and return the length of the longer string if they are not equal",
+          "code": "class Solution {\n    func findLUSlength(_ a: String, _ b: String) -> Int {\n      if a == b {\n        return -1\n      } else {\n        return max(a.count, b.count)\n      }\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) since no additional data structures are used that scale with input size",
+            "time": "O(n)",
+            "timeExplanation": "Time complexity depends on the string comparison operation, which is O(n) for Swift strings"
+          },
+          "explanation": "If the two strings are equal, there is no uncommon subsequence, so return -1. Otherwise, return the length of the longer string",
+          "id": "258d704b-47a9-47e1-a4e6-e84bf67e3cca",
+          "intuition": "Use the fact that if two strings are not equal, the longer one is the longest uncommon subsequence",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "Because the longest uncommon subsequence is \"abc\" and its length is 3",
+              "id": "ac394426-f093-4805-8bc5-4da5a9dfa2d7",
+              "input": "a = \"abc\", b = \"cdc\""
+            },
+            {
+              "expectedOutput": "-1",
+              "explanation": "Because there is no uncommon subsequence",
+              "id": "78870e59-7b84-40d9-9215-669d63ccb235",
+              "input": "a = \"aaa\", b = \"aaa\""
+            }
+          ]
+        }
+      ],
+      "id": "ac6abd1e-581d-4d52-8273-a937176c5bfd",
+      "lastUpdated": "2026-02-06T21:23:56Z",
+      "problemSlug": "longest-uncommon-subsequence-i",
+      "relatedProblems": [
+        "longest-uncommon-subsequence-ii",
+        "subsequence-of-subsequence"
+      ],
+      "summary": "The problem asks for the length of the longest uncommon subsequence between two strings. A key insight is to realize that the longest uncommon subsequence will be the longer string itself if the two strings are not equal."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Check the type of information. 2. Apply the corresponding masking rules. 3. Return the masked string.",
+          "code": "class Solution {\n    func maskPII(_ S: String) -> String { let parts = S.components(separatedBy: \"@\")\n    if parts.count == 2 { let localName = String(Array(parts[0]).prefix(3))\n    let restLocal = String(Array(Array(parts[0]).dropFirst(3)).map { _ in \"*\" })\n    return localName + restLocal + \"@\" + parts[1].lowercased() }\n    let S = S.replacingOccurrences(of: \"+\", with: \"\")\n    let S = S.replacingOccurrences(of: \"-\", with: \"\")\n    if S.count > 13 { return \"***-***-\" + S.suffix(4) }\n    if S.count > 10 { return \"*\" + String(S.dropFirst(1).prefix(3)) + \"-***-\" + S.suffix(4) }\n    if S.count > 6 { return \"***-\" + String(S.prefix(3)) + \"-\" + S.suffix(4) }\n    return \"***-***-\" + S.suffix(4)\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We store the modified string, which takes O(n) space.",
+            "time": "O(n)",
+            "timeExplanation": "We iterate over the string, which takes O(n) time."
+          },
+          "explanation": "This approach checks each character in the string. If the string is an email, replace all characters before the domain with asterisks. If the string is a phone number, replace all digits except the last four with asterisks.",
+          "id": "b1940b62-8550-4c9e-b4c9-de7b5c759705",
+          "intuition": "The brute force approach involves checking each character in the string to determine if it should be masked or not.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"l*****e@leetcode.com\"",
+              "explanation": "We mask all characters except the first and the domain.",
+              "id": "ebece88a-c66b-4add-9841-5773c102467f",
+              "input": "s = \"LeetCode@LeetCode.com\""
+            },
+            {
+              "expectedOutput": "\"***-***-7890\"",
+              "explanation": "We mask all digits except the last four.",
+              "id": "0965258a-eb99-4928-891d-980cc0146cb5",
+              "input": "s = \"+1(234)567-890\""
+            }
+          ]
+        },
+        {
+          "approach": "1. Use regular expressions to identify email and phone number patterns. 2. Replace the characters to be masked with asterisks.",
+          "code": "class Solution {\n    func maskPII(_ S: String) -> String { let emailPattern = \"([a-zA-Z0-9]+)@([a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)+)\"\n    let phonePattern = \"([+-]?\\d{1,2})\\s?\\(?(\\d{3})\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}\"\n    if let emailRegex = try? NSRegularExpression(pattern: emailPattern, options: .caseInsensitive), let emailMatch = emailRegex.firstMatch(in: S, options: [], range: NSRange(S.startIndex..., in: S)) { let localName = String(Array(s.substring(with: NSRange(location: emailMatch.range(at: 1).location, length: emailMatch.range(at: 1).length))).prefix(3))\n    let restLocal = String(Array(Array(s.substring(with: NSRange(location: emailMatch.range(at: 1).location + 3, length: emailMatch.range(at: 1).length - 3))).map { _ in \"*\" }))\n    return localName + restLocal + \"@\" + s.substring(with: NSRange(location: emailMatch.range(at: 2).location, length: emailMatch.range(at: 2).length)).lowercased() }\n    if let phoneRegex = try? NSRegularExpression(pattern: phonePattern, options: .caseInsensitive), let phoneMatch = phoneRegex.firstMatch(in: S, options: [], range: NSRange(S.startIndex..., in: S)) { let areaCode = s.substring(with: NSRange(location: phoneMatch.range(at: 1).location, length: phoneMatch.range(at: 1).length))\n    let threeDigits = s.substring(with: NSRange(location: phoneMatch.range(at: 2).location, length: phoneMatch.range(at: 2).length))\n    let fourDigits = s.substring(with: NSRange(location: S.index(S.startIndex, offsetBy: S.count - 4), length: 4))\n    return \"***-***-\" + fourDigits }\n    return \"***-***-***\"\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We store the modified string, which takes O(n) space.",
+            "time": "O(n)",
+            "timeExplanation": "We iterate over the string, which takes O(n) time."
+          },
+          "explanation": "This approach uses regular expressions to match the email and phone number patterns. If the string is an email, we replace all characters before the domain with asterisks. If the string is a phone number, we replace all digits except the last four with asterisks.",
+          "id": "524fbb0e-9aaf-4cc8-be99-e59a9d1385df",
+          "intuition": "The optimized approach involves using regular expressions to identify and replace the characters to be masked.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "\"l*****e@leetcode.com\"",
+              "explanation": "We mask all characters except the first and the domain.",
+              "id": "9dfa7b19-0e51-4b97-9553-100c68663780",
+              "input": "s = \"LeetCode@LeetCode.com\""
+            },
+            {
+              "expectedOutput": "\"***-***-7890\"",
+              "explanation": "We mask all digits except the last four.",
+              "id": "0c94a222-1a83-49a2-88c2-888b73f64934",
+              "input": "s = \"+1(234)567-890\""
+            },
+            {
+              "expectedOutput": "\"***-***-7890\"",
+              "explanation": "We mask all digits except the last four.",
+              "id": "4ca0e982-fdbc-4299-ad1e-0112b08de592",
+              "input": "s = \"123-456-7890\""
+            }
+          ]
+        }
+      ],
+      "id": "4f2d0802-ea84-4d20-9955-98b1419fde40",
+      "lastUpdated": "2026-02-06T21:42:51Z",
+      "problemSlug": "masking-personal-information",
+      "relatedProblems": [
+        "valid-phone-numbers",
+        "reverse-words-in-a-string-iii"
+      ],
+      "summary": "Masking Personal Information involves hiding sensitive information in a string by replacing characters with asterisks (*) or changing case. The key insight is to identify the type of information (email or phone number) and then apply the corresponding masking rules."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. For each row, compute heights (consecutive 1s above)\n2. Apply largest rectangle in histogram\n3. Track maximum area",
+          "code": "class Solution {\n    func maximalRectangle(_ matrix: [[Character]]) -> Int {\n        if matrix.isEmpty { return 0 }\n        let m = matrix.count, n = matrix[0].count\n        var heights = [Int](repeating: 0, count: n)\n        var maxArea = 0\n\n        func largestRect(_ h: [Int]) -> Int {\n            var stack: [Int] = []\n            var h = h + [0]\n            var area = 0\n            for i in 0..<h.count {\n                while !stack.isEmpty && h[i] < h[stack.last!] {\n                    let height = h[stack.removeLast()]\n                    let width = stack.isEmpty ? i : i - stack.last! - 1\n                    area = max(area, height * width)\n                }\n                stack.append(i)\n            }\n            return area\n        }\n\n        for i in 0..<m {\n            for j in 0..<n {\n                heights[j] = matrix[i][j] == \"1\" ? heights[j] + 1 : 0\n            }\n            maxArea = max(maxArea, largestRect(heights))\n        }\n        return maxArea\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Heights array",
+            "time": "O(m×n)",
+            "timeExplanation": "Process each row"
+          },
+          "explanation": "Heights array represents histogram for each row as base.",
+          "id": "fcccadad-3670-4d2d-ad65-fb41d65b4a51",
+          "intuition": "For each row, build histogram of heights, then find largest rectangle.",
+          "name": "Build Histograms",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "6",
+              "explanation": "3×2 rectangle",
+              "id": "1cb4891c-a03b-40af-868e-4f2a35e8685d",
+              "input": "matrix = [[\"1\",\"0\",\"1\",\"0\",\"0\"],[\"1\",\"0\",\"1\",\"1\",\"1\"]]"
+            }
+          ]
+        }
+      ],
+      "id": "b721129e-d154-4db5-be8b-2225c9516092",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "maximal-rectangle",
+      "relatedProblems": [
+        "largest-rectangle-in-histogram"
+      ],
+      "summary": "Find largest rectangle of 1s in matrix. Treat each row as histogram base, use largest rectangle in histogram."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Create a min-heap ordered by node value\n2. Add the head of each non-empty list to the heap\n3. While heap is not empty:\n   - Pop the minimum node\n   - Append it to the result\n   - If that node has a next, push next to heap\n4. Return the merged list",
+          "code": "class Solution {\n    func mergeKLists(_ lists: [ListNode?]) -> ListNode? {\n        // Simple approach using sorted array (for interview, explain heap would be better)\n        var nodes: [ListNode] = []\n\n        // Collect all nodes\n        for list in lists {\n            var node = list\n            while let n = node {\n                nodes.append(n)\n                node = n.next\n            }\n        }\n\n        // Sort by value\n        nodes.sort { $0.val < $1.val }\n\n        // Rebuild list\n        let dummy = ListNode(0)\n        var tail = dummy\n        for node in nodes {\n            tail.next = node\n            tail = node\n        }\n        tail.next = nil\n\n        return dummy.next\n    }\n\n    // Optimal with custom min-heap\n    func mergeKListsHeap(_ lists: [ListNode?]) -> ListNode? {\n        var heap: [ListNode] = lists.compactMap { $0 }\n\n        func heapifyUp(_ i: Int) {\n            var i = i\n            while i > 0 && heap[(i-1)/2].val > heap[i].val {\n                heap.swapAt(i, (i-1)/2)\n                i = (i-1)/2\n            }\n        }\n\n        func heapifyDown(_ i: Int) {\n            var i = i\n            while 2*i + 1 < heap.count {\n                var smallest = 2*i + 1\n                if smallest + 1 < heap.count && heap[smallest+1].val < heap[smallest].val {\n                    smallest += 1\n                }\n                if heap[i].val <= heap[smallest].val { break }\n                heap.swapAt(i, smallest)\n                i = smallest\n            }\n        }\n\n        // Build heap\n        for i in (0..<heap.count).reversed() { heapifyDown(i) }\n\n        let dummy = ListNode(0)\n        var tail = dummy\n\n        while !heap.isEmpty {\n            let min = heap[0]\n            tail.next = min\n            tail = min\n\n            if let next = min.next {\n                heap[0] = next\n                heapifyDown(0)\n            } else {\n                heap[0] = heap[heap.count - 1]\n                heap.removeLast()\n                if !heap.isEmpty { heapifyDown(0) }\n            }\n        }\n\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(k)",
+            "spaceExplanation": "Heap stores at most k nodes (one per list)",
+            "time": "O(N log k)",
+            "timeExplanation": "N total nodes, each pushed/popped once with O(log k) heap operations"
+          },
+          "explanation": "The heap maintains the 'frontier' of each list - the next candidate node from each list. By always extracting the minimum, we build the sorted result.\n\nSwift doesn't have a built-in heap, so we implement a simple one or use an array with manual sorting (less efficient but simpler).\n\nKey insight: each node is pushed and popped exactly once, and each operation is O(log k).",
+          "id": "550e8400-e29b-41d4-a716-446655440111",
+          "intuition": "Always pick the smallest available node across all k lists. A min-heap gives us O(log k) access to the minimum among k candidates.\n\nAt any time, the heap contains at most one node from each list (the current head).",
+          "name": "Min-Heap (Priority Queue)",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,1,2,3,4,4,5,6]",
+              "explanation": "Heap starts with [1,1,2]. Pop 1, push 4. Pop 1, push 3. Continue...",
+              "id": "550e8400-e29b-41d4-a716-446655440211",
+              "input": "lists = [[1,4,5],[1,3,4],[2,6]]"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "Empty input returns empty list",
+              "id": "550e8400-e29b-41d4-a716-446655440212",
+              "input": "lists = []"
+            }
+          ]
+        },
+        {
+          "approach": "1. If lists is empty, return nil\n2. While we have more than one list:\n   - Pair up lists and merge each pair\n   - Replace lists with merged results\n3. Return the single remaining list",
+          "code": "class Solution {\n    func mergeKLists(_ lists: [ListNode?]) -> ListNode? {\n        var lists = lists.compactMap { $0 }  // Remove nils\n        if lists.isEmpty { return nil }\n\n        while lists.count > 1 {\n            var merged: [ListNode] = []\n            for i in stride(from: 0, to: lists.count, by: 2) {\n                let l1 = lists[i]\n                let l2 = i + 1 < lists.count ? lists[i + 1] : nil\n                if let m = mergeTwoLists(l1, l2) {\n                    merged.append(m)\n                }\n            }\n            lists = merged\n        }\n\n        return lists.first\n    }\n\n    private func mergeTwoLists(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {\n        let dummy = ListNode(0)\n        var tail = dummy\n        var l1 = l1, l2 = l2\n\n        while let n1 = l1, let n2 = l2 {\n            if n1.val <= n2.val {\n                tail.next = n1\n                l1 = n1.next\n            } else {\n                tail.next = n2\n                l2 = n2.next\n            }\n            tail = tail.next!\n        }\n        tail.next = l1 ?? l2\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Merge is done in-place, only using pointers",
+            "time": "O(N log k)",
+            "timeExplanation": "log k rounds, each processing all N nodes"
+          },
+          "explanation": "Each 'round' halves the number of lists: k → k/2 → k/4 → ... → 1.\n\nThere are O(log k) rounds, and each round processes all N nodes once (spread across the merges). Total: O(N log k).\n\nThis approach reuses our merge-two-lists solution and is often easier to implement correctly than a heap.",
+          "id": "550e8400-e29b-41d4-a716-446655440112",
+          "intuition": "Pair up the k lists and merge each pair. After one round, we have k/2 lists. Repeat until one list remains.\n\nThis is like merge sort's merge step, applied to lists instead of arrays.",
+          "name": "Divide and Conquer",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1,1,2,3,4,4,5,6]",
+              "explanation": "Heap starts with [1,1,2]. Pop 1, push 4. Pop 1, push 3. Continue...",
+              "id": "aca770ac-ad74-4d56-b4ff-39cf7ce6cfdc",
+              "input": "lists = [[1,4,5],[1,3,4],[2,6]]"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "Empty input returns empty list",
+              "id": "ec03a1f2-96d3-4167-8fd7-9db96420f515",
+              "input": "lists = []"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440006",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "merge-k-sorted-lists",
+      "relatedProblems": [
+        "merge-two-sorted-lists",
+        "ugly-number-ii"
+      ],
+      "summary": "Merge k sorted linked lists into one sorted list. Use a min-heap for O(n log k) efficiency, or divide and conquer by repeatedly merging pairs."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize n components (each node is its own component)\n2. For each edge, union the two nodes\n3. Each successful union decreases component count by 1",
+          "code": "class Solution {\n    func countComponents(_ n: Int, _ edges: [[Int]]) -> Int {\n        var parent = Array(0..<n)\n        var rank = [Int](repeating: 0, count: n)\n        var components = n\n\n        func find(_ x: Int) -> Int {\n            if parent[x] != x {\n                parent[x] = find(parent[x])\n            }\n            return parent[x]\n        }\n\n        func union(_ x: Int, _ y: Int) {\n            let px = find(x), py = find(y)\n            if px == py { return }\n            if rank[px] < rank[py] {\n                parent[px] = py\n            } else if rank[px] > rank[py] {\n                parent[py] = px\n            } else {\n                parent[py] = px\n                rank[px] += 1\n            }\n            components -= 1\n        }\n\n        for edge in edges {\n            union(edge[0], edge[1])\n        }\n\n        return components\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Parent and rank arrays",
+            "time": "O(E * α(n))",
+            "timeExplanation": "α is inverse Ackermann, nearly constant"
+          },
+          "explanation": "Union-Find with path compression and union by rank gives near O(1) operations.",
+          "id": "550e8400-e29b-41d4-a716-446655440168",
+          "intuition": "Each edge connects two nodes. Union-Find efficiently tracks which nodes are connected.",
+          "name": "Union-Find",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "Components: {0,1,2} and {3,4}",
+              "id": "550e8400-e29b-41d4-a716-446655440274",
+              "input": "n=5, edges=[[0,1],[1,2],[3,4]]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440057",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "number-of-connected-components-in-an-undirected-graph",
+      "relatedProblems": [
+        "number-of-islands",
+        "graph-valid-tree"
+      ],
+      "summary": "Count connected components using Union-Find or DFS."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize an empty list to store timestamps. 2. For each new timestamp, append it to the list and iterate through the list to count the number of timestamps within the time frame. 3. Remove timestamps that are outside the time frame.",
+          "code": "class Solution {\n    class RecentCounter {\n        var queue: [Int]\n\n        init() {\n            queue = []\n        }\n\n        func ping(_ t: Int) -> Int {\n            queue.append(t)\n            while let first = queue.first, first < t - 3000 {\n                queue.removeFirst()\n            }\n            return queue.count\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We need to store all timestamps in the queue.",
+            "time": "O(n)",
+            "timeExplanation": "In the worst case, we need to iterate through the entire queue for each new timestamp."
+          },
+          "explanation": "This approach is straightforward but inefficient due to the need to iterate through the entire list for each new timestamp.",
+          "id": "2f600036-3d3d-4802-8b7d-cb29fb32dcde",
+          "intuition": "This approach involves maintaining a list of all timestamps and iterating through the list to count the number of recent calls for each new timestamp.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "The first timestamp is 1, so the count is 1.",
+              "id": "47d708b3-d969-4f4a-b3f2-29813e04a591",
+              "input": "RecentCounter().ping(1)"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "The timestamps are 100, 200, 300, and 3001. The count for the last timestamp is 3 because the first timestamp is outside the time frame.",
+              "id": "a0fd84cb-9a46-483c-a80a-e50acdb81e91",
+              "input": "RecentCounter().ping(100).ping(200).ping(300).ping(3001)"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize a queue to store timestamps. 2. For each new timestamp, add it to the queue and remove timestamps that are outside the time frame.",
+          "code": "class Solution {\n    import Foundation\n\n    class RecentCounter {\n        var queue: [Int]\n\n        init() {\n            queue = []\n        }\n\n        func ping(_ t: Int) -> Int {\n            queue.append(t)\n            while let first = queue.first, first < t - 3000 {\n                queue.removeFirst()\n            }\n            return queue.count\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We need to store all timestamps in the queue.",
+            "time": "O(1)",
+            "timeExplanation": "Adding and removing elements from the queue takes constant time."
+          },
+          "explanation": "This approach is more efficient than the brute force approach because we only need to remove the oldest timestamp when it is outside the time frame.",
+          "id": "95773465-c4f3-484e-93ce-c6e853e4e447",
+          "intuition": "This approach involves utilizing a queue data structure to efficiently add and remove timestamps.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "The first timestamp is 1, so the count is 1.",
+              "id": "dbb659cf-fca2-4d4d-ac7e-86372ea41c11",
+              "input": "RecentCounter().ping(1)"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "The timestamps are 100, 200, 300, and 3001. The count for the last timestamp is 3 because the first timestamp is outside the time frame.",
+              "id": "8d735076-5ec3-4e34-b69d-6fce7ffd2118",
+              "input": "RecentCounter().ping(100).ping(200).ping(300).ping(3001)"
+            }
+          ]
+        }
+      ],
+      "id": "b633fb6d-3ac3-497b-8e86-c5fb22e9502f",
+      "lastUpdated": "2026-02-06T21:49:31Z",
+      "problemSlug": "number-of-recent-calls",
+      "relatedProblems": [
+        "design-circular-queue",
+        "implement-queue-using-stacks"
+      ],
+      "summary": "The problem requires maintaining a queue of recent timestamps and counting the number of timestamps within a certain time frame of the current timestamp. The key insight is to utilize a queue data structure to efficiently add and remove timestamps."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Remove leading and trailing spaces from the string. 2. Initialize a counter for the number of segments. 3. Iterate over each character in the string. If the character is a space and the previous character is not a space, increment the counter. 4. After the loop, if the string is not empty and the last character is not a space, increment the counter.",
+          "code": "class Solution {\n    func countSegments(_ s: String) -> Int { let str = s.trimmingCharacters(in: .whitespaces); if str.isEmpty { return 0 }; let arr = str.components(separatedBy: \" \"); return arr.filter { !$0.isEmpty }.count }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are creating a new array of substrings separated by spaces.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) where n is the length of the string because we are iterating over each character in the string."
+          },
+          "explanation": "This approach is straightforward and works by essentially counting the number of spaces in the string and adding one if the string is not empty and does not end with a space.",
+          "id": "1670fc2f-d4a4-4d06-95d3-510dc36c7688",
+          "intuition": "This approach works by iterating over each character in the string and counting the number of spaces to determine the number of segments.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The string contains two segments: \"Hello,\" and \"world!\".",
+              "id": "ada85376-b1ae-4389-b4fc-a07d230e1e1a",
+              "input": "s = \"Hello, world!\""
+            },
+            {
+              "expectedOutput": "6",
+              "explanation": "The string contains six segments: \"fly\", \"me\", \"to\", \"the\", \"moon\", and an empty segment at the end.",
+              "id": "b1b3214d-94f0-4ecd-a343-2e7bfa64e30c",
+              "input": "s = \"   fly me   to   the moon  \t  \""
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The string contains one segment: \"a\".",
+              "id": "9666e776-36a0-4176-be88-ef9b2ad43be5",
+              "input": "s = \"a\""
+            }
+          ]
+        },
+        {
+          "approach": "1. Remove leading and trailing spaces from the string. 2. Split the string into substrings separated by spaces. 3. Count the number of non-empty substrings.",
+          "code": "class Solution {\n    func countSegments(_ s: String) -> Int { let str = s.trimmingCharacters(in: .whitespaces); return str.components(separatedBy: \" \").filter { !$0.isEmpty }.count }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are creating a new array of substrings separated by spaces.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) where n is the length of the string because we are splitting the string into substrings."
+          },
+          "explanation": "This approach is more efficient and elegant than the brute force approach because it leverages Swift's built-in string functionality.",
+          "id": "e5e08f02-a1bd-421b-b8c7-e2b12a2b8502",
+          "intuition": "This approach works by using Swift's built-in string splitting functionality to split the string into segments and then counting the number of non-empty segments.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The string contains two segments: \"Hello,\" and \"world!\".",
+              "id": "803b9e6c-43e3-4f2b-94b4-cbbac553e7c4",
+              "input": "s = \"Hello, world!\""
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "The string contains four segments: \"fly\", \"me\", \"to\", and \"the moon\".",
+              "id": "fba51e97-5676-4be2-89d0-d2eec6cb65f2",
+              "input": "s = \"   fly me   to   the moon  \t  \""
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The string contains one segment: \"a\".",
+              "id": "dd6c5822-c44d-4787-adfc-93a6b519cb30",
+              "input": "s = \"a\""
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "The string contains no segments.",
+              "id": "de82d179-bd3e-4e0c-a6d5-d0ae92acd827",
+              "input": "s = \" \""
+            }
+          ]
+        }
+      ],
+      "id": "b337b398-604c-491d-85d8-c15c93ce5e41",
+      "lastUpdated": "2026-02-06T21:18:29Z",
+      "problemSlug": "number-of-segments-in-a-string",
+      "relatedProblems": [
+        "valid-palindrome",
+        "letter-combinations-of-a-phone-number"
+      ],
+      "summary": "The problem requires counting the number of segments in a given string, where a segment is defined as a sequence of characters separated by spaces. The key insight is to remove leading and trailing spaces and then count the number of spaces to determine the number of segments."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize an empty list to store the positions of large groups. 2. Iterate through the string using a for loop. 3. For each character, check its sequence length. 4. If the sequence length is 3 or more, add the start and end positions of the sequence to the list.",
+          "code": "class Solution {\n    func largeGroupPositions(s: String) -> [[Int]] { var res: [[Int]] = []; var count = 1; for i in 1...s.count - 1 { if s[s.index(s.startIndex, offsetBy: i)] == s[s.index(s.startIndex, offsetBy: i - 1)] { count += 1 } else { if count >= 3 { res.append([i - count, i - 1]) } count = 1 } }; if count >= 3 { res.append([s.count - count, s.count - 1]) }; return res }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we're only using a fixed amount of space to store the result and the count variable.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we're iterating through the string once."
+          },
+          "explanation": "This approach works by individually checking each character in the string, which results in a straightforward but inefficient solution.",
+          "id": "d7368bfe-f5e2-47d5-80c7-047d92612b73",
+          "intuition": "This approach involves iterating through the string and checking each character's sequence length to determine if it's part of a large group.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[3,5],[6,9]]",
+              "explanation": "The positions of the large groups are [3,5] and [6,9] because 'b' appears three times consecutively at these positions.",
+              "id": "e08b5ab2-d1c9-4baf-b6ff-274dd3f84bd3",
+              "input": "aababbabba"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "There are no large groups in the string 'abc'.",
+              "id": "8f35e441-3e85-47e7-926e-b4beb4e4d248",
+              "input": "abc"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize an empty list to store the positions of large groups. 2. Initialize variables to track the current character and its count. 3. Iterate through the string using a for loop. 4. For each character, increment the count if it's the same as the current character. 5. If the character is different, check the count of the previous character and add its position to the list if it's 3 or more.",
+          "code": "class Solution {\n    func largeGroupPositions(s: String) -> [[Int]] {\n        var res: [[Int]] = []\n        var left = 0\n        var count = 1\n        let sArray = Array(s)\n        for i in 1...sArray.count - 1 {\n            if sArray[i] == sArray[i - 1] {\n                count += 1\n            }\n            else {\n                if count >= 3 {\n                    res.append([left, i - 1])\n                }\n                left = i\n                count = 1\n            }\n        }\n        if count >= 3 {\n            res.append([left, sArray.count - 1])\n        }\n        return res\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we're only using a fixed amount of space to store the result and the count variable.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we're iterating through the string once."
+          },
+          "explanation": "This approach works by reducing the number of iterations and using more efficient variables to track the sequence length of each character.",
+          "id": "b60817cb-405f-4c96-a156-168719c82d37",
+          "intuition": "This approach involves using a more efficient algorithm to track the sequence length of each character and reduce the number of iterations.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[[3,5],[6,9]]",
+              "explanation": "The positions of the large groups are [3,5] and [6,9] because 'b' appears three times consecutively at these positions.",
+              "id": "68ebfda0-a68d-4a90-b547-db25004b31b6",
+              "input": "aababbabba"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "There are no large groups in the string 'abc'.",
+              "id": "20ac00df-005d-4403-be20-d70c4c714294",
+              "input": "abc"
+            }
+          ]
+        }
+      ],
+      "id": "d09ffaed-9262-48a8-aeb7-b17529b4581c",
+      "lastUpdated": "2026-02-06T21:42:45Z",
+      "problemSlug": "positions-of-large-groups",
+      "relatedProblems": [
+        "minimum-size-subarray-sum",
+        "find-all-anagrams-in-a-string"
+      ],
+      "summary": "The problem involves finding all positions of large groups in a given string, where a large group is defined as a group of 3 or more consecutive occurrences of the same character. The key insight is to iterate through the string and track the sequence length of each character."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. If n < 0, return 1/pow(x, -n)\n2. If n = 0, return 1\n3. If n even: half = pow(x, n/2), return half × half\n4. If n odd: return x × pow(x, n-1)",
+          "code": "class Solution {\n    func myPow(_ x: Double, _ n: Int) -> Double {\n        if n == 0 { return 1 }\n        if n < 0 { return 1 / myPow(x, -n) }\n        let half = myPow(x, n / 2)\n        return n % 2 == 0 ? half * half : half * half * x\n    }\n}",
+          "complexity": {
+            "space": "O(log n)",
+            "spaceExplanation": "Recursion depth",
+            "time": "O(log n)",
+            "timeExplanation": "Halve n each step"
+          },
+          "explanation": "Reduce problem size by half each step for O(log n) time.",
+          "id": "26c2fd01-f876-41e1-babc-8ad4f3f4eac0",
+          "intuition": "x^n = x^(n/2) × x^(n/2). Handle negative n.",
+          "name": "Binary Exponentiation",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1024.0",
+              "explanation": "2^10 = 1024",
+              "id": "7c47823c-599f-4be6-930b-9942349b13ee",
+              "input": "x=2.0, n=10"
+            }
+          ]
+        }
+      ],
+      "id": "aa7d86c6-8f75-4c12-9cc6-09de14ef8ea5",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "pow-x-n",
+      "relatedProblems": [
+        "sqrt-x"
+      ],
+      "summary": "Calculate x^n efficiently. Use binary exponentiation: x^n = (x^(n/2))²."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Build adjacency list, sort destinations\n2. DFS from 'JFK', greedily visit smallest destination\n3. Add to result in reverse (post-order)\n4. Reverse final result",
+          "code": "class Solution {\n    func findItinerary(_ tickets: [[String]]) -> [String] {\n        var graph = [String: [String]]()\n        for t in tickets {\n            graph[t[0], default: []].append(t[1])\n        }\n        for key in graph.keys {\n            graph[key]?.sort(by: >)  // Reverse sort for pop efficiency\n        }\n\n        var result = [String]()\n\n        func dfs(_ airport: String) {\n            while !(graph[airport]?.isEmpty ?? true) {\n                let next = graph[airport]!.removeLast()\n                dfs(next)\n            }\n            result.append(airport)\n        }\n\n        dfs(\"JFK\")\n        return result.reversed()\n    }\n}",
+          "complexity": {
+            "space": "O(E)",
+            "spaceExplanation": "Graph and result storage",
+            "time": "O(E log E)",
+            "timeExplanation": "Sorting edges dominates"
+          },
+          "explanation": "Hierholzer's visits each edge exactly once. Sorting ensures lexicographically smallest path.",
+          "id": "550e8400-e29b-41d4-a716-446655440176",
+          "intuition": "Build itinerary by DFS, adding airports in reverse post-order. Sorted adjacency ensures lexical order.",
+          "name": "Hierholzer's Algorithm",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"JFK\",\"MUC\",\"LHR\",\"SFO\",\"SJC\"]",
+              "explanation": "Visit all tickets starting from JFK",
+              "id": "550e8400-e29b-41d4-a716-446655440282",
+              "input": "[[\"MU\",\"LHR\"],[\"JFK\",\"MUC\"],[\"SFO\",\"SJC\"],[\"LHR\",\"SFO\"]]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440065",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "reconstruct-itinerary",
+      "relatedProblems": [
+        "valid-arrangement-of-pairs",
+        "cracking-the-safe"
+      ],
+      "summary": "Find Eulerian path visiting all edges. Use Hierholzer's algorithm with lexical ordering."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize a variable to store the number of repetitions, starting with 1. 2. Continuously check if string B is a substring of the repeated string A. 3. If string B is a substring, return the number of repetitions. 4. If not, append string A to itself and increment the repetition count. 5. Repeat steps 2-4 until string B is found as a substring or the length of the repeated string A exceeds twice the length of string B plus the length of string A.",
+          "code": "class Solution {\n    func repeatedStringMatch(_ a: String, _ b: String) -> Int {\n        let bLength = b.count\n        let aLength = a.count\n        var repeatedA = a\n        var count = 1\n\n        while repeatedA.count < bLength + aLength + aLength {\n            if repeatedA.contains(b) {\n                return count\n            }\n            repeatedA += a\n            count += 1\n        }\n\n        return -1\n    }\n}",
+          "complexity": {
+            "space": "O(n*m)",
+            "spaceExplanation": "The space complexity is also dependent on the length of string A and string B because we are creating a new string that is the repetition of string A, which in the worst case could be up to twice the length of string B plus the length of string A.",
+            "time": "O(n*m)",
+            "timeExplanation": "The time complexity is dependent on the length of string A and string B, as well as the number of repetitions required to match string B within the repeated string A."
+          },
+          "explanation": "This brute-force approach is straightforward but can be inefficient for large strings because it checks every possible repetition of string A until it finds a match or determines that no match is possible within the given length constraint. It ensures that all possible repetitions are considered and thus guarantees finding the minimum number of repetitions if a match exists.",
+          "id": "05b99c4b-9414-47f8-957b-e6f58297048d",
+          "intuition": "This approach works by continuously appending string A to itself and checking if the resulting string contains string B. It continues this process until it finds a match or until the length of the resulting string exceeds twice the length of string B plus the length of string A.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "This is because \"abcd\" repeated three times results in \"abcdabcdabcd\", which contains \"cdabcdab\".",
+              "id": "1cc05abd-d865-42df-b1f1-dcca9f3f84fd",
+              "input": "a = \"abcd\", b = \"cdabcdab\""
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "The repeated string \"abcabcabcabc\" contains \"bcabca\".",
+              "id": "9b84248a-f78c-4eba-927d-461dd0df9207",
+              "input": "a = \"abc\", b = \"bcabca\""
+            }
+          ]
+        },
+        {
+          "approach": "1. Calculate the minimum and maximum number of repetitions required based on the lengths of strings A and B. 2. Loop through each possible number of repetitions within the calculated range. 3. For each repetition count, create the repeated string A and check if it contains string B. 4. If a match is found, return the number of repetitions. 5. If no match is found after checking all repetitions within the range, return -1.",
+          "code": "class Solution {\n    func repeatedStringMatch(_ a: String, _ b: String) -> Int {\n        let bLength = b.count\n        let aLength = a.count\n        let minRepeats = Int(ceil(Double(bLength) / Double(aLength)))\n        let maxRepeats = minRepeats + 2\n\n        for repeats in minRepeats...maxRepeats {\n            var repeatedA = String(repeating: a, count: repeats)\n            if repeatedA.contains(b) {\n                return repeats\n            }\n        }\n\n        return -1\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is also linear with respect to the length of string B because we are creating a repeated string A that, in the worst case, can be up to twice the length of string B plus the length of string A.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear with respect to the length of string B because we are looping through a range of repetitions and checking for the presence of string B in the repeated string A."
+          },
+          "explanation": "This optimized approach is more efficient than the brute-force method because it narrows down the range of possible repetitions to check, thus reducing the number of iterations and the amount of memory used for creating the repeated strings.",
+          "id": "0bcc8ac0-652e-4b85-a2d0-46681835ffe4",
+          "intuition": "The optimized approach leverages the mathematical relationship between the lengths of strings A and B to limit the maximum number of repetitions needed to check. It uses the fact that if string B is a substring of the repeated string A, then the length of the repeated string A must be at least as long as string B but no more than twice the length of string B plus the length of string A.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "The string \"abc\" repeated four times gives \"abcabcabcabc\", which matches \"abcabcabcabc\".",
+              "id": "5663b26e-f59d-43a4-9b7b-49f7fc8f64d8",
+              "input": "a = \"abc\", b = \"abcabcabcabc\""
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "The string \"abcd\" repeated three times gives \"abcdabcdabcd\", which contains \"cdabcdabcd\".",
+              "id": "4f95522c-e624-4e37-81e0-2f655824272c",
+              "input": "a = \"abcd\", b = \"cdabcdabcd\""
+            }
+          ]
+        }
+      ],
+      "id": "82bcd1a6-24a6-400b-a2a7-57c6c8c08763",
+      "lastUpdated": "2026-02-06T21:33:47Z",
+      "problemSlug": "repeated-string-match",
+      "relatedProblems": [
+        "implement-strstr",
+        "find-the-difference"
+      ],
+      "summary": "The problem of Repeated String Match involves finding the minimum number of repetitions required to make string A a substring of string B. The key insight to solving this problem efficiently involves understanding the relationship between the lengths of the two strings and using that to limit the number of repetitions that need to be checked."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start from the beginning of the string and check every possible substring length. For each length, check if the string can be formed by repeating the substring of that length.",
+          "code": "class Solution {\n    let s = \"abab\"\n    func repeatedSubstringPattern(_ s: String) -> Bool {\n        let n = s.count\n        for length in 1...n/2 {\n            if n % length == 0 {\n                let substring = String(s.prefix(length))\n                var repeated = String(repeating: substring, count: n/length)\n                if repeated == s {\n                    return true\n                }\n            }\n        }\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are creating a new string by repeating the substring, which can be of size n in the worst case.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) because in the worst-case scenario, we are iterating through the string and for each iteration, we are creating a new string by repeating the substring."
+          },
+          "explanation": "This approach involves iterating through the string and checking every possible substring length. For each length, it checks if the string can be formed by repeating the substring of that length. If it finds a matching pattern, it returns True. If it checks all possible lengths and doesn't find a match, it returns False.",
+          "id": "336297b6-a2cc-4c3a-9033-f2941d68f4a0",
+          "intuition": "The brute-force approach works by checking every possible substring length to see if the string can be formed by repeating a substring of that length.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The string \"abab\" can be formed by repeating the substring \"ab\".",
+              "id": "6ffe00dc-9257-4640-b028-c4b3742c7df9",
+              "input": "s = \"abab\""
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The string \"aba\" cannot be formed by repeating any substring.",
+              "id": "2033134a-6738-4aaf-ad27-2b5960efd9a0",
+              "input": "s = \"aba\""
+            }
+          ]
+        },
+        {
+          "approach": "Concatenate the string with itself and check if the original string is a substring of the concatenated string, excluding the first and last characters.",
+          "code": "class Solution {\n    func repeatedSubstringPattern(_ s: String) -> Bool {\n        let doubleS = s + s\n        let range = doubleS.range(of: s, options: .literal, range: Range(uncheckedBounds: (lower: doubleS.index(after: doubleS.startIndex), upper: doubleS.index(before: doubleS.endIndex))))\n        return range != nil\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are creating a new string by concatenating the original string with itself.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are using the built-in string search function, which has a linear time complexity."
+          },
+          "explanation": "This approach involves concatenating the string with itself and checking if the original string is a substring of the concatenated string, excluding the first and last characters. If the original string is found, it means the string can be formed by repeating a substring.",
+          "id": "735eeb91-3090-4951-9b3f-551155ecb9ff",
+          "intuition": "The optimized approach works by concatenating the string with itself and checking if the original string is a substring of the concatenated string, excluding the first and last characters.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The string \"abab\" can be formed by repeating the substring \"ab\".",
+              "id": "eb7167f3-3748-4ebb-afed-842d9b496801",
+              "input": "s = \"abab\""
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The string \"aba\" cannot be formed by repeating any substring.",
+              "id": "c8361cf1-5d62-4d65-9ff3-bc6268495d2e",
+              "input": "s = \"aba\""
+            }
+          ]
+        }
+      ],
+      "id": "cfbc95eb-6dba-495b-a6b7-f5316edc5156",
+      "lastUpdated": "2026-02-06T21:20:14Z",
+      "problemSlug": "repeated-substring-pattern",
+      "relatedProblems": [
+        "string-to-integer-atoi",
+        "roman-to-integer"
+      ],
+      "summary": "The problem asks to determine if a given string consists of a repeated pattern, and the key insight is to check if the string can be formed by repeating a substring. This can be solved using brute-force or optimized approaches."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Count k nodes exist\n2. Reverse those k nodes\n3. Connect to next group (recursive or iterative)",
+          "code": "class Solution {\n    func reverseKGroup(_ head: ListNode?, _ k: Int) -> ListNode? {\n        var count = 0\n        var curr = head\n        while curr != nil && count < k {\n            curr = curr?.next\n            count += 1\n        }\n        if count < k { return head }\n\n        var prev: ListNode? = nil\n        curr = head\n        for _ in 0..<k {\n            let next = curr?.next\n            curr?.next = prev\n            prev = curr\n            curr = next\n        }\n        head?.next = reverseKGroup(curr, k)\n        return prev\n    }\n}",
+          "complexity": {
+            "space": "O(n/k)",
+            "spaceExplanation": "Recursion",
+            "time": "O(n)",
+            "timeExplanation": "Visit each node"
+          },
+          "explanation": "Keep partial group at end unchanged.",
+          "id": "83d10cea-2f52-4e82-a840-3f981fcb393c",
+          "intuition": "Reverse k nodes at a time, connect groups.",
+          "name": "Iterative",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[2,1,4,3,5]",
+              "explanation": "Pairs reversed, 5 unchanged",
+              "id": "6d0c7eaa-2011-45d1-b870-42757b68543d",
+              "input": "head = [1,2,3,4,5], k = 2"
+            }
+          ]
+        }
+      ],
+      "id": "8a175a1b-81a3-4b64-859a-67e5a943d620",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "reverse-nodes-in-k-group",
+      "relatedProblems": [
+        "swap-nodes-in-pairs"
+      ],
+      "summary": "Reverse every k nodes. Count k, reverse group, recursively handle rest."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "We initialize two counters to zero, one for the 'U'-'D' movement and one for the 'L'-'R' movement. Then, we iterate over each movement: if it's 'U', we increment the 'U'-'D' counter; if it's 'D', we decrement the 'U'-'D' counter; if it's 'L', we increment the 'L'-'R' counter; and if it's 'R', we decrement the 'L'-'R' counter. If both counters are zero at the end, we return true; otherwise, we return false.",
+          "code": "class Solution {\n    func judgeCircle(moves: String) -> Bool {\n        var verticalCount = 0\n        var horizontalCount = 0\n\n        for move in moves {\n            switch move {\n            case \"U\": verticalCount += 1\n            case \"D\": verticalCount -= 1\n            case \"L\": horizontalCount += 1\n            case \"R\": horizontalCount -= 1\n            default: break\n            }\n        }\n\n        return verticalCount == 0 && horizontalCount == 0\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we're only using a fixed amount of space to store our counters.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we're scanning the input string once."
+          },
+          "explanation": "The brute force solution works by essentially simulating the robot's movement and checking if it ends up back at the origin.",
+          "id": "ec0218af-c41f-4bb6-86d6-a39ee7bb2714",
+          "intuition": "The brute force approach involves keeping track of the net movement in the 'U' and 'D' directions and the net movement in the 'L' and 'R' directions.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The robot moves up and then down, so it ends up back at the origin.",
+              "id": "5176474b-5686-49b5-b823-1d7e8e883815",
+              "input": "moves = \"UD\""
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The robot moves left twice, so it doesn't end up back at the origin.",
+              "id": "02abbd55-56db-49ff-923c-e4ea1286e636",
+              "input": "moves = \"LL\""
+            }
+          ]
+        },
+        {
+          "approach": "We initialize a dictionary to store the net movement in the 'U'-'D' direction and the net movement in the 'L'-'R' direction. Then, we iterate over each movement and update the corresponding values in the dictionary. At the end, we check if both values in the dictionary are zero.",
+          "code": "class Solution {\n    func judgeCircle(moves: String) -> Bool {\n        var movementDict: [Character: Int] = [\"U\": 0, \"D\": 0, \"L\": 0, \"R\": 0]\n\n        for move in moves {\n            movementDict[move, default: 0] += 1\n        }\n\n        return movementDict[\"U\"]! - movementDict[\"D\"]! == 0 && movementDict[\"L\"]! - movementDict[\"R\"]! == 0\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we're only using a fixed amount of space to store our dictionary.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we're scanning the input string once."
+          },
+          "explanation": "The optimized solution works by using a dictionary to efficiently keep track of the robot's movement.",
+          "id": "ea7773e2-ca47-4ca0-a6e3-f41a21400261",
+          "intuition": "This optimized approach works similarly to the brute force approach but uses a dictionary to keep track of the movements.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The robot moves up and then down, so it ends up back at the origin.",
+              "id": "cbcb0810-f03d-449e-8a47-c97461758dd5",
+              "input": "moves = \"UD\""
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The robot moves left twice, so it doesn't end up back at the origin.",
+              "id": "348e0568-26a0-487e-a1cb-f42eaa1519dd",
+              "input": "moves = \"LL\""
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "The robot moves left and then right, so it ends up back at the origin.",
+              "id": "aa0e612f-996d-4506-9a91-54487a1b7afb",
+              "input": "moves = \"LR\""
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "The robot moves up twice, down twice, left twice, and right twice, so it ends up back at the origin.",
+              "id": "cf190734-e2bf-4683-a520-a4a67f3e46ed",
+              "input": "moves = \"UUDDLLRR\""
+            }
+          ]
+        }
+      ],
+      "id": "3a976697-1cb3-4040-b7c6-f1fa04556ddf",
+      "lastUpdated": "2026-02-06T21:31:47Z",
+      "problemSlug": "robot-return-to-origin",
+      "relatedProblems": [
+        "reverse-string",
+        "valid-anagram"
+      ],
+      "summary": "This problem involves determining if a robot will return to its origin after a series of movements, with key insight being that the difference between the number of 'U' and 'D' movements and the number of 'L' and 'R' movements will determine the outcome."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Create an array of all rotations of the first string. 2. Compare each rotation to the second string and return true if there is a match. 3. If no match is found, return false.",
+          "code": "class Solution {\n    func rotateString(_ s: String, _ goal: String) -> Bool {\n        let n = s.count\n        var rotations = [String]()\n        for i in 0..<n {\n            let rotation = String(s.dropFirst(i) + s.prefix(i))\n            rotations.append(rotation)\n        }\n        return rotations.contains(goal)\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because a new string of length n is created for each rotation, resulting in a total of n strings.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) because String concatenation and comparison in Swift are O(n) operations, and these are performed n times."
+          },
+          "explanation": "This approach works by utilizing the definition of a rotation of a string. It is, however, inefficient as it involves creating a new string for each rotation and then comparing it to the second string.",
+          "id": "52d67769-cb88-49b3-8393-2070a56c71db",
+          "intuition": "The brute-force approach involves checking every possible rotation of the first string and comparing it to the second string.",
+          "name": "Brute-Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The string 'cdeab' is a rotation of 'abcde'.",
+              "id": "8f7e6b41-15af-47f3-8b33-230872aaecdd",
+              "input": "s = 'abcde', goal = 'cdeab'"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The string 'abced' is not a rotation of 'abcde'.",
+              "id": "ba619a9b-cb94-45d3-ac14-5e4deae7cf4d",
+              "input": "s = 'abcde', goal = 'abced'"
+            }
+          ]
+        },
+        {
+          "approach": "1. Concatenate the second string with itself. 2. Check if the first string is a substring of the resulting string.",
+          "code": "class Solution {\n    func rotateString(_ s: String, _ goal: String) -> Bool { return (goal + goal).contains(s) }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because a new string of length 2n is created by concatenating the goal string with itself.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because the contains method in Swift performs a linear search, which takes O(n) time."
+          },
+          "explanation": "This approach works by utilizing the property that a string is a rotation of another if it is a substring of the second string concatenated with itself. It is more efficient because it only involves a single string concatenation and a single substring search.",
+          "id": "46c36614-db84-4db0-a2d1-48968cae5a1b",
+          "intuition": "A more efficient approach is to recognize that a string is a rotation of another if the first string is a substring of the second string concatenated with itself.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The string 'cdeab' is a rotation of 'abcde'.",
+              "id": "8db70ce7-6709-4a4a-afb9-490828b9bc72",
+              "input": "s = 'abcde', goal = 'cdeab'"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The string 'abced' is not a rotation of 'abcde'.",
+              "id": "6162bdb8-2ff0-4367-8cc4-690f562f5199",
+              "input": "s = 'abcde', goal = 'abced'"
+            }
+          ]
+        }
+      ],
+      "id": "f58dcf32-e54c-4b54-9051-a6b448fafe16",
+      "lastUpdated": "2026-02-06T21:40:23Z",
+      "problemSlug": "rotate-string",
+      "relatedProblems": [
+        "reverse-string",
+        "string-to-integer-atoi"
+      ],
+      "summary": "Rotate String is a problem that involves checking if a string is a rotation of another string. The key insight is to recognize that a string is a rotation of another if the first string is a substring of the second string concatenated with itself."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Serialize by DFS preorder, output value or \"#\" for nil.\n2. Deserialize by reading tokens in order and rebuilding nodes recursively.",
+          "code": "class Solution {\n    class Codec {\n        func serialize(_ root: TreeNode?) -> String {\n            var result: [String] = []\n            func dfs(_ node: TreeNode?) {\n                guard let node = node else {\n                    result.append(\"#\")\n                    return\n                }\n                result.append(String(node.val))\n                dfs(node.left)\n                dfs(node.right)\n            }\n            dfs(root)\n            return result.joined(separator: \",\")\n        }\n\n        func deserialize(_ data: String) -> TreeNode? {\n            let tokens = data.split(separator: \",\").map(String.init)\n            var index = 0\n\n            func dfs() -> TreeNode? {\n                if index >= tokens.count { return nil }\n                let token = tokens[index]\n                index += 1\n                if token == \"#\" { return nil }\n                let node = TreeNode(Int(token) ?? 0)\n                node.left = dfs()\n                node.right = dfs()\n                return node\n            }\n\n            return dfs()\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Tokens plus recursion stack",
+            "time": "O(n)",
+            "timeExplanation": "Each node is visited once in both serialize and deserialize"
+          },
+          "explanation": "Null markers make the structure unambiguous, so a single pass over tokens can reconstruct the original tree.",
+          "id": "296bba88-9dd2-4f56-bce6-600215ee37fc",
+          "intuition": "Preorder with explicit nulls uniquely represents the tree structure.",
+          "name": "Preorder with Null Markers",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,3,null,null,4,5]",
+              "explanation": "Serialization and deserialization preserve the same shape and values.",
+              "id": "bac9f4b5-62ce-43dd-8019-472f11c5deb1",
+              "input": "root = [1,2,3,null,null,4,5]"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "Empty tree serializes to a null marker and deserializes to nil.",
+              "id": "9d538869-272a-4bd4-97b7-e8d55f231969",
+              "input": "root = []"
+            }
+          ]
+        }
+      ],
+      "id": "9dc90726-ad7b-42b7-bbf9-4f34ef32ba8c",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "serialize-and-deserialize-binary-tree",
+      "relatedProblems": [
+        "serialize-and-deserialize-bst",
+        "construct-binary-tree-from-preorder-and-inorder-traversal"
+      ],
+      "summary": "Use preorder traversal with null markers to serialize, then rebuild the tree by consuming the token list in order."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Skip leading whitespace\n2. Handle sign\n3. Process digits, check overflow",
+          "code": "class Solution {\n    func myAtoi(_ s: String) -> Int {\n        let chars = Array(s)\n        var i = 0, sign = 1, result = 0\n        while i < chars.count && chars[i] == \" \" { i += 1 }\n        if i < chars.count && (chars[i] == \"+\" || chars[i] == \"-\") {\n            sign = chars[i] == \"-\" ? -1 : 1\n            i += 1\n        }\n        while i < chars.count && chars[i].isNumber {\n            let digit = Int(String(chars[i]))!\n            if result > (Int(Int32.max) - digit) / 10 {\n                return sign == 1 ? Int(Int32.max) : Int(Int32.min)\n            }\n            result = result * 10 + digit\n            i += 1\n        }\n        return sign * result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Array copy",
+            "time": "O(n)",
+            "timeExplanation": "Single pass"
+          },
+          "explanation": "Stop at first non-digit after numbers start.",
+          "id": "75a6978c-e2af-4a4d-afe5-08dd5c2a5211",
+          "intuition": "Process: whitespace → sign → digits → stop.",
+          "name": "State Machine",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "-42",
+              "explanation": "Parsed with sign",
+              "id": "6824d757-06a4-47ed-877a-3afb365423f9",
+              "input": "s = \"   -42\""
+            }
+          ]
+        }
+      ],
+      "id": "a858b6d5-21c4-46b5-a6ce-adbe0e5bfc41",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "string-to-integer-atoi",
+      "relatedProblems": [
+        "reverse-integer"
+      ],
+      "summary": "Convert string to integer. Handle whitespace, sign, overflow."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize counters for absences and late arrivals. 2. Iterate over each character in the attendance record string. 3. For each character, check if it represents an absence, a late arrival, or a present day, and update the counters accordingly. 4. After checking all characters, compare the counters to the conditions for a good record.",
+          "code": "class Solution {\n    func checkRecord(_ s: String) -> Bool {\n        var aCount = 0\n        var lCount = 0\n        var prevL = false\n        for char in s {\n            switch char {\n            case \"A\": aCount += 1\n            case \"L\": lCount += 1; prevL = true\n            default: prevL = false\n            }\n            if prevL && lCount >= 3 || aCount >= 2 { return false }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we use a constant amount of space to store the counters and the previous character's status.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we make one pass through the attendance record string, where n is the number of characters in the string."
+          },
+          "explanation": "This approach directly checks each character in the attendance record string, making it straightforward but potentially inefficient for large inputs.",
+          "id": "ab69b43e-b2c2-401a-8619-563581e3262f",
+          "intuition": "This approach checks each character in the attendance record string to determine if it represents an absence, late arrival, or present day, and then counts these occurrences to determine if the record is good.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The student has less than two absences and no more than one late arrival in a row, so the attendance record is good.",
+              "id": "bed8f07c-8d83-4100-bcca-676686ac27c3",
+              "input": "s = \"PPALLP\""
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The student has more than one late arrival in a row, so the attendance record is not good.",
+              "id": "06dc1334-d032-498d-ae18-5f6452c209ec",
+              "input": "s = \"PPALLL\""
+            }
+          ]
+        },
+        {
+          "approach": "1. Use the count() method to count the number of absences. 2. Use a range-based for loop to check for three consecutive late arrivals.",
+          "code": "class Solution {\n    func checkRecord(_ s: String) -> Bool {\n        return s.count(where: { $0 == \"A\" }) < 2 && !s.contains(\"LLL\")\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because these methods do not use any additional space that scales with the input size.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because the count() and contains() methods each make one pass through the attendance record string, where n is the number of characters in the string."
+          },
+          "explanation": "This approach is more optimized for Swift, using its built-in features to simplify and speed up the attendance record check.",
+          "id": "030141d3-df7a-4b19-8bbf-7892b7e29acc",
+          "intuition": "This approach takes advantage of the count() and range-based for loop features of Swift to more concisely and efficiently count the number of absences and check for consecutive late arrivals.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The student has less than two absences and no three consecutive late arrivals, so the attendance record is good.",
+              "id": "95492ec3-eae9-470d-a064-267e19b24fc1",
+              "input": "s = \"PPALLP\""
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The student has three consecutive late arrivals, so the attendance record is not good.",
+              "id": "4cb70fbd-cfb6-46c7-800e-bcf70bf2faf4",
+              "input": "s = \"LLLALLL\""
+            }
+          ]
+        }
+      ],
+      "id": "29642f15-c58b-4790-b4d1-cf492d799da8",
+      "lastUpdated": "2026-02-06T21:25:43Z",
+      "problemSlug": "student-attendance-record-i",
+      "relatedProblems": [
+        "regular-expression-matching",
+        "string-to-integer-atoi"
+      ],
+      "summary": "This problem involves determining if a student's attendance record is good based on certain conditions. The key insight is to count the number of late arrivals and absences."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Update each row in the Employees table to change the sex of each employee.",
+          "code": "class Solution {\n    UPDATE Employees SET sex = IF(sex = 'm', 'f', 'm')\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are updating the existing table.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we need to update each row in the Employees table."
+          },
+          "explanation": "The brute-force approach updates the Employees table by using a simple SQL query that updates the sex of each employee.",
+          "id": "0a4b3b29-0e32-4402-9490-ceaa296c7c16",
+          "intuition": "The brute-force approach simply updates each row in the Employees table by changing the sex of each employee.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "Employees table with employees id = 1, name = 'John', sex = 'f' and id = 2, name = 'Jane', sex = 'm'",
+              "explanation": "The expected output shows the sex of each employee has been swapped.",
+              "id": "e9562e15-1953-4073-aedb-cbbe1eec1975",
+              "input": "Employees table with employees id = 1, name = 'John', sex = 'm' and id = 2, name = 'Jane', sex = 'f'"
+            },
+            {
+              "expectedOutput": "Employees table with employees id = 1, name = 'Jim', sex = 'f', id = 2, name = 'Jill', sex = 'm', id = 3, name = 'Jack', sex = 'f'",
+              "explanation": "The expected output shows the sex of each employee has been swapped.",
+              "id": "d546eabf-9744-45be-afc6-9e2f3a3ef61e",
+              "input": "Employees table with employees id = 1, name = 'Jim', sex = 'm', id = 2, name = 'Jill', sex = 'f', id = 3, name = 'Jack', sex = 'm'"
+            }
+          ]
+        },
+        {
+          "approach": "Use a SQL query to update the sex of each employee in the Employees table.",
+          "code": "class Solution {\n    UPDATE Employees SET sex = CASE WHEN sex = 'm' THEN 'f' ELSE 'm' END\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are updating the existing table.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we need to update each row in the Employees table."
+          },
+          "explanation": "The optimized approach uses a SQL query to update the sex of each employee in the Employees table.",
+          "id": "7a9c7f74-2403-4b2e-bf49-20bad5cc8539",
+          "intuition": "The optimized approach uses a SQL query to update the sex of each employee in the Employees table.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "Employees table with employees id = 1, name = 'John', sex = 'f' and id = 2, name = 'Jane', sex = 'm'",
+              "explanation": "The expected output shows the sex of each employee has been swapped.",
+              "id": "12226a6f-6fd1-4a95-82ac-755246890e85",
+              "input": "Employees table with employees id = 1, name = 'John', sex = 'm' and id = 2, name = 'Jane', sex = 'f'"
+            },
+            {
+              "expectedOutput": "Employees table with employees id = 1, name = 'Jim', sex = 'f', id = 2, name = 'Jill', sex = 'm', id = 3, name = 'Jack', sex = 'f'",
+              "explanation": "The expected output shows the sex of each employee has been swapped.",
+              "id": "d5d3338b-18f6-4454-9b90-737ec0dc02f2",
+              "input": "Employees table with employees id = 1, name = 'Jim', sex = 'm', id = 2, name = 'Jill', sex = 'f', id = 3, name = 'Jack', sex = 'm'"
+            }
+          ]
+        }
+      ],
+      "id": "224a511c-d121-4f0f-b6d3-d35e7f4dc863",
+      "lastUpdated": "2026-02-06T21:29:38Z",
+      "problemSlug": "swap-sex-of-employees",
+      "relatedProblems": [
+        "employees-with-bonus",
+        "employees-earnings"
+      ],
+      "summary": "The problem requires swapping the sex of each employee in a given table. A key insight is to use SQL to update the sex of each employee."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Binary search on T from 0 to max elevation\n2. For each T, BFS to check if path exists\n3. Find minimum T where path is possible",
+          "code": "class Solution {\n    func swimInWater(_ grid: [[Int]]) -> Int {\n        let n = grid.count\n        let dirs = [(0,1),(0,-1),(1,0),(-1,0)]\n\n        func canReach(_ t: Int) -> Bool {\n            if grid[0][0] > t { return false }\n            var visited = Set<[Int]>()\n            var queue = [[0, 0]]\n            visited.insert([0, 0])\n\n            while !queue.isEmpty {\n                let curr = queue.removeFirst()\n                if curr == [n-1, n-1] { return true }\n\n                for (dr, dc) in dirs {\n                    let nr = curr[0] + dr, nc = curr[1] + dc\n                    if nr >= 0 && nr < n && nc >= 0 && nc < n &&\n                       !visited.contains([nr, nc]) && grid[nr][nc] <= t {\n                        visited.insert([nr, nc])\n                        queue.append([nr, nc])\n                    }\n                }\n            }\n            return false\n        }\n\n        var lo = grid[0][0], hi = n * n - 1\n        while lo < hi {\n            let mid = (lo + hi) / 2\n            if canReach(mid) {\n                hi = mid\n            } else {\n                lo = mid + 1\n            }\n        }\n\n        return lo\n    }\n}",
+          "complexity": {
+            "space": "O(n²)",
+            "spaceExplanation": "Visited set",
+            "time": "O(n² log n²)",
+            "timeExplanation": "Binary search O(log n²), BFS O(n²) each"
+          },
+          "explanation": "At time T, all cells with elevation <= T are accessible. Binary search finds minimum viable T.",
+          "id": "550e8400-e29b-41d4-a716-446655440175",
+          "intuition": "Binary search on time T. Check if path exists using only cells with elevation <= T.",
+          "name": "Binary Search + BFS",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "At t=3, path 0->2->3 or 0->1->3 possible",
+              "id": "550e8400-e29b-41d4-a716-446655440281",
+              "input": "[[0,2],[1,3]]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440064",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "swim-in-rising-water",
+      "relatedProblems": [
+        "path-with-minimum-effort",
+        "trapping-rain-water-ii"
+      ],
+      "summary": "Find minimum time to swim from top-left to bottom-right. Binary search + BFS or modified Dijkstra."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Create an empty string to store the result. 2. Iterate over each character in the input string. 3. For each character, check if it's an uppercase letter. 4. If it's an uppercase letter, convert it to lower case and append it to the result string. 5. If it's not an uppercase letter, append it to the result string as is.",
+          "code": "class Solution {\n    func toLowerCase(_ s: String) -> String { var result = \"\"; for char in s { if char.isUppercase { result += String(char).lowercased() } else { result += String(char) } }; return result }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we're creating a new string that can potentially be the same length as the input string.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we're iterating over the string once, where n is the number of characters in the string."
+          },
+          "explanation": "This approach involves manually checking and converting each character, which can be time-consuming but gets the job done.",
+          "id": "a7811036-dd1f-49a2-9f9b-1172a5c1a1ca",
+          "intuition": "This approach works by iterating over each character in the string and converting it to lower case if it's an uppercase letter.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"hello\"",
+              "explanation": "The expected output is the input string converted to lower case.",
+              "id": "780c0b00-cd1d-424c-a4c9-4987056ff084",
+              "input": "s = \"Hello\""
+            },
+            {
+              "expectedOutput": "\"here\"",
+              "explanation": "The expected output is the input string as is because it's already in lower case.",
+              "id": "bc557d07-dad5-4887-9077-e89d452f8e77",
+              "input": "s = \"here\""
+            },
+            {
+              "expectedOutput": "\"lovely\"",
+              "explanation": "The expected output is the input string converted to lower case.",
+              "id": "9e540728-f9b2-4121-981a-99dadf1b148d",
+              "input": "s = \"LOVELY\""
+            }
+          ]
+        },
+        {
+          "approach": "1. Use the lowercased() method to convert the input string to lower case.",
+          "code": "class Solution {\n    func toLowerCase(_ s: String) -> String { return s.lowercased() }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because the lowercased() method creates a new string that can potentially be the same length as the input string.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because the lowercased() method iterates over the string once, where n is the number of characters in the string."
+          },
+          "explanation": "This approach is more efficient because it utilizes a built-in method that's optimized for performance.",
+          "id": "aafce0be-6448-4fc6-9f0d-081e38dd995d",
+          "intuition": "This approach works by leveraging the existing lowercased() method in Swift, which converts a string to lower case.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "\"hello\"",
+              "explanation": "The expected output is the input string converted to lower case.",
+              "id": "fb4dd0cd-b976-45e3-aa14-913567f617a2",
+              "input": "s = \"Hello\""
+            },
+            {
+              "expectedOutput": "\"here\"",
+              "explanation": "The expected output is the input string as is because it's already in lower case.",
+              "id": "4f36daf1-282a-433b-98c5-d76cf926a9d2",
+              "input": "s = \"here\""
+            },
+            {
+              "expectedOutput": "\"lovely\"",
+              "explanation": "The expected output is the input string converted to lower case.",
+              "id": "7a49cb4a-08fa-479b-91eb-31031605a95c",
+              "input": "s = \"LOVELY\""
+            }
+          ]
+        }
+      ],
+      "id": "94e10142-587c-4000-8d1d-417bff980f81",
+      "lastUpdated": "2026-02-06T21:35:19Z",
+      "problemSlug": "to-lower-case",
+      "relatedProblems": [
+        "reverse-words-in-a-string-iii",
+        "valid-palindrome"
+      ],
+      "summary": "The problem requires converting a given string to lower case. The key insight is to understand the ASCII values of characters and leverage existing string methods in Swift."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Read the file line by line, split each line into words, and store them in a 2D array. Then, iterate over the array and swap its rows with columns. Finally, write the transposed array back to the file.",
+          "code": "class Solution {\n    import Foundation\n\n    class TransposeFile {\n        static func transpose(file: String) -> String {\n            let content = try! String(contentsOfFile: file)\n            let lines = content.components(separatedBy: \"\\n\")\n            var matrix: [[String]] = []\n            for line in lines {\n                let words = line.components(separatedBy: \" \")\n                matrix.append(words)\n            }\n            var transposedMatrix: [[String]] = Array(repeating: Array(repeating: \"\", count: matrix.count), count: matrix[0].count)\n            for i in 0..<matrix.count {\n                for j in 0..<matrix[0].count {\n                    transposedMatrix[j][i] = matrix[i][j]\n                }\n            }\n            var result = \"\"\n            for row in transposedMatrix {\n                result += row.joined(separator: \" \") + \"\\n\"\n            }\n            return result\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n*m)",
+            "spaceExplanation": "We need to store the entire file in memory, which takes O(n*m) space.",
+            "time": "O(n*m)",
+            "timeExplanation": "We need to iterate over the entire file, which takes O(n*m) time."
+          },
+          "explanation": "This approach has a time complexity of O(n*m) where n is the number of rows and m is the number of columns. The space complexity is also O(n*m) because we need to store the entire file in memory.",
+          "id": "79286508-44e2-4bb9-a2c6-3af8753d8f85",
+          "intuition": "This approach works by reading the entire file into memory and then swapping its rows with columns. It's straightforward but not efficient for large files.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1 4\\n2 5\\n3 6",
+              "explanation": "The file has two rows and three columns. After transposing, it should have three rows and two columns.",
+              "id": "8cc55674-7378-4840-9247-51043eca9fb1",
+              "input": "file1.txt containing: 1 2 3\\n4 5 6"
+            },
+            {
+              "expectedOutput": "a d\\nb e\\nc f",
+              "explanation": "The file has two rows and three columns. After transposing, it should have three rows and two columns.",
+              "id": "c7e8dbde-80eb-4058-a552-907999c25eed",
+              "input": "file2.txt containing: a b c\\nd e f"
+            }
+          ]
+        },
+        {
+          "approach": "Read the file line by line, split each line into words, and store them in a dictionary where the key is the column index and the value is an array of words. Then, iterate over the dictionary and join the words in each array into a string. Finally, write the transposed strings back to the file.",
+          "code": "class Solution {\n    import Foundation\n\n    class TransposeFile {\n        static func transpose(file: String) -> String {\n            let content = try! String(contentsOfFile: file)\n            let lines = content.components(separatedBy: \"\\n\")\n            var dict: [Int: [String]] = [:]\n            for (i, line) in lines.enumerated() {\n                let words = line.components(separatedBy: \" \")\n                for (j, word) in words.enumerated() {\n                    if dict[j] == nil {\n                        dict[j] = [word]\n                    } else {\n                        dict[j]!.append(word)\n                    }\n                }\n            }\n            var result = \"\"\n            for (_, value) in dict {\n                result += value.joined(separator: \" \") + \"\\n\"\n            }\n            return result\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(m)",
+            "spaceExplanation": "We only need to store the words in each column, which takes O(m) space.",
+            "time": "O(n*m)",
+            "timeExplanation": "We need to iterate over the entire file, which takes O(n*m) time."
+          },
+          "explanation": "This approach has a time complexity of O(n*m) where n is the number of rows and m is the number of columns. The space complexity is O(m) because we only need to store the words in each column.",
+          "id": "f0f89411-01a7-4783-bcc0-8098412c420a",
+          "intuition": "This approach works by using a more efficient data structure, such as a dictionary of arrays, to represent the file. It's more efficient than the brute force approach because it uses less memory.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1 4\\n2 5\\n3 6",
+              "explanation": "The file has two rows and three columns. After transposing, it should have three rows and two columns.",
+              "id": "86b06145-3df7-480b-a24c-fa5081214d7b",
+              "input": "file1.txt containing: 1 2 3\\n4 5 6"
+            },
+            {
+              "expectedOutput": "a d\\nb e\\nc f",
+              "explanation": "The file has two rows and three columns. After transposing, it should have three rows and two columns.",
+              "id": "9e004bfc-85aa-4fa6-88ca-c1d32e4313ea",
+              "input": "file2.txt containing: a b c\\nd e f"
+            }
+          ]
+        }
+      ],
+      "id": "c6285fb6-32fd-423f-9b03-15409821e3da",
+      "lastUpdated": "2026-02-06T21:09:53Z",
+      "problemSlug": "transpose-file",
+      "relatedProblems": [
+        "transpose-matrix",
+        "flip-and-invert-image"
+      ],
+      "summary": "The problem requires transposing a file, which involves swapping its rows with columns. The key insight is to use a matrix data structure to represent the file and then transpose it."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Define the Node class with an id and a list of children. 2. Implement methods for adding a child and traversing the tree.",
+          "code": "",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Space complexity is also O(n) as each node is stored in memory.",
+            "time": "O(n)",
+            "timeExplanation": "Time complexity is O(n) due to the potential need to traverse every node in the tree."
+          },
+          "explanation": "This approach provides a clear, albeit inefficient, baseline for comparison. It's essential for understanding the fundamental mechanics of tree node relationships.",
+          "id": "a21cc7e7-22a2-46c8-8686-4af713c3c5bc",
+          "intuition": "The brute-force approach involves manually handling each node relationship, which, albeit straightforward, lacks efficiency in both time and space complexity.",
+          "name": "Brute-Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "Correct tree structure",
+              "explanation": "Verify that the brute-force approach correctly establishes node relationships and traverses the tree.",
+              "id": "ada37227-c5ad-4453-bd72-dbb804b417b6",
+              "input": "Tree with 5 nodes"
+            },
+            {
+              "expectedOutput": "No output",
+              "explanation": "Ensure the brute-force approach handles edge cases like an empty tree without errors.",
+              "id": "6b4c78b3-bd35-4898-8ff8-6e42792cb750",
+              "input": "Empty tree"
+            }
+          ]
+        },
+        {
+          "approach": "1. Utilize a Dictionary to store node relationships. 2. Implement an iterative traversal method to reduce recursion overhead.",
+          "code": "class Solution {\n    class OptimizedTreeNode {\n        var id: Int\n        var children: [Int]\n\n        init(_ id: Int) {\n            self.id = id\n            children = []\n        }\n\n        func addChild(_ node: Int) {\n            children.append(node)\n        }\n\n        func traverse(_ nodes: [Int: OptimizedTreeNode]) {\n            print(id)\n            for child in children {\n                if let childNode = nodes[child] {\n                    childNode.traverse(nodes)\n                }\n            }\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Space complexity remains O(n) as we're still storing all nodes, but the dictionary allows for more efficient node lookups.",
+            "time": "O(n)",
+            "timeExplanation": "While the time complexity remains O(n) due to the need to potentially visit every node, the optimized approach reduces the constant factor by minimizing recursion overhead."
+          },
+          "explanation": "This optimized approach significantly improves efficiency by leveraging a Dictionary for O(1) lookups and avoiding deep recursion.",
+          "id": "3614494b-427d-4a43-9232-3a9608d65a51",
+          "intuition": "An optimized approach focuses on streamlining node relationship management and traversal, potentially leveraging advanced data structures or algorithms to minimize time and space complexity.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "Correct traversal",
+              "explanation": "Verify the optimized approach correctly handles complex tree structures without exceeding maximum recursion depths.",
+              "id": "2295729e-8f10-482d-9408-ee752d570ca0",
+              "input": "Deeply nested tree"
+            },
+            {
+              "expectedOutput": "Error or infinite loop prevention",
+              "explanation": "Ensure the optimized approach includes cycle detection to prevent infinite loops or errors.",
+              "id": "9837400e-86c9-4881-bc1a-02b7c534b1fb",
+              "input": "Tree with cycles"
+            }
+          ]
+        }
+      ],
+      "id": "c2b330fb-b874-4dfa-90ff-5acfd37982fe",
+      "lastUpdated": "2026-02-06T21:28:47Z",
+      "problemSlug": "tree-node",
+      "relatedProblems": [
+        "binary-tree-inorder-traversal",
+        "n-ary-tree-level-order-traversal"
+      ],
+      "summary": "This problem involves designing a Tree Node class, with key insights revolving around the efficient organization of node relationships. Efficient approaches focus on minimizing the number of operations required to establish and traverse these relationships."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Iterate over each combination of line segments, check the triangle inequality for each combination",
+          "code": "class Solution {\n    func isTriangle(x: Int, y: Int, z: Int) -> Bool { return x + y > z && x + z > y && y + z > x }\n    func triangleNumber(arr: [Int]) -> Int {\n        var count = 0\n        for i in 0..<arr.count {\n            for j in i+1..<arr.count {\n                for k in j+1..<arr.count {\n                    if isTriangle(x: arr[i], y: arr[j], z: arr[k]) {\n                        count += 1\n                    }\n                }\n            }\n        }\n        return count\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we're only using a constant amount of space to store the count and loop indices",
+            "time": "O(n^3)",
+            "timeExplanation": "The time complexity is cubic because we're checking all possible combinations of three line segments"
+          },
+          "explanation": "This approach involves checking all possible combinations of line segments. For each combination, it calculates the length of the three sides and checks if they satisfy the triangle inequality",
+          "id": "f02f25df-4748-455c-9bfa-5b20dd6a88ac",
+          "intuition": "Check all possible combinations of three line segments to form a triangle",
+          "name": "Baseline Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The three line segments can form a triangle because 3 + 4 > 5, 3 + 5 > 4, and 4 + 5 > 3",
+              "id": "20719ac3-5c2d-4313-8313-29cfff062077",
+              "input": "x = 3, y = 4, z = 5"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The three line segments cannot form a triangle because 1 + 2 is not greater than 3",
+              "id": "98746cd0-aad3-4e2a-88b4-88686a502402",
+              "input": "x = 1, y = 2, z = 3"
+            }
+          ]
+        },
+        {
+          "approach": "Use a sorting-based approach to efficiently check the triangle inequality for all combinations of line segments",
+          "code": "class Solution {\n    func triangleNumber(arr: [Int]) -> Int {\n        let sortedArr = arr.sorted()\n        var count = 0\n        for i in 0..<sortedArr.count-2 {\n            let k = i + 2\n            for j in i+1..<sortedArr.count-1 {\n                while k < sortedArr.count && sortedArr[i] + sortedArr[j] > sortedArr[k] {\n                    if isTriangle(x: sortedArr[i], y: sortedArr[j], z: sortedArr[k]) {\n                        count += 1\n                    }\n                    k += 1\n                }\n            }\n        }\n        return count\n    }\n    func isTriangle(x: Int, y: Int, z: Int) -> Bool { return x + y > z && x + z > y && y + z > x }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear because we're storing the sorted array",
+            "time": "O(n^2 log n)",
+            "timeExplanation": "The time complexity is quadratic because we're sorting the array and then iterating over the array to check the triangle inequality for each combination of line segments"
+          },
+          "explanation": "This approach involves sorting the array of line segments and then iterating over the array to check the triangle inequality for each combination of line segments",
+          "id": "1d2ab224-f884-4a92-ab08-b3efc14c7f8c",
+          "intuition": "Use a more efficient algorithm to check the triangle inequality for all combinations of line segments",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The three line segments can form a triangle because 3 + 4 > 5, 3 + 5 > 4, and 4 + 5 > 3",
+              "id": "f0b56123-ca7a-4ed4-8dde-be6c1cb2e303",
+              "input": "x = 3, y = 4, z = 5"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The three line segments cannot form a triangle because 1 + 2 is not greater than 3",
+              "id": "c502ddd9-9d13-4643-8f52-748de9e4c968",
+              "input": "x = 1, y = 2, z = 3"
+            }
+          ]
+        }
+      ],
+      "id": "33dfac72-023d-4fca-948c-32228403e214",
+      "lastUpdated": "2026-02-06T21:28:56Z",
+      "problemSlug": "triangle-judgement",
+      "relatedProblems": [
+        "valid-triangle",
+        "minimum-perimeter-rectangle"
+      ],
+      "summary": "Determine if three line segments can form a triangle. Key insight: the sum of lengths of any two sides must be greater than the third side."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Define the regular expression pattern, loop through each phone number, and use the regex to check if the phone number is valid.",
+          "code": "class Solution {\n    import Foundation\n\n    func validPhoneNumbers(_ phoneNumbers: [String]) -> [String] {\n        let pattern = \"^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$\n        let regex = try! NSRegularExpression(pattern: pattern, options: []);\n        return phoneNumbers.filter { phoneNumber in\n            let range = NSRange(phoneNumber.startIndex..., in: phoneNumber)\n            return regex.firstMatch(in: phoneNumber, options: [], range: range) != nil\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Since we're just filtering the input array, the space complexity is constant",
+            "time": "O(n*m)",
+            "timeExplanation": "Where n is the number of phone numbers and m is the average length of a phone number"
+          },
+          "explanation": "This approach involves directly applying the given pattern to each phone number using string pattern matching functions, which results in a straightforward, albeit potentially inefficient solution.",
+          "id": "9b36253a-ee20-4ca3-8a3b-d5e8d9e604e3",
+          "intuition": "This approach works by directly checking each phone number against the given pattern using string matching.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"(123) 456-7890\", \"123-456-7890\", \"1234567890\"]",
+              "explanation": "The first three numbers match the pattern, with or without the parentheses and the hyphen, while the last one is too short.",
+              "id": "3f41e832-7fae-4c0e-83e5-7bb355a52502",
+              "input": "phoneNumbers = [\"(123) 456-7890\", \"123-456-7890\", \"1234567890\", \"1234567\"]"
+            },
+            {
+              "expectedOutput": "[\"123.456.7890\"]",
+              "explanation": "Only the last phone number fits the required format.",
+              "id": "cdc4af74-f309-431c-b635-7e44c83da8e3",
+              "input": "phoneNumbers = [\"1234\", \"12345678901\", \"123-4567\", \"123.456.7890\"]"
+            }
+          ]
+        },
+        {
+          "approach": "Precompile the regex pattern, then use it to filter the phone numbers in a single pass, potentially utilizing parallel processing if the list is very large.",
+          "code": "class Solution {\n    import Foundation\n\n    func validPhoneNumbersOptimized(_ phoneNumbers: [String]) -> [String] {\n        let pattern = \"^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$\n        let regex = try! NSRegularExpression(pattern: pattern, options: []);\n        return phoneNumbers.parallelMap { phoneNumber -> String? in\n            let range = NSRange(phoneNumber.startIndex..., in: phoneNumber)\n            return regex.firstMatch(in: phoneNumber, options: [], range: range) != nil ? phoneNumber : nil\n        }.compactMap { $0 }\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Since we're using an optimized version of the filter process, the space complexity remains constant",
+            "time": "O(n*m/p)",
+            "timeExplanation": "Where n is the number of phone numbers, m is the average length of a phone number, and p is the number of parallel processing units"
+          },
+          "explanation": "By compiling the regex pattern beforehand and reusing it, we can reduce the overhead of compiling it for each phone number, and then apply it to filter the list of phone numbers efficiently.",
+          "id": "1ea5b32c-4832-420e-97ff-10592553b30c",
+          "intuition": "This optimized approach still uses the same regex pattern but improves the filtering process by using a more efficient data structure or algorithm.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[\"(123) 456-7890\", \"123-456-7890\", \"1234567890\"]",
+              "explanation": "The result is the same as the brute force approach, but the processing should be faster for large inputs due to parallelization.",
+              "id": "d5dc099a-3365-4059-b372-6bf662c5bb01",
+              "input": "phoneNumbers = [\"(123) 456-7890\", \"123-456-7890\", \"1234567890\", \"1234567\"]"
+            },
+            {
+              "expectedOutput": "[\"123.456.7890\"]",
+              "explanation": "The optimized approach also correctly identifies the valid phone number.",
+              "id": "44155de5-2125-46e6-ba5a-6fe7b5bc0870",
+              "input": "phoneNumbers = [\"1234\", \"12345678901\", \"123-4567\", \"123.456.7890\"]"
+            }
+          ]
+        }
+      ],
+      "id": "7eed2e4b-5525-4f45-b2df-90824b3b42f3",
+      "lastUpdated": "2026-02-06T21:09:48Z",
+      "problemSlug": "valid-phone-numbers",
+      "relatedProblems": [
+        "valid-email-addresses",
+        "validate-ip-address"
+      ],
+      "summary": "This problem requires validating phone numbers with a given regular expression pattern, and the key insight is to use string pattern matching techniques."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Split the IP address into its parts and then validate each part based on its values and length.",
+          "code": "class Solution {\n    import Foundation\n\n    func validIPAddress(_ IP: String) -> String {\n        let IPv4_delimiter = \".\"\n        let IPv6_delimiter = \":\"\n\n        if IP.contains(IPv4_delimiter) {\n            let parts = IP.components(separatedBy: IPv4_delimiter)\n            if parts.count != 4 {\n                return \"Neither\"\n            }\n\n            for part in parts {\n                if part.count > 1 && part.first == \"0\" {\n                    return \"Neither\"\n                }\n\n                if let number = Int(part) {\n                    if number < 0 || number > 255 {\n                        return \"Neither\"\n                    }\n                } else {\n                    return \"Neither\"\n                }\n            }\n            return \"IPv4\"\n        } else if IP.contains(IPv6_delimiter) {\n            let parts = IP.components(separatedBy: IPv6_delimiter)\n            if parts.count != 8 {\n                return \"Neither\"\n            }\n\n            for part in parts {\n                if part.count > 4 {\n                    return \"Neither\"\n                }\n\n                for char in part {\n                    if !(char >= \"0\" && char <= \"9\" || char >= \"a\" && char <= \"f\" || char >= \"A\" && char <= \"F\") {\n                        return \"Neither\"\n                    }\n                }\n            }\n            return \"IPv6\"\n        } else {\n            return \"Neither\"\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We store the parts of the IP address, and in the worst case, this takes linear space.",
+            "time": "O(n)",
+            "timeExplanation": "We iterate through the string to split it into parts, and this takes linear time."
+          },
+          "explanation": "For IPv4, the address should be split into 4 parts by '.', and each part should be between 0 and 255. For IPv6, the address should be split into 8 parts by ':', and each part should be between 0 and FFFF.",
+          "id": "cb108cad-8aef-4075-a5b1-3b34558d8755",
+          "intuition": "This approach uses basic string processing to split the IP address into its parts and then validate each part according to IPv4 or IPv6 rules.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"IPv4\"",
+              "explanation": "This IP address can be split into 4 parts by '.': 192, 168, 0, and 1. Each part is a number between 0 and 255, so the IP address is valid for IPv4.",
+              "id": "fd74db2e-0e87-4c77-a130-621b7ec73c65",
+              "input": "IP = \"192.168.0.1\""
+            },
+            {
+              "expectedOutput": "\"IPv6\"",
+              "explanation": "This IP address can be split into 8 parts by ':': 2001, 0db8, 85a3, 0000, 0000, 8a2e, 0370, and 7334. Each part is a hexadecimal number between 0 and FFFF, so the IP address is valid for IPv6.",
+              "id": "35def55f-d7c9-43ce-a895-2426fe7f1015",
+              "input": "IP = \"2001:0db8:85a3:0000:0000:8a2e:0370:7334\""
+            }
+          ]
+        },
+        {
+          "approach": "Use the URLComponents class to parse the IP address and check its validity.",
+          "code": "class Solution {\n    import Foundation\n\n    func validIPAddress(_ IP: String) -> String {\n        var urlComponents = URLComponents(string: \"http://(IP)\")\n        var host = urlComponents?.host\n\n        if host?.contains(\":\") == true {\n            if host?.components(separatedBy: \":\").count == 8 {\n                for part in (host?.components(separatedBy: \":\") ?? []) {\n                    if part.count > 4 {\n                        return \"Neither\"\n                    }\n\n                    for char in part {\n                        if !(char >= \"0\" && char <= \"9\" || char >= \"a\" && char <= \"f\" || char >= \"A\" && char <= \"F\") {\n                            return \"Neither\"\n                        }\n                    }\n                }\n                return \"IPv6\"\n            } else {\n                return \"Neither\"\n            }\n        } else if host?.contains(\".\") == true {\n            if (host?.components(separatedBy: \".\") ?? []).count == 4 {\n                for part in (host?.components(separatedBy: \".\") ?? []) {\n                    if part.count > 1 && part.first == \"0\" {\n                        return \"Neither\"\n                    }\n\n                    if let number = Int(part) {\n                        if number < 0 || number > 255 {\n                            return \"Neither\"\n                        }\n                    } else {\n                        return \"Neither\"\n                    }\n                }\n                return \"IPv4\"\n            } else {\n                return \"Neither\"\n            }\n        } else {\n            return \"Neither\"\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We store the parsed IP address, and in the worst case, this takes linear space.",
+            "time": "O(n)",
+            "timeExplanation": "We use the URLComponents class to parse the IP address, and this takes linear time."
+          },
+          "explanation": "The URLComponents class can parse the IP address and check if it's a valid IPv4 or IPv6 address.",
+          "id": "2c0093cf-4f0f-440b-8598-da8681fac5cb",
+          "intuition": "This approach uses a more efficient method of checking the IP address by using the URLComponents class in Swift.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "\"IPv4\"",
+              "explanation": "The IP address is valid for IPv4 because it can be split into 4 parts by '.': 172, 16, 254, and 1. Each part is a number between 0 and 255.",
+              "id": "f2461147-1fc5-43de-9472-29e73db598f3",
+              "input": "IP = \"172.16.254.1\""
+            },
+            {
+              "expectedOutput": "\"IPv6\"",
+              "explanation": "The IP address is valid for IPv6 because it can be split into 8 parts by ':': 2001, 0db8, 85a3, 0000, 0000, 8a2e, 0370, and 7334. Each part is a hexadecimal number between 0 and FFFF.",
+              "id": "4a219d5e-ab7f-4358-8e1a-1e93e1c09469",
+              "input": "IP = \"2001:0db8:85a3:0000:0000:8a2e:0370:7334\""
+            },
+            {
+              "expectedOutput": "\"Neither\"",
+              "explanation": "The IP address is not valid for IPv4 because one of its parts is greater than 255.",
+              "id": "fcad8ff0-3a2f-47f7-ae65-ff4d176de397",
+              "input": "IP = \"256.256.256.256\""
+            }
+          ]
+        }
+      ],
+      "id": "bb211ce8-2174-4a3b-8389-9ff60fcba0d3",
+      "lastUpdated": "2026-02-06T21:20:50Z",
+      "problemSlug": "validate-ip-address",
+      "relatedProblems": [
+        "defuse-the-bomb",
+        "valid-palindrome"
+      ],
+      "summary": "This problem involves validating an IP address given as a string, which requires us to check if the IP address is valid according to IPv4 or IPv6 rules. The key insight is checking the number of parts and the value of each part."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Add all gates to queue\n2. BFS: update empty rooms with distance\n3. Each BFS level increases distance by 1",
+          "code": "class Solution {\n    func wallsAndGates(_ rooms: inout [[Int]]) {\n        let m = rooms.count, n = rooms[0].count\n        let INF = 2147483647\n        var queue: [(Int, Int)] = []\n\n        for i in 0..<m {\n            for j in 0..<n {\n                if rooms[i][j] == 0 { queue.append((i, j)) }\n            }\n        }\n\n        let dirs = [(0,1),(0,-1),(1,0),(-1,0)]\n        while !queue.isEmpty {\n            let (i, j) = queue.removeFirst()\n            for (di, dj) in dirs {\n                let ni = i + di, nj = j + dj\n                if ni >= 0 && ni < m && nj >= 0 && nj < n && rooms[ni][nj] == INF {\n                    rooms[ni][nj] = rooms[i][j] + 1\n                    queue.append((ni, nj))\n                }\n            }\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(m×n)",
+            "spaceExplanation": "Queue size",
+            "time": "O(m×n)",
+            "timeExplanation": "Visit each cell"
+          },
+          "explanation": "First time we reach a room, it's the shortest path.",
+          "id": "5cbcc0bc-3330-4a40-a061-2b5391c9733d",
+          "intuition": "BFS from all gates simultaneously gives shortest distances.",
+          "name": "Multi-source BFS",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[3,-1,0,1],[2,2,1,-1],[1,-1,2,-1],[0,-1,3,4]]",
+              "explanation": "Distances filled",
+              "id": "c567bca8-ef02-4794-970e-caa9a9cb0743",
+              "input": "rooms = [[INF,-1,0,INF],[INF,INF,INF,-1],[INF,-1,INF,-1],[0,-1,INF,INF]]"
+            }
+          ]
+        }
+      ],
+      "id": "586b043e-68bc-4272-a9c7-10e351d30f64",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "walls-and-gates",
+      "relatedProblems": [
+        "rotting-oranges"
+      ],
+      "summary": "Fill empty rooms with distance to nearest gate. Multi-source BFS from all gates."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Split the input text into words, iterate over each word, and use a dictionary to store the count of each word.",
+          "code": "class Solution {\n    import Foundation\n\n    func wordFrequency(_ text: String) -> [String: Int] {\n        var wordCounts: [String: Int] = [:]\n        let words = text.components(separatedBy: .whitespaces)\n        for word in words {\n            let lowerCaseWord = word.lowercased()\n            if let count = wordCounts[lowerCaseWord] {\n                wordCounts[lowerCaseWord] = count + 1\n            } else {\n                wordCounts[lowerCaseWord] = 1\n            }\n        }\n        return wordCounts\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing each unique word in a dictionary.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) because for each word, we are potentially iterating over the rest of the words to count occurrences."
+          },
+          "explanation": "This approach provides a straightforward solution but may be inefficient for large input texts due to its O(n) time complexity for each word.",
+          "id": "4bd9867a-ccbf-4589-8f0c-2c3255427d22",
+          "intuition": "This approach works by iterating over each word in the input text and manually counting the occurrences of each word.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "{\"the\": 2, \"quick\": 1, \"brown\": 1, \"fox\": 1, \"jumps\": 1, \"over\": 1, \"lazy\": 1, \"dog\": 1}",
+              "explanation": "The expected output is a dictionary with each word and its count.",
+              "id": "564555e6-27d0-4ae6-afb1-8548ad135f75",
+              "input": "text = \"The quick brown fox jumps over the lazy dog\""
+            },
+            {
+              "expectedOutput": "{\"hello\": 2, \"world\": 2}",
+              "explanation": "The expected output is a dictionary with each word in lower case and its count.",
+              "id": "7009ad87-f4f7-4627-a904-f3d2b08de8b7",
+              "input": "text = \"Hello world hello World\""
+            }
+          ]
+        },
+        {
+          "approach": "Split the input text into words, iterate over each word, and use a dictionary to store the count of each word.",
+          "code": "class Solution {\n    import Foundation\n\n    func wordFrequency(_ text: String) -> [String: Int] {\n        var wordCounts: [String: Int] = [:]\n        let words = text.components(separatedBy: .whitespaces)\n        for word in words {\n            let lowerCaseWord = word.lowercased()\n            wordCounts[lowerCaseWord, default: 0] += 1\n        }\n        return wordCounts\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing each unique word in a dictionary.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are iterating over the input text once."
+          },
+          "explanation": "This approach provides an efficient solution with a time complexity of O(n) because we are only iterating over the input text once.",
+          "id": "a97002b7-8e60-46ab-883f-5f6ec5e27858",
+          "intuition": "This approach works by using a dictionary to store the word counts and iterating over the input text only once.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "{\"the\": 2, \"quick\": 1, \"brown\": 1, \"fox\": 1, \"jumps\": 1, \"over\": 1, \"lazy\": 1, \"dog\": 1}",
+              "explanation": "The expected output is a dictionary with each word and its count.",
+              "id": "77a978c3-4736-4b5d-9585-da43c3af298b",
+              "input": "text = \"The quick brown fox jumps over the lazy dog\""
+            },
+            {
+              "expectedOutput": "{\"hello\": 2, \"world\": 2}",
+              "explanation": "The expected output is a dictionary with each word in lower case and its count.",
+              "id": "21be4110-62a0-4c2a-b1fe-74d9a0b2ebe4",
+              "input": "text = \"Hello world hello World\""
+            }
+          ]
+        }
+      ],
+      "id": "46f7d445-29ff-48fd-bebd-0c166d3b11ca",
+      "lastUpdated": "2026-02-06T21:09:43Z",
+      "problemSlug": "word-frequency",
+      "relatedProblems": [
+        "valid-palindrome",
+        "group-anagrams"
+      ],
+      "summary": "The Word Frequency problem involves counting the occurrence of each word in a given text, with key insights including handling of case sensitivity and word separation."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Build pattern map: 'hot' -> ['*ot', 'h*t', 'ho*']\n2. BFS from beginWord\n3. For each word, find neighbors via pattern\n4. First time reaching endWord is shortest",
+          "code": "class Solution {\n    func ladderLength(_ beginWord: String, _ endWord: String, _ wordList: [String]) -> Int {\n        var wordSet = Set(wordList)\n        if !wordSet.contains(endWord) { return 0 }\n\n        var queue = [(beginWord, 1)]\n        var visited = Set([beginWord])\n\n        while !queue.isEmpty {\n            let (word, level) = queue.removeFirst()\n            var chars = Array(word)\n\n            for i in 0..<chars.count {\n                let original = chars[i]\n                for c in \"abcdefghijklmnopqrstuvwxyz\" {\n                    chars[i] = c\n                    let newWord = String(chars)\n                    if newWord == endWord { return level + 1 }\n                    if wordSet.contains(newWord) && !visited.contains(newWord) {\n                        visited.insert(newWord)\n                        queue.append((newWord, level + 1))\n                    }\n                }\n                chars[i] = original\n            }\n        }\n\n        return 0\n    }\n}",
+          "complexity": {
+            "space": "O(M * N)",
+            "spaceExplanation": "Queue and visited set",
+            "time": "O(M² * N)",
+            "timeExplanation": "M = word length, N = word count. Check 26*M neighbors for N words"
+          },
+          "explanation": "Pattern matching avoids O(26*L) letter substitutions. Map each word to wildcard patterns for O(1) neighbor lookup.",
+          "id": "550e8400-e29b-41d4-a716-446655440171",
+          "intuition": "Each word connects to words differing by one letter. BFS explores level by level for shortest path.",
+          "name": "BFS with Pattern Matching",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "5",
+              "explanation": "hit -> hot -> dot -> dog -> cog",
+              "id": "550e8400-e29b-41d4-a716-446655440277",
+              "input": "beginWord=\"hit\", endWord=\"cog\", wordList=[\"hot\",\"dot\",\"dog\",\"lot\",\"log\",\"cog\"]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440060",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "word-ladder",
+      "relatedProblems": [
+        "word-ladder-ii",
+        "minimum-genetic-mutation"
+      ],
+      "summary": "Transform word to target changing one letter at a time. BFS finds shortest path."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. BFS from endWord to compute distances\n2. DFS from beginWord following decreasing distances",
+          "code": "class Solution {\n    func findLadders(_ beginWord: String, _ endWord: String, _ wordList: [String]) -> [[String]] {\n        var wordSet = Set(wordList)\n        if !wordSet.contains(endWord) { return [] }\n        // Build graph and BFS for distances (simplified)\n        // Then DFS to collect all paths\n        return []\n    }\n}",
+          "complexity": {
+            "space": "O(n × m)",
+            "spaceExplanation": "Word set + paths",
+            "time": "O(n × m × 26)",
+            "timeExplanation": "BFS + DFS"
+          },
+          "explanation": "BFS ensures we only explore shortest paths.",
+          "id": "a9d1c949-01f5-4229-92fc-bba95ef930ec",
+          "intuition": "BFS finds distances, DFS backtracks to find all shortest paths.",
+          "name": "BFS + DFS",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[\"hit\",\"hot\",\"dot\",\"dog\",\"cog\"]]",
+              "explanation": "All shortest paths",
+              "id": "d262b04c-90b2-49f4-8c79-ce0e287f328b",
+              "input": "beginWord = \"hit\", endWord = \"cog\", wordList = [...]"
+            }
+          ]
+        }
+      ],
+      "id": "ab97a23d-e207-4269-8309-5075129fdcca",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "word-ladder-ii",
+      "relatedProblems": [
+        "word-ladder"
+      ],
+      "summary": "Find all shortest transformation sequences. BFS to find distance, then DFS to reconstruct paths."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Create an empty list of strings to store the characters in the zigzag pattern. Iterate through the input string and distribute the characters into the list of strings based on the row index and direction of the zigzag pattern. After distributing all characters, read off the characters from the list of strings to form the new string.",
+          "code": "class Solution {\n    import Foundation\n\n    func convert(_ s: String, _ numRows: Int) -> String {\n        if numRows == 1 {\n            return s\n        }\n\n        var rows: [String] = Array(repeating: \"\", count: numRows)\n        var index: Int = 0\n        var step: Int = 1\n\n        for char in s {\n            rows[index] += String(char)\n\n            if index == 0 {\n                step = 1\n            } else if index == numRows - 1 {\n                step = -1\n            }\n\n            index += step\n        }\n\n        return rows.joined()\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we use a list of strings to store the characters in the zigzag pattern, where n is the length of the input string.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we iterate through the input string once and distribute the characters into the list of strings."
+          },
+          "explanation": "This approach works by simulating the zigzag pattern and reading off the characters from the pattern. However, it has a high time complexity due to the use of multiple strings and string concatenation.",
+          "id": "c5c80dc3-e6fa-4083-9dfd-65724dfba8b1",
+          "intuition": "This approach works by simulating the zigzag pattern and storing the characters in a list of strings. It then reads off the characters from the pattern to form the new string.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"PAHNAPLSIIGYIR\"",
+              "explanation": "The input string \"PAYPALISHIRING\" is converted into a zigzag pattern with 3 rows and then read off to form the new string \"PAHNAPLSIIGYIR\".",
+              "id": "a47e4210-6514-40ff-91d3-ced12c63ffa5",
+              "input": "s = \"PAYPALISHIRING\", numRows = 3"
+            },
+            {
+              "expectedOutput": "\"PINALSIGYAHRPI\"",
+              "explanation": "The input string \"PAYPALISHIRING\" is converted into a zigzag pattern with 4 rows and then read off to form the new string \"PINALSIGYAHRPI\".",
+              "id": "500bc567-68bc-41e2-979d-83deb6cd40e5",
+              "input": "s = \"PAYPALISHIRING\", numRows = 4"
+            }
+          ]
+        },
+        {
+          "approach": "Create a single string to store the characters in the zigzag pattern. Iterate through the input string and distribute the characters into the string based on the row index and direction of the zigzag pattern. After distributing all characters, read off the characters from the string to form the new string.",
+          "code": "class Solution {\n    import Foundation\n\n    func convert(_ s: String, _ numRows: Int) -> String {\n        if numRows == 1 {\n            return s\n        }\n\n        var result: [Character] = Array(repeating: \"\", count: s.count)\n        var index: Int = 0\n        var step: Int = 1\n\n        for (i, char) in s.enumerated() {\n            result[index] = char\n\n            if index == 0 {\n                step = 1\n            } else if index == numRows - 1 {\n                step = -1\n            }\n\n            index += step\n        }\n\n        return String(result)\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we use a single string to store the characters in the zigzag pattern, where n is the length of the input string.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we iterate through the input string once and distribute the characters into the string."
+          },
+          "explanation": "This approach works by using a single string to store the characters in the zigzag pattern and reducing the number of string concatenations, resulting in improved performance.",
+          "id": "3d9c5694-8d97-46ef-bfd4-c4ea3634856c",
+          "intuition": "This approach works by using a single string to store the characters in the zigzag pattern and reducing the number of string concatenations.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "\"PAHNAPLSIIGYIR\"",
+              "explanation": "The input string \"PAYPALISHIRING\" is converted into a zigzag pattern with 3 rows and then read off to form the new string \"PAHNAPLSIIGYIR\".",
+              "id": "754dcfcb-5a45-4990-af1e-88bb6099376f",
+              "input": "s = \"PAYPALISHIRING\", numRows = 3"
+            },
+            {
+              "expectedOutput": "\"PINALSIGYAHRPI\"",
+              "explanation": "The input string \"PAYPALISHIRING\" is converted into a zigzag pattern with 4 rows and then read off to form the new string \"PINALSIGYAHRPI\".",
+              "id": "79593a7d-ea10-4891-89fd-219d50820a53",
+              "input": "s = \"PAYPALISHIRING\", numRows = 4"
+            }
+          ]
+        }
+      ],
+      "id": "1f37693e-63fc-4bd9-9919-53a0e6e71902",
+      "lastUpdated": "2026-02-06T21:03:48Z",
+      "problemSlug": "zigzag-conversion",
+      "relatedProblems": [
+        "reverse-integer",
+        "roman-to-integer"
+      ],
+      "summary": "The problem asks to convert a string into a zigzag pattern and then read off the characters from the pattern to form a new string. The key insight is to simulate the zigzag pattern and store the characters in a list of strings."
+    }
+  ],
+  "topic": "misc",
+  "version": "2.0.0"
+}

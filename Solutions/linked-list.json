@@ -1,0 +1,2268 @@
+{
+  "solutions": [
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize carry = 0 and result with dummy head\n2. While either list has nodes OR carry > 0:\n   - Get digits (0 if list exhausted)\n   - sum = digit1 + digit2 + carry\n   - Create node with sum % 10\n   - Update carry = sum / 10\n3. Return dummy.next",
+          "code": "class Solution {\n    func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {\n        let dummy = ListNode(0)\n        var tail = dummy\n        var p1 = l1\n        var p2 = l2\n        var carry = 0\n\n        while p1 != nil || p2 != nil || carry > 0 {\n            let val1 = p1?.val ?? 0\n            let val2 = p2?.val ?? 0\n            let sum = val1 + val2 + carry\n\n            carry = sum / 10\n            tail.next = ListNode(sum % 10)\n            tail = tail.next!\n\n            p1 = p1?.next\n            p2 = p2?.next\n        }\n\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(max(m, n))",
+            "spaceExplanation": "Result list has at most max(m,n)+1 nodes",
+            "time": "O(max(m, n))",
+            "timeExplanation": "Process max(m,n) digits where m and n are list lengths"
+          },
+          "explanation": "The reverse order is a gift - it means we process from least significant to most significant, exactly as in manual addition.\n\nHandling unequal lengths: treat exhausted list as contributing 0.\n\nDon't forget the final carry! If sum of last digits produces a carry, we need one more node (e.g., 5+5=10 needs [0,1]).\n\nThe dummy node simplifies appending the first result node.",
+          "id": "550e8400-e29b-41d4-a716-446655440115",
+          "intuition": "Since digits are in reverse order (ones place first), we can add them directly left-to-right, just like manual addition.\n\nKeep track of the carry: if sum >= 10, carry 1 to the next digit.",
+          "name": "Elementary Math Simulation",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[7,0,8]",
+              "explanation": "342 + 465 = 807. Process: 2+5=7, 4+6=10 (carry 1), 3+4+1=8",
+              "id": "550e8400-e29b-41d4-a716-446655440214",
+              "input": "l1 = [2,4,3], l2 = [5,6,4]"
+            },
+            {
+              "expectedOutput": "[0,0,0,1]",
+              "explanation": "999 + 1 = 1000. Final carry creates extra digit",
+              "id": "550e8400-e29b-41d4-a716-446655440215",
+              "input": "l1 = [9,9,9], l2 = [1]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440008",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "add-two-numbers",
+      "relatedProblems": [
+        "add-two-numbers-ii",
+        "multiply-strings"
+      ],
+      "summary": "Add two numbers represented as reversed linked lists. Simulate digit-by-digit addition with carry, building the result list as you go."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, we reverse both linked lists. Then, we add the numbers digit by digit, keeping track of the carry. Finally, we reverse the resulting linked list to get the final answer.",
+          "code": "// Definition for singly-linked list.\n\nclass Solution {\n    func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {\n        var stack1: [Int] = []\n        var stack2: [Int] = []\n        var curr1 = l1\n        var curr2 = l2\n        while curr1 != nil {\n            stack1.append(curr1!.val)\n            curr1 = curr1!.next\n        }\n        while curr2 != nil {\n            stack2.append(curr2!.val)\n            curr2 = curr2!.next\n        }\n        var dummyHead = ListNode(0)\n        var curr = dummyHead\n        var carry = 0\n        while !stack1.isEmpty || !stack2.isEmpty || carry != 0 {\n            var sum = carry\n            if !stack1.isEmpty {\n                sum += stack1.removeLast()\n            }\n            if !stack2.isEmpty {\n                sum += stack2.removeLast()\n            }\n            curr.next = ListNode(sum % 10)\n            curr = curr.next!\n            carry = sum / 10\n        }\n        return dummyHead.next\n    }\n}",
+          "complexity": {
+            "space": "O(max(m, n))",
+            "spaceExplanation": "The space complexity is O(max(m, n)) because we are using stacks to reverse the linked lists.",
+            "time": "O(max(m, n))",
+            "timeExplanation": "The time complexity is O(max(m, n)) because we are reversing both linked lists and then adding the numbers digit by digit."
+          },
+          "explanation": "The brute-force approach works by first reversing the linked lists, which allows us to add the numbers digit by digit. We keep track of the carry and add it to the next digits. Finally, we reverse the resulting linked list to get the final answer.",
+          "id": "ced0e125-8da0-4321-a4bd-c9f053054b0b",
+          "intuition": "This approach involves reversing the linked lists and then adding the numbers digit by digit.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1 -> 0 -> 8 -> 6",
+              "explanation": "The input linked lists represent the numbers 739 and 864. The expected output is the linked list representing the number 1603.",
+              "id": "e3b047db-9094-4979-839e-dca939d25054",
+              "input": "nums = [7,3,9], nums = [8,6,4]"
+            },
+            {
+              "expectedOutput": "5 -> 8 -> 19",
+              "explanation": "The input linked lists represent the numbers 2711 and 318. The expected output is the linked list representing the number 5829.",
+              "id": "aea4b85d-8d1f-4418-84c1-6c216484e9a1",
+              "input": "nums = [2,7,11,15], nums = [3,1,8]"
+            }
+          ]
+        },
+        {
+          "approach": "We use a recursive function to add the numbers digit by digit. We keep track of the carry and add it to the next digits.",
+          "code": "// Definition for singly-linked list.\n\nclass Solution {\n    func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {\n        let length1 = length(l1)\n        let length2 = length(l2)\n        let maxHeight = max(length1, length2)\n        if length1 < length2 {\n            l1 = padWithZeros(l1, length2 - length1)\n        } else if length2 < length1 {\n            l2 = padWithZeros(l2, length1 - length2)\n        }\n        let solution = addTwoNumbersRecursive(l1, l2, maxHeight, 0, 0)\n        return solution\n    }\n\n    func addTwoNumbersRecursive(_ l1: ListNode?, _ l2: ListNode?, _ height: Int, _ carry: Int, _ depth: Int) -> ListNode? {\n        if l1 == nil && l2 == nil && carry == 0 {\n            return nil\n        }\n        let sum = carry\n        if l1 != nil {\n            sum += l1!.val\n        }\n        if l2 != nil {\n            sum += l2!.val\n        }\n        let newNode = ListNode(sum % 10)\n        newNode.next = addTwoNumbersRecursive(l1?.next, l2?.next, height, sum / 10, depth + 1)\n        return newNode\n    }\n\n    func length(_ node: ListNode?) -> Int {\n        var length = 0\n        var curr = node\n        while curr != nil {\n            length += 1\n            curr = curr!.next\n        }\n        return length\n    }\n\n    func padWithZeros(_ node: ListNode?, _ zeros: Int) -> ListNode? {\n        var curr = node\n        var zerosAdded = 0\n        while zerosAdded < zeros {\n            let newNode = ListNode(0)\n            newNode.next = curr\n            curr = newNode\n            zerosAdded += 1\n        }\n        return curr\n    }\n}",
+          "complexity": {
+            "space": "O(max(m, n))",
+            "spaceExplanation": "The space complexity is O(max(m, n)) because we are using recursive calls to add the numbers digit by digit.",
+            "time": "O(max(m, n))",
+            "timeExplanation": "The time complexity is O(max(m, n)) because we are adding the numbers digit by digit."
+          },
+          "explanation": "The optimized approach works by using a recursive function to add the numbers digit by digit. We keep track of the carry and add it to the next digits. This approach avoids the need to reverse the linked lists.",
+          "id": "92d99284-bae3-48cd-8254-65ac28a3c6df",
+          "intuition": "This approach involves using a recursive function to add the numbers digit by digit without reversing the linked lists.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "7 -> 0 -> 8",
+              "explanation": "The input linked lists represent the numbers 342 and 465. The expected output is the linked list representing the number 807.",
+              "id": "64e2454f-96e4-44ee-8bd9-2397f05eb11d",
+              "input": "nums = [2,4,3], nums = [5,6,4]"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "The input linked lists represent the numbers 0 and 0. The expected output is the linked list representing the number 0.",
+              "id": "2a35db81-71c1-4df6-b5da-2eae6914f110",
+              "input": "nums = [0], nums = [0]"
+            }
+          ]
+        }
+      ],
+      "id": "90bdd4cd-af6d-4a5c-9625-b4b0c3dfbb91",
+      "lastUpdated": "2026-02-06T21:19:07Z",
+      "problemSlug": "add-two-numbers-ii",
+      "relatedProblems": [
+        "add-two-numbers",
+        "plus-one"
+      ],
+      "summary": "The problem asks to add two numbers represented as linked lists where each node contains a digit of the number. The key insight is to use a stack to reverse the linked lists and then perform addition."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start by creating a new binary search tree. Then, iterate over the linked list, and for each node, insert it into the binary search tree.",
+          "code": "class Solution {\n    func sortedListToBST(_ head: ListNode?) -> TreeNode? {\n        var nodes: [Int] = []\n        var curr = head\n        while curr != nil {\n            nodes.append(curr!.val)\n            curr = curr!.next\n        }\n        return arrayToBST(nodes, 0, nodes.count - 1)\n    }\n\n    func arrayToBST(_ nodes: [Int], _ start: Int, _ end: Int) -> TreeNode? {\n        if start > end { return nil }\n        let mid = (start + end) / 2\n        let node = TreeNode(nodes[mid])\n        node.left = arrayToBST(nodes, start, mid - 1)\n        node.right = arrayToBST(nodes, mid + 1, end)\n        return node\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We store all nodes in an array, so the space complexity is O(n).",
+            "time": "O(n log n)",
+            "timeExplanation": "We iterate over the linked list once, and then we use a recursive helper function to construct the BST, which has a time complexity of O(n log n). However, because this approach does not take full advantage of the fact that the input list is sorted, its actual time complexity may be higher than necessary."
+          },
+          "explanation": "This approach works but it's inefficient because it doesn't consider the fact that the linked list is already sorted, which could be used to balance the tree more efficiently.",
+          "id": "5fe20e71-1b6c-4548-a015-f1710d7b5453",
+          "intuition": "This approach works by iterating over the linked list and inserting each node into the binary search tree.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "a balanced BST",
+              "explanation": "We create a new BST and insert each node into it.",
+              "id": "2b115498-ad2a-49fe-9713-dedc009dea54",
+              "input": "[-10, -3, 0, 5, 9]"
+            },
+            {
+              "expectedOutput": "a balanced BST",
+              "explanation": "We create a new BST and insert each node into it.",
+              "id": "c9cd20e3-e34d-4d13-b7c2-5d2d935064cf",
+              "input": "[1, 2]"
+            }
+          ]
+        },
+        {
+          "approach": "Start by finding the middle of the linked list, and use it as the root of the current subtree. Then recursively find the middle of the left and right halves and use them as the roots of the left and right subtrees.",
+          "code": "class Solution {\n    func sortedListToBST(_ head: ListNode?) -> TreeNode? {\n        return findMiddle(head, nil)\n    }\n\n    func findMiddle(_ head: ListNode?, _ tail: ListNode?) -> TreeNode? {\n        if head == tail {\n            return nil\n        }\n        var slow = head\n        var fast = head\n        var prev: ListNode?\n        while fast?.next != tail && fast?.next?.next != tail {\n            prev = slow\n            slow = slow?.next\n            fast = fast?.next?.next\n        }\n        let node = TreeNode(slow!.val)\n        if prev != nil {\n            prev?.next = slow?.next\n        }\n        node.left = findMiddle(head, slow)\n        node.right = findMiddle(slow?.next, tail)\n        return node\n    }\n}",
+          "complexity": {
+            "space": "O(log n)",
+            "spaceExplanation": "We use recursive calls to divide the list into smaller sublists, and the maximum depth of the recursion call stack is log n, because we divide the list roughly in half at each step.",
+            "time": "O(n)",
+            "timeExplanation": "We do a constant amount of work for each node in the linked list, so the overall time complexity is O(n)."
+          },
+          "explanation": "This approach ensures that the resulting tree is roughly balanced, because we divide the list in half at each step.",
+          "id": "baace220-ad7b-4570-aa7f-1035a11f0722",
+          "intuition": "This approach works by using a similar divide-and-conquer strategy as in the array-to-BST conversion problem but adapted for linked lists.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "a balanced BST",
+              "explanation": "We divide the list in half and use the middle as the root of the current subtree.",
+              "id": "26b4c671-16f0-4297-84df-57a201baa559",
+              "input": "[-10, -3, 0, 5, 9]"
+            },
+            {
+              "expectedOutput": "a balanced BST",
+              "explanation": "We divide the list in half and use the middle as the root of the current subtree.",
+              "id": "2336ac1a-ff67-4360-85b8-99f6eeda32ae",
+              "input": "[1, 2]"
+            }
+          ]
+        }
+      ],
+      "id": "6ab66c10-8d9a-4761-8ff6-687b4ca1a2d6",
+      "lastUpdated": "2026-02-06T21:06:44Z",
+      "problemSlug": "convert-sorted-list-to-binary-search-tree",
+      "relatedProblems": [
+        "sorted-array-to-bst",
+        "balance-a-binary-search-tree"
+      ],
+      "summary": "The problem asks us to convert a sorted linked list into a balanced binary search tree and a key insight is to use a similar approach as to the one used in the array to BST conversion problem. This approach works because by picking the middle element of the list as the root, we ensure that the tree remains roughly balanced."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. First pass: create a copy of each node, store original→copy mapping\n2. Second pass: for each original node:\n   - Set copy.next = map[original.next]\n   - Set copy.random = map[original.random]\n3. Return map[head]",
+          "code": "class Solution {\n    func copyRandomList(_ head: Node?) -> Node? {\n        guard let head = head else { return nil }\n\n        var map: [ObjectIdentifier: Node] = [:]\n\n        // First pass: create all nodes\n        var curr: Node? = head\n        while let node = curr {\n            map[ObjectIdentifier(node)] = Node(node.val)\n            curr = node.next\n        }\n\n        // Second pass: wire up pointers\n        curr = head\n        while let node = curr {\n            let copy = map[ObjectIdentifier(node)]!\n            if let next = node.next {\n                copy.next = map[ObjectIdentifier(next)]\n            }\n            if let random = node.random {\n                copy.random = map[ObjectIdentifier(random)]\n            }\n            curr = node.next\n        }\n\n        return map[ObjectIdentifier(head)]\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Hash map stores n node mappings",
+            "time": "O(n)",
+            "timeExplanation": "Two passes through n nodes, O(1) per node"
+          },
+          "explanation": "The hash map is the key insight. When we encounter original.random pointing to some node X, we need to find the copy of X. The map gives us this in O(1).\n\nFirst pass creates all nodes (values only). Second pass wires up both next and random pointers using the map.\n\nNote: we handle nil by checking before map lookup.",
+          "id": "550e8400-e29b-41d4-a716-446655440113",
+          "intuition": "The challenge is that random pointers can point to nodes we haven't created yet. Solution: first create all nodes, then wire up the pointers.\n\nA hash map lets us find the copy of any original node in O(1).",
+          "name": "Hash Map (Two Pass)",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[7,null],[13,0],[11,4],[10,2],[1,0]]",
+              "explanation": "Deep copy with same structure. Node 1's random points to node 0, etc.",
+              "id": "550e8400-e29b-41d4-a716-446655440213",
+              "input": "[[7,null],[13,0],[11,4],[10,2],[1,0]]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Insert copy after each original: A→A'→B→B'→...\n2. Set random pointers: copy.random = original.random?.next\n3. Separate the two lists: restore original, extract copies",
+          "code": "class Solution {\n    func copyRandomList(_ head: Node?) -> Node? {\n        guard head != nil else { return nil }\n\n        // Phase 1: Insert copies after originals\n        var curr = head\n        while let node = curr {\n            let copy = Node(node.val)\n            copy.next = node.next\n            node.next = copy\n            curr = copy.next\n        }\n\n        // Phase 2: Set random pointers\n        curr = head\n        while let node = curr {\n            let copy = node.next\n            copy?.random = node.random?.next  // Random's copy is right after random\n            curr = copy?.next\n        }\n\n        // Phase 3: Separate lists\n        let dummy = Node(0)\n        var copyTail = dummy\n        curr = head\n        while let node = curr {\n            let copy = node.next!\n            let nextOrig = copy.next\n\n            // Extract copy\n            copyTail.next = copy\n            copyTail = copy\n\n            // Restore original\n            node.next = nextOrig\n            curr = nextOrig\n        }\n\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "No extra data structures, only pointers (output doesn't count)",
+            "time": "O(n)",
+            "timeExplanation": "Three passes, each O(n)"
+          },
+          "explanation": "The interleaving trick embeds the 'map' in the list structure itself. Original.next always points to its copy.\n\nPhase 1: Create copies, insert after originals.\nPhase 2: Wire random pointers using the interleaved structure.\nPhase 3: Carefully unweave the two lists.\n\nThe separation step is tricky - we must restore the original list while extracting the copy list.",
+          "id": "550e8400-e29b-41d4-a716-446655440114",
+          "intuition": "Avoid the hash map by interleaving copies with originals: A→A'→B→B'→C→C'. Now A'.random = A.random.next (the copy is right after the original).",
+          "name": "Interleaving (O(1) Space)",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[[7,null],[13,0],[11,4],[10,2],[1,0]]",
+              "explanation": "Deep copy with same structure. Node 1's random points to node 0, etc.",
+              "id": "cad77c55-2607-4df0-8ce4-3298730bda9d",
+              "input": "[[7,null],[13,0],[11,4],[10,2],[1,0]]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440007",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "copy-list-with-random-pointer",
+      "relatedProblems": [
+        "clone-graph",
+        "clone-binary-tree-with-random-pointer"
+      ],
+      "summary": "Create a deep copy of a linked list where each node has a random pointer. Use a hash map to map original nodes to copies, enabling O(1) lookup for random pointers."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start by finding the node to be deleted. Then, shift all the nodes after it one position to the left. This approach requires traversing the linked list to find the node to be deleted and then shifting all the nodes after it.",
+          "code": "class Solution { func deleteNode(_ node: ListNode?) { guard let node = node else { return } node.val = node.next?.val node.next = node.next?.next } }",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we do not use any additional space that scales with the input size.",
+            "time": "O(1)",
+            "timeExplanation": "The time complexity is O(1) because we only need to access the next node and update the current node's value and next pointer."
+          },
+          "explanation": "This approach is a simple solution that involves shifting all the nodes after the node to be deleted. However, it requires traversing the linked list to find the node to be deleted, which can be inefficient for large linked lists.",
+          "id": "e1bea64d-2164-4533-ac00-cfea657e282b",
+          "intuition": "This approach involves finding the node to be deleted and then shifting all the nodes after it one position to the left.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3 -> 5",
+              "explanation": "The node to be deleted is node 4, which has a value of 4. After deleting node 4, the linked list becomes 3 -> 5.",
+              "id": "9306abef-4e70-489e-9103-412a3332ac4b",
+              "input": "node = 3 -> 4 -> 5, delete node 4"
+            },
+            {
+              "expectedOutput": "1 -> 3",
+              "explanation": "The node to be deleted is node 2, which has a value of 2. After deleting node 2, the linked list becomes 1 -> 3.",
+              "id": "a9f4b087-75e3-4e65-8acd-e56fa251976d",
+              "input": "node = 1 -> 2 -> 3, delete node 2"
+            }
+          ]
+        },
+        {
+          "approach": "Start by finding the node before the node to be deleted. Then, update the next pointer of the node before the node to be deleted to point to the node after the node to be deleted. This approach requires traversing the linked list to find the node before the node to be deleted.",
+          "code": "class Solution { func deleteNode(_ node: ListNode?) { guard let node = node, let nextNode = node.next else { return } var currentNode: ListNode? = node.next while let tempNode = currentNode { if tempNode.next == nil { tempNode.val = node.val; return } currentNode = tempNode.next; tempNode.val = tempNode.next!.val } } }",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we do not use any additional space that scales with the input size.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because in the worst-case scenario, we need to traverse the entire linked list."
+          },
+          "explanation": "This approach is an optimized solution that involves updating the next pointer of the node before the node to be deleted. However, the problem statement only provides access to the node to be deleted, so this approach cannot be used.",
+          "id": "595cf945-3b48-4647-ad8a-04b69ac97d4c",
+          "intuition": "This approach involves only updating the next pointer of the node before the node to be deleted.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "3 -> 5",
+              "explanation": "The node to be deleted is node 4, which has a value of 4. After deleting node 4, the linked list becomes 3 -> 5.",
+              "id": "0cccfebe-9248-4b5e-a578-ef0a8e2faf59",
+              "input": "node = 3 -> 4 -> 5, delete node 4"
+            },
+            {
+              "expectedOutput": "1 -> 3",
+              "explanation": "The node to be deleted is node 2, which has a value of 2. After deleting node 2, the linked list becomes 1 -> 3.",
+              "id": "734e9969-65b4-4d36-afe8-329cae26b7ea",
+              "input": "node = 1 -> 2 -> 3, delete node 2"
+            }
+          ]
+        }
+      ],
+      "id": "059debb1-f217-4161-81f7-28fd2a23bf3b",
+      "lastUpdated": "2026-02-06T21:11:18Z",
+      "problemSlug": "delete-node-in-a-linked-list",
+      "relatedProblems": [
+        "reverse-linked-list",
+        "middle-of-the-linked-list"
+      ],
+      "summary": "The problem requires deleting a node in a linked list given access to the node to be deleted. We can solve this by copying the next node's data into the current node and then deleting the next node."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize an array with a fixed size. 2. Implement the addFront, addRear, deleteFront, deleteRear, getFront, getRear, isEmpty, and isFull operations by checking if the deque is empty or full and then performing the respective actions. 3. When adding elements and the deque is full, create a new array with double the size, copy all elements to the new array, and then add the new element.",
+          "code": "class Solution {\n    class MyCircularDeque {\n        var data: [Int]\n        var head: Int\n        var tail: Int\n        var size: Int\n        init(k: Int) {\n            data = [Int](repeating: 0, count: k)\n            head = 0\n            tail = 0\n            size = 0\n        }\n        func insertFront(value: Int) -> Bool {\n            if isFull() {\n                return false\n            }\n            if isEmpty() {\n                data[head] = value\n                size += 1\n                return true\n            }\n            let newHead = (head - 1 + data.count) % data.count\n            data[newHead] = value\n            head = newHead\n            size += 1\n            return true\n        }\n        func insertLast(value: Int) -> Bool {\n            if isFull() {\n                return false\n            }\n            if isEmpty() {\n                data[tail] = value\n                size += 1\n                return true\n            }\n            let newTail = (tail + 1) % data.count\n            data[newTail] = value\n            tail = newTail\n            size += 1\n            return true\n        }\n        func deleteFront() -> Bool {\n            if isEmpty() {\n                return false\n            }\n            if head == tail {\n                head = 0\n                tail = 0\n                size = 0\n                return true\n            }\n            head = (head + 1) % data.count\n            size -= 1\n            return true\n        }\n        func deleteLast() -> Bool {\n            if isEmpty() {\n                return false\n            }\n            if head == tail {\n                head = 0\n                tail = 0\n                size = 0\n                return true\n            }\n            tail = (tail - 1 + data.count) % data.count\n            size -= 1\n            return true\n        }\n        func getFront() -> Int {\n            if isEmpty() {\n                return -1\n            }\n            return data[head]\n        }\n        func getRear() -> Int {\n            if isEmpty() {\n                return -1\n            }\n            return data[tail]\n        }\n        func isEmpty() -> Bool {\n            return size == 0\n        }\n        func isFull() -> Bool {\n            return size == data.count\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity of the brute force approach is O(n) because we need to store all elements in the deque in the array.",
+            "time": "O(1) for most operations, O(n) for addFront and addRear when the deque is full",
+            "timeExplanation": "The time complexity of the brute force approach is O(1) for most operations because we can directly access and modify the elements in the array. However, when the deque is full and we need to add more elements, the time complexity becomes O(n) because we need to create a new array and copy all elements to the new array."
+          },
+          "explanation": "The brute force approach uses an array to store the elements of the deque, which makes it easy to implement the operations but inefficient when the deque is full and we need to add more elements. The addFront and addRear operations have an average time complexity of O(n) because when the deque is full, we need to create a new array and copy all elements to the new array.",
+          "id": "aff9763f-38df-4593-a333-754e46437bdc",
+          "intuition": "This approach uses an array of fixed size to store the elements of the deque. When the deque is full and we need to add more elements, we create a new array with double the size of the old array, copy all elements to the new array, and then add the new element.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "deque.isEmpty() == false, deque.isFull() == true",
+              "explanation": "We create a deque with a capacity of 3 and insert elements from both ends. The deque should be full after inserting the 4th element.",
+              "id": "6aa68504-a7da-4120-9c01-9a8670798d47",
+              "input": "let deque = MyCircularDeque(3); deque.insertLast(1); deque.insertLast(2); deque.insertFront(3); deque.insertFront(4); deque.insertRear(5); deque.insertFront(6)"
+            },
+            {
+              "expectedOutput": "deque.getFront() == 2, deque.getRear() == 3",
+              "explanation": "We create a deque with a capacity of 3, insert elements from the front, and then delete elements from both ends. The front element should be 2 and the rear element should be 3 after deletion.",
+              "id": "ef1f3c10-f3ee-4e2f-99fa-be7dc86e175f",
+              "input": "let deque = MyCircularDeque(3); deque.insertFront(1); deque.insertFront(2); deque.insertFront(3); deque.deleteFront(); deque.deleteRear()"
+            }
+          ]
+        },
+        {
+          "approach": "1. Create a doubly linked list node class. 2. Implement the addFront, addRear, deleteFront, deleteRear, getFront, getRear, isEmpty, and isFull operations using the linked list.",
+          "code": "class Solution {\n    class MyCircularDeque {\n        var head: Node?\n        var tail: Node?\n        var size: Int\n        var capacity: Int\n        init(_ k: Int) {\n            capacity = k\n            size = 0\n        }\n        func insertFront(_ value: Int) -> Bool {\n            if size == capacity {\n                return false\n            }\n            let node = Node(value)\n            if isEmpty() {\n                head = node\n                tail = node\n                node.next = node\n                node.prev = node\n            }\n            else {\n                node.next = head\n                node.prev = tail\n                head?.prev = node\n                tail?.next = node\n                head = node\n            }\n            size += 1\n            return true\n        }\n        func insertLast(_ value: Int) -> Bool {\n            if size == capacity {\n                return false\n            }\n            let node = Node(value)\n            if isEmpty() {\n                head = node\n                tail = node\n                node.next = node\n                node.prev = node\n            }\n            else {\n                node.next = head\n                node.prev = tail\n                head?.prev = node\n                tail?.next = node\n                tail = node\n            }\n            size += 1\n            return true\n        }\n        func deleteFront() -> Bool {\n            if isEmpty() {\n                return false\n            }\n            if size == 1 {\n                head = nil\n                tail = nil\n            }\n            else {\n                head = head?.next\n                head?.prev = tail\n                tail?.next = head\n            }\n            size -= 1\n            return true\n        }\n        func deleteLast() -> Bool {\n            if isEmpty() {\n                return false\n            }\n            if size == 1 {\n                head = nil\n                tail = nil\n            }\n            else {\n                tail = tail?.prev\n                tail?.next = head\n                head?.prev = tail\n            }\n            size -= 1\n            return true\n        }\n        func getFront() -> Int {\n            return head?.val ?? -1\n        }\n        func getRear() -> Int {\n            return tail?.val ?? -1\n        }\n        func isEmpty() -> Bool {\n            return size == 0\n        }\n        func isFull() -> Bool {\n            return size == capacity\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity of the optimized approach is O(n) because we need to store all elements in the deque in the linked list.",
+            "time": "O(1)",
+            "timeExplanation": "The time complexity of the optimized approach is O(1) for all operations because we can directly access and modify the nodes in the linked list."
+          },
+          "explanation": "The optimized approach uses a doubly linked list to store the elements of the deque, which makes it efficient to add and remove elements from both ends. The addFront and addRear operations have a time complexity of O(1) because we can directly add or remove nodes from the front and rear of the linked list.",
+          "id": "d108aa8c-97d8-40f3-8f5a-f158bc96e5df",
+          "intuition": "This approach uses a doubly linked list to store the elements of the deque, which makes it efficient to add and remove elements from both ends.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "deque.isEmpty() == false, deque.isFull() == true",
+              "explanation": "We create a deque with a capacity of 3, insert elements from both ends, and then check if the deque is full.",
+              "id": "f7881e1d-aba1-499e-8ae3-2d3db59031c0",
+              "input": "let deque = MyCircularDeque(3); deque.insertFront(1); deque.insertRear(2); deque.insertFront(3); deque.insertRear(4); deque.insertFront(5)"
+            },
+            {
+              "expectedOutput": "deque.getFront() == 2, deque.getRear() == 3",
+              "explanation": "We create a deque with a capacity of 3, insert elements from the front, and then delete elements from both ends. The front element should be 2 and the rear element should be 3 after deletion.",
+              "id": "edb50da1-edd4-43aa-966f-a98507ea25f2",
+              "input": "let deque = MyCircularDeque(3); deque.insertFront(1); deque.insertFront(2); deque.insertFront(3); deque.deleteFront(); deque.deleteRear()"
+            }
+          ]
+        }
+      ],
+      "id": "8909c465-dcf2-4503-a446-3d1146a8dde1",
+      "lastUpdated": "2026-02-06T21:30:23Z",
+      "problemSlug": "design-circular-deque",
+      "relatedProblems": [
+        "design-hashmap",
+        "lru-cache"
+      ],
+      "summary": "Design Circular Deque is a problem that requires implementing a circular deque data structure, which is a combination of a queue and a deque. The key insight is to manage the head and tail pointers to ensure efficient addition and removal of elements from both ends."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Create an array of a specified size. Implement enqueue and dequeue by updating the front and rear indices. Check for full and empty conditions by comparing the rear and front indices.",
+          "code": "class Solution {\n    class MyCircularQueue {\n        var data: [Int]\n        var front: Int\n        var rear: Int\n        var count: Int\n\n        init(_ k: Int) {\n            data = Array(repeating: -1, count: k)\n            front = 0\n            rear = 0\n            count = 0\n        }\n\n        func enQueue(_ value: Int) -> Bool {\n            if count == data.count {\n                return false\n            }\n            data[rear] = value\n            rear = (rear + 1) % data.count\n            count += 1\n            return true\n        }\n\n        func deQueue() -> Bool {\n            if count == 0 {\n                return false\n            }\n            front = (front + 1) % data.count\n            count -= 1\n            return true\n        }\n\n        func Front() -> Int {\n            if count == 0 {\n                return -1\n            }\n            return data[front]\n        }\n\n        func Rear() -> Int {\n            if count == 0 {\n                return -1\n            }\n            return data[(rear - 1 + data.count) % data.count]\n        }\n\n        func isEmpty() -> Bool {\n            return count == 0\n        }\n\n        func isFull() -> Bool {\n            return count == data.count\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(k)",
+            "spaceExplanation": "The space complexity is O(k) where k is the size of the circular queue, which is the space required for the underlying array.",
+            "time": "O(1)",
+            "timeExplanation": "All operations including enqueue, dequeue, and checks for empty or full conditions take constant time O(1)."
+          },
+          "explanation": "To implement the Circular Queue, we initialize the array with a specified size and set the front and rear indices to 0. When enqueuing, we check if the queue is full by comparing the rear index with the front index. If not full, we add the element at the rear index and increment the rear index. When dequeuing, we check if the queue is empty by comparing the front index with the rear index. If not empty, we remove the element at the front index and increment the front index.",
+          "id": "776fb6a7-c67f-47d6-8dc3-8def5d9855f2",
+          "intuition": "This solution works by using a fixed-size array and keeping track of the front and rear indices to simulate the circular behavior.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2, true, 4",
+              "explanation": "Creating a circular queue of size 3, enqueuing 1, 2, and 3. The queue is full so enqueuing 4 fails. The rear of the queue is 3. After dequeuing, enqueuing 4 succeeds, and the rear of the queue becomes 4.",
+              "id": "27de0dbf-eea6-407f-86d1-728529073359",
+              "input": "MyCircularQueue queue = new MyCircularQueue(3); queue.enQueue(1); queue.enQueue(2); queue.enQueue(3); queue.enQueue(4); queue.Rear(); queue.isFull(); queue.deQueue(); queue.enQueue(4); queue.Rear();"
+            },
+            {
+              "expectedOutput": "1, -1",
+              "explanation": "Enqueuing 1 and 2 into a queue of size 3, then dequeuing. The front of the queue is 2. After dequeuing again, the queue is empty.",
+              "id": "bfdfd07a-e304-46a4-adca-9019e47bc847",
+              "input": "MyCircularQueue queue = new MyCircularQueue(3); queue.enQueue(1); queue.enQueue(2); queue.deQueue(); queue.Front(); queue.deQueue();"
+            }
+          ]
+        },
+        {
+          "approach": "Implement the circular queue using an array and keeping track of the front and rear indices. Use modular arithmetic to handle wrap-around cases efficiently.",
+          "code": "class Solution {\n    class MyCircularQueue {\n        let k: Int\n        var data: [Int?]\n        var front: Int\n        var count: Int\n\n        init(_ k: Int) {\n            self.k = k\n            data = Array(repeating: nil, count: k)\n            front = 0\n            count = 0\n        }\n\n        func enQueue(_ value: Int) -> Bool {\n            if count == k {\n                return false\n            }\n            let rear = (front + count) % k\n            data[rear] = value\n            count += 1\n            return true\n        }\n\n        func deQueue() -> Bool {\n            if count == 0 {\n                return false\n            }\n            data[front] = nil\n            front = (front + 1) % k\n            count -= 1\n            return true\n        }\n\n        func Front() -> Int {\n            if count == 0 {\n                return -1\n            }\n            return data[front]!\n        }\n\n        func Rear() -> Int {\n            if count == 0 {\n                return -1\n            }\n            let rear = (front + count - 1) % k\n            return data[rear]!\n        }\n\n        func isEmpty() -> Bool {\n            return count == 0\n        }\n\n        func isFull() -> Bool {\n            return count == k\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(k)",
+            "spaceExplanation": "The space complexity remains O(k) as the size of the underlying array is the dominant factor.",
+            "time": "O(1)",
+            "timeExplanation": "The operations are still O(1) because we're using modular arithmetic to calculate the next index, which takes constant time."
+          },
+          "explanation": "The optimized solution improves the handling of indices and conditions by using modular arithmetic. This approach allows the queue to efficiently handle enqueue and dequeue operations by calculating the next index as (index + 1) % size, thus reducing the need for conditional checks for wrap-around cases.",
+          "id": "44b6c0e7-b806-45fe-a7fd-7826a94c3819",
+          "intuition": "The optimized solution uses the same approach as the brute force but with more efficient handling of the indices and conditions using modular arithmetic.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2, true, 4",
+              "explanation": "Similar to the brute force example, demonstrating the optimized solution's correctness in handling various operations.",
+              "id": "bf78798b-0baa-47a2-96d9-4f35348f2012",
+              "input": "MyCircularQueue queue = new MyCircularQueue(3); queue.enQueue(1); queue.enQueue(2); queue.enQueue(3); queue.enQueue(4); queue.Rear(); queue.isFull(); queue.deQueue(); queue.enQueue(4); queue.Rear();"
+            },
+            {
+              "expectedOutput": "5, -1, false",
+              "explanation": "Enqueuing a single element, checking the front and rear (which should be the same), dequeuing, and then checking if the queue is empty after the operation.",
+              "id": "a2d5e2e3-7113-402e-8fd9-e257e7997ac1",
+              "input": "MyCircularQueue queue = new MyCircularQueue(3); queue.enQueue(5); queue.Front(); queue.rear(); queue.deQueue(); queue.Front(); queue.isEmpty();"
+            }
+          ]
+        }
+      ],
+      "id": "fb0f2509-922c-4f98-9c50-f59864d63011",
+      "lastUpdated": "2026-02-06T21:29:20Z",
+      "problemSlug": "design-circular-queue",
+      "relatedProblems": [
+        "design-hashmap",
+        "design-linked-list"
+      ],
+      "summary": "Design a Circular Queue data structure with methods to enqueue, dequeue, and check if it's empty or full. The key insight is using a circular array to efficiently implement these operations."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Create an array to store key-value pairs. 2. For put operation, append the new key-value pair to the array. 3. For get operation, iterate through the array to find the key and return the corresponding value. 4. For remove operation, iterate through the array to find the key and remove the corresponding key-value pair.",
+          "code": "class Solution {\n    class MyHashMap { var array: [(Int, Int)] = []; func put(_ key: Int, _ value: Int) { if let index = array.firstIndex(where: { $0.0 == key }) { array[index].1 = value } else { array.append((key, value)) } }; func get(_ key: Int) -> Int { if let index = array.firstIndex(where: { $0.0 == key }) { return array[index].1 } else { return -1 } }; func remove(_ key: Int) { if let index = array.firstIndex(where: { $0.0 == key }) { array.remove(at: index) } } }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) as we store all key-value pairs in the array.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity for put, get, and remove operations is O(n) as we need to potentially check all elements in the array."
+          },
+          "explanation": "The brute force approach is not efficient for large inputs as the time complexity for get and remove operations is O(n).",
+          "id": "052d1f73-f3ba-4cc8-8fe9-3b0a69ce3427",
+          "intuition": "The brute force approach uses a simple array to store key-value pairs and checks each pair for a match.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1, 1, -1",
+              "explanation": "The expected output is based on the sequence of operations: putting key-value pairs, getting values, and removing a key-value pair.",
+              "id": "9857718f-2900-4f36-a992-5a3b642209f0",
+              "input": "myHashMap.put(1, 1); myHashMap.get(1); myHashMap.put(2, 2); myHashMap.get(1); myHashMap.remove(2); myHashMap.get(2);"
+            },
+            {
+              "expectedOutput": "1, -1",
+              "explanation": "The expected output is based on the sequence of operations: putting key-value pairs, getting a value, removing a key-value pair, and getting the value of the removed key.",
+              "id": "e7c42a31-a022-4d0e-927e-fe6894e23e82",
+              "input": "myHashMap.put(1, 1); myHashMap.put(2, 2); myHashMap.get(1); myHashMap.remove(2); myHashMap.get(2);"
+            }
+          ]
+        },
+        {
+          "approach": "1. Create an array of linked lists, where each linked list represents a bucket. 2. Use a hash function to map keys to indices in the array. 3. For put operation, append the new key-value pair to the corresponding linked list or update the value if the key already exists. 4. For get operation, use the hash function to find the index and then iterate through the linked list to find the key and return the corresponding value. 5. For remove operation, use the hash function to find the index and then iterate through the linked list to find the key and remove the corresponding node.",
+          "code": "class Solution {\n    class MyHashMap {\n        let size = 1000\n        var buckets: [[(Int, Int)]] = Array(repeating: [], count: size)\n        func _hash(_ key: Int) -> Int {\n            return abs(key) % size\n        }\n        func put(_ key: Int, _ value: Int) {\n            let index = _hash(key)\n            for (i, node) in buckets[index].enumerated() {\n                if node.0 == key {\n                    buckets[index][i].1 = value\n                    return\n                }\n            }\n            buckets[index].append((key, value))\n        }\n        func get(_ key: Int) -> Int {\n            let index = _hash(key)\n            for node in buckets[index] {\n                if node.0 == key {\n                    return node.1\n                }\n            }\n            return -1\n        }\n        func remove(_ key: Int) {\n            let index = _hash(key)\n            for (i, node) in buckets[index].enumerated() {\n                if node.0 == key {\n                    buckets[index].remove(at: i)\n                    return\n                }\n            }\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) as we store all key-value pairs in the array of linked lists.",
+            "time": "O(1 + n/m)",
+            "timeExplanation": "The time complexity for put, get, and remove operations is O(1 + n/m) as we use a good hash function to distribute keys across the array and then we may need to iterate through a linked list in the worst case."
+          },
+          "explanation": "The optimized approach is more efficient as it uses chaining to handle hash collisions, resulting in a better average time complexity.",
+          "id": "3638d478-a376-44f6-96a5-805be61ce578",
+          "intuition": "The optimized approach uses a combination of arrays and linked lists (chaining) to efficiently store and retrieve key-value pairs, minimizing hash collisions.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1, 1, -1",
+              "explanation": "The expected output is based on the sequence of operations: putting key-value pairs, getting values, and removing a key-value pair.",
+              "id": "c22dd91b-df9b-405b-865f-c73e309fd512",
+              "input": "myHashMap.put(1, 1); myHashMap.get(1); myHashMap.put(2, 2); myHashMap.get(1); myHashMap.remove(2); myHashMap.get(2);"
+            },
+            {
+              "expectedOutput": "1, -1",
+              "explanation": "The expected output is based on the sequence of operations: putting key-value pairs, getting a value, removing a key-value pair, and getting the value of the removed key.",
+              "id": "a8ce2c70-ee1c-4f01-bba9-f5f5f85e92ff",
+              "input": "myHashMap.put(1, 1); myHashMap.put(2, 2); myHashMap.get(1); myHashMap.remove(2); myHashMap.get(2);"
+            }
+          ]
+        }
+      ],
+      "id": "fde7f18c-4113-420b-8799-728ab080e18c",
+      "lastUpdated": "2026-02-06T21:34:53Z",
+      "problemSlug": "design-hashmap",
+      "relatedProblems": [
+        "design-tic-tac-toe",
+        "design-circular-queue"
+      ],
+      "summary": "Design a HashMap with basic operations like put, get, and remove, key insight is to use a combination of arrays and linked lists to store key-value pairs efficiently. The solution needs to handle hash collisions."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Create a HashSet class with an array to store elements. 2. Implement the add operation by checking if the element already exists in the array and adding it if not. 3. Implement the remove operation by finding the element in the array and removing it. 4. Implement the contains operation by searching for the element in the array.",
+          "code": "class Solution {\n    class MyHashSet { var elements: [Int] = []; func add(_ key: Int) { if !elements.contains(key) { elements.append(key) } } func remove(_ key: Int) { elements = elements.filter { $0 != key } } func contains(_ key: Int) -> Bool { return elements.contains(key) } }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) as we need to store all elements in the array.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity for add, remove, and contains operations is O(n) due to the linear search."
+          },
+          "explanation": "The brute-force approach involves using basic array operations to implement the HashSet class. This approach is simple but inefficient for large datasets.",
+          "id": "f041ade1-6578-4832-ba85-5c9899423177",
+          "intuition": "This approach involves using a basic array to store elements and then perform linear search for contains and remove operations.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "Adding 1 and 2, then checking if 1 exists returns true.",
+              "id": "2ba0861f-513b-4979-94c0-85da12f119d4",
+              "input": "add(1), add(2), contains(1)"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "Removing 2 and then checking if 2 exists returns false.",
+              "id": "a5809821-8c51-41c8-a9ca-21110bc601c8",
+              "input": "remove(2), contains(2)"
+            }
+          ]
+        },
+        {
+          "approach": "1. Create a HashSet class with a dictionary to store elements. 2. Implement the add operation by adding the element to the dictionary. 3. Implement the remove operation by removing the element from the dictionary. 4. Implement the contains operation by checking if the element exists in the dictionary.",
+          "code": "class Solution {\n    class MyHashSet { var elements: [Bool] = [Bool](repeating: false, count: 1000000); func add(_ key: Int) { elements[key] = true } func remove(_ key: Int) { elements[key] = false } func contains(_ key: Int) -> Bool { return elements[key] } }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) as we need to allocate a large array to accommodate all possible hash values.",
+            "time": "O(1)",
+            "timeExplanation": "The time complexity for add, remove, and contains operations is O(1) due to the constant-time hash table operations."
+          },
+          "explanation": "The optimized approach involves using a hash table to implement the HashSet class. This approach is efficient for large datasets.",
+          "id": "f9bdd58a-b33f-4efa-878d-e58ed1ee4e8e",
+          "intuition": "This approach involves using a hash table to store elements, which allows for efficient lookup, insertion, and deletion.",
+          "name": "Optimized Hash Table Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "Adding 1 and 2, then checking if 1 exists returns true.",
+              "id": "bf69a787-9a92-4876-9bc2-d9f9352904ee",
+              "input": "add(1), add(2), contains(1)"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "Removing 2 and then checking if 2 exists returns false.",
+              "id": "b028da0c-022a-44f4-afb5-4082ad08fb22",
+              "input": "remove(2), contains(2)"
+            }
+          ]
+        }
+      ],
+      "id": "57d5d79e-b319-4578-a7e8-fe9ee480d018",
+      "lastUpdated": "2026-02-06T21:34:47Z",
+      "problemSlug": "design-hashset",
+      "relatedProblems": [
+        "design-tic-tac-toe",
+        "insert-delete-getrandom-o1"
+      ],
+      "summary": "The problem requires designing a HashSet class that supports add, remove, and contains operations. The key insight is to utilize hashing to achieve efficient lookup and insertion."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Initialize an empty linked list and implement addAtHead, addAtTail, addAtIndex, get, and delete operations by iterating through the list",
+          "code": "class Solution {\n    class MyLinkedList {\n        var head: ListNode?\n        var tail: ListNode?\n        var size: Int\n\n        init() {\n            head = nil\n            tail = nil\n            size = 0\n        }\n\n        func addAtHead(_ val: Int) {\n            let newNode = ListNode(val: val)\n            if head == nil {\n                head = newNode\n                tail = newNode\n            } else {\n                newNode.next = head\n                head = newNode\n            }\n            size += 1\n        }\n\n        func addAtTail(_ val: Int) {\n            let newNode = ListNode(val: val)\n            if tail == nil {\n                head = newNode\n                tail = newNode\n            } else {\n                tail?.next = newNode\n                tail = newNode\n            }\n            size += 1\n        }\n\n        func addAtIndex(_ index: Int, _ val: Int) {\n            if index == 0 {\n                addAtHead(val)\n                return\n            }\n            if index == size {\n                addAtTail(val)\n                return\n            }\n            let newNode = ListNode(val: val)\n            var currentIndex = 0\n            var currentNode = head\n            while currentIndex < index - 1 {\n                currentNode = currentNode?.next\n                currentIndex += 1\n            }\n            newNode.next = currentNode?.next\n            currentNode?.next = newNode\n            size += 1\n        }\n\n        func get(_ index: Int) -> Int {\n            if index < 0 || index >= size {\n                return -1\n            }\n            var currentIndex = 0\n            var currentNode = head\n            while currentIndex < index {\n                currentNode = currentNode?.next\n                currentIndex += 1\n            }\n            return currentNode?.val ?? -1\n        }\n\n        func deleteAtIndex(_ index: Int) {\n            if index < 0 || index >= size {\n                return\n            }\n            if index == 0 {\n                head = head?.next\n                if head == nil {\n                    tail = nil\n                }\n            } else {\n                var currentIndex = 0\n                var currentNode = head\n                while currentIndex < index - 1 {\n                    currentNode = currentNode?.next\n                    currentIndex += 1\n                }\n                if currentNode?.next === tail {\n                    tail = currentNode\n                }\n                currentNode?.next = currentNode?.next?.next\n            }\n            size -= 1\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Space complexity is O(1) because we only use a constant amount of space to store the current node and other variables",
+            "time": "O(n)",
+            "timeExplanation": "Time complexity is O(n) because in the worst case, we have to traverse the entire list"
+          },
+          "explanation": "Start by handling edge cases such as an empty list or index out of bounds. Implement each operation step-by-step, starting from the head of the list and moving towards the tail as needed. Keep track of the current node and update the next pointers accordingly.",
+          "id": "b6f58868-5c3e-44b9-bbe3-6c18a6e0fce9",
+          "intuition": "Create a linked list with basic node operations, but don't optimize for performance",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2, 2",
+              "explanation": "First, add 1 at head, then add 3 at tail. Then add 2 at index 1. Get the value at index 1, which is 2. Finally, delete the value at index 1, which is also 2.",
+              "id": "d2fe95b0-4642-4fbd-8a72-0c554393b78d",
+              "input": "addAtHead(1), addAtTail(3), addAtIndex(1, 2), get(1), deleteAtIndex(1)"
+            },
+            {
+              "expectedOutput": "1, 1",
+              "explanation": "First, add 1 at head, then add 2 at head. Then get the value at index 1, which is 1. Finally, delete the value at index 0, which is 2.",
+              "id": "eb45f21c-cd05-431a-af11-a4058574e066",
+              "input": "addAtHead(1), addAtHead(2), get(1), deleteAtIndex(0)"
+            },
+            {
+              "expectedOutput": "20, 30, 10",
+              "explanation": "First, add 10 at index 0. Then add 20 at index 0. Then add 30 at index 1. Get the value at index 0, which is 20. Get the value at index 1, which is 30. Get the value at index 2, which is 10.",
+              "id": "4fbca443-1386-4c38-8bb4-3a2414a226e0",
+              "input": "addAtIndex(0, 10), addAtIndex(0, 20), addAtIndex(1, 30), get(0), get(1), get(2)"
+            }
+          ]
+        },
+        {
+          "approach": "Implement addAtHead, addAtTail, addAtIndex, get, and delete operations using a combination of node pointers and a size variable to track the number of elements in the list",
+          "code": "class Solution {\n    class MyLinkedList {\n        var head: ListNode?\n        var tail: ListNode?\n        var size: Int\n\n        init() {\n            head = nil\n            tail = nil\n            size = 0\n        }\n\n        func addAtHead(_ val: Int) {\n            let newNode = ListNode(val: val)\n            if head == nil {\n                head = newNode\n                tail = newNode\n            } else {\n                newNode.next = head\n                head = newNode\n            }\n            size += 1\n        }\n\n        func addAtTail(_ val: Int) {\n            let newNode = ListNode(val: val)\n            if tail == nil {\n                head = newNode\n                tail = newNode\n            } else {\n                tail?.next = newNode\n                tail = newNode\n            }\n            size += 1\n        }\n\n        func addAtIndex(_ index: Int, _ val: Int) {\n            if index == 0 {\n                addAtHead(val)\n                return\n            }\n            if index == size {\n                addAtTail(val)\n                return\n            }\n            if index > size {\n                return\n            }\n            let newNode = ListNode(val: val)\n            var prev: ListNode? = head\n            for _ in 0..<index-1 {\n                prev = prev?.next\n            }\n            newNode.next = prev?.next\n            prev?.next = newNode\n            size += 1\n        }\n\n        func get(_ index: Int) -> Int {\n            if index >= size {\n                return -1\n            }\n            var cur: ListNode? = head\n            for _ in 0..<index {\n                cur = cur?.next\n            }\n            return cur?.val ?? -1\n        }\n\n        func deleteAtIndex(_ index: Int) {\n            if index >= size {\n                return\n            }\n            if index == 0 {\n                head = head?.next\n                if head == nil {\n                    tail = nil\n                }\n            } else {\n                var prev: ListNode? = head\n                for _ in 0..<index-1 {\n                    prev = prev?.next\n                }\n                if prev?.next === tail {\n                    tail = prev\n                }\n                prev?.next = prev?.next?.next\n            }\n            size -= 1\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Space complexity is O(1) because we only use a constant amount of space to store the current node and other variables",
+            "time": "O(1) for addAtHead, O(1) for addAtTail, O(n) for addAtIndex, O(n) for get, O(n) for deleteAtIndex",
+            "timeExplanation": "Time complexity is O(n) for addAtIndex, get, and deleteAtIndex because in the worst case, we have to traverse the entire list. Time complexity is O(1) for addAtHead and addAtTail because we can directly update the head and tail pointers."
+          },
+          "explanation": "Maintain a size variable to keep track of the number of elements in the list. Implement each operation using a combination of node pointers and the size variable to minimize the number of node traversals.",
+          "id": "10dcbd19-179f-4e7f-910e-75fcc10a7853",
+          "intuition": "Create a linked list with basic node operations, optimizing for performance by minimizing the number of node traversals",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2, 2",
+              "explanation": "First, add 1 at head, then add 3 at tail. Then add 2 at index 1. Get the value at index 1, which is 2. Finally, delete the value at index 1, which is also 2.",
+              "id": "78cb4449-26cb-40e8-8447-0d4666009662",
+              "input": "addAtHead(1), addAtTail(3), addAtIndex(1, 2), get(1), deleteAtIndex(1)"
+            },
+            {
+              "expectedOutput": "1, 1",
+              "explanation": "First, add 1 at head, then add 2 at head. Then get the value at index 1, which is 1. Finally, delete the value at index 0, which is 2.",
+              "id": "64c17bcf-e27c-4507-80a5-34270257294c",
+              "input": "addAtHead(1), addAtHead(2), get(1), deleteAtIndex(0)"
+            },
+            {
+              "expectedOutput": "20, 30, 10",
+              "explanation": "First, add 10 at index 0. Then add 20 at index 0. Then add 30 at index 1. Get the value at index 0, which is 20. Get the value at index 1, which is 30. Get the value at index 2, which is 10.",
+              "id": "cba75605-2d96-4bce-9504-a3c7dc3e41bd",
+              "input": "addAtIndex(0, 10), addAtIndex(0, 20), addAtIndex(1, 30), get(0), get(1), get(2)"
+            }
+          ]
+        }
+      ],
+      "id": "21c6a44d-8c7e-4e03-af74-c6f73c4cd545",
+      "lastUpdated": "2026-02-06T21:35:08Z",
+      "problemSlug": "design-linked-list",
+      "relatedProblems": [
+        "reverse-linked-list",
+        "delete-node-in-a-bst"
+      ],
+      "summary": "Design a singly linked list with basic operations like addAtHead, addAtTail, addAtIndex, get, and delete, requiring careful handling of edge cases and pointer manipulations. Key insight is that we must handle the head, tail, and general cases separately."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, define a function that takes a node as input and returns the last node in the flattened list. Then, iterate through the list and whenever a node with a child is encountered, recursively call the function on the child and connect it to the current node.",
+          "code": "// Definition for a Node.\n\nclass Solution {\n    func flatten(_ head: Node?) -> Node? {\n        return flattenList(head)\n    }\n\n    func flattenList(_ head: Node?) -> Node? {\n        if head == nil {\n            return nil\n        }\n\n        var curr: Node? = head\n        while curr != nil {\n            if curr?.child != nil {\n                let childTail = flattenList(curr?.child)\n                let tempNext = curr?.next\n                curr?.next = curr?.child\n                curr?.child?.prev = curr\n                curr?.child = nil\n                childTail?.next = tempNext\n                if tempNext != nil {\n                    tempNext?.prev = childTail\n                }\n                curr = childTail\n            } else {\n                curr = curr?.next\n            }\n        }\n        return head\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) due to the recursive call stack.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) where n is the total number of nodes in the list. This is because each node is visited once during the DFS traversal."
+          },
+          "explanation": "The brute force approach involves a recursive DFS traversal of the list. When a node with a child is encountered, the function is called recursively on the child node, and the result is connected to the current node.",
+          "id": "700d5291-6c8b-4ca3-b990-165bc59b8da9",
+          "intuition": "This approach works by using a brute force method to flatten the multilevel doubly linked list. It iterates through the list, and whenever it encounters a node with a child, it recursively flattens the child list and then connects it to the current node.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1 <-> 2 <-> 3 <-> 4 <-> 5 <-> 6",
+              "explanation": "In this test case, the list is already flattened, so the output is the same as the input.",
+              "id": "c7af5332-5cf2-4f1f-8c97-e8ddc42b83d8",
+              "input": "1 <-> 2 <-> 3 <-> 4 <-> 5 <-> 6"
+            },
+            {
+              "expectedOutput": "1 <-> 2 <-> 3 <-> 7 <-> 8 <-> 9 <-> 4 <-> 5 <-> 6",
+              "explanation": "In this test case, the list has a nested child list starting at node 3. The output shows the flattened list with the child list inserted at node 3.",
+              "id": "19303365-a092-4c60-b760-d524017c1f2e",
+              "input": "1 <-> 2 <-> 3 <-> 4 <-> 5 <-> 6 with 3 -> 7 <-> 8 <-> 9"
+            }
+          ]
+        },
+        {
+          "approach": "First, define a function that takes a node as input and returns the last node in the flattened list. Then, use a stack to store nodes to visit, and iterate through the stack, handling child pointers by pushing them onto the stack.",
+          "code": "class Solution {\n    func flatten(_ head: Node?) -> Node? {\n        if head == nil {\n            return nil\n        }\n\n        var stack: [Node] = [head!]\n        var prev: Node? = nil\n\n        while !stack.isEmpty {\n            let curr = stack.removeLast()\n            curr.prev = prev\n\n            if prev != nil {\n                prev?.next = curr\n            }\n\n            if curr.next != nil {\n                stack.append(curr.next!)\n            }\n\n            if curr.child != nil {\n                stack.append(curr.child!)\n                curr.child = nil\n            }\n\n            prev = curr\n        }\n\n        return head\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) due to the stack used for iterative DFS.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) where n is the total number of nodes in the list. This is because each node is visited once during the DFS traversal."
+          },
+          "explanation": "The optimized approach involves an iterative DFS traversal of the list. It uses a stack to store nodes to visit, which allows it to avoid the overhead of recursive calls.",
+          "id": "9da81db2-c8c0-4d7a-bac4-fcb4f2505cee",
+          "intuition": "This approach works by using an iterative DFS traversal of the list. It maintains a stack of nodes to visit and handles the child pointers by pushing them onto the stack.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1 <-> 2 <-> 3 <-> 4 <-> 5 <-> 6",
+              "explanation": "In this test case, the list is already flattened, so the output is the same as the input.",
+              "id": "4dbda7d4-48c3-4ddd-98c6-d53f29febee8",
+              "input": "1 <-> 2 <-> 3 <-> 4 <-> 5 <-> 6"
+            },
+            {
+              "expectedOutput": "1 <-> 2 <-> 3 <-> 7 <-> 8 <-> 9 <-> 4 <-> 5 <-> 6",
+              "explanation": "In this test case, the list has a nested child list starting at node 3. The output shows the flattened list with the child list inserted at node 3.",
+              "id": "915ba869-1626-4d32-8bab-c19d4051396c",
+              "input": "1 <-> 2 <-> 3 <-> 4 <-> 5 <-> 6 with 3 -> 7 <-> 8 <-> 9"
+            }
+          ]
+        }
+      ],
+      "id": "61c81050-e94d-489a-a6d3-a0f7cb5768e9",
+      "lastUpdated": "2026-02-06T21:18:25Z",
+      "problemSlug": "flatten-a-multilevel-doubly-linked-list",
+      "relatedProblems": [
+        "flattening-a-linked-list",
+        "doubly-linked-list-reversal"
+      ],
+      "summary": "This problem involves flattening a multilevel doubly linked list. The key insight is to use a Depth-First Search (DFS) approach to traverse the list and handle the child pointers."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Move left subtree to right\n2. Find rightmost of moved subtree\n3. Connect original right subtree there",
+          "code": "class Solution {\n    func flatten(_ root: TreeNode?) {\n        var curr = root\n        while curr != nil {\n            if curr?.left != nil {\n                var rightmost = curr?.left\n                while rightmost?.right != nil {\n                    rightmost = rightmost?.right\n                }\n                rightmost?.right = curr?.right\n                curr?.right = curr?.left\n                curr?.left = nil\n            }\n            curr = curr?.right\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "In-place",
+            "time": "O(n)",
+            "timeExplanation": "Visit each node"
+          },
+          "explanation": "Process top-down, restructuring as we go.",
+          "id": "9939b4c8-0cd4-48f4-870b-2faed0b81c0c",
+          "intuition": "For each node, connect left subtree's rightmost to right subtree.",
+          "name": "Iterative",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,null,2,null,3,null,4,null,5,null,6]",
+              "explanation": "Flattened preorder",
+              "id": "946c2ec1-10e8-43e3-b685-263957663fe9",
+              "input": "root = [1,2,5,3,4,null,6]"
+            }
+          ]
+        }
+      ],
+      "id": "2d48b448-abf0-4fd4-98fe-a0f5608b304b",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "flatten-binary-tree-to-linked-list",
+      "relatedProblems": [],
+      "summary": "Flatten tree to right-skewed list (preorder). Morris traversal or recursion."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Maintain sorted list with dummy head\n2. For each node, find insert position\n3. Insert into sorted portion",
+          "code": "class Solution {\n    func insertionSortList(_ head: ListNode?) -> ListNode? {\n        let dummy = ListNode(0)\n        var curr = head\n        while curr != nil {\n            let next = curr?.next\n            var prev = dummy\n            while prev.next != nil && prev.next!.val < curr!.val {\n                prev = prev.next!\n            }\n            curr?.next = prev.next\n            prev.next = curr\n            curr = next\n        }\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Reuse nodes",
+            "time": "O(n²)",
+            "timeExplanation": "Insertion sort"
+          },
+          "explanation": "O(n²) but simple and stable.",
+          "id": "a394130e-7b0b-4402-aef3-1dfa7f213b53",
+          "intuition": "Build sorted list by inserting each node in correct position.",
+          "name": "Insertion Sort",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,3,4]",
+              "explanation": "Sorted",
+              "id": "779fde70-0ebf-4ce7-b47c-7f2662a41d39",
+              "input": "head = [4,2,1,3]"
+            }
+          ]
+        }
+      ],
+      "id": "be5d668b-7094-4d41-85f3-d2192abc8019",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "insertion-sort-list",
+      "relatedProblems": [
+        "sort-list"
+      ],
+      "summary": "Sort linked list using insertion sort. Build sorted portion, insert each node."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, we define a function to check if a node exists in a linked list. Then, we iterate through the first linked list and use this function to check if each node exists in the second linked list. If we find a match, we return that node.",
+          "code": "// Definition for singly-linked list.\n\nclass Solution {\n    func getIntersectionNode(_ headA: ListNode?, _ headB: ListNode?) -> ListNode? {\n        var pA = headA\n        while pA != nil {\n            var pB = headB\n            while pB != nil {\n                if pA === pB {\n                    return pA\n                }\n                pB = pB?.next\n            }\n            pA = pA?.next\n        }\n        return nil\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We use a constant amount of space to store the pointers, so the space complexity is O(1).",
+            "time": "O(m * n)",
+            "timeExplanation": "We iterate through each node in the first linked list (m nodes) and for each node, we iterate through the second linked list (n nodes). This results in a time complexity of O(m * n)."
+          },
+          "explanation": "We use a nested loop to compare each node in the first linked list with each node in the second linked list. If we find a match, we return that node. This approach is not efficient but works for small linked lists.",
+          "id": "571851ca-931a-49ac-b81a-ed3198979756",
+          "intuition": "This approach works by iterating through one linked list and checking if each node exists in the other linked list. It has a high time complexity but is straightforward to implement.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "The node with value 8",
+              "explanation": "The two linked lists intersect at the node with value 8.",
+              "id": "6397208c-dce3-41c2-ba24-4da958559cc0",
+              "input": "listA = [4,1,8,4,5], listB = [5,0,1,8,4,5], intersection at node 8"
+            },
+            {
+              "expectedOutput": "nil",
+              "explanation": "The two linked lists do not intersect.",
+              "id": "22823c31-77a5-474a-b5fb-55166c5d9ae5",
+              "input": "listA = [2,6,4], listB = [1,5], no intersection"
+            }
+          ]
+        },
+        {
+          "approach": "First, we calculate the lengths of both linked lists. Then, we move the pointers at the same pace, taking into account the difference in lengths. When the pointers meet, it's the intersection point.",
+          "code": "// Definition for singly-linked list.\n\nclass Solution {\n    func getIntersectionNode(_ headA: ListNode?, _ headB: ListNode?) -> ListNode? {\n        var pA = headA\n        var pB = headB\n        while pA !== pB {\n            pA = pA != nil ? pA?.next : headB\n            pB = pB != nil ? pB?.next : headA\n        }\n        return pA\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We use a constant amount of space to store the pointers, so the space complexity is O(1).",
+            "time": "O(m + n)",
+            "timeExplanation": "We iterate through both linked lists once, resulting in a time complexity of O(m + n), where m and n are the lengths of the linked lists."
+          },
+          "explanation": "We use two pointers, one for each linked list. We calculate the lengths of both linked lists and then move the pointers at the same pace. If one pointer reaches the end of its linked list, we move it to the head of the other linked list. This ensures that both pointers travel the same total distance.",
+          "id": "44ccaf23-7744-456d-b7f5-d4c2ec40aebe",
+          "intuition": "This approach works by using two pointers to traverse both linked lists. We calculate the lengths of both linked lists and then move the pointers at the same pace, taking into account the difference in lengths. When the pointers meet, it's the intersection point.",
+          "name": "Two-Pointer Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "The node with value 8",
+              "explanation": "The two linked lists intersect at the node with value 8.",
+              "id": "aaa1684c-718c-4af0-aaa4-7cb24d5d4cdc",
+              "input": "listA = [4,1,8,4,5], listB = [5,0,1,8,4,5], intersection at node 8"
+            },
+            {
+              "expectedOutput": "nil",
+              "explanation": "The two linked lists do not intersect.",
+              "id": "94b3163a-fcc3-4558-9189-945e03c3e7ba",
+              "input": "listA = [2,6,4], listB = [1,5], no intersection"
+            },
+            {
+              "expectedOutput": "The node with value 2",
+              "explanation": "The two linked lists intersect at the node with value 2.",
+              "id": "c8984724-2daf-4130-9ffa-6b68532d4aac",
+              "input": "listA = [1,9,1,2,4], listB = [3,2,4], intersection at node 2"
+            }
+          ]
+        }
+      ],
+      "id": "865fe782-ae4f-4634-9978-48ed8ff977b9",
+      "lastUpdated": "2026-02-06T21:07:40Z",
+      "problemSlug": "intersection-of-two-linked-lists",
+      "relatedProblems": [
+        "linked-list-cycle",
+        "merge-two-sorted-lists"
+      ],
+      "summary": "This problem involves finding the intersection of two linked lists. The key insight is to use a two-pointer technique or hash table to efficiently find the intersection point."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Step 1: Initialize a variable to keep track of the number of components found. Step 2: Iterate over the linked list, checking if each node's value is in the list of given values. Step 3: If a node's value is in the list, increment the component counter and continue iterating until a node's value is not in the list.",
+          "code": "class Solution {\n    func numComponents(_ head: ListNode?, _ G: [Int]) -> Int {\n        var count = 0\n        var current = head\n        while current != nil {\n            if G.contains(current!.val) {\n                count += 1\n                var node = current\n                while node != nil && G.contains(node!.val) {\n                    node = node!.next\n                }\n                current = node\n            } else {\n                current = current!.next\n            }\n        }\n        return count\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we're not using any additional data structures that scale with the input size.",
+            "time": "O(n*m)",
+            "timeExplanation": "The time complexity is O(n*m) because we're iterating over the linked list (n nodes) and for each node, we're checking if its value is in the list of given values (m values)."
+          },
+          "explanation": "In this approach, we traverse the linked list and check each node's value. If a node's value is in the list of given values, we increment the component counter and continue iterating until we find a node whose value is not in the list, effectively finding a component. We repeat this process until we've traversed the entire linked list.",
+          "id": "4400c615-4d04-4a6b-a99c-89e10fb26b07",
+          "intuition": "This approach works by iterating over the linked list and checking if each node's value is in the list of given values.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "There are two connected components: [0,1] and [3].",
+              "id": "dd5265b1-8613-4085-81e1-836d0415c492",
+              "input": "head = [0,1,2,3], G = [0,1,3]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "There are two connected components: [0,1] and [3,4].",
+              "id": "46aaf9ca-df8d-4637-9fe9-b3bcc9a1fddf",
+              "input": "head = [0,1,2,3,4], G = [0,3,1,4]"
+            }
+          ]
+        },
+        {
+          "approach": "Step 1: Create a hash set of the given values. Step 2: Initialize a variable to keep track of the number of components found. Step 3: Iterate over the linked list, checking if each node's value is in the hash set. Step 4: If a node's value is in the hash set, increment the component counter and continue iterating until a node's value is not in the hash set.",
+          "code": "class Solution { func numComponents(_ head: ListNode?, _ G: [Int]) -> Int { let set = Set(G); var count = 0; var current = head; while current != nil { if set.contains(current!.val) { count += 1; while current != nil && set.contains(current!.val) { current = current!.next } } else { current = current!.next } } return count } }",
+          "complexity": {
+            "space": "O(m)",
+            "spaceExplanation": "The space complexity is O(m) because we're storing the given values in a hash set.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we're iterating over the linked list (n nodes) and checking if each node's value is in the hash set in constant time."
+          },
+          "explanation": "In this approach, we use a hash set to store the given values, allowing us to check if a node's value is in the list in constant time. We then iterate over the linked list, incrementing the component counter whenever we find a node whose value is in the hash set, and continuing to iterate until we find a node whose value is not in the hash set.",
+          "id": "acf079bf-d5ef-411f-b3ca-249e4a940ccd",
+          "intuition": "This approach works by using a hash set to store the given values, allowing us to check if a node's value is in the list in constant time.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "There are two connected components: [0,1] and [3].",
+              "id": "728f3035-d42c-47b3-9a4c-5a6edab40e87",
+              "input": "head = [0,1,2,3], G = [0,1,3]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "There are two connected components: [0,1] and [3,4].",
+              "id": "98b9bb6e-7af1-4ced-bb69-6840c58064a3",
+              "input": "head = [0,1,2,3,4], G = [0,3,1,4]"
+            }
+          ]
+        }
+      ],
+      "id": "5f284e3d-cd44-4ee6-b2c2-501a79194148",
+      "lastUpdated": "2026-02-06T21:41:53Z",
+      "problemSlug": "linked-list-components",
+      "relatedProblems": [
+        "linked-list-cycle",
+        "remove-duplicates-from-sorted-list"
+      ],
+      "summary": "Given the head of a linked list and a list of values, return the number of connected components where each component contains at least one of the given values. The key insight is to iterate over the linked list and keep track of the components that contain the given values."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize slow and fast to head\n2. While fast and fast.next exist:\n   - Move slow one step\n   - Move fast two steps\n   - If they meet, return true\n3. Return false (fast reached end)",
+          "code": "class Solution {\n    func hasCycle(_ head: ListNode?) -> Bool {\n        var slow = head\n        var fast = head\n\n        while fast != nil && fast?.next != nil {\n            slow = slow?.next\n            fast = fast?.next?.next\n\n            if slow === fast {\n                return true\n            }\n        }\n\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only two pointers used",
+            "time": "O(n)",
+            "timeExplanation": "At most 2n iterations before detection or end"
+          },
+          "explanation": "Why does this work? In a cycle, the fast pointer gains one position on slow each iteration. Eventually they must meet.\n\nMathematically: if cycle length is C, fast catches up by 1 each step, so they meet within C steps after slow enters the cycle.",
+          "id": "550e8400-e29b-41d4-a716-446655440105",
+          "intuition": "Use two pointers: slow moves 1 step, fast moves 2 steps. If there's a cycle, fast will eventually catch up to slow. If no cycle, fast will reach the end.",
+          "name": "Floyd's Cycle Detection",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "Tail connects to node at index 1 (value 2)",
+              "id": "550e8400-e29b-41d4-a716-446655440204",
+              "input": "[3,2,0,-4], pos = 1"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "Single node with no cycle",
+              "id": "550e8400-e29b-41d4-a716-446655440205",
+              "input": "[1], pos = -1"
+            }
+          ]
+        },
+        {
+          "approach": "1. Create an empty set of visited nodes\n2. Traverse the list:\n   - If current node is in set, return true\n   - Add current node to set\n3. Return false if we reach the end",
+          "code": "class Solution {\n    func hasCycle(_ head: ListNode?) -> Bool {\n        var visited = Set<ObjectIdentifier>()\n        var current = head\n\n        while let node = current {\n            let id = ObjectIdentifier(node)\n            if visited.contains(id) {\n                return true\n            }\n            visited.insert(id)\n            current = node.next\n        }\n\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Store up to n node references",
+            "time": "O(n)",
+            "timeExplanation": "Visit each node once"
+          },
+          "explanation": "Simple but uses extra space. We store node references (not values) to handle duplicate values correctly.",
+          "id": "550e8400-e29b-41d4-a716-446655440106",
+          "intuition": "Track visited nodes in a set. If we see a node twice, there's a cycle.",
+          "name": "Hash Set",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "Tail connects to node at index 1 (value 2)",
+              "id": "9fd46a1c-2ddb-440d-afc1-203146fb93d8",
+              "input": "[3,2,0,-4], pos = 1"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "Single node with no cycle",
+              "id": "e845366a-2c77-4687-8f65-d182a1d39c7c",
+              "input": "[1], pos = -1"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440003",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "linked-list-cycle",
+      "relatedProblems": [
+        "linked-list-cycle-ii",
+        "happy-number"
+      ],
+      "summary": "Detect if a linked list has a cycle using Floyd's Tortoise and Hare algorithm. Two pointers moving at different speeds will meet if there's a cycle."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Use Floyd's to find meeting point\n2. If no cycle, return nil\n3. Move one pointer to head\n4. Move both pointers 1 step until they meet\n5. Return meeting point (cycle start)",
+          "code": "class Solution {\n    func detectCycle(_ head: ListNode?) -> ListNode? {\n        var slow = head\n        var fast = head\n\n        // Find meeting point\n        while fast != nil && fast?.next != nil {\n            slow = slow?.next\n            fast = fast?.next?.next\n\n            if slow === fast {\n                // Found cycle, now find start\n                var ptr = head\n                while ptr !== slow {\n                    ptr = ptr?.next\n                    slow = slow?.next\n                }\n                return ptr\n            }\n        }\n\n        return nil\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only pointer variables",
+            "time": "O(n)",
+            "timeExplanation": "Two traversals at most"
+          },
+          "explanation": "Mathematical proof: if head to cycle start is a, and meeting point to cycle start is b, then slow traveled a+b and fast traveled a+b+c (full cycle). Since fast is 2x slow: 2(a+b) = a+b+c, so a = c-b. Moving from head and meeting point at same speed, they meet at cycle start.",
+          "id": "863a0b04-e172-4079-b382-8ad6df60fb33",
+          "intuition": "After detecting cycle, distance from head to cycle start equals distance from meeting point to cycle start.",
+          "name": "Floyd's Algorithm Extended",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "Node at index 1",
+              "explanation": "Cycle starts at node with value 2",
+              "id": "0f6f6929-8163-48f0-aaf9-3997fe717672",
+              "input": "head = [3,2,0,-4], pos = 1"
+            },
+            {
+              "expectedOutput": "null",
+              "explanation": "No cycle",
+              "id": "1c209cb0-64a7-4b07-9859-5cd88129b3fe",
+              "input": "head = [1,2], pos = -1"
+            }
+          ]
+        }
+      ],
+      "id": "d6a0e3a7-d8c3-44e8-b889-af6e95948f0a",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "linked-list-cycle-ii",
+      "relatedProblems": [
+        "linked-list-cycle",
+        "find-the-duplicate-number"
+      ],
+      "summary": "Find cycle start node. Floyd's algorithm to detect, then move one pointer to head and both move 1 step until they meet."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, traverse the linked list and store all nodes in an array. Then, generate a random index within the bounds of the array and return the node at that index.",
+          "code": "class Solution {\n    var list: ListNode?\n    init(_ head: ListNode?) {\n        list = head\n    }\n    func getRandom() -> Int {\n        var nodes = [Int]()\n        var current = list\n        while current != nil {\n            nodes.append(current!.val)\n            current = current!.next\n        }\n        let randomIndex = Int.random(in: 0..<nodes.count)\n        return nodes[randomIndex]\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We need to store all nodes in an array, which requires O(n) space.",
+            "time": "O(n)",
+            "timeExplanation": "We need to traverse the linked list once to store all nodes in an array."
+          },
+          "explanation": "This approach is straightforward but has high space complexity due to the need to store all nodes in an array.",
+          "id": "96d6229d-13d1-44ae-b71c-41c3d44a0e0e",
+          "intuition": "This approach works by first converting the linked list to an array, then selecting a random index from the array.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1 or 2 or 3",
+              "explanation": "The output should be one of the node values in the linked list.",
+              "id": "80ea893b-1ff4-4c3c-a54e-5e3b3a93a4a2",
+              "input": "head = [1,2,3], getRandom()"
+            },
+            {
+              "expectedOutput": "1 or 2 or 3 or 4 or 5",
+              "explanation": "The output should be one of the node values in the linked list.",
+              "id": "aa8052ad-2865-4c54-af01-41aff810864a",
+              "input": "head = [1,2,3,4,5], getRandom()"
+            }
+          ]
+        },
+        {
+          "approach": "First, initialize a variable to store the result. Then, traverse the linked list and for each node, generate a random number between 1 and the current node's position (inclusive). If the random number is 1, update the result to the current node's value.",
+          "code": "class Solution {\n    var list: ListNode?\n    init(_ head: ListNode?) {\n        list = head\n    }\n    func getRandom() -> Int {\n        var result: Int?\n        var i = 1\n        var current = list\n        while current != nil {\n            if Int.random(in: 1...i) == 1 {\n                result = current!.val\n            }\n            i += 1\n            current = current!.next\n        }\n        return result!\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We only need to store a few variables, so the space complexity is constant.",
+            "time": "O(n)",
+            "timeExplanation": "We need to traverse the linked list once."
+          },
+          "explanation": "This approach ensures that each node has an equal chance of being selected, and it only requires a single pass through the linked list.",
+          "id": "64f1c183-d7a7-4f8d-8735-d81dd8cba3ba",
+          "intuition": "This approach works by treating the linked list as a stream of data and using reservoir sampling to select a random node.",
+          "name": "Reservoir Sampling",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1 or 2 or 3",
+              "explanation": "The output should be one of the node values in the linked list.",
+              "id": "69ca7f83-d484-4092-a53e-5aecaacdc203",
+              "input": "head = [1,2,3], getRandom()"
+            },
+            {
+              "expectedOutput": "1 or 2 or 3 or 4 or 5",
+              "explanation": "The output should be one of the node values in the linked list.",
+              "id": "9d5d080f-4d0d-4c57-9d9b-77d0a6293797",
+              "input": "head = [1,2,3,4,5], getRandom()"
+            }
+          ]
+        }
+      ],
+      "id": "81ed284f-4267-42be-a1c6-e82e29387c0e",
+      "lastUpdated": "2026-02-06T21:15:07Z",
+      "problemSlug": "linked-list-random-node",
+      "relatedProblems": [
+        "copy-list-with-random-pointer",
+        "find-the-duplicate-number"
+      ],
+      "summary": "The problem asks to return a random node from a linked list. The key insight is to use reservoir sampling to achieve this in linear time complexity."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Doubly linked list with dummy head/tail\n2. Hash map: key → node reference\n3. get(key): if exists, move to head, return value\n4. put(key, value):\n   - If exists: update value, move to head\n   - If new: create node, add to head, add to map\n   - If over capacity: remove tail node, remove from map",
+          "code": "class Solution {\n    class LRUCache {\n        private \n\n        private let capacity: Int\n        private var cache: [Int: Node] = [:]\n        private let head = Node(0, 0)  // Dummy head\n        private let tail = Node(0, 0)  // Dummy tail\n\n        init(_ capacity: Int) {\n            self.capacity = capacity\n            head.next = tail\n            tail.prev = head\n        }\n\n        func get(_ key: Int) -> Int {\n            guard let node = cache[key] else { return -1 }\n            moveToHead(node)\n            return node.value\n        }\n\n        func put(_ key: Int, _ value: Int) {\n            if let node = cache[key] {\n                node.value = value\n                moveToHead(node)\n            } else {\n                let node = Node(key, value)\n                cache[key] = node\n                addToHead(node)\n\n                if cache.count > capacity {\n                    let removed = removeTail()\n                    cache.removeValue(forKey: removed.key)\n                }\n            }\n        }\n\n        private func addToHead(_ node: Node) {\n            node.prev = head\n            node.next = head.next\n            head.next?.prev = node\n            head.next = node\n        }\n\n        private func removeNode(_ node: Node) {\n            node.prev?.next = node.next\n            node.next?.prev = node.prev\n        }\n\n        private func moveToHead(_ node: Node) {\n            removeNode(node)\n            addToHead(node)\n        }\n\n        private func removeTail() -> Node {\n            let node = tail.prev!\n            removeNode(node)\n            return node\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(capacity)",
+            "spaceExplanation": "Store at most 'capacity' nodes in map and list",
+            "time": "O(1)",
+            "timeExplanation": "Both get and put are O(1) - hash lookup and list operations are constant time"
+          },
+          "explanation": "The doubly linked list maintains order by recency. The hash map provides O(1) access to any node.\n\nWhy doubly linked? We need to remove a node from the middle in O(1). With a doubly linked list, given a node reference, we can update prev.next and next.prev directly.\n\nDummy head and tail simplify edge cases (empty list, single element). The actual nodes are always between these dummies.",
+          "id": "550e8400-e29b-41d4-a716-446655440118",
+          "intuition": "We need two operations in O(1):\n1. Find a key → hash map\n2. Track/update recency → doubly linked list\n\nMost recently used at head, least recently used at tail. On access, move node to head.",
+          "name": "Hash Map + Doubly Linked List",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[null,null,null,1,null,-1,null,-1,3,4]",
+              "explanation": "After put(3,3), cache is [1,3]. get(2) returns -1 (evicted). After put(4,4), cache is [3,4].",
+              "id": "550e8400-e29b-41d4-a716-446655440218",
+              "input": "[\"LRUCache\",\"put\",\"put\",\"get\",\"put\",\"get\",\"put\",\"get\",\"get\",\"get\"]\n[[2],[1,1],[2,2],[1],[3,3],[2],[4,4],[1],[3],[4]]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440010",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "lru-cache",
+      "relatedProblems": [
+        "lfu-cache",
+        "design-in-memory-file-system"
+      ],
+      "summary": "Implement an LRU cache with O(1) get and put. Combine a hash map (O(1) lookup) with a doubly linked list (O(1) insertion/deletion) to track recency."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Create a dummy node to serve as the start\n2. Use a tail pointer to build the result\n3. While both lists have nodes:\n   - Compare values, append smaller to tail\n   - Advance the list we took from\n4. Append remaining nodes from non-empty list\n5. Return dummy.next",
+          "code": "class Solution {\n    func mergeTwoLists(_ list1: ListNode?, _ list2: ListNode?) -> ListNode? {\n        let dummy = ListNode(0)\n        var tail = dummy\n        var l1 = list1\n        var l2 = list2\n\n        while let node1 = l1, let node2 = l2 {\n            if node1.val <= node2.val {\n                tail.next = node1\n                l1 = node1.next\n            } else {\n                tail.next = node2\n                l2 = node2.next\n            }\n            tail = tail.next!\n        }\n\n        // Append remaining nodes\n        tail.next = l1 ?? l2\n\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only use a few pointers, reuse existing nodes",
+            "time": "O(n + m)",
+            "timeExplanation": "Visit each node in both lists once"
+          },
+          "explanation": "The dummy node trick is powerful: instead of tracking whether we've added the first node, we always have a valid tail to append to. At the end, dummy.next is our actual head.\n\nWhen one list is exhausted, we can directly link the remainder since it's already sorted.",
+          "id": "550e8400-e29b-41d4-a716-446655440103",
+          "intuition": "Compare the heads of both lists, take the smaller one, and advance that list's pointer. A dummy node avoids special-casing the first node.",
+          "name": "Iterative with Dummy",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,1,2,3,4,4]",
+              "explanation": "Compare 1≤1, take l1. Compare 2>1, take l2. Continue...",
+              "id": "550e8400-e29b-41d4-a716-446655440203",
+              "input": "list1 = [1,2,4], list2 = [1,3,4]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Base case: if either list is empty, return the other\n2. Compare heads, take the smaller one as current head\n3. Recursively merge the rest\n4. Return the current head",
+          "code": "class Solution {\n    func mergeTwoLists(_ list1: ListNode?, _ list2: ListNode?) -> ListNode? {\n        guard let l1 = list1 else { return list2 }\n        guard let l2 = list2 else { return list1 }\n\n        if l1.val <= l2.val {\n            l1.next = mergeTwoLists(l1.next, l2)\n            return l1\n        } else {\n            l2.next = mergeTwoLists(l1, l2.next)\n            return l2\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n + m)",
+            "spaceExplanation": "Recursive stack depth equals total nodes",
+            "time": "O(n + m)",
+            "timeExplanation": "Each node processed once"
+          },
+          "explanation": "Each recursive call handles one node, choosing the smaller of the two heads. The recursion naturally unwinds to build the complete list.",
+          "id": "550e8400-e29b-41d4-a716-446655440104",
+          "intuition": "The merged list starts with the smaller head, followed by the merge of the remaining elements.",
+          "name": "Recursive",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1,1,2,3,4,4]",
+              "explanation": "Compare 1≤1, take l1. Compare 2>1, take l2. Continue...",
+              "id": "06fb4471-f767-41e7-a90c-0268d3289e67",
+              "input": "list1 = [1,2,4], list2 = [1,3,4]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440002",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "merge-two-sorted-lists",
+      "relatedProblems": [
+        "merge-k-sorted-lists",
+        "sort-list"
+      ],
+      "summary": "Merge two sorted linked lists by comparing nodes one at a time and building a new list. Use a dummy head to simplify edge cases."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize slow = fast = head\n2. While fast and fast.next exist:\n   a. slow moves 1 step\n   b. fast moves 2 steps\n3. Return slow",
+          "code": "class Solution {\n    func middleNode(_ head: ListNode?) -> ListNode? {\n        var slow = head\n        var fast = head\n\n        while fast != nil && fast?.next != nil {\n            slow = slow?.next\n            fast = fast?.next?.next\n        }\n\n        return slow\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only two pointers",
+            "time": "O(n)",
+            "timeExplanation": "Single pass (fast goes through all nodes)"
+          },
+          "explanation": "For even length, this returns the second of the two middle nodes. Fast travels 2x the distance, so when it's done, slow is at 50%.",
+          "id": "f16a4db4-2d79-4a5c-988b-6d7f034d717f",
+          "intuition": "Fast moves twice as fast as slow. When fast reaches end, slow is at midpoint.",
+          "name": "Slow and Fast Pointers",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[3,4,5]",
+              "explanation": "Middle is node 3",
+              "id": "87a04e5f-4f8a-40ce-bd6d-c33d993d017d",
+              "input": "head = [1,2,3,4,5]"
+            },
+            {
+              "expectedOutput": "[4,5,6]",
+              "explanation": "For even length, second middle",
+              "id": "be8695e7-c6dc-4c34-9cf1-46f1a5ac3455",
+              "input": "head = [1,2,3,4,5,6]"
+            }
+          ]
+        }
+      ],
+      "id": "769ac535-8d13-4b5f-9adc-ae0fd905abf7",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "middle-of-the-linked-list",
+      "relatedProblems": [
+        "delete-the-middle-node-of-a-linked-list",
+        "reorder-list"
+      ],
+      "summary": "Find middle node. Slow/fast pointers: when fast reaches end, slow is at middle."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start from the first node and traverse the linked list. For each node, start from the next node and find the first node with a greater value.",
+          "code": "import SwiftUI\n\nclass Solution {\n    func nextLargerNodes(_ head: ListNode?) -> [Int] {\n        var list = [Int]()\n        var current = head\n        while current != nil {\n            list.append(current!.val)\n            current = current!.next\n        }\n        \n        var result = [Int]()\n        for i in 0..<list.count {\n            var found = false\n            for j in i+1..<list.count {\n                if list[j] > list[i] {\n                    result.append(list[j])\n                    found = true\n                    break\n                }\n            }\n            if !found {\n                result.append(0)\n            }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) as we store the nodes' values in an array for easier comparison.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) due to the nested loop structure where we potentially traverse the whole list for each node."
+          },
+          "explanation": "For each node in the list, we check every subsequent node to find the first greater value. This approach ensures every node's next greater value is found but is inefficient due to repeated operations.",
+          "id": "2de9b40d-dd84-41ec-a377-628b4c2b87ab",
+          "intuition": "This approach iterates through the linked list and for each node, it traverses the rest of the list to find the next greater value.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[5,5,0]",
+              "explanation": "For the first node (2), the next greater node is the third node (5). For the second node (1), the next greater node is also the third node (5). For the third node (5), there is no next greater node, so it is 0.",
+              "id": "9e7548f8-e852-480f-b3d8-c5143f2f197f",
+              "input": "head = [2,1,5]"
+            },
+            {
+              "expectedOutput": "[7,0,5,5,0]",
+              "explanation": "For each node in the linked list, we find the next greater value or return 0 if no greater value exists.",
+              "id": "35fb35b4-fbc1-417d-ba90-e90a9e8efc94",
+              "input": "head = [2,7,4,3,5]"
+            }
+          ]
+        },
+        {
+          "approach": "Maintain a stack of nodes. Traverse the list and whenever a node's value is greater than the top of the stack, update the result and pop the stack until the stack is empty or the top's value is greater.",
+          "code": "import Foundation\n\nclass Solution {\n    func nextLargerNodes(_ head: ListNode?) -> [Int] {\n        var list = [Int]()\n        var current = head\n        while current != nil {\n            list.append(current!.val)\n            current = current!.next\n        }\n        \n        var stack: [(index: Int, value: Int)] = []\n        var result = Array(repeating: 0, count: list.count)\n        \n        for i in 0..<list.count {\n            while !stack.isEmpty && list[i] > stack.last!.value {\n                let lastIndex = stack.removeLast().index\n                result[lastIndex] = list[i]\n            }\n            stack.append((index: i, value: list[i]))\n        }\n        \n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity remains O(n) for storing the nodes' values and the stack in the worst case.",
+            "time": "O(n)",
+            "timeExplanation": "We traverse the list once, resulting in O(n) time complexity."
+          },
+          "explanation": "By using a stack, we can efficiently manage the nodes and their next greater values in a single pass, reducing the time complexity to O(n).",
+          "id": "3566ab88-ef22-494c-836c-d5c733678e24",
+          "intuition": "Utilizing a monotonic stack allows us to efficiently keep track of nodes that have not yet found a next greater value. As we traverse the linked list, we update the stack whenever we find a greater value.",
+          "name": "Monotonic Stack Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[5,5,0]",
+              "explanation": "The same explanation applies here as for the Brute Force Approach.",
+              "id": "fad81560-f1b3-4ff3-8909-5e90eade259b",
+              "input": "head = [2,1,5]"
+            },
+            {
+              "expectedOutput": "[7,0,5,5,0]",
+              "explanation": "This test case also demonstrates the correct application of the Monotonic Stack Approach.",
+              "id": "6cec10e9-12d5-4d3f-8225-4e868f1bf0f7",
+              "input": "head = [2,7,4,3,5]"
+            }
+          ]
+        }
+      ],
+      "id": "3bcef74e-087c-42e5-bc01-ecc82d8b6d66",
+      "lastUpdated": "2026-02-06T21:56:04Z",
+      "problemSlug": "next-greater-node-in-linked-list",
+      "relatedProblems": [
+        "daily-temperatures",
+        "asteroid-collision"
+      ],
+      "summary": "Next Greater Node In Linked List involves finding the next greater node value for each node in a linked list. The key insight is utilizing a monotonic stack to keep track of nodes that have not yet found a greater value."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. odd = head, even = head.next, evenHead = even\n2. Link odd nodes, link even nodes\n3. Connect odd.next = evenHead",
+          "code": "class Solution {\n    func oddEvenList(_ head: ListNode?) -> ListNode? {\n        guard let head = head, let even = head.next else { return head }\n        var odd: ListNode? = head\n        var evenNode: ListNode? = even\n        let evenHead = even\n        while evenNode?.next != nil {\n            odd?.next = evenNode?.next\n            odd = odd?.next\n            evenNode?.next = odd?.next\n            evenNode = evenNode?.next\n        }\n        odd?.next = evenHead\n        return head\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Relink in place",
+            "time": "O(n)",
+            "timeExplanation": "Single pass"
+          },
+          "explanation": "Process two nodes at a time, building parallel lists.",
+          "id": "7955f1d9-28d3-48a8-8c3d-d868bf0f45b6",
+          "intuition": "Build odd and even lists separately, connect odd tail to even head.",
+          "name": "Two Pointers",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,3,5,2,4]",
+              "explanation": "Odd positions: 1,3,5. Even: 2,4.",
+              "id": "ff8fe070-0f90-4d09-b8dc-fb188234fc9f",
+              "input": "[1,2,3,4,5]"
+            }
+          ]
+        }
+      ],
+      "id": "30c73894-5a52-4916-bdf9-ec0e1a170a98",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "odd-even-linked-list",
+      "relatedProblems": [
+        "split-linked-list-in-parts"
+      ],
+      "summary": "Group odd-indexed nodes followed by even-indexed. Use two pointers to separate lists, then connect."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Find middle with slow/fast\n2. Reverse second half\n3. Compare halves",
+          "code": "class Solution {\n    func isPalindrome(_ head: ListNode?) -> Bool {\n        var slow = head, fast = head\n        while fast?.next != nil { slow = slow?.next; fast = fast?.next?.next }\n        var prev: ListNode? = nil\n        while slow != nil { let next = slow?.next; slow?.next = prev; prev = slow; slow = next }\n        var p1 = head, p2 = prev\n        while p2 != nil { if p1?.val != p2?.val { return false }; p1 = p1?.next; p2 = p2?.next }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "In-place",
+            "time": "O(n)",
+            "timeExplanation": "Two passes"
+          },
+          "explanation": "After reversing second half, walk both halves comparing values.",
+          "id": "62d330d3-6c81-46ee-98cf-835a507dff54",
+          "intuition": "Find middle, reverse from middle, compare with first half.",
+          "name": "Reverse Second Half",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "Palindrome",
+              "id": "ed8f0111-de65-48e3-8315-c30b990db39d",
+              "input": "[1,2,2,1]"
+            }
+          ]
+        }
+      ],
+      "id": "e782917c-0c61-4d42-bcce-111fb6e4fbee",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "palindrome-linked-list",
+      "relatedProblems": [
+        "valid-palindrome"
+      ],
+      "summary": "Check if linked list is palindrome. Find middle, reverse second half, compare."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "We start by initializing two dummy nodes, one for the less than list and one for the greater than or equal to list. Then we iterate through the original list and append each node to the corresponding list based on its value. Finally, we connect the two lists.",
+          "code": "class Solution {\n    func partition(_ head: ListNode?, _ x: Int) -> ListNode? {\n        var dummy1 = ListNode(0)\n        var dummy2 = ListNode(0)\n        var l1 = dummy1\n        var l2 = dummy2\n        var curr = head\n        while curr != nil {\n            if curr!.val < x {\n                l1.next = curr\n                l1 = l1.next!\n            } else {\n                l2.next = curr\n                l2 = l2.next!\n            }\n            curr = curr!.next\n        }\n        l1.next = dummy2.next\n        l2.next = nil\n        return dummy1.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We use a constant amount of space to store the dummy nodes and other variables.",
+            "time": "O(n)",
+            "timeExplanation": "We make one pass through the list, where n is the number of nodes in the list."
+          },
+          "explanation": "This approach works by essentially rebuilding the list from scratch, separating nodes into two categories based on their values relative to x.",
+          "id": "d556d069-af9d-4bf9-b38b-a5b8b5fd6d0e",
+          "intuition": "This approach works by iterating through the list and creating two separate lists, one for nodes with values less than x and one for nodes with values greater than or equal to x.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1 -> 2 -> 2 -> 4 -> 3 -> 5",
+              "explanation": "All nodes with values less than 3 come before all nodes with values greater than or equal to 3.",
+              "id": "c0aae75f-b4ea-499b-a3f2-31ae42853086",
+              "input": "1 -> 4 -> 3 -> 2 -> 5 -> 2, x = 3"
+            },
+            {
+              "expectedOutput": "1 -> 7 -> 9 -> 6 -> 8",
+              "explanation": "Nodes with values 1 and 7 are less than 5, so they come before nodes with values greater than or equal to 5.",
+              "id": "102840b8-572d-4824-9162-7cae1ebf7387",
+              "input": "7 -> 9 -> 1 -> 6 -> 8, x = 5"
+            }
+          ]
+        },
+        {
+          "approach": "We start by initializing two dummy nodes, one for the less than list and one for the greater than or equal to list. Then we iterate through the original list, using two pointers to keep track of the current position in the less than list and the greater than or equal to list. We move the pointers based on the values of the nodes.",
+          "code": "class Solution {\n    func partition(_ head: ListNode?, _ x: Int) -> ListNode? {\n        var dummy1 = ListNode(0)\n        var dummy2 = ListNode(0)\n        var l1 = dummy1\n        var l2 = dummy2\n        var curr = head\n        while curr != nil {\n            if curr!.val < x {\n                l1.next = curr\n                l1 = l1.next!\n            } else {\n                l2.next = curr\n                l2 = l2.next!\n            }\n            curr = curr!.next\n        }\n        l2.next = nil\n        l1.next = dummy2.next\n        return dummy1.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We use a constant amount of space to store the dummy nodes and other variables.",
+            "time": "O(n)",
+            "timeExplanation": "We make one pass through the list, where n is the number of nodes in the list."
+          },
+          "explanation": "This approach works by essentially rebuilding the list from scratch, separating nodes into two categories based on their values relative to x. We use two pointers to efficiently connect the nodes in the correct order.",
+          "id": "7a700994-e793-47af-a040-4516abb88d8a",
+          "intuition": "This approach works similarly to the brute force approach, but we use two pointers to keep track of the current position in the less than list and the greater than or equal to list.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1 -> 2 -> 2 -> 4 -> 3 -> 5",
+              "explanation": "All nodes with values less than 3 come before all nodes with values greater than or equal to 3.",
+              "id": "78c46d82-ace2-49af-976f-9d82e3333066",
+              "input": "1 -> 4 -> 3 -> 2 -> 5 -> 2, x = 3"
+            },
+            {
+              "expectedOutput": "1 -> 7 -> 9 -> 6 -> 8",
+              "explanation": "Nodes with values 1 and 7 are less than 5, so they come before nodes with values greater than or equal to 5.",
+              "id": "cd679877-a7dc-4982-9e96-f30981c4892a",
+              "input": "7 -> 9 -> 1 -> 6 -> 8, x = 5"
+            }
+          ]
+        }
+      ],
+      "id": "785e7b4a-b4cc-482c-98fd-c79a6078fc1d",
+      "lastUpdated": "2026-02-06T21:05:47Z",
+      "problemSlug": "partition-list",
+      "relatedProblems": [
+        "reverse-linked-list",
+        "remove-elements-from-linked-list"
+      ],
+      "summary": "Partition List is a problem where we have a list of nodes and a value x, we need to partition the list around x such that all nodes with values less than x come before all nodes with values greater than or equal to x. The key insight is to use two separate lists to store nodes with values less than x and greater than or equal to x."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Use next pointer of parent level to traverse and connect children.",
+          "code": "class Solution {\n    func connect(_ root: Node?) -> Node? {\n        var leftmost = root\n        while leftmost?.left != nil {\n            var head = leftmost\n            while head != nil {\n                head?.left?.next = head?.right\n                if head?.next != nil {\n                    head?.right?.next = head?.next?.left\n                }\n                head = head?.next\n            }\n            leftmost = leftmost?.left\n        }\n        return root\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Use existing pointers",
+            "time": "O(n)",
+            "timeExplanation": "Visit each node"
+          },
+          "explanation": "O(1) space by using established next pointers.",
+          "id": "d18ea6a3-fbfa-4282-b0e6-509e791ecb8d",
+          "intuition": "Connect nodes at same level left to right.",
+          "name": "Level Order",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "Connected tree",
+              "explanation": "Each level connected",
+              "id": "62109a91-d408-4c64-9ee8-b6e1786b3e33",
+              "input": "root = [1,2,3,4,5,6,7]"
+            }
+          ]
+        }
+      ],
+      "id": "28a9ce27-ba0a-4882-ba27-7a401961fab7",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "populating-next-right-pointers-in-each-node",
+      "relatedProblems": [
+        "populating-next-right-pointers-in-each-node-ii"
+      ],
+      "summary": "Connect each node to its right neighbor. BFS level order or use existing next pointers."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "We start by checking if the root is nil. If not, we initialize a queue with the root node and its level. We then enter a loop that continues until the queue is empty. In each iteration, we dequeue a node and its level, and then enqueue its children if they exist. After processing all nodes at the current level, we connect the next right pointers for the nodes at the next level.",
+          "code": "class Solution {\n    func connect(_ root: Node?) -> Node? {\n        guard let root = root else {\n            return nil\n        }\n        var queue = [root]\n        while !queue.isEmpty {\n            var levelSize = queue.count\n            for i in 0..<levelSize {\n                if i < levelSize - 1 {\n                    queue[i].next = queue[i + 1]\n                }\n                if let left = queue[i].left {\n                    queue.append(left)\n                }\n                if let right = queue[i].right {\n                    queue.append(right)\n                }\n            }\n            queue.removeFirst(levelSize)\n        }\n        return root\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "In the worst-case scenario, the queue will store all nodes at the last level.",
+            "time": "O(n)",
+            "timeExplanation": "We visit each node once."
+          },
+          "explanation": "This approach can be improved by only using a single queue to store nodes at the current level and then connecting the next right pointers for the nodes at the next level after processing all nodes at the current level.",
+          "id": "aae3fb58-d3d1-42bf-a4f9-efe2b7d7a3f8",
+          "intuition": "This approach works by first performing a level-order traversal of the binary tree and then connecting the nodes at each level.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,#,2,3,#,4,5,6,7,#]",
+              "explanation": "We connect the next right pointers for each node level by level.",
+              "id": "95b69b92-c9bc-4e9d-90fe-46b5ccfcd165",
+              "input": "root = [1,2,3,4,5,6,7]"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "We return an empty tree if the input is empty.",
+              "id": "169a7794-6557-4240-8ece-ba1ff7d15d90",
+              "input": "root = []"
+            }
+          ]
+        },
+        {
+          "approach": "We start by checking if the root is nil. If not, we initialize a dummy node and a previous pointer. We then enter a loop that continues until we have processed all levels. In each iteration, we reset the previous pointer and the dummy node, and then iterate over each node at the current level. We connect the next right pointers for the nodes at the current level using the previous pointer.",
+          "code": "class Solution {\n    func connect(_ root: Node?) -> Node? {\n        guard let root = root else {\n            return nil\n        }\n        var leftmost = root\n        while let leftmostLeft = leftmost.left {\n            var head = leftmost\n            while let head = head {\n                if let headLeft = head.left {\n                    headLeft.next = head.right\n                }\n                if let headRight = head.right, let headNext = head.next {\n                    headRight.next = headNext.left\n                }\n                head = head.next\n            }\n            leftmost = leftmostLeft\n        }\n        return root\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We only use a constant amount of space to store the pointers.",
+            "time": "O(n)",
+            "timeExplanation": "We visit each node once."
+          },
+          "explanation": "This approach has a lower space complexity than the brute-force approach because it avoids using a queue to store all nodes at each level.",
+          "id": "f7b9e8d8-6c6b-4731-a52a-ad69d3f3c12c",
+          "intuition": "This approach works by using a previous pointer to connect the next right pointers for the nodes at each level.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1,#,2,3,#,4,5,6,7,#]",
+              "explanation": "We connect the next right pointers for each node level by level.",
+              "id": "835deb4c-27b0-4253-8b72-6aa67f74a881",
+              "input": "root = [1,2,3,4,5,6,7]"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "We return an empty tree if the input is empty.",
+              "id": "3f80d65b-42b9-4f88-b46f-892bad82cdd2",
+              "input": "root = []"
+            }
+          ]
+        }
+      ],
+      "id": "332ffa94-2c28-4da5-b372-d7c1a3e01a44",
+      "lastUpdated": "2026-02-06T21:06:58Z",
+      "problemSlug": "populating-next-right-pointers-in-each-node-ii",
+      "relatedProblems": [
+        "populating-next-right-pointers-in-each-node",
+        "binary-tree-zigzag-level-order-traversal"
+      ],
+      "summary": "The problem involves populating the next right pointers in each node of a binary tree and the key insight is to perform a level-order traversal to achieve this in a relatively efficient manner."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Traverse the list. 2. Compare each node with its next node. 3. Remove the duplicate node.",
+          "code": "// Definition for singly-linked list.\n\nclass Solution {\n    func deleteDuplicates(_ head: ListNode?) -> ListNode? {\n        let dummy = ListNode(0)\n        dummy.next = head\n        var prev: ListNode? = dummy\n        var current: ListNode? = head\n\n        while current != nil {\n            if prev?.val == current?.val {\n                prev?.next = current?.next\n            } else {\n                prev = current\n            }\n            current = current?.next\n        }\n\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We are not using any extra space, so the space complexity is O(1).",
+            "time": "O(n)",
+            "timeExplanation": "We are traversing the linked list once, so the time complexity is O(n), where n is the number of nodes in the linked list."
+          },
+          "explanation": "Start with the head of the list. Compare the current node with its next node. If they have the same value, remove the next node. Otherwise, move to the next node.",
+          "id": "c9d2bd6e-0d99-434c-a8c5-16246d3318c8",
+          "intuition": "This approach involves traversing the list and comparing each node with its next node to remove duplicates. It is not efficient for large lists.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1 -> 2",
+              "explanation": "The duplicate 1 is removed.",
+              "id": "dadfa631-2dab-49d2-ae66-a4d59f8c6a0d",
+              "input": "1 -> 1 -> 2"
+            },
+            {
+              "expectedOutput": "1 -> 2 -> 3",
+              "explanation": "The duplicates 1 and 3 are removed.",
+              "id": "22e3d9b5-f6ba-4188-94c3-962d688512d0",
+              "input": "1 -> 1 -> 2 -> 3 -> 3"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize two pointers, current and next. 2. Traverse the list. 3. If the current node is different from the next node, move the current pointer forward.",
+          "code": "// Definition for singly-linked list.\n\nclass Solution {\n    func deleteDuplicates(_ head: ListNode?) -> ListNode? {\n        var current: ListNode? = head\n        while current != nil && current?.next != nil {\n            if current?.val == current?.next?.val {\n                current?.next = current?.next?.next\n            } else {\n                current = current?.next\n            }\n        }\n        return head\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We are not using any extra space, so the space complexity is O(1).",
+            "time": "O(n)",
+            "timeExplanation": "We are traversing the linked list once, so the time complexity is O(n), where n is the number of nodes in the linked list."
+          },
+          "explanation": "Start with the head of the list. Initialize two pointers, current and next. If the current node is different from the next node, move the current pointer forward and skip the duplicates.",
+          "id": "ebcf388a-eafd-451a-a312-3e0421160401",
+          "intuition": "This approach involves using a two-pointer technique to remove duplicates from the sorted linked list. It is more efficient than the brute-force approach.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1 -> 2",
+              "explanation": "The duplicate 1 is removed.",
+              "id": "aa5a98ed-52a5-462c-b214-c74a7d5f28a8",
+              "input": "1 -> 1 -> 2"
+            },
+            {
+              "expectedOutput": "1 -> 2 -> 3",
+              "explanation": "The duplicates 1 and 3 are removed.",
+              "id": "9c6a86c1-8639-41c6-9a85-fab363d04a78",
+              "input": "1 -> 1 -> 2 -> 3 -> 3"
+            }
+          ]
+        }
+      ],
+      "id": "63b2b200-fb3d-4068-9136-45c6b6cea9ef",
+      "lastUpdated": "2026-02-06T21:05:42Z",
+      "problemSlug": "remove-duplicates-from-sorted-list",
+      "relatedProblems": [
+        "remove-element",
+        "remove-duplicates-from-sorted-array"
+      ],
+      "summary": "This problem is to remove duplicates from a sorted linked list. The key insight is to traverse the list and compare each node with its next node to remove duplicates."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start from the head of the list, and for each node, compare it with its next node. If they have the same value, skip the next node. Otherwise, move to the next node.",
+          "code": "class Solution {\n    func deleteDuplicates(_ head: ListNode?) -> ListNode? {\n        guard let head = head else { return nil }\n\n        let dummy = ListNode(0)\n        dummy.next = head\n        var prev: ListNode? = dummy\n\n        while prev?.next != nil && prev?.next?.next != nil {\n            if prev?.next?.val == prev?.next?.next?.val {\n                let val = prev?.next?.val\n                while prev?.next != nil && prev?.next?.val == val {\n                    prev?.next = prev?.next?.next\n                }\n            } else {\n                prev = prev?.next\n            }\n        }\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We only use a constant amount of space.",
+            "time": "O(n)",
+            "timeExplanation": "We only traverse the list once."
+          },
+          "explanation": "We start from the head of the list. For each node, we check if it has the same value as its next node. If they are the same, we skip the next node by changing the current node's next pointer to its next node's next node.",
+          "id": "29137601-27b8-4d64-91a8-a1289cbc6fca",
+          "intuition": "This approach checks every node with its next node to see if they have the same value, removing any duplicates.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,5]",
+              "explanation": "Nodes with values 3 and 4 are duplicates and should be removed.",
+              "id": "88df58ba-f315-4991-acea-8c6ac22335b3",
+              "input": "head = [1,2,3,3,4,4,5]"
+            },
+            {
+              "expectedOutput": "[2,3]",
+              "explanation": "All nodes with value 1 are duplicates and should be removed.",
+              "id": "01ba3c05-064d-43a8-93c8-73ede141258e",
+              "input": "head = [1,1,1,2,3]"
+            }
+          ]
+        },
+        {
+          "approach": "Initialize two pointers, one at the head of the list and one at the head's next node. Compare the values at these two pointers. If they are the same, move the second pointer forward until it points to a different value or reaches the end of the list.",
+          "code": "class Solution {\n    func deleteDuplicates(_ head: ListNode?) -> ListNode? {\n        let dummy = ListNode(0)\n        dummy.next = head\n        var slow: ListNode? = dummy\n        var fast: ListNode? = head\n\n        while fast != nil && fast?.next != nil {\n            if fast?.val == fast?.next?.val {\n                let val = fast?.val\n                while fast != nil && fast?.val == val {\n                    fast = fast?.next\n                }\n                slow?.next = fast\n            } else {\n                slow = slow?.next\n                fast = fast?.next\n            }\n        }\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We only use a constant amount of space.",
+            "time": "O(n)",
+            "timeExplanation": "We only traverse the list once."
+          },
+          "explanation": "We maintain two pointers, `slow` and `fast`. `slow` is used to track the last non-duplicate node we've seen, and `fast` is used to scan the list for duplicates. If `fast` and `fast.next` have the same value, we skip `fast.next` by moving `fast` forward.",
+          "id": "64066c8f-c69f-4e37-b1dd-7d757128b188",
+          "intuition": "This approach uses a two-pointer technique to track the current node and the next node, deciding whether to include or skip the next node based on their values.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,5]",
+              "explanation": "Nodes with values 3 and 4 are duplicates and should be removed.",
+              "id": "b51f2d70-4a38-497e-aff1-02df15675b48",
+              "input": "head = [1,2,3,3,4,4,5]"
+            },
+            {
+              "expectedOutput": "[2,3]",
+              "explanation": "All nodes with value 1 are duplicates and should be removed.",
+              "id": "00478afa-2eda-45db-96b3-35d363a7716b",
+              "input": "head = [1,1,1,2,3]"
+            }
+          ]
+        }
+      ],
+      "id": "e4343969-cf7a-4704-9aa6-c636c54c6702",
+      "lastUpdated": "2026-02-06T21:05:37Z",
+      "problemSlug": "remove-duplicates-from-sorted-list-ii",
+      "relatedProblems": [
+        "remove-duplicates-from-sorted-array",
+        "remove-duplicates-from-unsorted-array"
+      ],
+      "summary": "The problem requires removing duplicates from a sorted linked list, allowing only unique values to remain. The key insight is to track the current node and its next node to decide whether to include or skip the next node."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Start with an empty new list. 2. Iterate over the original list, appending nodes that do not match the given value to the new list. 3. Update the head of the new list to be the first node that does not match the given value, or null if all nodes match the given value.",
+          "code": "class Solution {\n    func removeElements(_ head: ListNode?, _ val: Int) -> ListNode? {\n        let dummy = ListNode(-1)\n        dummy.next = head\n        var current: ListNode? = dummy\n        while let unwrappedCurrent = current {\n            if let next = unwrappedCurrent.next, next.val == val {\n                unwrappedCurrent.next = next.next\n            } else {\n                current = unwrappedCurrent.next\n            }\n        }\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1), since we are not using any additional data structures that scale with the size of the input.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n), where n is the number of nodes in the linked list, since in the worst-case scenario we are iterating over the entire list once."
+          },
+          "explanation": "Create a dummy node that always points to the head of the list, and a current node that starts at the head of the list. As long as the current node is not null, compare its value to the given value, and if they match, update the next pointer of the previous node to skip the current node.",
+          "id": "9cb62480-6ab8-406c-afd5-5468d58611f8",
+          "intuition": "This approach involves iterating over the entire linked list and removing the nodes that match the given value, with a new list being formed with every removal.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,3,4,5]",
+              "explanation": "The output should be the list [1,2,3,4,5] since the nodes with values 6 are removed from the original list.",
+              "id": "e0a990a5-4f5f-4237-b612-431a5a2267f2",
+              "input": "head = [1,2,6,3,4,5,6], val = 6"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "The output should be an empty list, as there are no nodes to remove.",
+              "id": "a9849119-afb3-4afb-81e6-e985d2bc0b0e",
+              "input": "head = [], val = 1"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize two pointers, previous and current, to the dummy node and head of the list respectively. 2. Iterate over the list until the current node is null. 3. Inside the loop, check if the current node's value matches the given value, and if so, update the previous node's next pointer to skip the current node.",
+          "code": "class Solution {\n    func removeElements(_ head: ListNode?, _ val: Int) -> ListNode? {\n        let dummy = ListNode(-1)\n        dummy.next = head\n        var prev: ListNode? = dummy\n        var curr: ListNode? = head\n        while let unwrappedCurr = curr {\n            if unwrappedCurr.val == val {\n                prev?.next = unwrappedCurr.next\n            } else {\n                prev = unwrappedCurr\n            }\n            curr = unwrappedCurr.next\n        }\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1), since we are not using any additional data structures that scale with the size of the input.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n), where n is the number of nodes in the linked list, since in the worst-case scenario we are iterating over the entire list once."
+          },
+          "explanation": "The key to this approach is to always keep track of the previous node, so that when we encounter a node that needs to be removed, we can simply update the previous node's next pointer to skip the current node.",
+          "id": "f3e4e1b9-23be-4bd7-b409-b07d4d8ad750",
+          "intuition": "This approach involves using a two-pointer technique to remove the nodes that match the given value from the list.",
+          "name": "Optimized Iterative",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[]",
+              "explanation": "The output should be an empty list, since all nodes have the value 7 and are therefore removed.",
+              "id": "e84e6dce-a24f-4598-ade7-8a60f6fc4a79",
+              "input": "head = [7,7,7,7], val = 7"
+            },
+            {
+              "expectedOutput": "[2]",
+              "explanation": "The output should be the list [2], since the node with value 1 is removed from the original list.",
+              "id": "c1b5cecf-13f5-4a27-b223-745891de3a18",
+              "input": "head = [1,2], val = 1"
+            }
+          ]
+        }
+      ],
+      "id": "ae846ad1-2106-4ed0-8c0a-6449603f16f5",
+      "lastUpdated": "2026-02-06T21:10:15Z",
+      "problemSlug": "remove-linked-list-elements",
+      "relatedProblems": [
+        "delete-node-in-a-bst",
+        "remove-duplicates-from-sorted-list"
+      ],
+      "summary": "This problem requires removing all elements with a given value from a linked list, with key insight being to handle edge cases such as the head and tail of the list. It can be solved using a brute-force approach or an iterative approach."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Create dummy node pointing to head\n2. Initialize both pointers at dummy\n3. Move ahead pointer n+1 steps (creates gap of n)\n4. Move both pointers until ahead reaches nil\n5. Skip the target: behind.next = behind.next.next\n6. Return dummy.next",
+          "code": "class Solution {\n    func removeNthFromEnd(_ head: ListNode?, _ n: Int) -> ListNode? {\n        let dummy = ListNode(0)\n        dummy.next = head\n\n        var behind: ListNode? = dummy\n        var ahead: ListNode? = dummy\n\n        // Create gap of n+1\n        for _ in 0...n {\n            ahead = ahead?.next\n        }\n\n        // Move both until ahead reaches end\n        while ahead != nil {\n            behind = behind?.next\n            ahead = ahead?.next\n        }\n\n        // Skip the nth node from end\n        behind?.next = behind?.next?.next\n\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only use two pointer variables plus dummy",
+            "time": "O(L)",
+            "timeExplanation": "Single pass through the list where L is list length"
+          },
+          "explanation": "The key insight is the gap. If ahead is n+1 nodes ahead of behind, when ahead is nil (past the end), behind is at the node BEFORE the one we want to remove.\n\nWhy n+1 instead of n? Because we need behind to point to the predecessor of the target node so we can update its next pointer.\n\nThe dummy node elegantly handles removing the head: if n equals the list length, behind stays at dummy, and behind.next becomes the original head (which we skip).",
+          "id": "550e8400-e29b-41d4-a716-446655440109",
+          "intuition": "If we maintain a gap of n nodes between two pointers, when the front pointer reaches the end, the back pointer will be exactly n nodes from the end.\n\nA dummy node handles edge cases like removing the head.",
+          "name": "Two Pointers with Gap",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,3,5]",
+              "explanation": "Remove 4 (2nd from end). Gap of 2 means when ahead=nil, behind points to 3",
+              "id": "550e8400-e29b-41d4-a716-446655440208",
+              "input": "head = [1,2,3,4,5], n = 2"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "Remove only node. Dummy handles this: behind stays at dummy, skips head",
+              "id": "550e8400-e29b-41d4-a716-446655440209",
+              "input": "head = [1], n = 1"
+            },
+            {
+              "expectedOutput": "[1]",
+              "explanation": "Remove 2 (last node). behind ends at node 1, skips node 2",
+              "id": "550e8400-e29b-41d4-a716-446655440210",
+              "input": "head = [1,2], n = 1"
+            }
+          ]
+        },
+        {
+          "approach": "1. First pass: count total nodes (length)\n2. Calculate target index: length - n\n3. Use dummy node for edge case handling\n4. Second pass: traverse to node at index (target - 1)\n5. Skip the target node",
+          "code": "class Solution {\n    func removeNthFromEnd(_ head: ListNode?, _ n: Int) -> ListNode? {\n        // First pass: count length\n        var length = 0\n        var node = head\n        while node != nil {\n            length += 1\n            node = node?.next\n        }\n\n        let dummy = ListNode(0)\n        dummy.next = head\n\n        // Find predecessor of target (at position length - n - 1 from dummy)\n        var curr: ListNode? = dummy\n        for _ in 0..<(length - n) {\n            curr = curr?.next\n        }\n\n        // Skip target\n        curr?.next = curr?.next?.next\n\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only use counter and pointer variables",
+            "time": "O(L)",
+            "timeExplanation": "Two passes: first counts L nodes, second traverses L-n nodes"
+          },
+          "explanation": "Converting 'nth from end' to 'kth from start' simplifies the problem. If list has L nodes, the nth from end is the (L-n)th from start (0-indexed).\n\nWe traverse to position (L-n-1) to reach the predecessor, then update its next pointer.\n\nLess elegant than one-pass but easier to understand and implement correctly.",
+          "id": "550e8400-e29b-41d4-a716-446655440110",
+          "intuition": "First pass counts the total length. Second pass removes the (length - n)th node from the beginning.",
+          "name": "Two Pass",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,3,5]",
+              "explanation": "Remove 4 (2nd from end). Gap of 2 means when ahead=nil, behind points to 3",
+              "id": "07741670-29e9-4437-97a3-b9248a20d0b8",
+              "input": "head = [1,2,3,4,5], n = 2"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "Remove only node. Dummy handles this: behind stays at dummy, skips head",
+              "id": "f7d85690-5bd8-4aaa-b02c-b147e516d951",
+              "input": "head = [1], n = 1"
+            },
+            {
+              "expectedOutput": "[1]",
+              "explanation": "Remove 2 (last node). behind ends at node 1, skips node 2",
+              "id": "f2e7c630-351b-44a7-a1d2-b14362eea4cb",
+              "input": "head = [1,2], n = 1"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440005",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "remove-nth-node-from-end-of-list",
+      "relatedProblems": [
+        "delete-the-middle-node-of-a-linked-list",
+        "swapping-nodes-in-a-linked-list"
+      ],
+      "summary": "Remove the nth node from the end using two pointers with a gap of n. When the ahead pointer reaches the end, the behind pointer is at the node before the target."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Find the middle using slow/fast pointers\n2. Split the list at the middle\n3. Reverse the second half\n4. Merge by alternating: take from first, then second, repeat",
+          "code": "class Solution {\n    func reorderList(_ head: ListNode?) {\n        guard let head = head, head.next != nil else { return }\n\n        // Step 1: Find middle\n        var slow = head\n        var fast = head\n        while fast.next != nil && fast.next?.next != nil {\n            slow = slow.next!\n            fast = fast.next!.next!\n        }\n\n        // Step 2: Split and reverse second half\n        var second = slow.next\n        slow.next = nil  // Cut the list\n        second = reverseList(second)\n\n        // Step 3: Merge alternately\n        var first: ListNode? = head\n        while second != nil {\n            let tmp1 = first?.next\n            let tmp2 = second?.next\n            first?.next = second\n            second?.next = tmp1\n            first = tmp1\n            second = tmp2\n        }\n    }\n\n    private func reverseList(_ head: ListNode?) -> ListNode? {\n        var prev: ListNode? = nil\n        var curr = head\n        while curr != nil {\n            let next = curr?.next\n            curr?.next = prev\n            prev = curr\n            curr = next\n        }\n        return prev\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only use pointer variables, no extra data structures",
+            "time": "O(n)",
+            "timeExplanation": "Each step (find middle, reverse, merge) is O(n), total is O(n)"
+          },
+          "explanation": "This approach transforms the problem into three simpler sub-problems we already know how to solve:\n\n- Finding middle: slow/fast pointer technique (slow moves 1 step, fast moves 2)\n- Reversing: standard iterative reversal with prev/curr/next pointers\n- Merging: similar to merge two lists, but we alternate instead of comparing\n\nKey insight: after reversing the second half, both halves are the same length (±1), so we can interleave them directly.",
+          "id": "550e8400-e29b-41d4-a716-446655440107",
+          "intuition": "The reordered list alternates between taking from the start and end. We can achieve this by:\n1. Split the list into two halves\n2. Reverse the second half\n3. Merge both halves by alternating nodes",
+          "name": "Three-Step Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,4,2,3]",
+              "explanation": "Split: [1,2] and [3,4]. Reverse second: [4,3]. Merge: 1→4→2→3",
+              "id": "550e8400-e29b-41d4-a716-446655440206",
+              "input": "[1,2,3,4]"
+            },
+            {
+              "expectedOutput": "[1,5,2,4,3]",
+              "explanation": "Split: [1,2,3] and [4,5]. Reverse second: [5,4]. Merge: 1→5→2→4→3",
+              "id": "550e8400-e29b-41d4-a716-446655440207",
+              "input": "[1,2,3,4,5]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Push all nodes onto a stack\n2. Calculate how many nodes to interleave (n/2)\n3. Traverse from head, pop from stack, insert popped nodes between current nodes\n4. Handle the final next pointer",
+          "code": "class Solution {\n    func reorderList(_ head: ListNode?) {\n        guard let head = head else { return }\n\n        // Push all nodes to stack\n        var stack: [ListNode] = []\n        var node: ListNode? = head\n        while let n = node {\n            stack.append(n)\n            node = n.next\n        }\n\n        let count = stack.count\n        var curr: ListNode? = head\n\n        // Interleave n/2 nodes from the end\n        for _ in 0..<(count / 2) {\n            let end = stack.removeLast()\n            let next = curr?.next\n            curr?.next = end\n            end.next = next\n            curr = next\n        }\n\n        // Terminate the list\n        curr?.next = nil\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Stack stores all n nodes",
+            "time": "O(n)",
+            "timeExplanation": "Push n nodes, then interleave n/2 times"
+          },
+          "explanation": "The stack gives us O(1) access to the 'end' of the list. By pushing all nodes, the top of the stack is the last node, second-to-top is second-to-last, etc.\n\nWe only need to interleave n/2 nodes from the end, where n is the total count. After interleaving, we must set the final node's next to nil to avoid a cycle.",
+          "id": "550e8400-e29b-41d4-a716-446655440108",
+          "intuition": "Use a stack to access nodes from the end. Push all nodes, then pop half while traversing from the front to interleave.",
+          "name": "Stack-Based",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1,4,2,3]",
+              "explanation": "Split: [1,2] and [3,4]. Reverse second: [4,3]. Merge: 1→4→2→3",
+              "id": "e48a96f1-4799-4953-b142-e51275392ee2",
+              "input": "[1,2,3,4]"
+            },
+            {
+              "expectedOutput": "[1,5,2,4,3]",
+              "explanation": "Split: [1,2,3] and [4,5]. Reverse second: [5,4]. Merge: 1→5→2→4→3",
+              "id": "ea5de1fc-6fd2-4e3c-9647-4c7cb9ebc787",
+              "input": "[1,2,3,4,5]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440004",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "reorder-list",
+      "relatedProblems": [
+        "reverse-linked-list",
+        "palindrome-linked-list"
+      ],
+      "summary": "Reorder list from L0→L1→...→Ln to L0→Ln→L1→Ln-1→... by finding middle, reversing second half, then merging alternately."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize prev as nil and curr as head\n2. While curr is not nil:\n   - Store next = curr.next (save reference)\n   - Set curr.next = prev (reverse pointer)\n   - Move prev = curr\n   - Move curr = next\n3. Return prev (the new head)",
+          "code": "class Solution {\n    func reverseList(_ head: ListNode?) -> ListNode? {\n        var prev: ListNode? = nil\n        var curr = head\n\n        while curr != nil {\n            let next = curr?.next  // Save next\n            curr?.next = prev      // Reverse pointer\n            prev = curr            // Move prev forward\n            curr = next            // Move curr forward\n        }\n\n        return prev\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only use three pointers regardless of list size",
+            "time": "O(n)",
+            "timeExplanation": "We visit each node exactly once"
+          },
+          "explanation": "The trick is maintaining three pointers:\n- prev: the node we just processed\n- curr: the node we're currently processing\n- next: the node we'll process next\n\nBefore reversing curr's pointer, we must save curr.next, otherwise we lose access to the rest of the list. After the loop, prev points to what was the last node, which is now the new head.",
+          "id": "550e8400-e29b-41d4-a716-446655440101",
+          "intuition": "We traverse the list once, reversing each pointer as we go. At each step, we need to:\n1. Save the next node (before we lose the reference)\n2. Point current node backwards to previous\n3. Move both pointers forward",
+          "name": "Iterative",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[5,4,3,2,1]",
+              "explanation": "Each arrow reverses: 1→2→3→4→5 becomes 5→4→3→2→1",
+              "id": "550e8400-e29b-41d4-a716-446655440201",
+              "input": "[1,2,3,4,5]"
+            },
+            {
+              "expectedOutput": "[2,1]",
+              "explanation": "Simple case: 1→2 becomes 2→1",
+              "id": "550e8400-e29b-41d4-a716-446655440202",
+              "input": "[1,2]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Base case: if head is nil or head.next is nil, return head\n2. Recursively reverse the rest: newHead = reverseList(head.next)\n3. Make the next node point back: head.next.next = head\n4. Clear current node's next: head.next = nil\n5. Return newHead (propagate through all calls)",
+          "code": "class Solution {\n    func reverseList(_ head: ListNode?) -> ListNode? {\n        // Base case: empty or single node\n        guard let head = head, let next = head.next else {\n            return head\n        }\n\n        // Recursively reverse the rest\n        let newHead = reverseList(next)\n\n        // Fix pointers\n        next.next = head  // Make next point back to us\n        head.next = nil   // Clear our forward pointer\n\n        return newHead\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Recursive call stack uses O(n) space",
+            "time": "O(n)",
+            "timeExplanation": "Visit each node once via recursion"
+          },
+          "explanation": "The recursion reaches the end of the list first, then as it unwinds:\n- At each step, head.next still points to the last node we processed\n- We make that node point back to us (head.next.next = head)\n- We clear our own next pointer (will be set by the previous recursive call)\n\nThe newHead is returned unchanged through all recursive calls.",
+          "id": "550e8400-e29b-41d4-a716-446655440102",
+          "intuition": "Recursively reverse the rest of the list, then fix up the current node's pointers. The base case is when we reach the last node (which becomes our new head).",
+          "name": "Recursive",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[5,4,3,2,1]",
+              "explanation": "Each arrow reverses: 1→2→3→4→5 becomes 5→4→3→2→1",
+              "id": "43a1a8c3-f3fb-4fe3-bf9a-8189cc5cb527",
+              "input": "[1,2,3,4,5]"
+            },
+            {
+              "expectedOutput": "[2,1]",
+              "explanation": "Simple case: 1→2 becomes 2→1",
+              "id": "2d0da5ea-6d28-44fd-b808-a39626c48eb6",
+              "input": "[1,2]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "reverse-linked-list",
+      "relatedProblems": [
+        "reverse-linked-list-ii",
+        "palindrome-linked-list"
+      ],
+      "summary": "Reverse the direction of pointers in a linked list. The key insight is that you need to track three nodes at once: previous, current, and next."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Use a dummy node and move `pre` to the node just before `left`.\n2. Let `start` be the first node in the sublist and `then` be start.next.\n3. For each step, move `then` to the front of the sublist.",
+          "code": "class Solution {\n    func reverseBetween(_ head: ListNode?, _ left: Int, _ right: Int) -> ListNode? {\n        if head == nil || left == right { return head }\n        let dummy = ListNode(0)\n        dummy.next = head\n        var pre: ListNode? = dummy\n\n        var pos = 1\n        while pos < left {\n            pre = pre?.next\n            pos += 1\n        }\n\n        let start = pre?.next\n        var then = start?.next\n        var i = 0\n        while i < right - left {\n            start?.next = then?.next\n            then?.next = pre?.next\n            pre?.next = then\n            then = start?.next\n            i += 1\n        }\n\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only a few pointers are used.",
+            "time": "O(n)",
+            "timeExplanation": "We traverse the list once and reverse the sublist in place."
+          },
+          "explanation": "This reverses the sublist in-place without touching nodes outside the range.",
+          "id": "1b727499-28ed-4e69-ae36-0d335a4f4c55",
+          "intuition": "If we fix the node before the sublist, we can repeatedly move the next node to the front of that sublist.",
+          "name": "Sublist Reversal",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,4,3,2,5]",
+              "explanation": "Sublist 2..4 is reversed.",
+              "id": "1272d27f-24bc-4442-bf9a-626f1fe6c565",
+              "input": "head = [1,2,3,4,5], left = 2, right = 4"
+            },
+            {
+              "expectedOutput": "[5]",
+              "explanation": "Single node remains unchanged.",
+              "id": "e8309d6a-9f8f-49ce-b125-1afc3423b163",
+              "input": "head = [5], left = 1, right = 1"
+            }
+          ]
+        }
+      ],
+      "id": "b5852c33-2b98-45c6-8c16-c292beb01185",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "reverse-linked-list-ii",
+      "relatedProblems": [
+        "reverse-linked-list",
+        "reorder-list"
+      ],
+      "summary": "Reverse the nodes between two positions using head insertion within the sublist."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start at the head of the list. Move the last node to the front k times.",
+          "code": "class Solution {\n  func rotateRight(_ head: ListNode?, _ k: Int) -> ListNode? {\n    guard let head = head else { return nil }\n    var count = 1\n    var tail: ListNode? = head\n    while tail?.next != nil {\n      count += 1\n      tail = tail?.next\n    }\n    tail?.next = head\n    let newTail = getNewTail(head, count, k)\n    let newHead = newTail?.next\n    newTail?.next = nil\n    return newHead\n  }\n\n  private func getNewTail(_ head: ListNode?, _ length: Int, _ k: Int) -> ListNode? {\n    var current = head\n    for _ in 1..<length - k % length {\n      current = current?.next\n    }\n    return current\n  }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are not using any additional space that scales with the input size.",
+            "time": "O(n + k)",
+            "timeExplanation": "The time complexity is O(n + k) because we are doing a constant amount of work for each node in the list, and then potentially moving k nodes to the front."
+          },
+          "explanation": "This solution involves a lot of repeated work and is not efficient for large lists or large values of k.",
+          "id": "ed17ba3d-6d73-4e4e-b3f8-82d29bf41c86",
+          "intuition": "We can solve this problem by simply traversing the linked list k times, each time moving the last node to the front.",
+          "name": "Brute-Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[4,5,1,2,3]",
+              "explanation": "Rotate the list to the right by 2 steps.",
+              "id": "76948cd9-815b-4fcf-98c3-4ae2cb9245c7",
+              "input": "head = [1,2,3,4,5], k = 2"
+            },
+            {
+              "expectedOutput": "[1,2,3,4,5]",
+              "explanation": "Rotating the list by its length results in the same list.",
+              "id": "4ce726d6-d4e7-4faf-b6b9-d469b8ebee55",
+              "input": "head = [1,2,3,4,5], k = 5"
+            }
+          ]
+        },
+        {
+          "approach": "Find the length of the list and the new tail at the (length - k % length - 1)th node. Connect the new tail to nil and the new head to the node after the new tail.",
+          "code": "class Solution {\n  func rotateRight(_ head: ListNode?, _ k: Int) -> ListNode? {\n    guard let head = head else { return nil }\n    var oldTail: ListNode? = head\n    var n = 1\n    while let next = oldTail?.next {\n      oldTail = next\n      n += 1\n    }\n    oldTail?.next = head\n    let new_tail = getNewTail(head, n, k)\n    let newHead = new_tail?.next\n    new_tail?.next = nil\n    return newHead\n  }\n\n  private func getNewTail(_ head: ListNode?, _ length: Int, _ k: Int) -> ListNode? {\n    var current = head\n    for _ in 1..<length - k % length {\n      current = current?.next\n    }\n    return current\n  }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are not using any additional space that scales with the input size.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are doing a constant amount of work for each node in the list."
+          },
+          "explanation": "This solution avoids the repeated work of the brute-force solution and only requires a single pass through the list.",
+          "id": "d9be489a-3b78-4e9a-8c0e-0b02cab4e32c",
+          "intuition": "We can solve this problem more efficiently by finding the new tail of the list and only moving nodes once.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[4,5,1,2,3]",
+              "explanation": "Rotate the list to the right by 2 steps.",
+              "id": "dc807492-2f28-4fa3-867c-589b9914a60c",
+              "input": "head = [1,2,3,4,5], k = 2"
+            },
+            {
+              "expectedOutput": "[1,2,3,4,5]",
+              "explanation": "Rotating the list by its length results in the same list.",
+              "id": "7024a029-dd9e-4ea4-b4ea-42d9c6185505",
+              "input": "head = [1,2,3,4,5], k = 5"
+            }
+          ]
+        }
+      ],
+      "id": "654069d1-534d-4f2e-8210-5c7883f5e666",
+      "lastUpdated": "2026-02-06T21:04:58Z",
+      "problemSlug": "rotate-list",
+      "relatedProblems": [
+        "reverse-linked-list",
+        "partition-list"
+      ],
+      "summary": "The problem involves rotating a linked list to the right by k steps. A key insight is to connect the tail to the head and find the new tail at the (length - k % length - 1)th node."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Find middle using slow/fast pointers\n2. Recursively sort halves\n3. Merge sorted halves",
+          "code": "class Solution {\n    func sortList(_ head: ListNode?) -> ListNode? {\n        guard head?.next != nil else { return head }\n        var slow = head, fast = head?.next\n        while fast?.next != nil { slow = slow?.next; fast = fast?.next?.next }\n        let mid = slow?.next; slow?.next = nil\n        let left = sortList(head), right = sortList(mid)\n        return merge(left, right)\n    }\n    func merge(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {\n        let dummy = ListNode(0)\n        var curr: ListNode? = dummy\n        var p1 = l1, p2 = l2\n        while p1 != nil && p2 != nil {\n            if p1!.val < p2!.val { curr?.next = p1; p1 = p1?.next }\n            else { curr?.next = p2; p2 = p2?.next }\n            curr = curr?.next\n        }\n        curr?.next = p1 ?? p2\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(log n)",
+            "spaceExplanation": "Recursion stack",
+            "time": "O(n log n)",
+            "timeExplanation": "Merge sort"
+          },
+          "explanation": "Standard merge sort adapted for linked lists. Split at middle, recurse, merge.",
+          "id": "5be78f9e-a88b-40c6-97fe-7085fe46b22e",
+          "intuition": "Split list in half, sort each, merge. For O(1) space, use bottom-up.",
+          "name": "Merge Sort",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,3,4]",
+              "explanation": "Sorted list",
+              "id": "b132f4e2-4a99-42b9-b5a0-ddd5d42e242e",
+              "input": "[4,2,1,3]"
+            }
+          ]
+        }
+      ],
+      "id": "f91c0118-8ed9-44d5-a645-e52202ceebec",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "sort-list",
+      "relatedProblems": [
+        "merge-two-sorted-lists",
+        "merge-k-sorted-lists"
+      ],
+      "summary": "Sort linked list in O(n log n) time, O(1) space. Use bottom-up merge sort."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, we calculate the length of the linked list. Then, we calculate the size of each part by dividing the length by k. Next, we traverse the list again, this time splitting it into parts based on the calculated size.",
+          "code": "class Solution {\n    func splitListToParts(_ head: ListNode?, _ k: Int) -> [ListNode?] {\n        var length = 0\n        var node = head\n\n        // Calculate the length of the linked list\n        while node != nil {\n            node = node?.next\n            length += 1\n        }\n\n        // Calculate the size of each part\n        let partSize = length / k\n        let remainder = length % k\n\n        var parts = [ListNode?]()\n        node = head\n\n        // Split the linked list into parts\n        for _ in 0..<k {\n            if let node = node {\n                parts.append(node)\n\n                // Move to the end of the current part\n                for _ in 1..<(partSize + (remainder > 0 ? 1 : 0)) {\n                    if let nextNode = node.next {\n                        node = nextNode\n                    } else {\n                        break\n                    }\n                }\n\n                // Break the link\n                if let nextNode = node.next {\n                    node.next = nil\n                    node = nextNode\n                } else {\n                    node = nil\n                }\n            }\n\n            // Decrease the remainder\n            if remainder > 0 {\n                remainder -= 1\n            }\n        }\n\n        return parts\n    }\n}",
+          "complexity": {
+            "space": "O(k)",
+            "spaceExplanation": "The space complexity is O(k) because we need to store the head of each part in an array.",
+            "time": "O(n)",
+            "timeExplanation": "We need two passes over the data. The first pass to calculate the length of the linked list and the second pass to split it into k parts."
+          },
+          "explanation": "The brute force approach is straightforward but has the disadvantage of requiring two passes over the data, making it less efficient for large inputs.",
+          "id": "2898e4bc-81cf-4efd-964b-c3a950d725fd",
+          "intuition": "This approach involves traversing the linked list to calculate its length and then splitting it into k parts. It's the most straightforward method but not the most efficient for large inputs.",
+          "name": "Approach 1: Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[1],[2],[3],[],[],[]]",
+              "explanation": "The linked list [1,2,3] should be split into 5 parts. Since there are not enough elements to fill 5 parts, the remaining parts will be empty.",
+              "id": "d79e9fcd-c1e3-4869-816a-27725241d1ec",
+              "input": "head = [1,2,3], k = 5"
+            },
+            {
+              "expectedOutput": "[[1,2,3,4],[5,6,7],[8,9,10]]",
+              "explanation": "The linked list [1,2,3,4,5,6,7,8,9,10] should be split into 3 parts. Each part should contain roughly equal number of elements.",
+              "id": "3849c252-3744-4813-8fa7-30ed1bee0945",
+              "input": "head = [1,2,3,4,5,6,7,8,9,10], k = 3"
+            }
+          ]
+        },
+        {
+          "approach": "First, we calculate the length of the linked list. Then, we calculate the size of each part. Next, we use two pointers to traverse the linked list and split it into parts based on the calculated size.",
+          "code": "class Solution {\n    func splitListToParts(_ head: ListNode?, _ k: Int) -> [ListNode?] {\n        var length = 0\n        var node = head\n\n        // Calculate the length of the linked list\n        while node != nil {\n            node = node?.next\n            length += 1\n        }\n\n        // Calculate the size of each part\n        let partSize = length / k\n        let remainder = length % k\n\n        var parts = [ListNode?]()\n        node = head\n\n        // Split the linked list into parts\n        for _ in 0..<k {\n            parts.append(node)\n\n            // Calculate the size of the current part\n            let currentPartSize = partSize + (remainder > 0 ? 1 : 0)\n\n            // Move the first pointer to the end of the current part\n            var firstPointer = node\n            for _ in 1..<(currentPartSize) {\n                if let nextNode = firstPointer?.next {\n                    firstPointer = nextNode\n                } else {\n                    break\n                }\n            }\n\n            // Move the second pointer to the end of the current part and break the link\n            if let nextNode = firstPointer?.next {\n                node = nextNode\n                firstPointer?.next = nil\n            } else {\n                node = nil\n            }\n\n            // Decrease the remainder\n            if remainder > 0 {\n                remainder -= 1\n            }\n        }\n\n        return parts\n    }\n}",
+          "complexity": {
+            "space": "O(k)",
+            "spaceExplanation": "The space complexity is O(k) because we need to store the head of each part in an array.",
+            "time": "O(n)",
+            "timeExplanation": "We need one pass over the data to calculate the length and another pass to split it into k parts."
+          },
+          "explanation": "The two pointers approach has the advantage of requiring only one pass over the data after the initial length calculation, making it slightly more efficient.",
+          "id": "1dc2800d-d759-4db8-b2d2-571113e38676",
+          "intuition": "This approach also involves calculating the length of the linked list and then splitting it into k parts using two pointers to move at different speeds.",
+          "name": "Approach 2: Two Pointers",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[[1],[2],[3],[],[],[]]",
+              "explanation": "The linked list [1,2,3] should be split into 5 parts. Since there are not enough elements to fill 5 parts, the remaining parts will be empty.",
+              "id": "659d4866-c3b1-41e4-8c81-891a8776c32f",
+              "input": "head = [1,2,3], k = 5"
+            },
+            {
+              "expectedOutput": "[[1,2,3,4],[5,6,7],[8,9,10]]",
+              "explanation": "The linked list [1,2,3,4,5,6,7,8,9,10] should be split into 3 parts. Each part should contain roughly equal number of elements.",
+              "id": "9ff86c1a-0538-4c94-8bf5-6a4c9c7706cd",
+              "input": "head = [1,2,3,4,5,6,7,8,9,10], k = 3"
+            }
+          ]
+        }
+      ],
+      "id": "a96d25b8-cccf-4737-96b1-a1b06f9e3a9e",
+      "lastUpdated": "2026-02-06T21:36:28Z",
+      "problemSlug": "split-linked-list-in-parts",
+      "relatedProblems": [
+        "rotate-list",
+        "delete-node-in-a-bst"
+      ],
+      "summary": "This problem involves splitting a linked list into k parts of roughly equal size. The key insight here is to first calculate the length of the linked list."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. prev → first → second → next\n2. Change to prev → second → first → next\n3. Move prev two steps",
+          "code": "class Solution {\n    func swapPairs(_ head: ListNode?) -> ListNode? {\n        let dummy = ListNode(0)\n        dummy.next = head\n        var prev: ListNode? = dummy\n        while prev?.next != nil && prev?.next?.next != nil {\n            let first = prev?.next\n            let second = first?.next\n            first?.next = second?.next\n            second?.next = first\n            prev?.next = second\n            prev = first\n        }\n        return dummy.next\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Constant",
+            "time": "O(n)",
+            "timeExplanation": "Single pass"
+          },
+          "explanation": "Track prev to reconnect after swap.",
+          "id": "bbc9d1b3-2e7a-4206-acf3-7484dc0bfe99",
+          "intuition": "Use dummy node, swap each pair.",
+          "name": "Iterative",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[2,1,4,3]",
+              "explanation": "Pairs swapped",
+              "id": "cd01ec66-b32b-431d-9493-54e18cce5780",
+              "input": "head = [1,2,3,4]"
+            }
+          ]
+        }
+      ],
+      "id": "d944fd57-19e0-4185-9119-f906d492f887",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "swap-nodes-in-pairs",
+      "relatedProblems": [
+        "reverse-nodes-in-k-group"
+      ],
+      "summary": "Swap every two adjacent nodes. Recursively or iteratively swap pairs."
+    }
+  ],
+  "topic": "linked-list",
+  "version": "2.0.0"
+}

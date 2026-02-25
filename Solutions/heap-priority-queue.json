@@ -1,0 +1,768 @@
+{
+  "solutions": [
+    {
+      "approaches": [
+        {
+          "approach": "1. tweets: [userId: [(timestamp, tweetId)]]\n2. follows: [userId: Set<followeeId>]\n3. postTweet: append (timestamp, tweetId) to user's list\n4. getNewsFeed: collect tweets from user + followees, heap-merge top 10\n5. follow/unfollow: add/remove from follows set",
+          "code": "class Solution {\n    class Twitter {\n        private var tweets: [Int: [(Int, Int)]] = [:]  // userId -> [(time, tweetId)]\n        private var follows: [Int: Set<Int>] = [:]      // userId -> Set<followeeId>\n        private var timestamp = 0\n\n        init() {}\n\n        func postTweet(_ userId: Int, _ tweetId: Int) {\n            tweets[userId, default: []].append((timestamp, tweetId))\n            timestamp += 1\n        }\n\n        func getNewsFeed(_ userId: Int) -> [Int] {\n            var allTweets: [(Int, Int)] = []\n\n            // Get own tweets\n            if let userTweets = tweets[userId] {\n                allTweets.append(contentsOf: userTweets.suffix(10))\n            }\n\n            // Get followees' tweets\n            for followeeId in follows[userId, default: []] {\n                if let followeeTweets = tweets[followeeId] {\n                    allTweets.append(contentsOf: followeeTweets.suffix(10))\n                }\n            }\n\n            // Sort by timestamp descending and take top 10\n            allTweets.sort { $0.0 > $1.0 }\n            return Array(allTweets.prefix(10).map { $0.1 })\n        }\n\n        func follow(_ followerId: Int, _ followeeId: Int) {\n            if followerId != followeeId {\n                follows[followerId, default: []].insert(followeeId)\n            }\n        }\n\n        func unfollow(_ followerId: Int, _ followeeId: Int) {\n            follows[followerId, default: []].remove(followeeId)\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(users × tweets + users × follows)",
+            "spaceExplanation": "Store all tweets and follow relationships",
+            "time": "O(n log n) for getNewsFeed, O(1) for others",
+            "timeExplanation": "getNewsFeed collects up to 10×(followees+1) tweets and sorts them"
+          },
+          "explanation": "Each user has a list of tweets in chronological order. For getNewsFeed, we need to merge k sorted lists (user's tweets + followees' tweets) and get top 10. A max-heap efficiently handles this merge operation. We only need to consider recent tweets, so we can optimize by only adding a limited number from each user to the heap.",
+          "id": "215a2955-d7b3-4a91-802d-0e4521331fa2",
+          "intuition": "Store each user's tweets with timestamps. For news feed, collect tweets from user and all followees, use a max-heap to get the 10 most recent. Maintain follow relationships in a set.",
+          "name": "Hash Maps + Heap Merge",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[5], [6,5], [5]",
+              "explanation": "User 1 posts tweet 5. Feed shows [5]. User 1 follows 2. User 2 posts 6. Feed shows [6,5]. Unfollow, feed shows [5].",
+              "id": "c397a34a-5a42-4758-952d-17b16a9afd4f",
+              "input": "postTweet(1,5), getNewsFeed(1), follow(1,2), postTweet(2,6), getNewsFeed(1), unfollow(1,2), getNewsFeed(1)"
+            }
+          ]
+        },
+        {
+          "approach": "1. Use a max-heap with entries (timestamp, tweetId, userId, tweetIndex)\n2. Add most recent tweet from user and each followee to heap\n3. Pop 10 times, each time adding the next tweet from that user\n4. This efficiently merges k sorted lists",
+          "code": "class Solution {\n    class Twitter {\n        private var tweets: [Int: [(Int, Int)]] = [:]\n        private var follows: [Int: Set<Int>] = [:]\n        private var timestamp = 0\n\n        init() {}\n\n        func postTweet(_ userId: Int, _ tweetId: Int) {\n            tweets[userId, default: []].append((timestamp, tweetId))\n            timestamp += 1\n        }\n\n        func getNewsFeed(_ userId: Int) -> [Int] {\n            // Collect users to check (self + followees)\n            var users = follows[userId, default: []]\n            users.insert(userId)\n\n            // Build heap: (negTime, tweetId, userId, index)\n            // Using negative time for max-heap behavior with min-heap\n            var heap: [(Int, Int, Int, Int)] = []\n\n            for uid in users {\n                if let userTweets = tweets[uid], !userTweets.isEmpty {\n                    let idx = userTweets.count - 1\n                    let (time, tid) = userTweets[idx]\n                    heap.append((-time, tid, uid, idx))\n                }\n            }\n\n            // Heapify\n            heap.sort { $0.0 < $1.0 }\n\n            var result: [Int] = []\n            while !heap.isEmpty && result.count < 10 {\n                let (_, tweetId, uid, idx) = heap.removeFirst()\n                result.append(tweetId)\n\n                if idx > 0, let userTweets = tweets[uid] {\n                    let newIdx = idx - 1\n                    let (time, tid) = userTweets[newIdx]\n                    heap.append((-time, tid, uid, newIdx))\n                    heap.sort { $0.0 < $1.0 }\n                }\n            }\n\n            return result\n        }\n\n        func follow(_ followerId: Int, _ followeeId: Int) {\n            if followerId != followeeId {\n                follows[followerId, default: []].insert(followeeId)\n            }\n        }\n\n        func unfollow(_ followerId: Int, _ followeeId: Int) {\n            follows[followerId, default: []].remove(followeeId)\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(k) for heap",
+            "spaceExplanation": "Heap holds at most k entries (one per user)",
+            "time": "O(k + 10 log k) for getNewsFeed where k = followees",
+            "timeExplanation": "Initialize heap with k users, then 10 heap operations"
+          },
+          "explanation": "This is the classic k-way merge pattern. We initialize the heap with one tweet from each source (user + followees). After popping the max, we push the next tweet from that same source. This ensures we process tweets in timestamp order without loading all tweets into memory.",
+          "id": "a0d42c75-2f8f-4f47-bf6a-984e3c80aa76",
+          "intuition": "For large followee lists, use a proper k-way merge with a heap. Start with the most recent tweet from each user, pop min, add next tweet from that user.",
+          "name": "Optimized with Min-Heap (k-way merge)",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "Correctly merged feed by timestamp",
+              "explanation": "K-way merge ensures efficient retrieval even with many followees",
+              "id": "e9aa502e-7036-407e-9a78-7fc053e62928",
+              "input": "Multiple users posting and following"
+            }
+          ]
+        }
+      ],
+      "id": "3d79efaf-1994-409f-90c2-554ac79378f5",
+      "lastUpdated": "2026-02-06T08:33:51Z",
+      "problemSlug": "design-twitter",
+      "relatedProblems": [
+        "design-a-food-rating-system"
+      ],
+      "summary": "Design a simplified Twitter with postTweet, getNewsFeed (10 most recent from self + followees), follow, and unfollow. Use a heap to merge tweets from multiple users for the feed."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Create a class ExamRoom with a specified number of seats n. The class should have methods seat and leave that handle seat allocation and deallocation respectively. Use a list to store occupied seats and calculate the maximum distance between seats for each new seat allocation.",
+          "code": "class Solution {\n    class ExamRoom {\n        let n: Int\n        var occupied: [Int]\n        init(_ n: Int) {\n            self.n = n\n            occupied = []\n        }\n        func seat() -> Int {\n            var maxDist = -1\n            var seat = -1\n            for i in 0...n-1 {\n                var dist = 1 if i == 0 {\n                    dist = occupied.first ?? n\n                }\n                else if i == n-1 {\n                    dist = n - (occupied.last ?? -1) - 1\n                }\n                else if occupied.count > 0 {\n                    var minDist = n for pos in occupied {\n                        let currDist = min(i - pos, pos - i)\n                        if currDist < minDist {\n                            minDist = currDist\n                        }\n                    }\n                    dist = minDist / 2\n                }\n                if dist > maxDist {\n                    maxDist = dist\n                    seat = i\n                }\n            }\n            occupied.append(seat)\n            return seat\n        }\n        func leave(_ p: Int) {\n            if let index = occupied.firstIndex(of: p) {\n                occupied.remove(at: index)\n            }\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing the occupied seats in a list, which in the worst case can have n elements.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) because in the worst case, we are checking every possible seat allocation, and for each allocation, we are calculating the distance between the new seat and all existing seats."
+          },
+          "explanation": "This approach works by trying all possible seat allocations and selecting the one that maximizes the minimum distance between any two people. However, this approach is inefficient as it involves a lot of repeated calculations and does not scale well for large inputs.",
+          "id": "9ed66a99-98f7-46e7-b684-45b7425ebc05",
+          "intuition": "The brute force approach involves checking every possible seating arrangement and selecting the one that maximizes the minimum distance between any two people.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "0, 9, 0",
+              "explanation": "In this test case, we first create an exam room with 10 seats. We then allocate a seat, deallocate it, and allocate another seat. The expected output is the seat numbers allocated in each step.",
+              "id": "0db5a807-1a29-434b-b308-17dc57f7c5c5",
+              "input": "ExamRoom(10); seat(); leave(0); seat()"
+            },
+            {
+              "expectedOutput": "0, 2, 4, 1",
+              "explanation": "In this test case, we create an exam room with 5 seats and allocate 4 seats. We then deallocate the second seat and allocate another seat. The expected output is the seat numbers allocated in each step.",
+              "id": "42dab65c-6831-4b06-be6c-184c482dad64",
+              "input": "ExamRoom(5); seat(); seat(); seat(); leave(1); seat()"
+            }
+          ]
+        },
+        {
+          "approach": "Create a class ExamRoom with a specified number of seats n. The class should have methods seat and leave that handle seat allocation and deallocation respectively. Use a priority queue to store available seats and calculate the maximum distance between seats for each new seat allocation.",
+          "code": "class Solution {\n    class ExamRoom {\n        let n: Int\n        var occupied: Set<Int>\n        var pq: [(Int, Int)] = []\n        let INF = Int.max\n\n        init(_ n: Int) {\n            self.n = n\n            occupied = Set()\n        }\n\n        func seat() -> Int {\n            if occupied.isEmpty {\n                occupied.insert(0)\n                return 0\n            }\n            var maxDist = -1\n            var seat = -1\n            for i in occupied {\n                let dist = max(i, n - 1 - i)\n                if dist > maxDist {\n                    maxDist = dist\n                    seat = i\n                }\n            }\n            for i in occupied {\n                let left = i - 1\n                let right = i + 1\n                if left >= 0 && occupied.contains(left) {\n                    continue\n                }\n                if right < n && occupied.contains(right) {\n                    continue\n                }\n                let dist = max(left >= 0 ? i - left : i, right < n ? right - i : n - 1 - i)\n                if dist > maxDist {\n                    maxDist = dist\n                    seat = left >= 0 && left < n ? (i + left) / 2 : right < n ? (i + right) / 2 : i\n                }\n            }\n            occupied.insert(seat)\n            return seat\n        }\n\n        func leave(_ p: Int) {\n            if occupied.contains(p) {\n                occupied.remove(p)\n            }\n            var index = 0\n            while index < pq.count {\n                if pq[index].1 == p {\n                    pq.remove(at: index)\n                    break\n                }\n                index += 1\n            }\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing the occupied seats in a set and the available seats in a priority queue, which in the worst case can have n elements.",
+            "time": "O(log n)",
+            "timeExplanation": "The time complexity is O(log n) because we are using a priority queue to store available seats, and updating the queue involves logarithmic time operations."
+          },
+          "explanation": "This approach works by maintaining a priority queue of available seats, where the priority of each seat is its distance to the nearest occupied seat. When a new seat is allocated, we update the priority queue by removing the allocated seat and updating the priorities of the adjacent seats.",
+          "id": "420fa907-0fdb-4e59-8c9a-05764dcde98d",
+          "intuition": "The optimized approach involves using a priority queue to store the available seats and updating the queue whenever a seat is allocated or deallocated.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "0, 9, 0",
+              "explanation": "In this test case, we first create an exam room with 10 seats. We then allocate a seat, deallocate it, and allocate another seat. The expected output is the seat numbers allocated in each step.",
+              "id": "30e01d8b-7bff-4c5a-94d9-f2914c4a1fed",
+              "input": "ExamRoom(10); seat(); leave(0); seat()"
+            },
+            {
+              "expectedOutput": "0, 2, 4, 1",
+              "explanation": "In this test case, we create an exam room with 5 seats and allocate 4 seats. We then deallocate the second seat and allocate another seat. The expected output is the seat numbers allocated in each step.",
+              "id": "e66fe2f8-a565-434c-a07d-10d19abba632",
+              "input": "ExamRoom(5); seat(); seat(); seat(); leave(1); seat()"
+            }
+          ]
+        }
+      ],
+      "id": "179f9604-0338-4e3c-8a64-242959c23af2",
+      "lastUpdated": "2026-02-06T21:44:32Z",
+      "problemSlug": "exam-room",
+      "relatedProblems": [
+        "insert-interval",
+        "split-array-largest-sum"
+      ],
+      "summary": "The Exam Room problem requires designing a class to manage seat assignments in an exam room with a specified number of seats, and the key insight involves using a combination of data structures to efficiently allocate and deallocate seats."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, generate all possible pairs of elements from the two input arrays. Then, calculate the sum of each pair and store them in a list or array. After that, sort the pairs based on their sums. Finally, return the k pairs with the smallest sums.",
+          "code": "class Solution {\n    import Foundation\n\n    func kSmallestPairs(_ nums1: [Int], _ nums2: [Int], _ k: Int) -> [[Int]] {\n        let allPairs = nums1.flatMap { i in nums2.map { j in [i, j] } }\n        let sortedPairs = allPairs.sorted { $0[0] + $0[1] < $1[0] + $1[1] }\n        return Array(sortedPairs.prefix(k))\n    }\n}",
+          "complexity": {
+            "space": "O(n*m)",
+            "spaceExplanation": "The space complexity comes from storing all possible pairs, which requires O(n*m) space.",
+            "time": "O(n*m*log(n*m))",
+            "timeExplanation": "The time complexity is dominated by the sorting step, which takes O(n*m*log(n*m)) time."
+          },
+          "explanation": "This approach works by ensuring that all possible pairs are considered and then selecting the k pairs with the smallest sums. However, it can be inefficient for large inputs due to the sorting step.",
+          "id": "4c0ae1ef-ea16-4464-ac28-d6dad4430a07",
+          "intuition": "This approach involves generating all possible pairs and sorting them to find the k pairs with the smallest sums.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[1,2],[1,4],[1,6]]",
+              "explanation": "The pairs with the smallest sums are [1,2], [1,4], and [1,6].",
+              "id": "605c4173-0f53-4d1a-88c0-9c79af586720",
+              "input": "nums1 = [1,7,11], nums2 = [2,4,6], k = 3"
+            },
+            {
+              "expectedOutput": "[[1,1],[1,1]]",
+              "explanation": "The pairs with the smallest sums are [1,1] (twice), since there are multiple pairs with the same smallest sum.",
+              "id": "46639d5b-a222-4a79-b488-c8badafb847e",
+              "input": "nums1 = [1,1,2], nums2 = [1,2,3], k = 2"
+            }
+          ]
+        },
+        {
+          "approach": "First, initialize a min-heap with the pairs formed by the first element of each array. Then, repeatedly pop the smallest pair from the heap and push the next possible pair from the same array into the heap. Continue this process k times to find the k pairs with the smallest sums.",
+          "code": "class Solution {\n    import Foundation\n\n    struct Pair: Comparable {\n        let sum: Int\n        let indices: (Int, Int)\n\n        static func < (lhs: Pair, rhs: Pair) -> Bool {\n            return lhs.sum < rhs.sum\n        }\n    }\n\n    func kSmallestPairs(_ nums1: [Int], _ nums2: [Int], _ k: Int) -> [[Int]] {\n        var heap = [(Int, Int)]()\n        var result = [[Int]]()\n\n        if nums1.isEmpty || nums2.isEmpty || k == 0 {\n            return result\n        }\n\n        for i in 0..<nums1.count {\n            heap.append((i, 0))\n        }\n\n        var heapSet: Set<(Int, Int)> = Set(heap)\n\n        let heap1 = heap.sorted { (nums1[$0.0] + nums2[$0.1]) < (nums1[$1.0] + nums2[$1.1]) }\n\n        heap = [heap1.first!]\n        heapSet = [heap1.first!]\n\n        while !heap.isEmpty && result.count < k {\n            let (i, j) = heap.removeFirst()\n            result.append([nums1[i], nums2[j]])\n\n            if j + 1 < nums2.count {\n                let next = (i, j + 1)\n                if !heapSet.contains(next) {\n                    heap.append(next)\n                    heapSet.insert(next)\n                }\n            }\n\n            heap.sort { (nums1[$0.0] + nums2[$0.1]) < (nums1[$1.0] + nums2[$1.1]) }\n        }\n\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity comes from storing the pairs in the heap, which requires O(n) space.",
+            "time": "O(k*log(n))",
+            "timeExplanation": "The time complexity is dominated by the heap operations, which take O(log(n)) time. Since we perform k such operations, the total time complexity is O(k*log(n))."
+          },
+          "explanation": "This approach works by maintaining the smallest pairs at the top of the heap and efficiently generating the next possible pairs. It is more efficient than the brute-force approach, especially for large inputs.",
+          "id": "c2bfd873-b556-4797-80f5-aeaef16e550f",
+          "intuition": "This approach involves using a priority queue (min-heap) to efficiently find the k pairs with the smallest sums.",
+          "name": "Optimized Approach using Priority Queue",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[[1,2],[1,4],[1,6]]",
+              "explanation": "The pairs with the smallest sums are [1,2], [1,4], and [1,6].",
+              "id": "c4c6308f-9ca8-42d2-8355-0fd7a51b0df6",
+              "input": "nums1 = [1,7,11], nums2 = [2,4,6], k = 3"
+            },
+            {
+              "expectedOutput": "[[1,1],[1,1]]",
+              "explanation": "The pairs with the smallest sums are [1,1] (twice), since there are multiple pairs with the same smallest sum.",
+              "id": "2268d3d4-8798-4a7e-88a7-4d00a95f1e0e",
+              "input": "nums1 = [1,1,2], nums2 = [1,2,3], k = 2"
+            }
+          ]
+        }
+      ],
+      "id": "919a9232-7512-422a-9cd3-08fca85b0af6",
+      "lastUpdated": "2026-02-06T21:14:32Z",
+      "problemSlug": "find-k-pairs-with-smallest-sums",
+      "relatedProblems": [
+        "kth-largest-element-in-an-array",
+        "top-k-frequent-elements"
+      ],
+      "summary": "This problem involves finding the k pairs with the smallest sums from two given arrays. The key insight is to use a priority queue (min-heap) to efficiently find the smallest sums."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Add to max-heap (lower), move max to min-heap (upper)\n2. If min-heap larger, move its min back to max-heap\n3. Median: if equal sizes, average of tops; else max-heap top",
+          "code": "class Solution {\n    class MedianFinder {\n        private var lower: [Int] = []  // max-heap (negate values)\n        private var upper: [Int] = []  // min-heap\n\n        func addNum(_ num: Int) {\n            // Add to lower (max-heap)\n            lower.append(-num)\n            lower.sort()\n\n            // Move largest from lower to upper\n            upper.append(-lower.removeFirst())\n            upper.sort()\n\n            // Balance: upper can't be larger\n            if upper.count > lower.count {\n                lower.append(-upper.removeFirst())\n                lower.sort()\n            }\n        }\n\n        func findMedian() -> Double {\n            if lower.count > upper.count {\n                return Double(-lower.first!)\n            }\n            return Double(-lower.first! + upper.first!) / 2.0\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Store all n numbers",
+            "time": "O(n log n)",
+            "timeExplanation": "Each add is O(n log n) with array sort (O(log n) with real heap)"
+          },
+          "explanation": "Max-heap gives largest of smaller half, min-heap gives smallest of larger half. Keep sizes within 1.",
+          "id": "550e8400-e29b-41d4-a716-446655440129",
+          "intuition": "Keep lower half in max-heap, upper half in min-heap. Balance sizes so median is accessible at heap tops.",
+          "name": "Two Heaps",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1.5, 2.0",
+              "explanation": "[1,2] median=1.5, [1,2,3] median=2",
+              "id": "550e8400-e29b-41d4-a716-446655440235",
+              "input": "addNum(1), addNum(2), findMedian(), addNum(3), findMedian()"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440018",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "find-median-from-data-stream",
+      "relatedProblems": [
+        "sliding-window-median"
+      ],
+      "summary": "Maintain median using two heaps: max-heap for lower half, min-heap for upper half. Median is from top of heaps."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Use max-heap of size k\n2. For each point, add to heap\n3. If size > k, remove max (farthest)",
+          "code": "class Solution {\n    func kClosest(_ points: [[Int]], _ k: Int) -> [[Int]] {\n        var heap: [(Int, [Int])] = []  // (dist², point)\n        for p in points {\n            let dist = p[0]*p[0] + p[1]*p[1]\n            heap.append((dist, p))\n            heap.sort { $0.0 > $1.0 }  // Max heap\n            if heap.count > k { heap.removeLast() }\n        }\n        return heap.map { $0.1 }\n    }\n}",
+          "complexity": {
+            "space": "O(k)",
+            "spaceExplanation": "K points in heap",
+            "time": "O(n log k)",
+            "timeExplanation": "n points, log k heap ops"
+          },
+          "explanation": "Max-heap maintains k smallest, largest at top for removal.",
+          "id": "4e71b32c-a00c-4b20-a0b3-9a44318a2ab2",
+          "intuition": "Keep k smallest distances using max-heap.",
+          "name": "Max Heap",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[-2,2]]",
+              "explanation": "Closest to origin",
+              "id": "3aa1cf37-df18-4a1e-b811-89149a9cd4cf",
+              "input": "points = [[1,3],[-2,2]], k = 1"
+            }
+          ]
+        }
+      ],
+      "id": "fec51904-dbd8-41fe-bfe2-312f3015263b",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "k-closest-points-to-origin",
+      "relatedProblems": [
+        "top-k-frequent-elements"
+      ],
+      "summary": "Find k closest points to origin. Max-heap of size k or quickselect."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Maintain min-heap of size k\n2. For each add: push to heap, pop if size > k\n3. Top of heap is kth largest",
+          "code": "class Solution {\n    class KthLargest {\n        var heap: [Int] = []\n        let k: Int\n\n        init(_ k: Int, _ nums: [Int]) {\n            self.k = k\n            for num in nums { add(num) }\n        }\n\n        func add(_ val: Int) -> Int {\n            heap.append(val)\n            heap.sort()\n            if heap.count > k { heap.removeFirst() }\n            return heap.first!\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(k)",
+            "spaceExplanation": "K elements in heap",
+            "time": "O(log k) per add",
+            "timeExplanation": "Heap operations"
+          },
+          "explanation": "Min-heap ensures smallest of k largest is at top.",
+          "id": "369cb000-8fbc-4a78-a8d9-41fab7bb1216",
+          "intuition": "Keep k largest elements. Min of these k is the kth largest.",
+          "name": "Min Heap of Size K",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "4, 5, 5",
+              "explanation": "3rd largest updates",
+              "id": "119928ce-f1f5-43be-9094-cc531498eb26",
+              "input": "KthLargest(3, [4,5,8,2]), add(3), add(5), add(10)"
+            }
+          ]
+        }
+      ],
+      "id": "98c08674-15fe-4529-bccf-25e9efd3a739",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "kth-largest-element-in-a-stream",
+      "relatedProblems": [
+        "kth-largest-element-in-an-array"
+      ],
+      "summary": "Track kth largest in stream. Use min-heap of size k."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Pick pivot, partition array\n2. If pivot position == k-1, found it\n3. Else recurse into correct half",
+          "code": "class Solution {\n    func findKthLargest(_ nums: [Int], _ k: Int) -> Int {\n        var nums = nums\n        let target = nums.count - k\n\n        func partition(_ left: Int, _ right: Int) -> Int {\n            let pivot = nums[right]\n            var i = left\n            for j in left..<right {\n                if nums[j] < pivot {\n                    nums.swapAt(i, j)\n                    i += 1\n                }\n            }\n            nums.swapAt(i, right)\n            return i\n        }\n\n        var left = 0, right = nums.count - 1\n        while true {\n            let p = partition(left, right)\n            if p == target { return nums[p] }\n            if p < target { left = p + 1 }\n            else { right = p - 1 }\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "In-place",
+            "time": "O(n) average",
+            "timeExplanation": "Average case, O(n²) worst"
+          },
+          "explanation": "Average O(n) because we halve search space each time.",
+          "id": "550e8400-e29b-41d4-a716-446655440164",
+          "intuition": "Partition like QuickSort, but only recurse into the half containing k.",
+          "name": "QuickSelect",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "5",
+              "explanation": "Sorted: [1,2,3,4,5,6], 2nd largest is 5",
+              "id": "550e8400-e29b-41d4-a716-446655440270",
+              "input": "nums = [3,2,1,5,6,4], k = 2"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440053",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "kth-largest-element-in-an-array",
+      "relatedProblems": [
+        "kth-largest-element-in-a-stream"
+      ],
+      "summary": "Find kth largest. Use min-heap of size k, or QuickSelect for O(n) average."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Build a max-heap from all stones\n2. While heap has more than one stone:\n   a. Pop two largest (y >= x)\n   b. If y > x, push y - x back\n3. Return heap top if exists, else 0",
+          "code": "class Solution {\n    func lastStoneWeight(_ stones: [Int]) -> Int {\n        var heap = stones.sorted()\n\n        while heap.count > 1 {\n            let y = heap.removeLast()  // Largest\n            let x = heap.removeLast()  // Second largest\n\n            if y > x {\n                // Insert y - x in sorted position\n                let diff = y - x\n                let insertIndex = heap.firstIndex { $0 >= diff } ?? heap.count\n                heap.insert(diff, at: insertIndex)\n            }\n        }\n\n        return heap.first ?? 0\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Storing all stones in heap/array",
+            "time": "O(n² log n) worst case with array",
+            "timeExplanation": "Up to n smashes, each with O(n) insertion. True heap would be O(n log n)"
+          },
+          "explanation": "A max-heap maintains the invariant that the largest element is always at the root. By using a heap, each smash operation (2 pops + 1 optional push) is O(log n). We continue until at most one stone remains. Swift doesn't have a built-in heap, so we simulate with sorted array or use negative values with a min-heap.",
+          "id": "692027f4-b14d-4154-bca0-9b91453aecfd",
+          "intuition": "We always need the two largest stones. A max-heap gives us O(log n) access to the maximum element. Pop two, push back the difference if non-zero.",
+          "name": "Max-Heap (Priority Queue)",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "8,7→1. 4,2→2. 2,1→1. 1,1→0. 1 remains.",
+              "id": "59b7c3ce-9587-4219-a922-2f511d48226f",
+              "input": "stones = [2,7,4,1,8,1]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "Single stone, nothing to smash",
+              "id": "4649cb51-be63-4c19-b39a-9eef23da39f2",
+              "input": "stones = [1]"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "Equal stones destroy each other",
+              "id": "ec500a07-17d6-46fb-8716-77533f63c411",
+              "input": "stones = [2,2]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Store negative values (so min-heap acts as max-heap)\n2. Pop two smallest (most negative = largest original)\n3. If difference, push negative difference\n4. Return negative of remaining value",
+          "code": "class Solution {\n    func lastStoneWeight(_ stones: [Int]) -> Int {\n        // Using sorted array as simple heap\n        var heap = stones.sorted(by: >)  // Descending order\n\n        while heap.count > 1 {\n            let first = heap.removeFirst()   // Largest\n            let second = heap.removeFirst()  // Second largest\n\n            if first != second {\n                let diff = first - second\n                // Binary search insert to maintain sorted order\n                if let idx = heap.firstIndex(where: { $0 < diff }) {\n                    heap.insert(diff, at: idx)\n                } else {\n                    heap.append(diff)\n                }\n            }\n        }\n\n        return heap.first ?? 0\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Array stores all remaining stones",
+            "time": "O(n² ) with sorted array simulation",
+            "timeExplanation": "Each insertion is O(n) for binary search + shift, n iterations"
+          },
+          "explanation": "This is a common trick when only min-heap is available. By negating all values, the smallest negative corresponds to the largest original value. The algorithm remains the same, just negate on insert and extract.",
+          "id": "efca2132-cc38-4f72-8e29-49eb20707b0c",
+          "intuition": "Swift's standard library doesn't include a heap, but we can use CFBinaryHeap or simulate with an array. Using negative values with a min-heap simulates a max-heap.",
+          "name": "Simulated Max-Heap with Negative Values",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "Same process, different implementation",
+              "id": "6c0a6b46-8c42-4d2e-ad7f-2eac7cd9d526",
+              "input": "stones = [2,7,4,1,8,1]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "10,10→0. 4,2→2. Result: 2",
+              "id": "6f6364d3-8697-4f14-97f1-0fbeb99f282f",
+              "input": "stones = [10,4,2,10]"
+            }
+          ]
+        }
+      ],
+      "id": "95602fb1-a612-4a07-b587-641ca1d9fa88",
+      "lastUpdated": "2026-02-06T08:33:51Z",
+      "problemSlug": "last-stone-weight",
+      "relatedProblems": [
+        "last-stone-weight-ii"
+      ],
+      "summary": "Smash the two heaviest stones together repeatedly. If equal, both destroyed; if different, the difference remains. Return the last remaining stone's weight or 0. Use a max-heap for efficient retrieval."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Build adjacency list\n2. Min-heap with (distance, node), start with (0, source)\n3. Pop minimum, skip if visited\n4. Update neighbors if shorter path found\n5. Return max distance (time for all to receive)",
+          "code": "class Solution {\n    func networkDelayTime(_ times: [[Int]], _ n: Int, _ k: Int) -> Int {\n        var graph = [Int: [(Int, Int)]]()\n        for t in times {\n            graph[t[0], default: []].append((t[1], t[2]))\n        }\n\n        var dist = [Int: Int]()\n        var heap = [(0, k)]  // (distance, node)\n\n        while !heap.isEmpty {\n            heap.sort { $0.0 > $1.0 }  // Simple heap simulation\n            let (d, node) = heap.removeLast()\n\n            if dist[node] != nil { continue }\n            dist[node] = d\n\n            for (neighbor, weight) in graph[node] ?? [] {\n                if dist[neighbor] == nil {\n                    heap.append((d + weight, neighbor))\n                }\n            }\n        }\n\n        if dist.count != n { return -1 }\n        return dist.values.max()!\n    }\n}",
+          "complexity": {
+            "space": "O(V + E)",
+            "spaceExplanation": "Graph and distance storage",
+            "time": "O(E log V)",
+            "timeExplanation": "Each edge processed once, heap operations O(log V)"
+          },
+          "explanation": "Dijkstra's works because we always process the closest unvisited node, so its distance is optimal.",
+          "id": "550e8400-e29b-41d4-a716-446655440173",
+          "intuition": "Greedily process nodes in order of distance from source. Once processed, distance is final.",
+          "name": "Dijkstra's Algorithm",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "From node 2: node 1 and 3 at time 1, node 4 at time 2",
+              "id": "550e8400-e29b-41d4-a716-446655440279",
+              "input": "times=[[2,1,1],[2,3,1],[3,4,1]], n=4, k=2"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440062",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "network-delay-time",
+      "relatedProblems": [
+        "cheapest-flights-within-k-stops",
+        "path-with-minimum-effort"
+      ],
+      "summary": "Shortest path from source to all nodes. Classic Dijkstra's algorithm."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, sort the scores in descending order. Then, iterate through the original array and for each score, find its rank by finding its position in the sorted array. If the rank is 1, assign 'Gold Medal', if it is 2, assign 'Silver Medal', if it is 3, assign 'Bronze Medal', otherwise assign the rank as a string.",
+          "code": "class Solution {\n    func findRelativeRanks(_ scores: [Int]) -> [String] { let sortedScores = scores.sorted(by: >); var result = [String](); for score in scores { if let index = sortedScores.firstIndex(of: score) { if index == 0 { result.append(\"Gold Medal\") } else if index == 1 { result.append(\"Silver Medal\") } else if index == 2 { result.append(\"Bronze Medal\") } else { result.append(String(index + 1)) } } } return result }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing the sorted scores in a separate array.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity is dominated by the sorting operation which has a time complexity of O(n log n)."
+          },
+          "explanation": "This approach is straightforward but inefficient for large inputs because sorting has a high time complexity.",
+          "id": "3c8679fb-d051-4a12-91ab-69e1ef73ddc0",
+          "intuition": "This approach works by sorting the scores in descending order and then assigning ranks based on their positions in the sorted array.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"Gold Medal\", \"5\", \"Bronze Medal\", \"Silver Medal\", \"4\"]",
+              "explanation": "The scores in descending order are [10, 9, 8, 4, 3]. So the relative ranks are [\"Gold Medal\", \"5\", \"Bronze Medal\", \"Silver Medal\", \"4\"]",
+              "id": "012c7a20-1a05-4a38-a888-2b0f3fbc952d",
+              "input": "nums = [10, 3, 8, 9, 4]"
+            },
+            {
+              "expectedOutput": "[\"Gold Medal\", \"Silver Medal\", \"Bronze Medal\", \"4\", \"5\"]",
+              "explanation": "The scores in descending order are [5, 4, 3, 2, 1]. So the relative ranks are [\"Gold Medal\", \"Silver Medal\", \"Bronze Medal\", \"4\", \"5\"]",
+              "id": "c7e3829a-564d-4ee8-973b-f1ad68ac8e1e",
+              "input": "nums = [5, 4, 3, 2, 1]"
+            }
+          ]
+        },
+        {
+          "approach": "First, create an array of tuples where each tuple contains the score and its index in the original array. Then, sort this array in descending order based on the scores. Finally, iterate through the sorted array and assign the relative ranks based on the indices.",
+          "code": "class Solution {\n    func findRelativeRanks(_ scores: [Int]) -> [String] { let tuples = scores.enumerated().map { ($0, $1) }; let sortedTuples = tuples.sorted(by: { $0.1 > $1.1 }); var result = Array(repeating: \"\", count: scores.count); for (index, score) in sortedTuples.enumerated() { if index == 0 { result[score.0] = \"Gold Medal\" } else if index == 1 { result[score.0] = \"Silver Medal\" } else if index == 2 { result[score.0] = \"Bronze Medal\" } else { result[score.0] = String(index + 1) } } return result }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing the tuples and the sorted tuples in separate arrays.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity is dominated by the sorting operation which has a time complexity of O(n log n)."
+          },
+          "explanation": "This approach is more efficient than the brute force approach because it avoids the need for repeated searches in the sorted array.",
+          "id": "caaefedd-2391-4586-ae69-2fa3077baa97",
+          "intuition": "This approach works by using an array to store the relative ranks and then assigning the ranks directly based on their indices.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[\"Gold Medal\", \"5\", \"Bronze Medal\", \"Silver Medal\", \"4\"]",
+              "explanation": "The scores in descending order are [10, 9, 8, 4, 3]. So the relative ranks are [\"Gold Medal\", \"5\", \"Bronze Medal\", \"Silver Medal\", \"4\"]",
+              "id": "199823f7-fb43-4313-82bc-892892f22857",
+              "input": "nums = [10, 3, 8, 9, 4]"
+            },
+            {
+              "expectedOutput": "[\"Gold Medal\", \"Silver Medal\", \"Bronze Medal\", \"4\", \"5\"]",
+              "explanation": "The scores in descending order are [5, 4, 3, 2, 1]. So the relative ranks are [\"Gold Medal\", \"Silver Medal\", \"Bronze Medal\", \"4\", \"5\"]",
+              "id": "bc1c773d-e698-4eeb-a8af-9dcad20b840a",
+              "input": "nums = [5, 4, 3, 2, 1]"
+            }
+          ]
+        }
+      ],
+      "id": "31bb5ad3-f03f-4ee0-b17e-bfe93ce4f801",
+      "lastUpdated": "2026-02-06T21:22:55Z",
+      "problemSlug": "relative-ranks",
+      "relatedProblems": [
+        "array-partition-i",
+        "third-maximum-number"
+      ],
+      "summary": "The Relative Ranks problem involves ranking scores in descending order and assigning relative ranks. The key insight is to use a data structure that efficiently maps scores to their ranks."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Count frequencies, add to max heap\n2. Alternate between top two frequent chars\n3. Return empty if impossible (one char > (n+1)/2)",
+          "code": "class Solution {\n    func reorganizeString(_ s: String) -> String {\n        var count: [Character: Int] = [:]\n        for char in s { count[char, default: 0] += 1 }\n\n        var heap = count.map { ($0.value, $0.key) }.sorted { $0.0 > $1.0 }\n        if heap[0].0 > (s.count + 1) / 2 { return \"\" }\n\n        var result = \"\"\n        while heap.count >= 2 {\n            let first = heap.removeFirst()\n            let second = heap.removeFirst()\n            result += String(first.1) + String(second.1)\n            if first.0 > 1 { heap.append((first.0 - 1, first.1)) }\n            if second.0 > 1 { heap.append((second.0 - 1, second.1)) }\n            heap.sort { $0.0 > $1.0 }\n        }\n        if !heap.isEmpty { result += String(heap[0].1) }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(k)",
+            "spaceExplanation": "Frequency map",
+            "time": "O(n log k)",
+            "timeExplanation": "n chars, k unique chars"
+          },
+          "explanation": "Placing most frequent first minimizes adjacency conflicts.",
+          "id": "592c04e2-fa58-4d5b-8a9e-af4f16e106b9",
+          "intuition": "Always place most frequent available char.",
+          "name": "Max Heap Greedy",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"aba\"",
+              "explanation": "No adjacent a's",
+              "id": "e9a2adb5-b850-47b1-a271-3ae0837f4393",
+              "input": "s = \"aab\""
+            }
+          ]
+        }
+      ],
+      "id": "502e3be8-949a-4591-bcf9-d716bc320dbf",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "reorganize-string",
+      "relatedProblems": [
+        "task-scheduler"
+      ],
+      "summary": "Rearrange so no adjacent chars same. Greedy: always place most frequent, then second most."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start by iterating through the array, comparing each pair of adjacent elements. If they are in the wrong order, swap them. Repeat this process until no more swaps are needed, indicating the array is sorted.",
+          "code": "class Solution {\n    func sortArray(_ nums: [Int]) -> [Int] { \n        var nums = nums \n        for i in stride(from: nums.count - 1, to: 0, by: -1) { \n            for j in 0..<i { \n                if nums[j] > nums[j + 1] { \n                    (nums[j], nums[j + 1]) = (nums[j + 1], nums[j]) \n                } \n            } \n        } \n        return nums \n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we only use a single array and no additional data structures that scale with input size.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is quadratic because for each element, we potentially iterate through the rest of the array."
+          },
+          "explanation": "This method is simple to implement but inefficient for large datasets.",
+          "id": "e0ff32e2-07f2-49e5-a756-7bab2316cf80",
+          "intuition": "This approach works by repeatedly swapping the adjacent elements if they are in wrong order.",
+          "name": "Brute Force - Bubble Sort",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,5,8,9]",
+              "explanation": "The array is sorted in ascending order.",
+              "id": "14235a92-d79a-4b84-91ab-8c2f6b841aa7",
+              "input": "nums = [5,2,8,1,9]"
+            },
+            {
+              "expectedOutput": "[1,2,3,4,5]",
+              "explanation": "The array is already sorted, so the output is the same as the input.",
+              "id": "0e46c420-8b06-4b16-a638-e50d2d928397",
+              "input": "nums = [1,2,3,4,5]"
+            }
+          ]
+        },
+        {
+          "approach": "Choose a pivot element from the array and partition the other elements into two sub-arrays, according to whether they are less than or greater than the pivot. The sub-arrays are then recursively sorted.",
+          "code": "class Solution {\n    func sortArray(_ nums: [Int]) -> [Int] { \n        var nums = nums \n        quickSort(&nums, 0, nums.count - 1) \n        return nums \n    } \n\n    func quickSort(_ nums: inout [Int], _ low: Int, _ high: Int) { \n        if low < high { \n            let pivot = partition(&nums, low, high) \n            quickSort(&nums, low, pivot - 1) \n            quickSort(&nums, pivot + 1, high) \n        } \n    } \n\n    func partition(_ nums: inout [Int], _ low: Int, _ high: Int) -> Int { \n        let pivot = nums[high] \n        var i = low - 1 \n        for j in low..<high { \n            if nums[j] < pivot { \n                i += 1 \n                (nums[i], nums[j]) = (nums[j], nums[i]) \n            } \n        } \n        (nums[i + 1], nums[high]) = (nums[high], nums[i + 1]) \n        return i + 1 \n    }\n}",
+          "complexity": {
+            "space": "O(log n)",
+            "spaceExplanation": "The space complexity is logarithmic because of the recursive call stack.",
+            "time": "O(n log n)",
+            "timeExplanation": "The average time complexity is linearithmic because the array is divided in half with each recursive call."
+          },
+          "explanation": "Quick sort is generally efficient but can be slow for already sorted or nearly sorted data due to its worst-case time complexity.",
+          "id": "7574f52a-0694-4c4d-ab52-6e02ee6b3a17",
+          "intuition": "This approach works by selecting a pivot element and partitioning the array around it, then recursively sorting the sub-arrays.",
+          "name": "Optimized - Quick Sort",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,5,8,9]",
+              "explanation": "The array is sorted in ascending order.",
+              "id": "b5bab940-33dd-4fd2-b24f-db3be03b2a52",
+              "input": "nums = [5,2,8,1,9]"
+            },
+            {
+              "expectedOutput": "[1,2,3,4,5]",
+              "explanation": "The array is already sorted, so the output is the same as the input.",
+              "id": "2ea2051e-62bc-43de-b29b-015b5aec336b",
+              "input": "nums = [1,2,3,4,5]"
+            }
+          ]
+        }
+      ],
+      "id": "bdc13f90-f793-4c3c-82be-b89ab1b71a85",
+      "lastUpdated": "2026-02-06T21:47:58Z",
+      "problemSlug": "sort-an-array",
+      "relatedProblems": [
+        "two-sum",
+        "reverse-integer"
+      ],
+      "summary": "The problem is to sort an array of integers in ascending order. The key insight is to utilize efficient sorting algorithms to achieve the desired result."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Count the frequency of each character in the string using a dictionary. 2. Create a list of tuples where each tuple contains a character and its frequency. 3. Sort the list of tuples in descending order based on the frequency. 4. Construct the result string by concatenating each character a number of times equal to its frequency.",
+          "code": "class Solution {\n    import Foundation\n\n    func frequencySort(_ s: String) -> String {\n        var charFrequency: [Character: Int] = [:]\n        for char in s {\n            if charFrequency[char] != nil {\n                charFrequency[char]! += 1\n            } else {\n                charFrequency[char] = 1\n            }\n        }\n\n        let sortedChars = charFrequency.sorted { $0.value > $1.value }\n        var result = \"\"\n\n        for (char, frequency) in sortedChars {\n            result += String(repeating: char, count: frequency)\n        }\n\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is due to storing the character frequencies in a dictionary (O(n)) and the sorted list of tuples (O(n))",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity includes the iteration over the string (O(n)) and the sorting of the character frequencies (O(n log n))"
+          },
+          "explanation": "The brute-force approach is intuitive and simple to implement but may have high time complexity due to the sorting step.",
+          "id": "677b6251-39eb-4bd7-aea7-569cfd92a584",
+          "intuition": "This approach works by first counting the frequency of each character, then sorting the characters based on their frequency. It is the most straightforward method but may not be the most efficient.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "eert",
+              "explanation": "The characters 'e', 'e', 'r', 'r', 't' are sorted by frequency (2 for 'e' and 'r', 1 for 't'), resulting in 'eert'.",
+              "id": "e1e21512-17ba-4134-bb6b-2c9fd8ae7b25",
+              "input": "tree"
+            },
+            {
+              "expectedOutput": "aaaccc",
+              "explanation": "The characters 'a', 'a', 'a', 'c', 'c', 'c' are sorted by frequency (3 for both 'a' and 'c'), resulting in 'aaaccc'.",
+              "id": "f649cf09-3d75-43c5-b405-dcb014298546",
+              "input": "cccaaa"
+            }
+          ]
+        },
+        {
+          "approach": "1. Count the frequency of each character in the string using a dictionary. 2. Create a priority queue where the priority of each element is its frequency. 3. Pop elements from the priority queue and append the corresponding character to the result string a number of times equal to its frequency. 4. Repeat step 3 until the priority queue is empty.",
+          "code": "class Solution {\n    import Foundation\n\n    struct Element: Comparable {\n        let char: Character\n        let frequency: Int\n\n        static func < (lhs: Element, rhs: Element) -> Bool {\n            return lhs.frequency > rhs.frequency\n        }\n    }\n\n    func frequencySort(_ s: String) -> String {\n        var charFrequency: [Character: Int] = [:]\n        for char in s {\n            if charFrequency[char] != nil {\n                charFrequency[char]! += 1\n            } else {\n                charFrequency[char] = 1\n            }\n        }\n\n        var priorityQueue: [Element] = []\n        for (char, frequency) in charFrequency {\n            let element = Element(char: char, frequency: frequency)\n            priorityQueue.append(element)\n        }\n\n        priorityQueue.sort()\n\n        var result = \"\"\n\n        for element in priorityQueue {\n            result += String(repeating: element.char, count: element.frequency)\n        }\n\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is due to storing the character frequencies in a dictionary (O(n)) and the priority queue (O(n))",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity includes the iteration over the string (O(n)) and the sorting of the priority queue (O(n log n))"
+          },
+          "explanation": "The optimized approach leverages the priority queue data structure to more efficiently construct the result string based on character frequencies.",
+          "id": "283c5b08-b930-4e8b-a2c2-3da00a786151",
+          "intuition": "Using a priority queue allows us to efficiently select the most frequent character at each step without needing to sort all characters first.",
+          "name": "Optimized Approach with Priority Queue",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "bbaA",
+              "explanation": "The characters 'A', 'A', 'b', 'b' are sorted by frequency (2 for both 'A' and 'b'), resulting in 'bbaA'.",
+              "id": "f11585e3-4ece-42d1-85ac-5bb7ddc2e09c",
+              "input": "Aabb"
+            },
+            {
+              "expectedOutput": "llheo",
+              "explanation": "The characters 'h', 'e', 'l', 'l', 'o' are sorted by frequency (2 for 'l', 1 for the rest), resulting in 'llheo'.",
+              "id": "a82450e2-ebfa-4fa6-8180-ce612d445090",
+              "input": "hello"
+            }
+          ]
+        }
+      ],
+      "id": "93c87df3-308d-4cd5-b184-789b00481f94",
+      "lastUpdated": "2026-02-06T21:19:41Z",
+      "problemSlug": "sort-characters-by-frequency",
+      "relatedProblems": [
+        "top-k-frequent-elements",
+        "sort-array-by-parity"
+      ],
+      "summary": "The problem requires sorting characters in a given string based on their frequency, and a key insight is to use a hash table to count character frequencies and then sort these frequencies to reconstruct the string, with the most frequent characters appearing first. This problem involves various approaches including brute-force, hash table, and priority queue solutions."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Count frequencies, find max freq and how many tasks have it\n2. Minimum = (maxFreq - 1) * (n + 1) + numMaxTasks\n3. Answer = max(above, total tasks)",
+          "code": "class Solution {\n    func leastInterval(_ tasks: [Character], _ n: Int) -> Int {\n        var freq = [Int](repeating: 0, count: 26)\n        for task in tasks {\n            freq[Int(task.asciiValue!) - 65] += 1\n        }\n\n        let maxFreq = freq.max()!\n        let numMaxTasks = freq.filter { $0 == maxFreq }.count\n\n        let minTime = (maxFreq - 1) * (n + 1) + numMaxTasks\n        return max(minTime, tasks.count)\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Fixed 26-char array",
+            "time": "O(n)",
+            "timeExplanation": "Count frequencies once"
+          },
+          "explanation": "Frame built by most frequent task. Other tasks fill gaps or extend if needed.",
+          "id": "550e8400-e29b-41d4-a716-446655440165",
+          "intuition": "Most frequent task needs (count-1) gaps of size n. Fill gaps with other tasks.",
+          "name": "Math/Greedy",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "8",
+              "explanation": "A_B_A_B_A_B or similar",
+              "id": "550e8400-e29b-41d4-a716-446655440271",
+              "input": "tasks = [\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"], n = 2"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440054",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "task-scheduler",
+      "relatedProblems": [
+        "reorganize-string"
+      ],
+      "summary": "Min time to execute tasks with cooldown. Most frequent task defines structure."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Count occurrences of each number in a dictionary.\n2. Create buckets where index = frequency.\n3. Iterate buckets from high to low, collecting elements until k are gathered.",
+          "code": "class Solution {\n    func topKFrequent(_ nums: [Int], _ k: Int) -> [Int] {\n        var counts: [Int: Int] = [:]\n        for num in nums { counts[num, default: 0] += 1 }\n        var buckets = Array(repeating: [Int](), count: nums.count + 1)\n        for (num, count) in counts {\n            buckets[count].append(num)\n        }\n        var result: [Int] = []\n        for freq in stride(from: buckets.count - 1, through: 1, by: -1) {\n            for num in buckets[freq] {\n                result.append(num)\n                if result.count == k { return result }\n            }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Buckets and map store up to n items.",
+            "time": "O(n)",
+            "timeExplanation": "Counting plus bucket traversal is linear."
+          },
+          "explanation": "This avoids O(n log n) sorting and stays linear on average.",
+          "id": "2e212fcc-957a-4b1d-a01d-2694e9b90bd9",
+          "intuition": "If we bucket elements by frequency, we can gather the k most frequent without full sorting.",
+          "name": "Bucket Sort",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2]",
+              "explanation": "1 appears 3 times, 2 appears 2 times.",
+              "id": "25771fef-0ab3-4b28-a731-fa97a89188d5",
+              "input": "nums = [1,1,1,2,2,3], k = 2"
+            },
+            {
+              "expectedOutput": "[1]",
+              "explanation": "Single element is the answer.",
+              "id": "0779a404-ce3f-4756-916f-5d20b5106742",
+              "input": "nums = [1], k = 1"
+            }
+          ]
+        }
+      ],
+      "id": "51f4815d-a558-4057-b255-58209dea4db8",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "top-k-frequent-elements",
+      "relatedProblems": [
+        "top-k-frequent-words",
+        "kth-largest-element-in-an-array"
+      ],
+      "summary": "Count frequencies and collect elements from high to low frequency buckets."
+    }
+  ],
+  "topic": "heap-priority-queue",
+  "version": "2.0.0"
+}

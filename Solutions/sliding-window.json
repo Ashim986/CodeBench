@@ -1,0 +1,670 @@
+{
+  "solutions": [
+    {
+      "approaches": [
+        {
+          "approach": "Generate all possible subarrays and calculate their sums, then check if the sum equals the target.",
+          "code": "class Solution {\n    func numSubarraysWithSum(_ nums: [Int], _ goal: Int) -> Int {\n      var count = 0\n      for i in 0..<nums.count {\n        var sum = 0\n        for j in i..<nums.count {\n          sum += nums[j]\n          if sum == goal {\n            count += 1\n          }\n        }\n      }\n      return count\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we only use a fixed amount of space to store variables.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is quadratic because we generate all possible subarrays."
+          },
+          "explanation": "This approach involves generating all possible subarrays, calculating their sums, and checking if the sum equals the target. It's straightforward but inefficient due to its quadratic time complexity.",
+          "id": "6bf70fb3-2902-4320-8a60-42be0bcf23fa",
+          "intuition": "The brute-force approach involves checking all possible subarrays and calculating their sums to find the target sum.",
+          "name": "Brute-Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "The subarrays with sum 2 are [1,0,1], [1,0,1,0], [0,1,0,1], and [1,0,1].",
+              "id": "70e41fed-80ea-4dc0-9a1f-183a903a0982",
+              "input": "nums = [1,0,1,0,1], goal = 2"
+            },
+            {
+              "expectedOutput": "15",
+              "explanation": "All possible subarrays have sum 0.",
+              "id": "2df03eff-b1fd-41fc-b448-a08e49f75d7f",
+              "input": "nums = [0,0,0,0,0], goal = 0"
+            }
+          ]
+        },
+        {
+          "approach": "Use a prefix sum array and a hash table to store the counts of prefix sums, then iterate through the array to find the target sum.",
+          "code": "class Solution {\n    func numSubarraysWithSum(_ nums: [Int], _ goal: Int) -> Int {\n      var count = 0\n      var prefixSum = 0\n      var sumCount: [Int: Int] = [0: 1]\n\n      for num in nums {\n        prefixSum += num\n        if let val = sumCount[prefixSum - goal] {\n          count += val\n        }\n        sumCount[prefixSum, default: 0] += 1\n      }\n      return count\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear because we use a hash table to store the counts of prefix sums.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we only iterate through the array once."
+          },
+          "explanation": "This approach involves using a prefix sum array and a hash table to efficiently count the number of subarrays with the target sum. It reduces the time complexity to linear.",
+          "id": "1a8cf9d4-9083-4d88-bd87-33d48f201f9a",
+          "intuition": "The optimized approach involves using prefix sums and hash tables to efficiently count the number of subarrays with the target sum.",
+          "name": "Optimized Prefix Sum",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "The subarrays with sum 2 are [1,0,1], [1,0,1,0], [0,1,0,1], and [1,0,1].",
+              "id": "c0b05cbf-b4b2-443a-bd4e-2ac8376214b0",
+              "input": "nums = [1,0,1,0,1], goal = 2"
+            },
+            {
+              "expectedOutput": "15",
+              "explanation": "All possible subarrays have sum 0.",
+              "id": "44026acd-bde6-4432-a178-c0d74313eb75",
+              "input": "nums = [0,0,0,0,0], goal = 0"
+            }
+          ]
+        }
+      ],
+      "id": "23769a84-cae3-4bbc-be36-cf65fb9bb760",
+      "lastUpdated": "2026-02-06T21:49:17Z",
+      "problemSlug": "binary-subarrays-with-sum",
+      "relatedProblems": [
+        "subarray-sum-equals-k",
+        "max-consecutive-ones"
+      ],
+      "summary": "The problem involves finding the number of binary subarrays with sum equal to the target, and the key insight is to use prefix sums and hash tables for optimization."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Map stores value -> last seen index\n2. For each element, if in map and current - last <= k, return true\n3. Update map with current index",
+          "code": "class Solution {\n    func containsNearbyDuplicate(_ nums: [Int], _ k: Int) -> Bool {\n        var lastIndex: [Int: Int] = [:]\n        for (i, num) in nums.enumerated() {\n            if let last = lastIndex[num], i - last <= k {\n                return true\n            }\n            lastIndex[num] = i\n        }\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(min(n,k))",
+            "spaceExplanation": "Map stores at most k+1 elements",
+            "time": "O(n)",
+            "timeExplanation": "Single pass"
+          },
+          "explanation": "We only need to track the most recent index for each value because if there's a valid pair, it would involve the closest occurrence.",
+          "id": "43c3e701-6317-4e37-b56c-54ef6213375e",
+          "intuition": "Store last seen index of each number. When we see it again, check if indices differ by <= k.",
+          "name": "Hash Map",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "nums[0]=nums[3], 3-0=3<=3",
+              "id": "e0012751-0c01-47aa-9829-de5b1a41317a",
+              "input": "nums = [1,2,3,1], k = 3"
+            }
+          ]
+        }
+      ],
+      "id": "d467c1bd-7f83-42a9-8b6d-113bf49b76cf",
+      "lastUpdated": "2026-02-06T00:56:20.970Z",
+      "problemSlug": "contains-duplicate-ii",
+      "relatedProblems": [
+        "contains-duplicate",
+        "contains-duplicate-iii"
+      ],
+      "summary": "Check if array has duplicates within k indices. Use hash map to track last seen index of each value."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Count chars in p\n2. Slide window of size len(p)\n3. If counts match, add index",
+          "code": "class Solution {\n    func findAnagrams(_ s: String, _ p: String) -> [Int] {\n        if s.count < p.count { return [] }\n        let sChars = Array(s), pChars = Array(p)\n        var pCount = [Character: Int]()\n        var sCount = [Character: Int]()\n        for c in pChars { pCount[c, default: 0] += 1 }\n        var result: [Int] = []\n        for i in 0..<sChars.count {\n            sCount[sChars[i], default: 0] += 1\n            if i >= pChars.count {\n                let c = sChars[i - pChars.count]\n                if sCount[c] == 1 { sCount.removeValue(forKey: c) }\n                else { sCount[c]! -= 1 }\n            }\n            if sCount == pCount { result.append(i - pChars.count + 1) }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "26 chars max",
+            "time": "O(n)",
+            "timeExplanation": "Single pass"
+          },
+          "explanation": "Maintain window counts. Instead of comparing entire arrays, track how many chars are correctly matched.",
+          "id": "34c07c66-37a3-4c15-b036-f3d069840486",
+          "intuition": "Fixed window of size len(p). Track char counts, compare with p's counts.",
+          "name": "Sliding Window",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[0,6]",
+              "explanation": "\"cba\" at 0, \"bac\" at 6",
+              "id": "dfb95b10-1a38-4391-aa82-42eece0caaf2",
+              "input": "s=\"cbaebabacd\", p=\"abc\""
+            }
+          ]
+        }
+      ],
+      "id": "d9c60ce0-d177-4d0c-906f-08e6232a4127",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "find-all-anagrams-in-a-string",
+      "relatedProblems": [
+        "permutation-in-string"
+      ],
+      "summary": "Find start indices of p's anagrams in s. Sliding window with character counts."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each pair of fruits, iterate over the array to find the maximum length of fruits that can be collected. Keep track of the maximum length found so far.",
+          "code": "class Solution {\n    func totalFruit(_ fruits: [Int]) -> Int {\n        var maxFruits = 0\n        for i in 0..<fruits.count {\n            var fruitCount = [Int: Int]()\n            var fruitTypes = 0\n            for j in i..<fruits.count {\n                if fruitCount[fruits[j]] == nil {\n                    fruitTypes += 1\n                    if fruitTypes > 2 {\n                        break\n                    }\n                }\n                fruitCount[fruits[j]] = (fruitCount[fruits[j]] ?? 0) + 1\n                maxFruits = max(maxFruits, j - i + 1)\n            }\n        }\n        return maxFruits\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing the frequency of each fruit in the fruitCount dictionary.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) because we are iterating over the array for each pair of fruits."
+          },
+          "explanation": "This approach involves a lot of repeated work, as the same pairs of fruits are considered multiple times. However, it provides a baseline solution to the problem.",
+          "id": "6cccf843-2a56-4483-93fc-fcae07af7e9a",
+          "intuition": "This approach works by iterating over all possible pairs of fruits and checking if they can be collected within the given constraint.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "We can collect all three fruits because there are only two distinct types: 1 and 2.",
+              "id": "8d839800-6d7a-4848-b4e5-26b754ddce8f",
+              "input": "fruits = [1,2,1]"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "We can collect the first three fruits because there are only two distinct types: 0 and 1, but the third type 2 can be collected by replacing one of the previous fruits.",
+              "id": "7a8569df-a957-4f1e-9d2c-58a41159bcd2",
+              "input": "fruits = [0,1,2,2]"
+            }
+          ]
+        },
+        {
+          "approach": "Maintain a sliding window [left, right] and a dictionary to store the frequency of each fruit within the window. When the number of distinct fruits exceeds 2, slide the window to the right by incrementing the left pointer.",
+          "code": "class Solution {\n    func totalFruit(_ fruits: [Int]) -> Int {\n        var maxFruits = 0\n        var left = 0\n        var fruitCount = [Int: Int]()\n        for right in 0..<fruits.count {\n            fruitCount[fruits[right], default: 0] += 1\n            while fruitCount.keys.count > 2 {\n                fruitCount[fruits[left], default: 0] -= 1\n                if fruitCount[fruits[left]] == 0 {\n                    fruitCount.removeValue(forKey: fruits[left])\n                }\n                left += 1\n            }\n            maxFruits = max(maxFruits, right - left + 1)\n        }\n        return maxFruits\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are only storing a constant number of variables, regardless of the size of the input array.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we are iterating over the array once."
+          },
+          "explanation": "This approach avoids the repeated work of the brute force approach by only considering the fruits within the current window. It also uses a dictionary to efficiently store and retrieve the frequency of each fruit.",
+          "id": "8030aaa1-f135-4533-877f-e6d34ec36eb6",
+          "intuition": "This approach works by utilizing a sliding window to track the maximum length of fruits that can be collected, and it only considers the fruits within the current window.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "We can collect all three fruits because there are only two distinct types: 1 and 2.",
+              "id": "a94b0dd0-5a3a-4e63-a682-eafdaac2a38c",
+              "input": "fruits = [1,2,1]"
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "We can collect the first three fruits because there are only two distinct types: 0 and 1, but the third type 2 can be collected by replacing one of the previous fruits.",
+              "id": "057d4e5d-2c76-4cb5-874e-b1fba3058ea0",
+              "input": "fruits = [0,1,2,2]"
+            }
+          ]
+        }
+      ],
+      "id": "d5654749-fd4d-44d4-950b-f518c8ed92d2",
+      "lastUpdated": "2026-02-06T21:47:29Z",
+      "problemSlug": "fruit-into-baskets",
+      "relatedProblems": [
+        "max-subarray",
+        "longest-substring-without-repeating-characters"
+      ],
+      "summary": "The Fruit Into Baskets problem involves finding the maximum number of fruits that can be collected from a given array, with a constraint that at most two distinct types of fruits can be collected. The key insight is to utilize a sliding window approach to track the maximum length of fruits that can be collected."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all possible subsequences using two nested loops, check if each subsequence is harmonious by finding the minimum and maximum elements and checking their difference, update the maximum length if necessary.",
+          "code": "class Solution {\n    func findLHS(_ nums: [Int]) -> Int { var maxLen = 0; for i in 0..<nums.count { for j in i..<nums.count { var minNum = Int.max, maxNum = Int.min; for k in i...j { if nums[k] < minNum { minNum = nums[k] } if nums[k] > maxNum { maxNum = nums[k] } } if maxNum - minNum == 1 { maxLen = max(maxLen, j - i + 1) } } }; return maxLen }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We use a constant amount of space to store the maximum length and the minimum and maximum elements of the current subsequence.",
+            "time": "O(n^3)",
+            "timeExplanation": "The outer two loops generate all subsequences, and for each subsequence, we find the minimum and maximum elements, resulting in a cubic time complexity."
+          },
+          "explanation": "This approach checks all possible subsequences, which guarantees finding the longest harmonious subsequence, but it has high time complexity due to generating all subsequences.",
+          "id": "772dffd4-61ff-4ea1-99c6-0fd926ce0d27",
+          "intuition": "The idea is to check all possible subsequences and see if they are harmonious, then update the maximum length if necessary.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "5",
+              "explanation": "The longest harmonious subsequence is [2,2,2,3,3].",
+              "id": "1740fe4a-438e-4eec-b1dc-e72ffeab55e0",
+              "input": "nums = [1,3,2,2,5,2,3,7]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "The longest harmonious subsequences are [1,2], [2,3], and [3,4].",
+              "id": "57e55609-d75e-4c04-abce-93e64895eac7",
+              "input": "nums = [1,2,3,4]"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "There is no harmonious subsequence because the difference between the maximum and minimum elements must be 1.",
+              "id": "cd22801c-97b8-44ca-bbab-dd2d78f44a81",
+              "input": "nums = [1,1,1,1]"
+            }
+          ]
+        },
+        {
+          "approach": "Count the frequency of each number using a hash map, then for each number, check if its possible harmonious pair (the number plus 1) exists in the hash map and update the maximum length if necessary.",
+          "code": "class Solution {\n    func findLHS(_ nums: [Int]) -> Int { let count = Dictionary/grouping(by: { $0 })\n    var maxLen = 0\n    for (num, freq) in count { if let freqPlusOne = count[num + 1] { maxLen = max(maxLen, freq + freqPlusOne) } }\n    return maxLen }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We use a hash map to store the frequency of each number, which requires linear space complexity.",
+            "time": "O(n)",
+            "timeExplanation": "We iterate through the array once to count the frequency of each number, and then through the hash map once to find the longest harmonious subsequence."
+          },
+          "explanation": "This approach efficiently keeps track of the frequency of each number and its possible harmonious pairs using a hash map, allowing us to find the longest harmonious subsequence in linear time complexity.",
+          "id": "d8499b24-14b4-4864-ae67-86fa4c93ca38",
+          "intuition": "The idea is to use a hash map to efficiently keep track of the frequency of each number and its possible harmonious pairs.",
+          "name": "Hash Map",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "5",
+              "explanation": "The longest harmonious subsequence is [2,2,2,3,3].",
+              "id": "66a243df-ef45-4bca-add4-94a2a5a61fa1",
+              "input": "nums = [1,3,2,2,5,2,3,7]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "The longest harmonious subsequences are [1,2], [2,3], and [3,4].",
+              "id": "89ea6f0a-8015-4992-9b9a-7581e7868894",
+              "input": "nums = [1,2,3,4]"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "There is no harmonious subsequence because the difference between the maximum and minimum elements must be 1.",
+              "id": "8452bd0b-225a-438d-b32b-2a48ddfa1311",
+              "input": "nums = [1,1,1,1]"
+            }
+          ]
+        }
+      ],
+      "id": "df77aedc-5f51-476d-ae0a-512e83688c3a",
+      "lastUpdated": "2026-02-06T21:27:45Z",
+      "problemSlug": "longest-harmonious-subsequence",
+      "relatedProblems": [
+        "two-sum",
+        "longest-subsequence-repeated-character"
+      ],
+      "summary": "The problem requires finding the longest harmonious subsequence in an array, which is a subsequence where the difference between the maximum and minimum elements is 1. The key insight is that we can use a hash map to efficiently keep track of the frequency of each number and its possible harmonious pairs."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Use a frequency map for characters in current window\n2. Track the max frequency of any character in current window\n3. Expand window by moving right pointer\n4. If (window size - maxFreq) > k, shrink from left\n5. Update result with current window size\n6. Return maximum window size found",
+          "code": "class Solution {\n    func characterReplacement(_ s: String, _ k: Int) -> Int {\n        let chars = Array(s)\n        var freq: [Character: Int] = [:]\n        var maxFreq = 0\n        var left = 0\n        var result = 0\n\n        for right in 0..<chars.count {\n            // Add right character to window\n            freq[chars[right], default: 0] += 1\n            maxFreq = max(maxFreq, freq[chars[right]]!)\n\n            // Window size - maxFreq = chars we need to replace\n            // If > k, shrink window from left\n            while (right - left + 1) - maxFreq > k {\n                freq[chars[left]]! -= 1\n                left += 1\n            }\n\n            result = max(result, right - left + 1)\n        }\n\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Frequency map has at most 26 entries (uppercase letters)",
+            "time": "O(n)",
+            "timeExplanation": "Each character is added and removed from window at most once"
+          },
+          "explanation": "The key insight is that for any window, the minimum replacements needed equals (window length - frequency of most common character). If this exceeds k, the window is invalid. We don't need to decrease maxFreq when shrinking because we only care about finding a larger valid window - if maxFreq was achieved before, we need at least that many of one character to beat our current best.",
+          "id": "dac3e197-d96c-4c89-ac7b-f44e049ffb02",
+          "intuition": "Maintain a window where (window size - count of most frequent char) <= k. This means we can replace the non-majority characters to make them all the same. Expand right, shrink left when invalid.",
+          "name": "Sliding Window with Frequency Count",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "Replace both A's with B's (or vice versa) to get \"BBBB\" or \"AAAA\". Length = 4.",
+              "id": "d4103717-7b61-4ffe-8e1b-22495a4ae24c",
+              "input": "s = \"ABAB\", k = 2"
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "Replace the B at index 3 to get \"AAAAABA\". Longest same-char substring is \"AAAA\" with length 4.",
+              "id": "a20faea5-b299-4b45-bd5d-255daa5124c1",
+              "input": "s = \"AABABBA\", k = 1"
+            }
+          ]
+        },
+        {
+          "approach": "1. Same frequency tracking and maxFreq\n2. When window becomes invalid, shift both left and right (window size stays same)\n3. Only update result when window is valid\n4. Return final window size",
+          "code": "class Solution {\n    func characterReplacement(_ s: String, _ k: Int) -> Int {\n        let chars = Array(s)\n        var freq: [Character: Int] = [:]\n        var maxFreq = 0\n        var left = 0\n\n        for right in 0..<chars.count {\n            freq[chars[right], default: 0] += 1\n            maxFreq = max(maxFreq, freq[chars[right]]!)\n\n            // If invalid, slide window (don't shrink, just shift)\n            if (right - left + 1) - maxFreq > k {\n                freq[chars[left]]! -= 1\n                left += 1\n            }\n        }\n\n        // Final window size is our answer\n        return chars.count - left\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Frequency map bounded by alphabet size (26)",
+            "time": "O(n)",
+            "timeExplanation": "Single pass, no inner loop - each pointer moves at most n times"
+          },
+          "explanation": "This optimization works because we're looking for the maximum window. Once we achieve a window of size w, there's no point checking smaller windows. When invalid, we slide the entire window right (maintaining size) rather than shrinking. The window only grows when we find a better maxFreq.",
+          "id": "6450f4c5-35fc-4dac-b904-cde41c4c828e",
+          "intuition": "We can skip the while loop by only ever growing or shifting the window, never shrinking it. Since we want the maximum window, once we find a valid window of size w, we only care about windows of size > w.",
+          "name": "Sliding Window (Optimized - No Shrink Loop)",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "Window grows to size 4 and stays valid throughout.",
+              "id": "59707323-3700-44f9-ae26-aab83890b26a",
+              "input": "s = \"ABAB\", k = 2"
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "All same characters, no replacement needed. Window = entire string.",
+              "id": "713e474b-4439-4af2-9d4e-aaa52629de6d",
+              "input": "s = \"AAAA\", k = 0"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "With k=0, can't replace anything. Best is single character.",
+              "id": "a5d4d816-e3a9-42c5-a7f9-85057c9668f7",
+              "input": "s = \"ABCD\", k = 0"
+            }
+          ]
+        }
+      ],
+      "id": "2f7967f8-0288-408c-9e14-67efd5d58556",
+      "lastUpdated": "2026-02-06T08:24:18Z",
+      "problemSlug": "longest-repeating-character-replacement",
+      "relatedProblems": [
+        "longest-substring-without-repeating-characters",
+        "longest-substring-with-at-most-k-distinct-characters",
+        "max-consecutive-ones-iii"
+      ],
+      "summary": "Find the length of the longest substring where you can replace at most k characters to make all characters the same. Use sliding window: expand right, track most frequent character, shrink left when replacements needed exceed k."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize an empty string to store the longest substring found so far. 2. Generate all possible substrings of the input string. 3. For each substring, utilize a hash map to store the frequency of each character. 4. Check if the substring has at least k repeating characters by iterating over the hash map. 5. If it does, update the longest substring if necessary.",
+          "code": "class Solution {\n    func longestSubstring(_ s: String, _ k: Int) -> String {\n        let sArray = Array(s)\n        var longestSubstring = \"\"\n        for i in 0..<sArray.count {\n            for j in i + 1..<sArray.count + 1 {\n                let substring = String(sArray[i..<j])\n                var charFrequency = [Character:Int]()\n                for char in substring {\n                    charFrequency[char, default: 0] += 1\n                }\n                var hasKRepeating = true\n                for value in charFrequency.values {\n                    if value < k {\n                        hasKRepeating = false\n                        break\n                    }\n                }\n                if hasKRepeating && substring.count > longestSubstring.count {\n                    longestSubstring = substring\n                }\n            }\n        }\n        return longestSubstring\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) for storing the hash map of character frequencies and the substring.",
+            "time": "O(n^3)",
+            "timeExplanation": "The time complexity is O(n^3) due to generating all possible substrings (O(n^2)) and then iterating over each substring to count character frequencies (O(n))."
+          },
+          "explanation": "This approach has an exponential time complexity due to generating all possible substrings. However, it is simple to implement and will work for small inputs.",
+          "id": "c4027d5b-1eaa-42ab-889e-425d4f3273ce",
+          "intuition": "The brute-force approach works by checking all possible substrings of the input string and then determining if the substring has at least k repeating characters. This is achieved by utilizing a hash map to store character frequencies.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"aa\"",
+              "explanation": "The longest substring with at least 1 repeating character is the entire string \"aa\".",
+              "id": "ec7d0c19-b4b3-457f-a0f5-8db4cfbfe9c8",
+              "input": "s = \"aa\", k = 1"
+            },
+            {
+              "expectedOutput": "\"ababb\"",
+              "explanation": "The longest substring with at least 2 repeating characters is \"ababb\".",
+              "id": "131a942d-3264-49d1-ad38-78a3605a5f45",
+              "input": "s = \"ababbc\", k = 2"
+            }
+          ]
+        },
+        {
+          "approach": "1. Count the frequency of each character in the input string. 2. Split the input string into substrings at characters that appear less than k times. 3. Recursively solve the problem for each substring.",
+          "code": "class Solution {\n    func longestSubstring(_ s: String, _ k: Int) -> String {\n        let sArray = Array(s)\n        var charFrequency = [Character:Int]()\n        for char in sArray {\n            charFrequency[char, default: 0] += 1\n        }\n        if sArray.count < k {\n            return \"\"\n        }\n        var splitIndex = -1\n        for i in 0..<sArray.count {\n            if charFrequency[sArray[i]] < k {\n                splitIndex = i\n                break\n            }\n        }\n        if splitIndex == -1 {\n            return String(sArray)\n        }\n        var longestSubstring = \"\"\n        for i in 0..<sArray.count {\n            if i > splitIndex {\n                break\n            }\n            let substring = longestSubstring(String(sArray[0...i]), k)\n            if substring.count > longestSubstring.count {\n                longestSubstring = substring\n            }\n        }\n        return longestSubstring\n    }\n    func longestSubstring(_ sArray: [Character], _ k: Int) -> String {\n        var longestSubstring = \"\"\n        let s = String(sArray)\n        var charFrequency = [Character:Int]()\n        for char in sArray {\n            charFrequency[char, default: 0] += 1\n        }\n        if sArray.count < k {\n            return \"\"\n        }\n        for i in 0..<sArray.count {\n            if charFrequency[sArray[i]] >= k {\n                continue\n            }\n            let substring1 = longestSubstring(Array(s.dropFirst(i+1)), k)\n            if substring1.count > longestSubstring.count {\n                longestSubstring = substring1\n            }\n            let substring2 = longestSubstring(Array(s.dropLast(sArray.count - i)), k)\n            if substring2.count > longestSubstring.count {\n                longestSubstring = substring2\n            }\n        }\n        return longestSubstring\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) for storing the hash map of character frequencies and the recursive call stack.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) due to counting character frequencies and recursively solving the problem for each substring."
+          },
+          "explanation": "This approach reduces the problem size by splitting the string into smaller substrings, resulting in a more efficient solution.",
+          "id": "05d56efe-dfab-4807-bfb9-fe9b429cb0f7",
+          "intuition": "The divide-and-conquer approach works by splitting the input string into substrings based on characters that appear less than k times and then recursively solving the problem for each substring.",
+          "name": "Divide and Conquer",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "\"aa\"",
+              "explanation": "The longest substring with at least 1 repeating character is the entire string \"aa\".",
+              "id": "4f7739cf-05c9-40f1-8a86-fc7db02d6005",
+              "input": "s = \"aa\", k = 1"
+            },
+            {
+              "expectedOutput": "\"ababb\"",
+              "explanation": "The longest substring with at least 2 repeating characters is \"ababb\".",
+              "id": "8e3d5437-4433-47af-9337-906088a4d8e6",
+              "input": "s = \"ababbc\", k = 2"
+            }
+          ]
+        }
+      ],
+      "id": "755a6a5d-162d-4902-b3fd-c3c2a04cf026",
+      "lastUpdated": "2026-02-06T21:16:14Z",
+      "problemSlug": "longest-substring-with-at-least-k-repeating-characters",
+      "relatedProblems": [
+        "longest-substring-without-repeating-characters",
+        "subarrays-with-k-different-integers"
+      ],
+      "summary": "The problem requires finding the longest substring with at least k repeating characters. The key insight is to utilize a divide-and-conquer approach to solve this problem by splitting the string based on characters that appear less than k times."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Convert the string to an array of characters for indexing.\n2. Track last seen index of each character in a dictionary.\n3. Maintain a left pointer for the start of the current window.\n4. Update the best window length as you iterate.",
+          "code": "class Solution {\n    func lengthOfLongestSubstring(_ s: String) -> Int {\n        let chars = Array(s)\n        var lastIndex: [Character: Int] = [:]\n        var left = 0\n        var best = 0\n        for (right, ch) in chars.enumerated() {\n            if let prev = lastIndex[ch], prev >= left {\n                left = prev + 1\n            }\n            lastIndex[ch] = right\n            best = max(best, right - left + 1)\n        }\n        return best\n    }\n}",
+          "complexity": {
+            "space": "O(min(n, k))",
+            "spaceExplanation": "Map stores last index per distinct character.",
+            "time": "O(n)",
+            "timeExplanation": "Each index moves forward at most once."
+          },
+          "explanation": "The left pointer only moves forward, so each character is processed at most twice.",
+          "id": "27c88a35-bf8d-4b65-932f-ef95acdc2481",
+          "intuition": "When a repeat appears, move the left boundary just past the previous occurrence.",
+          "name": "Sliding Window",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "Longest substring is \"abc\".",
+              "id": "857fc085-7360-4555-9c7d-d324eb1a4c03",
+              "input": "s = \"abcabcbb\""
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "Only one unique character.",
+              "id": "d75e0eb2-181f-4052-92f3-16d6d6f774fa",
+              "input": "s = \"bbbbb\""
+            },
+            {
+              "expectedOutput": "3",
+              "explanation": "Longest substring is \"wke\".",
+              "id": "0460080e-0b23-4245-ab89-72bdc20b8121",
+              "input": "s = \"pwwkew\""
+            }
+          ]
+        }
+      ],
+      "id": "5c11fa1e-3d2c-48ba-b657-8147f2306374",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "longest-substring-without-repeating-characters",
+      "relatedProblems": [
+        "minimum-window-substring",
+        "longest-substring-with-at-most-k-distinct-characters"
+      ],
+      "summary": "Use a moving window and last-seen indices to keep all characters unique."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Step 1: Initialize the maximum average as negative infinity. Step 2: Iterate over the array with two nested loops to generate all possible subarrays of size k. Step 3: Calculate the sum of the current subarray. Step 4: Calculate the average of the current subarray by dividing the sum by k. Step 5: Update the maximum average if the current average is greater.",
+          "code": "import Foundation\n\nclass Solution {\n    func findMaxAverage(_ nums: [Int], _ k: Int) -> Double {\n        var maxAverage = Double(Int.min)\n        for i in 0...(nums.count - k) {\n            var sum = 0\n            for j in i..<i + k {\n                sum += nums[j]\n            }\n            let average = Double(sum) / Double(k)\n            maxAverage = max(maxAverage, average)\n        }\n        return maxAverage\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) as we only use a constant amount of space to store the maximum average and the current sum.",
+            "time": "O(n*k)",
+            "timeExplanation": "The outer loop iterates n-k+1 times, and the inner loop iterates k times. Therefore, the time complexity is O(n*k)."
+          },
+          "explanation": "The brute force approach involves checking all possible subarrays of size k, which makes it inefficient for large arrays. However, it provides a straightforward solution to the problem.",
+          "id": "b1a62929-4082-42da-aaee-ab5d8aac178c",
+          "intuition": "This approach works by generating all possible subarrays of size k, calculating their sum, and then dividing by k to get the average. The maximum average is then updated accordingly.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "12.75",
+              "explanation": "The maximum average is (12 + (-5) + (-6) + 50) / 4 = 12.75",
+              "id": "ced0de2d-950c-4dc6-9772-b0283bea688c",
+              "input": "nums = [1,12,-5,-6,50,3], k = 4"
+            },
+            {
+              "expectedOutput": "5",
+              "explanation": "The maximum average is 5 / 1 = 5",
+              "id": "c8c40cef-6115-4bed-9f83-ac20b243b35b",
+              "input": "nums = [5], k = 1"
+            }
+          ]
+        },
+        {
+          "approach": "Step 1: Initialize the window sum as the sum of the first k elements. Step 2: Calculate the initial average. Step 3: Slide the window to the right by subtracting the leftmost element and adding the new element. Step 4: Update the maximum average if the current average is greater. Step 5: Repeat steps 3-4 until the window reaches the end of the array.",
+          "code": "import Foundation\n\nclass Solution {\n    func findMaxAverage(_ nums: [Int], _ k: Int) -> Double {\n        var windowSum = 0\n        for i in 0..<k {\n            windowSum += nums[i]\n        }\n        var maxAverage = Double(windowSum) / Double(k)\n        for i in k..<nums.count {\n            windowSum = windowSum - nums[i - k] + nums[i]\n            maxAverage = max(maxAverage, Double(windowSum) / Double(k))\n        }\n        return maxAverage\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) as we only use a constant amount of space to store the window sum and the maximum average.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) as we only iterate over the array once."
+          },
+          "explanation": "The sliding window approach takes advantage of the fact that the sum of the elements within the window only changes by a constant amount when the window is slid to the right. This makes it more efficient than the brute force approach.",
+          "id": "32757df7-5394-4fb6-beac-703ac43cf18f",
+          "intuition": "This approach works by maintaining a sliding window of size k and calculating the sum of the elements within the window. The maximum average is then updated accordingly.",
+          "name": "Sliding Window",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "12.75",
+              "explanation": "The maximum average is (12 + (-5) + (-6) + 50) / 4 = 12.75",
+              "id": "5e21280e-0b1d-43e8-9ad8-badc71fa76b8",
+              "input": "nums = [1,12,-5,-6,50,3], k = 4"
+            },
+            {
+              "expectedOutput": "5",
+              "explanation": "The maximum average is 5 / 1 = 5",
+              "id": "774062f6-c30e-44d5-a21f-913fb267c476",
+              "input": "nums = [5], k = 1"
+            }
+          ]
+        }
+      ],
+      "id": "c1a0bb3f-94c3-475a-86e7-1c3e3dba2314",
+      "lastUpdated": "2026-02-06T21:30:27Z",
+      "problemSlug": "maximum-average-subarray-i",
+      "relatedProblems": [
+        "maximum-average-subarray-ii",
+        "subarray-sum-equals-k"
+      ],
+      "summary": "The problem asks to find the maximum average of a contiguous subarray of size k within a given array, and the key insight is to utilize the sliding window technique to efficiently calculate the sum of subarrays."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Count chars needed from t\n2. Expand right adding chars\n3. When valid, shrink left recording min",
+          "code": "class Solution {\n    func minWindow(_ s: String, _ t: String) -> String {\n        var need: [Character: Int] = [:]\n        for c in t { need[c, default: 0] += 1 }\n        var have: [Character: Int] = [:]\n        var required = need.count, formed = 0\n        var left = 0, minLen = Int.max, minStart = 0\n        let chars = Array(s)\n        for (right, c) in chars.enumerated() {\n            have[c, default: 0] += 1\n            if let n = need[c], have[c] == n { formed += 1 }\n            while formed == required {\n                if right - left + 1 < minLen { minLen = right - left + 1; minStart = left }\n                let lc = chars[left]\n                have[lc]! -= 1\n                if let n = need[lc], have[lc]! < n { formed -= 1 }\n                left += 1\n            }\n        }\n        return minLen == Int.max ? \"\" : String(chars[minStart..<minStart+minLen])\n    }\n}",
+          "complexity": {
+            "space": "O(k)",
+            "spaceExplanation": "Char counts",
+            "time": "O(n)",
+            "timeExplanation": "Each char processed twice"
+          },
+          "explanation": "Two pointers form window. Track how many unique chars satisfied.",
+          "id": "9e060409-ff3e-4bbb-912e-df8db7a86696",
+          "intuition": "Expand until valid, shrink while valid, track minimum.",
+          "name": "Sliding Window",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"BANC\"",
+              "explanation": "Smallest window containing A,B,C",
+              "id": "e75f7685-b4de-48aa-ad3c-4e39545520b0",
+              "input": "s=\"ADOBECODEBANC\", t=\"ABC\""
+            }
+          ]
+        }
+      ],
+      "id": "6048f5e3-04d5-40d2-aa60-6c9a87166c80",
+      "lastUpdated": "2026-02-06T01:03:48.938Z",
+      "problemSlug": "minimum-window-substring",
+      "relatedProblems": [
+        "substring-with-concatenation-of-all-words"
+      ],
+      "summary": "Find minimum window in s containing all chars of t. Expand right to include, shrink left to minimize."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Build a frequency array for s1 and for the first window in s2.\n2. Track how many of the 26 counts match.\n3. Slide the window, updating counts and matches.\n4. If all 26 counts match, return true.",
+          "code": "class Solution {\n    func checkInclusion(_ s1: String, _ s2: String) -> Bool {\n        let a = Array(s1)\n        let b = Array(s2)\n        if a.count > b.count { return false }\n\n        var count1 = Array(repeating: 0, count: 26)\n        var count2 = Array(repeating: 0, count: 26)\n\n        for ch in a {\n            let idx = Int(ch.asciiValue! - 97)\n            count1[idx] += 1\n        }\n        for i in 0..<a.count {\n            let idx = Int(b[i].asciiValue! - 97)\n            count2[idx] += 1\n        }\n\n        var matches = 0\n        for i in 0..<26 {\n            if count1[i] == count2[i] { matches += 1 }\n        }\n\n        var left = 0\n        for right in a.count..<b.count {\n            if matches == 26 { return true }\n\n            let rIndex = Int(b[right].asciiValue! - 97)\n            count2[rIndex] += 1\n            if count2[rIndex] == count1[rIndex] { matches += 1 }\n            else if count2[rIndex] == count1[rIndex] + 1 { matches -= 1 }\n\n            let lIndex = Int(b[left].asciiValue! - 97)\n            count2[lIndex] -= 1\n            if count2[lIndex] == count1[lIndex] { matches += 1 }\n            else if count2[lIndex] == count1[lIndex] - 1 { matches -= 1 }\n\n            left += 1\n        }\n\n        return matches == 26\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Two fixed-size arrays of length 26.",
+            "time": "O(n)",
+            "timeExplanation": "Each index is processed once in the sliding window."
+          },
+          "explanation": "The matching-counts trick avoids comparing full arrays on each step.",
+          "id": "82f82071-c8e4-4992-8de8-e36f7d88d1d8",
+          "intuition": "Any permutation of s1 has the same character counts, so we just need a window in s2 with matching counts.",
+          "name": "Sliding Window",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "Substring \"ba\" is a permutation of \"ab\".",
+              "id": "2708a68f-d53b-49fe-9227-b4884fd084ce",
+              "input": "s1 = \"ab\", s2 = \"eidbaooo\""
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "No permutation appears in s2.",
+              "id": "7e0e6c56-3a13-4d0c-a138-83d2f21fe73d",
+              "input": "s1 = \"ab\", s2 = \"eidboaoo\""
+            }
+          ]
+        }
+      ],
+      "id": "f94dfe99-f818-417f-b555-81d2d78b2212",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "permutation-in-string",
+      "relatedProblems": [
+        "find-all-anagrams-in-a-string",
+        "check-if-a-string-contains-all-binary-codes-of-size-k"
+      ],
+      "summary": "Use a fixed-size sliding window and compare character counts to detect a permutation."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Maintain deque of indices with decreasing values\n2. Remove indices outside window\n3. Remove indices with smaller values\n4. Front is current max",
+          "code": "class Solution {\n    func maxSlidingWindow(_ nums: [Int], _ k: Int) -> [Int] {\n        var deque: [Int] = []\n        var result: [Int] = []\n        for i in 0..<nums.count {\n            while !deque.isEmpty && deque.first! < i - k + 1 { deque.removeFirst() }\n            while !deque.isEmpty && nums[deque.last!] < nums[i] { deque.removeLast() }\n            deque.append(i)\n            if i >= k - 1 { result.append(nums[deque.first!]) }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(k)",
+            "spaceExplanation": "Deque size",
+            "time": "O(n)",
+            "timeExplanation": "Each element added/removed once"
+          },
+          "explanation": "Deque maintains candidates in decreasing order. Front is always the max in current window.",
+          "id": "d249a08b-6e7a-43cf-a52d-e623cd924a38",
+          "intuition": "Deque front is always max. Remove smaller elements, remove out-of-window elements.",
+          "name": "Monotonic Deque",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[3,3,5,5,6,7]",
+              "explanation": "Windows: [1,3,-1]→3, [3,-1,-3]→3...",
+              "id": "ceee2d57-b172-468d-830e-c6963e6359db",
+              "input": "nums=[1,3,-1,-3,5,3,6,7], k=3"
+            }
+          ]
+        }
+      ],
+      "id": "b050075d-eb14-4652-aa0c-9f143ac3f530",
+      "lastUpdated": "2026-02-06T01:03:48.938Z",
+      "problemSlug": "sliding-window-maximum",
+      "relatedProblems": [
+        "minimum-window-substring"
+      ],
+      "summary": "Return max in each sliding window of size k. Use monotonic deque storing indices of decreasing values."
+    }
+  ],
+  "topic": "sliding-window",
+  "version": "2.0.0"
+}

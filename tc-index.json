@@ -1,0 +1,106 @@
+{
+  "topics": [
+    {
+      "topic": "arrays-hashing",
+      "file": "tc-arrays-hashing.json",
+      "problemCount": 101,
+      "testCaseCount": 2396
+    },
+    {
+      "topic": "backtracking",
+      "file": "tc-backtracking.json",
+      "problemCount": 26,
+      "testCaseCount": 507
+    },
+    {
+      "topic": "binary-search",
+      "file": "tc-binary-search.json",
+      "problemCount": 30,
+      "testCaseCount": 726
+    },
+    {
+      "topic": "bit-manipulation",
+      "file": "tc-bit-manipulation.json",
+      "problemCount": 19,
+      "testCaseCount": 475
+    },
+    {
+      "topic": "dynamic-programming",
+      "file": "tc-dynamic-programming.json",
+      "problemCount": 73,
+      "testCaseCount": 1750
+    },
+    {
+      "topic": "graphs",
+      "file": "tc-graphs.json",
+      "problemCount": 22,
+      "testCaseCount": 473
+    },
+    {
+      "topic": "greedy",
+      "file": "tc-greedy.json",
+      "problemCount": 23,
+      "testCaseCount": 566
+    },
+    {
+      "topic": "heap-priority-queue",
+      "file": "tc-heap-priority-queue.json",
+      "problemCount": 14,
+      "testCaseCount": 332
+    },
+    {
+      "topic": "intervals",
+      "file": "tc-intervals.json",
+      "problemCount": 5,
+      "testCaseCount": 120
+    },
+    {
+      "topic": "linked-list",
+      "file": "tc-linked-list.json",
+      "problemCount": 38,
+      "testCaseCount": 861
+    },
+    {
+      "topic": "math-geometry",
+      "file": "tc-math-geometry.json",
+      "problemCount": 113,
+      "testCaseCount": 2748
+    },
+    {
+      "topic": "misc",
+      "file": "tc-misc.json",
+      "problemCount": 67,
+      "testCaseCount": 1185
+    },
+    {
+      "topic": "sliding-window",
+      "file": "tc-sliding-window.json",
+      "problemCount": 12,
+      "testCaseCount": 300
+    },
+    {
+      "topic": "stack",
+      "file": "tc-stack.json",
+      "problemCount": 36,
+      "testCaseCount": 842
+    },
+    {
+      "topic": "trees",
+      "file": "tc-trees.json",
+      "problemCount": 69,
+      "testCaseCount": 1545
+    },
+    {
+      "topic": "tries",
+      "file": "tc-tries.json",
+      "problemCount": 9,
+      "testCaseCount": 225
+    },
+    {
+      "topic": "two-pointers",
+      "file": "tc-two-pointers.json",
+      "problemCount": 67,
+      "testCaseCount": 1616
+    }
+  ]
+}

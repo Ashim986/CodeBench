@@ -1,0 +1,4603 @@
+{
+  "topic": "binary-search",
+  "version": "1.0.0",
+  "generatedAt": "2026-02-19T23:27:18Z",
+  "problems": [
+    {
+      "problemSlug": "132-pattern",
+      "leetCodeNumber": 456,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "53a66c70-4ff1-4e04-b635-40be475376a8",
+          "input": "nums = []",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "02dd4137-001e-417e-8490-9cff62c830b8",
+          "input": "nums = [1]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "261b7227-fff8-4a8b-ad0f-6f52d7b91e8f",
+          "input": "nums = [1, 2]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "f644ba3f-6e0b-431d-8bd7-3922c5e09ca2",
+          "input": "nums = [-1, -2, -3, -4]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "a7cc6cd1-c9a9-436a-a7a4-ab77f1ff919e",
+          "input": "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "31d40cc8-0025-4275-b84b-6fcbeed8e033",
+          "input": "nums = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "dbdc77f4-c261-43d1-8961-b1c334f54d7c",
+          "input": "nums = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "bf67b8ec-ab3e-4260-bc92-498beeefb217",
+          "input": "nums = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "4288189a-965c-42d9-983b-fc3b26c22599",
+          "input": "nums = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "63ae2b4f-6c99-4265-9296-54271f87a19d",
+          "input": "nums = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "2cc2bf3b-f4e4-4cde-9b78-5b42bdd5ed43",
+          "input": "nums = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "1e9d2912-9f55-4c9c-802b-52ef7e37cd18",
+          "input": "nums = [1000, 900, 800, 700, 600, 500, 400, 300, 200, 100]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "0e0c8b91-7b0f-41d4-9ade-e90c011f5b2f",
+          "input": "nums = [1, 3, 2, 4, 5]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "45f02436-ec89-4549-ac3c-ed99dc903a99",
+          "input": "nums = [1, 2, 3, 4, 3, 2, 1]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "32bc2b43-b8f5-4661-90c6-30e5c64e1703",
+          "input": "nums = [1, 2, 3, 1, 2, 1, 3, 2, 1]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "4e272669-b31c-493f-9955-99566d762dce",
+          "input": "nums = [-1, -2, -3, -4, -5, -6, -7, -8, -9, -10]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "4009c3b4-bda4-4577-a433-dd4ff25e5933",
+          "input": "nums = [1, -2, 3, -4, 5, -6, 7, -8, 9, -10]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "f7163dff-4fec-4a93-96eb-9cfa1a23377d",
+          "input": "nums = [3, 1, 4, 1, 5]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "0d49f2ef-3010-4128-b620-7a14bce00d08",
+          "input": "nums = [1, 1, 1, 2, 3, 1, 1, 1]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "d11cc505-1529-4787-bf1f-6685ad3a3c75",
+          "input": "nums = [10, 1, 10, 1, 10, 1, 10, 1, 10, 1]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "0e6daac6-01c7-4873-99b9-c994a30ef0bb",
+          "input": "nums = [1, 10, 1, 10, 1, 10, 1, 10, 1, 10]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "de1b71b2-1623-44cb-970c-4971d2329492",
+          "input": "nums = [-1, 1, -1, 1, -1, 1, -1, 1, -1, 1]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "c8cf4e13-fdfd-484d-982a-fff953d0a829",
+          "input": "nums = [1, -1, 1, -1, 1, -1, 1, -1, 1, -1]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "aebc2526-013c-40a7-824f-4d3f363757d6",
+          "input": "nums = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "c762b38a-cc16-4fdb-8eb0-e055cd151033",
+          "input": "nums = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "binary-search",
+      "leetCodeNumber": 704,
+      "difficulty": "easy",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "48b19d22-6e2e-4d9c-bef9-e44fdcdef08d",
+          "input": "nums = [], target = 5",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "72fbcdb0-8cca-450c-8283-6c952dc12b96",
+          "input": "nums = [5], target = 5",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "b7512651-aecd-4119-800a-811b5b453966",
+          "input": "nums = [5], target = 3",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "bee796a0-0124-4761-a5a0-68baa72dc95a",
+          "input": "nums = [1, 2, 3, 4, 5], target = 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "941f52b6-a147-41a6-a4e5-8a9fbfd17a00",
+          "input": "nums = [1, 2, 3, 4, 5], target = 5",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "72ef2081-266e-4e17-a978-1b7948820012",
+          "input": "nums = [1, 2, 3, 4, 5], target = 6",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "44bbef70-8afc-4026-8290-403ef415394e",
+          "input": "nums = [1, 2, 3, 4, 5], target = 0",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "cfb7ebc7-8185-4167-830f-c1c4085fc8f6",
+          "input": "nums = [10000], target = 10000",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "7bf7d848-7501-4847-a028-132db04333ba",
+          "input": "nums = [10000], target = 10001",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "41cc8426-3edc-4216-bfe6-7e63d2d80070",
+          "input": "nums = [-10000], target = -10000",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "50c56202-371d-4018-84f3-77b4bcc487cd",
+          "input": "nums = [-10000], target = -10001",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "c82434c5-b24d-44b3-a813-5257dd7c71e2",
+          "input": "nums = [1, 3, 5, 7, 9], target = 7",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "cbbf7b3a-fcd3-41fd-81ca-f9ff4b8c86b2",
+          "input": "nums = [1, 3, 5, 7, 9], target = 2",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "a4ca5c78-9e6a-42a6-8c6b-1d0410ba5a10",
+          "input": "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], target = 10",
+          "expectedOutput": "9",
+          "orderMatters": true
+        },
+        {
+          "id": "25bb6641-7911-4d82-ba2c-cc0e02341153",
+          "input": "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], target = 0",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "779ce5ac-35e3-453c-a1fd-501b5f7be6d2",
+          "input": "nums = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1], target = 5",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "3b7cf233-7136-4120-b5e3-21d415b68d9b",
+          "input": "nums = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1], target = 10",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "d3c2b557-1cdd-4f8d-b2db-02c984155f70",
+          "input": "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], target = 15",
+          "expectedOutput": "14",
+          "orderMatters": true
+        },
+        {
+          "id": "c67d49cb-43ee-43ca-8b52-83c17cbb33a6",
+          "input": "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], target = 0",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "703409cb-3d7d-45e3-8859-2f2aa7a3def5",
+          "input": "nums = [100, 200, 300, 400, 500], target = 300",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "fe8f3570-c1f0-48fb-9af9-aa33914b5fbd",
+          "input": "nums = [100, 200, 300, 400, 500], target = 600",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "a8449d77-3612-4d8c-864c-9c089544027e",
+          "input": "nums = [-100, -200, -300, -400, -500], target = -600",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "537ae46d-90e9-424a-8ed9-833510e0edb1",
+          "input": "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], target = 20",
+          "expectedOutput": "19",
+          "orderMatters": true
+        },
+        {
+          "id": "35d875fa-ed3b-4ee1-a003-15d2e1ecaded",
+          "input": "nums = [-1,0,3,5,9,12], target = 9",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "163f3ffa-6595-45fc-a563-1bb4bc2be71d",
+          "input": "nums = [-1,0,3,5,9,12], target = 2",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "capacity-to-ship-packages-within-d-days",
+      "leetCodeNumber": 1011,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "a474bf96-f2a0-481c-a076-db26fe7a8700",
+          "input": "weights = [1], D = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "27c866f2-5d45-4bf3-88c9-2a3bba4fff1c",
+          "input": "weights = [], D = 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "af01d364-1e67-4e2e-b7cd-d0073900d70c",
+          "input": "weights = [1,2,3], D = 1",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "cc51f283-c8a4-4d4d-841e-92750971aa7b",
+          "input": "weights = [5,5,5,5,5], D = 1",
+          "expectedOutput": "25",
+          "orderMatters": true
+        },
+        {
+          "id": "752a8009-5dc9-4ef3-b73f-ef125af41364",
+          "input": "weights = [1,1,1,1,1], D = 1",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "62949c86-c5b0-455a-8a1a-9ad885ce7c23",
+          "input": "weights = [1,1,1,1,1,1,1,1,1,1], D = 1",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "329b0b70-e1b7-4e0d-96bd-8799ea889503",
+          "input": "weights = [100,100,100,100,100], D = 1",
+          "expectedOutput": "500",
+          "orderMatters": true
+        },
+        {
+          "id": "416702da-0825-4e39-bc48-cf49af962615",
+          "input": "weights = [1,2,3,4,5,6,7,8,9,10], D = 1",
+          "expectedOutput": "55",
+          "orderMatters": true
+        },
+        {
+          "id": "3b8b9760-2960-4d64-81df-7423d2b8ae24",
+          "input": "weights = [10,9,8,7,6,5,4,3,2,1], D = 1",
+          "expectedOutput": "55",
+          "orderMatters": true
+        },
+        {
+          "id": "7099fff5-2d29-4d64-990e-5eb9e9ec7c9f",
+          "input": "weights = [1,2,3], D = 3",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "42f170e2-475f-4506-9382-0bbbd23d6774",
+          "input": "weights = [10,10,10], D = 2",
+          "expectedOutput": "30",
+          "orderMatters": true
+        },
+        {
+          "id": "85e56d18-f3e3-4f8a-bd64-149dc03d99f6",
+          "input": "weights = [1,1,1,1,1], D = 5",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "6189d363-d499-4990-a95c-d33f883d39a2",
+          "input": "weights = [1,2,3,4,5], D = 5",
+          "expectedOutput": "15",
+          "orderMatters": true
+        },
+        {
+          "id": "79d0d0af-73ec-4478-a522-729b99e67147",
+          "input": "weights = [5,4,3,2,1], D = 5",
+          "expectedOutput": "15",
+          "orderMatters": true
+        },
+        {
+          "id": "085d38b5-13ed-476b-a338-baa9d8792cc4",
+          "input": "weights = [10,20,30,40,50], D = 5",
+          "expectedOutput": "150",
+          "orderMatters": true
+        },
+        {
+          "id": "2c89fe66-a8a7-4bee-b603-6ab8756e9bd0",
+          "input": "weights = [50,40,30,20,10], D = 5",
+          "expectedOutput": "150",
+          "orderMatters": true
+        },
+        {
+          "id": "156e62b8-1d42-4996-9a80-5a8812280a4b",
+          "input": "weights = [1,2,3,4,5,6,7,8,9,10], D = 10",
+          "expectedOutput": "55",
+          "orderMatters": true
+        },
+        {
+          "id": "4f70b615-afb1-483b-9889-413daaea16df",
+          "input": "weights = [10,9,8,7,6,5,4,3,2,1], D = 10",
+          "expectedOutput": "55",
+          "orderMatters": true
+        },
+        {
+          "id": "25264a6b-bc6c-496c-8e7f-6b1bf0b1f38f",
+          "input": "weights = [1,1,1,1,1,1,1,1,1,1], D = 10",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "e8b08ba2-a72e-4a65-a33d-0bf3d2f3c741",
+          "input": "weights = [100,100,100,100,100], D = 5",
+          "expectedOutput": "500",
+          "orderMatters": true
+        },
+        {
+          "id": "3efbd320-f7df-42f5-9f9a-97e36e9ac5d0",
+          "input": "weights = [1,1,1,1,1,1,1,1,1,1], D = 5",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "4c6ce628-4dcc-4fa5-afe6-6d0aeb7083ba",
+          "input": "weights = [1,2,3,4,5,6,7,8,9,10], D = 2",
+          "expectedOutput": "55",
+          "orderMatters": true
+        },
+        {
+          "id": "ba6be251-2daf-4b24-a06a-e09fcebbd0b1",
+          "input": "weights = [10,9,8,7,6,5,4,3,2,1], D = 2",
+          "expectedOutput": "55",
+          "orderMatters": true
+        },
+        {
+          "id": "55e02796-fc79-424b-9434-8f15880c1c80",
+          "input": "weights = [1,2,3,4,5,6,7,8,9,10], D = 3",
+          "expectedOutput": "55",
+          "orderMatters": true
+        },
+        {
+          "id": "4e0ff137-90fb-4d14-b9ef-00a692302566",
+          "input": "weights = [10,9,8,7,6,5,4,3,2,1], D = 3",
+          "expectedOutput": "55",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "count-complete-tree-nodes",
+      "leetCodeNumber": 222,
+      "difficulty": "easy",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "c6a6f171-2f76-4be3-905b-9fcb91538908",
+          "input": "root = [1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "a5cc69e7-142c-48d1-b073-6e5fd3db56c5",
+          "input": "root = [1,2]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "ae582f8d-12bb-4f25-8637-e85021b100a0",
+          "input": "root = [1,null,2]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "23954c59-0432-41ce-9eb8-271f1e4822b2",
+          "input": "root = [1,2,3,null,null,4,5]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "9203d6c5-eb9b-49da-8a49-d4cbf628ab4b",
+          "input": "root = [1,2,3,4,5,6,7]",
+          "expectedOutput": "7",
+          "orderMatters": true
+        },
+        {
+          "id": "539d98d8-e64a-4095-9a67-1b1e02e97565",
+          "input": "root = [1,-2,3]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "045336ac-7810-4183-9c0a-3e576cd11002",
+          "input": "root = [1,2,2,4,5,6]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "b69326ca-78bb-4378-8426-d637f3ed6076",
+          "input": "root = [1,2,3,4,5,6,7,8,9,10]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "697f8627-1d88-41df-a884-79aadf3e0294",
+          "input": "root = [1,null,null]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "86971e89-1e2e-41f6-912d-ef1cdf44f139",
+          "input": "root = [1,2,null,null]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "cb7b3fd1-41b1-4c6d-a897-2210c3799832",
+          "input": "root = [1,2,3,null,null,null]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "1caef1d8-7f89-45ca-afeb-3e1c6525f901",
+          "input": "root = [1,2,3,4,5,6,7,null,null]",
+          "expectedOutput": "7",
+          "orderMatters": true
+        },
+        {
+          "id": "eed0310a-9397-4b0f-b744-1be86597c30a",
+          "input": "root = [1,2,3,4,5,6,7,8,null,null]",
+          "expectedOutput": "8",
+          "orderMatters": true
+        },
+        {
+          "id": "90650e93-5d4b-4b38-a92f-891ad1464686",
+          "input": "root = [1,-2,-3,-4,-5,-6,-7]",
+          "expectedOutput": "7",
+          "orderMatters": true
+        },
+        {
+          "id": "86fd38e2-9a76-48e5-b904-ca8ae2f82b98",
+          "input": "root = [1,2,3,4,5,6,7,8,9]",
+          "expectedOutput": "9",
+          "orderMatters": true
+        },
+        {
+          "id": "71e41da2-b6be-4b08-b54c-8b568f485102",
+          "input": "root = [1,null,2,null,3,null,4]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "4381a7db-0db1-46ab-9496-69cfcdb092ba",
+          "input": "root = [1,2,null,4,null,5,null,7]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "d85f5b06-3422-4e4b-8a40-57bb083e04d4",
+          "input": "root = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]",
+          "expectedOutput": "15",
+          "orderMatters": true
+        },
+        {
+          "id": "96daddf6-308e-448e-9451-5a302c10cade",
+          "input": "root = [1,null,null,null,null,null,null,null]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "67e16a52-e2b9-4ed6-a182-3b351c766708",
+          "input": "root = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]",
+          "expectedOutput": "14",
+          "orderMatters": true
+        },
+        {
+          "id": "aa1fa5e6-d51f-4d2f-91e9-196f6590235e",
+          "input": "root = [1,2,3,4,5,6,7,8,9,10,11,12]",
+          "expectedOutput": "12",
+          "orderMatters": true
+        },
+        {
+          "id": "7bd7f6d6-1d48-4f91-a2ef-1116eab8a4fc",
+          "input": "root = [1,2,3,4,5,6,7,8,9,10,11]",
+          "expectedOutput": "11",
+          "orderMatters": true
+        },
+        {
+          "id": "c22e1580-1e2f-4e94-8495-8e698c0710d7",
+          "input": "root = [1,null,2,null,3,null,4,null,5]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "0f6777a5-0197-44cf-b694-f8b8e169fc65",
+          "input": "root = [1,2,null,4,null,5,null,7,null,8]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "fbf58329-6a2e-47c4-8dc6-9c61eb9fc75d",
+          "input": "root = [1,2,3,4,5,6,7,8,9,10,11,12,13]",
+          "expectedOutput": "13",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "fair-candy-swap",
+      "leetCodeNumber": 888,
+      "difficulty": "easy",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "bd1d8954-fffd-453c-ab51-9b3d6bf6c2bd",
+          "input": "aliceSizes = [10,20,30], bobSizes = [10,20,30]",
+          "expectedOutput": "[0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "c87b3c30-93fd-4488-bd64-2070a9a97e89",
+          "input": "aliceSizes = [], bobSizes = [1,2,3]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "63060899-47ad-4d8e-8e1b-5de2bbda26b2",
+          "input": "aliceSizes = [1,2,3], bobSizes = []",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "e57dcd3d-8a0f-4ba8-8048-97fa02e1a174",
+          "input": "aliceSizes = [1], bobSizes = [1]",
+          "expectedOutput": "[0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "b79cd58e-e267-4b58-9922-2cd8dcd042e9",
+          "input": "aliceSizes = [1,2,3], bobSizes = [3,2,1]",
+          "expectedOutput": "[0,2]",
+          "orderMatters": true
+        },
+        {
+          "id": "08d4453d-3ea8-443c-ade2-e81fe6d1e5dd",
+          "input": "aliceSizes = [-1,-2,-3], bobSizes = [-3,-2,-1]",
+          "expectedOutput": "[0,2]",
+          "orderMatters": true
+        },
+        {
+          "id": "3a4047f4-37b4-44ae-9809-0bed1d2d312f",
+          "input": "aliceSizes = [1000,2000,3000], bobSizes = [1000,2000,3000]",
+          "expectedOutput": "[0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "20ba94fe-fd70-4e5c-a312-9d3cfa8ffa46",
+          "input": "aliceSizes = [10,20,30,40,50], bobSizes = [10,20,30,40,50]",
+          "expectedOutput": "[0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "b1e6b592-3c5b-48a0-b3d4-5412ba1169e0",
+          "input": "aliceSizes = [1,1,1,1,1], bobSizes = [1,1,1,1,1]",
+          "expectedOutput": "[0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "6ae76047-25c4-4d80-bc0e-559a12c8d97f",
+          "input": "aliceSizes = [1,2,3,4,5], bobSizes = [5,4,3,2,1]",
+          "expectedOutput": "[0,4]",
+          "orderMatters": true
+        },
+        {
+          "id": "6270e8f3-a63f-4546-8815-6a8274da5238",
+          "input": "aliceSizes = [10,20,30,40,50], bobSizes = [50,40,30,20,10]",
+          "expectedOutput": "[0,4]",
+          "orderMatters": true
+        },
+        {
+          "id": "10925eb8-08b7-41b8-9676-60639520cdee",
+          "input": "aliceSizes = [1,2,3,4,5], bobSizes = [1,2,3,4,5]",
+          "expectedOutput": "[0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "f5cc41eb-1cb4-4070-b435-70e181f655d3",
+          "input": "aliceSizes = [1,3,5,7,9], bobSizes = [1,3,5,7,9]",
+          "expectedOutput": "[0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "9c297fff-1207-4c38-899c-127d7f310456",
+          "input": "aliceSizes = [1,2,3], bobSizes = [4,5,6]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "6ddbd68d-a42d-4a27-bcbb-03cad56a9bf0",
+          "input": "aliceSizes = [1,1,1], bobSizes = [2,2,2]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "d5337bf4-66d7-4078-a6c1-227b153cc667",
+          "input": "aliceSizes = [1,2,3], bobSizes = [4,5,6,7,8,9]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "2f55cb26-de7d-478f-8c4e-9abeef45e818",
+          "input": "aliceSizes = [1,1,1,1,1], bobSizes = [2,2,2,2,2]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "e1e5047d-c309-4e7b-8bf9-e88ed39133ba",
+          "input": "aliceSizes = [1,3,5], bobSizes = [2,4,6]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "379c3ebb-c880-4a91-af6d-984c81787801",
+          "input": "aliceSizes = [1,2,3,4,5], bobSizes = [6,7,8,9,10]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "fcdff491-a6f7-44b0-9827-b32988fa3119",
+          "input": "aliceSizes = [1,3,5,7,9], bobSizes = [2,4,6,8,10]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "1bde1093-71ba-412c-94a6-f4a73d975713",
+          "input": "aliceSizes = [1,2,3,4,5], bobSizes = [10,20,30,40,50]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "50411543-fc21-421c-b461-ecf3c1c2b37d",
+          "input": "aliceSizes = [1,3,5,7,9], bobSizes = [10,20,30,40,50]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "c02b5d74-edc7-4978-a46d-95634345bec8",
+          "input": "aliceSizes = [1,1,1,1,1], bobSizes = [10,20,30,40,50]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "3fe06944-dc3b-4d6f-8d76-0d5fd2cf0170",
+          "input": "aliceSizes = [1,2,3,4,5], bobSizes = [100,200,300,400,500]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "c5a2eb3c-915a-4826-9cb2-412262b43e4a",
+          "input": "aliceSizes = [1,3,5,7,9], bobSizes = [100,200,300,400,500]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "find-first-and-last-position-of-element-in-sorted-array",
+      "leetCodeNumber": 34,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "766157DB-6F25-4B4B-ACF5-47CFF0BFDE93",
+          "input": "[], 0",
+          "expectedOutput": "[-1,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "4EB7CA38-C50D-45AC-A734-D476A4116210",
+          "input": "[1], 1",
+          "expectedOutput": "[0, 0]",
+          "orderMatters": true
+        },
+        {
+          "id": "458DF344-D22A-4DA0-B53E-5938B746F32A",
+          "input": "[1], 0",
+          "expectedOutput": "[-1, -1]",
+          "orderMatters": true
+        },
+        {
+          "id": "A92AD3CE-6684-46C8-AF96-A1EC7D9F3965",
+          "input": "[1,2,3,4,5], 3",
+          "expectedOutput": "[2, 2]",
+          "orderMatters": true
+        },
+        {
+          "id": "F71EA3B9-C23F-4648-9604-C98B8477D7FB",
+          "input": "[5,7,7,8,8,10], 8",
+          "expectedOutput": "[3,4]",
+          "orderMatters": true
+        },
+        {
+          "id": "583F71B3-1C6C-442E-A46B-9810DFB1C8BC",
+          "input": "[1,1,2,3,4], 1",
+          "expectedOutput": "[0, 1]",
+          "orderMatters": true
+        },
+        {
+          "id": "E7927913-9FC9-461E-AA58-7A27DBC19A24",
+          "input": "[7,7,7,7,7], 7",
+          "expectedOutput": "[0, 4]",
+          "orderMatters": true
+        },
+        {
+          "id": "631B2DE9-5708-4F29-95F8-6E71380E1A93",
+          "input": "[1,2,3,3,3,3,4,5,6,7,8,9], 3",
+          "expectedOutput": "[2, 5]",
+          "orderMatters": true
+        },
+        {
+          "id": "4B531BFB-D0EC-4202-9A6B-D0C7FDCD096B",
+          "input": "{\"nums\": [], \"target\": 0}",
+          "expectedOutput": "[-1, -1]",
+          "orderMatters": true
+        },
+        {
+          "id": "D649F85B-FB0B-4707-A45B-DC2B750070A0",
+          "input": "{\"nums\": [1], \"target\": 1}",
+          "expectedOutput": "[0, 0]",
+          "orderMatters": true
+        },
+        {
+          "id": "A89CD354-DCE2-48A6-8673-BD6D54EF9CA8",
+          "input": "{\"nums\": [1], \"target\": 0}",
+          "expectedOutput": "[-1, -1]",
+          "orderMatters": true
+        },
+        {
+          "id": "5B619573-F615-490C-9E99-982D08C1ECC2",
+          "input": "{\"nums\": [5, 7, 7, 8, 8, 10], \"target\": 2}",
+          "expectedOutput": "[-1, -1]",
+          "orderMatters": true
+        },
+        {
+          "id": "7315B1B8-6043-4E09-B94C-A494DBF45E53",
+          "input": "{\"nums\": [5, 7, 7, 8, 8, 10], \"target\": 12}",
+          "expectedOutput": "[-1, -1]",
+          "orderMatters": true
+        },
+        {
+          "id": "AA1F7173-B7AA-46ED-8694-F3DA819EA772",
+          "input": "{\"nums\": [5, 7, 7, 8, 8, 10], \"target\": 10}",
+          "expectedOutput": "[5, 5]",
+          "orderMatters": true
+        },
+        {
+          "id": "13D1FB74-A630-46BC-9195-B23B70D07CC9",
+          "input": "{\"nums\": [1, 1, 2, 3, 4, 5], \"target\": 1}",
+          "expectedOutput": "[0, 1]",
+          "orderMatters": true
+        },
+        {
+          "id": "0F9B5D71-1738-40D1-9B3B-4B92A07572ED",
+          "input": "{\"nums\": [1, 2, 3, 4, 5, 5], \"target\": 5}",
+          "expectedOutput": "[4, 5]",
+          "orderMatters": true
+        },
+        {
+          "id": "FC2DE93F-3AA0-43A5-84B1-929AA65BACC9",
+          "input": "{\"nums\": [6, 6, 6, 6, 6, 6], \"target\": 6}",
+          "expectedOutput": "[0, 5]",
+          "orderMatters": true
+        },
+        {
+          "id": "9FF125B7-CA0F-40B1-8553-2C5E4D556BBF",
+          "input": "{\"nums\": [1, 3, 5, 7, 9], \"target\": 4}",
+          "expectedOutput": "[-1, -1]",
+          "orderMatters": true
+        },
+        {
+          "id": "00035210-CA1A-4FD6-8C3B-E1A0C3C7988A",
+          "input": "{\"nums\": [5, 7, 7, 8, 8, 10], \"target\": 8}",
+          "expectedOutput": "[3, 4]",
+          "orderMatters": true
+        },
+        {
+          "id": "2025777D-5344-4845-ABCE-1B6E5BFBF26B",
+          "input": "{\"nums\": [6, 6, 6, 6, 6], \"target\": 6}",
+          "expectedOutput": "[0, 4]",
+          "orderMatters": true
+        },
+        {
+          "id": "3CF7DB3C-A96B-4187-B140-8F229148C240",
+          "input": "{\"nums\": [1, 2, 3, 4, 5], \"target\": 3}",
+          "expectedOutput": "[2, 2]",
+          "orderMatters": true
+        },
+        {
+          "id": "6A413ACD-C501-41A3-B722-9E560BB34633",
+          "input": "{\"nums\": [10, 20, 30], \"target\": 35}",
+          "expectedOutput": "[-1, -1]",
+          "orderMatters": true
+        },
+        {
+          "id": "51866E75-D034-4BFF-8317-F19226B55985",
+          "input": "nums = [], target = 0",
+          "expectedOutput": "[-1,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "5F2D538B-01DF-4B4C-9837-48920BB03095",
+          "input": "nums = [5], target = 5",
+          "expectedOutput": "[0, 0]",
+          "orderMatters": true
+        },
+        {
+          "id": "8E14E93F-FDD3-4EA5-AE52-76E9B0C9017B",
+          "input": "nums = [1, 3, 5, 7], target = 4",
+          "expectedOutput": "[-1, -1]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "find-minimum-in-rotated-sorted-array",
+      "leetCodeNumber": 153,
+      "difficulty": "medium",
+      "testCaseCount": 21,
+      "testCases": [
+        {
+          "id": "bffd4475-5eca-4190-9415-35b90a4b5480",
+          "input": "nums = [1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "e4dd10e6-f4b1-4590-90c8-e04397c6881d",
+          "input": "nums = [1,2]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "90b284e8-47f4-4f27-9eaa-60e70952bcac",
+          "input": "nums = [2,1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "9256f110-e1c0-4b29-840e-8f982d258f93",
+          "input": "nums = [5,1,3]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "363abf15-244e-444f-bce2-6a1c14b4be68",
+          "input": "nums = [1,2,3,4,5,6,7]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "7080c220-a024-45f0-bf54-0ceb68c7da39",
+          "input": "nums = [7,6,5,4,3,2,1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "49304f73-77d2-4ab8-a833-4e8b5f74d3a3",
+          "input": "nums = [-1,-2,-3,-4,-5]",
+          "expectedOutput": "-5",
+          "orderMatters": true
+        },
+        {
+          "id": "36f92b2e-d135-4661-b5f8-49788911e2bd",
+          "input": "nums = [10,20,30,40,50]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "04295e81-a0e1-4857-bb70-535a17126095",
+          "input": "nums = [50,40,30,20,10]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "8a1aa6b4-102a-4ff8-99cb-9eb1d6efdaf8",
+          "input": "nums = [1,2,3,4,5,6,7,8,9,10]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "7251426c-0c55-44e0-9ab6-5095eaae44b2",
+          "input": "nums = [10,9,8,7,6,5,4,3,2,1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "10df85c2-d893-4e4d-92e3-4eb3a310f67a",
+          "input": "nums = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1]",
+          "expectedOutput": "-10",
+          "orderMatters": true
+        },
+        {
+          "id": "09fe0ec8-9922-4696-9ce1-d37bf496e189",
+          "input": "nums = [1000,2000,3000,4000,5000]",
+          "expectedOutput": "1000",
+          "orderMatters": true
+        },
+        {
+          "id": "4bff4a89-357c-4553-9e06-04a7d6fc72e8",
+          "input": "nums = [5000,4000,3000,2000,1000]",
+          "expectedOutput": "1000",
+          "orderMatters": true
+        },
+        {
+          "id": "60aa6b84-5dcb-4d75-91fd-30b700b580a7",
+          "input": "nums = [5,6,7,1,2,3,4]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "1222fe58-4f74-40da-8703-48db4c05941c",
+          "input": "nums = [10,20,30,1,2,3,4,5,6,7,8,9]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "7125c136-283b-47f4-8b67-fde26f617a27",
+          "input": "nums = [9,8,7,6,5,4,3,2,1,10,20,30]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "9dbbd9dc-b332-4a1a-af53-152a9ff16118",
+          "input": "nums = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "81e63589-42e3-44bf-85b6-5b1d7087bca1",
+          "input": "nums = [3,4,5,1,2]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "ecd09d04-8c47-471f-ab5d-ba9dba464922",
+          "input": "nums = [4,5,6,7,0,1,2]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "9800463b-6f75-4138-b520-ce56ef437de9",
+          "input": "nums = [11,13,15,17]",
+          "expectedOutput": "11",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "find-peak-element",
+      "leetCodeNumber": 162,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "e98582a4-fee6-446a-851b-7f375f3e554f",
+          "input": "nums = [5,4,3,2,1]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "18cf6843-af04-4b7f-a2b0-8b2d0bc478fc",
+          "input": "nums = [1,2,3,4,5]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "012ff37c-e5de-4c1b-8798-634729a70205",
+          "input": "nums = [1,3,2,1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "49e9da1d-7729-476d-9b01-cb41e6b75304",
+          "input": "nums = [1,2,1,3,5,6,4]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "0499fec4-8bd4-4ec2-89fd-7a9d389dda6e",
+          "input": "nums = [1]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "d93ed24a-95b2-43c8-97db-addd5aa7510c",
+          "input": "nums = [1,1,1,1,1]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "c8c6680f-2ca3-4486-b78c-2120e0d20c80",
+          "input": "nums = [-1,-2,-3,-4,-5]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "75644241-bdab-4c3a-aa69-95d399552c40",
+          "input": "nums = [10,20,30,40,50]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "fa71ea6f-d010-4ba1-99b4-8d192c49046d",
+          "input": "nums = [5,5,5,5,5]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "47776372-502b-4ac0-b9e5-a275a332e03f",
+          "input": "nums = [1,2,3,4,5,6,7,8,9,10]",
+          "expectedOutput": "9",
+          "orderMatters": true
+        },
+        {
+          "id": "117743d0-87a5-44f1-83d0-24b71faa0dce",
+          "input": "nums = [10,9,8,7,6,5,4,3,2,1]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "27dd9cad-ea26-4452-956a-fe528dfe494b",
+          "input": "nums = [1,3,5,7,9]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "941d8907-b950-41dd-988b-27508e36ad9f",
+          "input": "nums = [9,7,5,3,1]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "cf10c8c5-6aba-4265-8500-86d34d57b747",
+          "input": "nums = [5,5,5,5,5,5,5,5,5,5]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "be252f13-6106-453e-b9a9-fb78474f51fa",
+          "input": "nums = [0,1,0]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "63473056-b86a-4dd5-8617-bb39640e077a",
+          "input": "nums = [0,0,1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "84262a7b-43e1-4d7d-b718-bcde294d463a",
+          "input": "nums = [1,0,0]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "2c95314e-c0e6-4ff5-864c-872768a3b402",
+          "input": "nums = [0,0,0,0,0,1,0,0,0,0]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "5162aedf-51f6-4321-9ec0-c7075d7495d6",
+          "input": "nums = [1,1,1,1,1,1,1,1,1,1]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "0d9c45b3-5eaa-4d98-8919-69b9b1dee836",
+          "input": "nums = [10,10,10,10,10,10,10,10,10,10]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "86ecc971-25af-467d-be1a-2813afc83479",
+          "input": "nums = [0,0,0,0,0,0,0,0,0,0]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "52966ca8-406c-46a0-a6ab-df6fa8bc431a",
+          "input": "nums = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "09cb56b8-14a9-4c33-bf20-42c7bb0599d2",
+          "input": "nums = [100,99,98,97,96,95,94,93,92,91]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "e4404066-a6a5-44a3-be23-0225456d0b49",
+          "input": "nums = [1000,2000,3000,4000,5000]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "b1ba84a6-4890-4afd-9cd2-3af8d8d7bc44",
+          "input": "nums = [5000,4000,3000,2000,1000]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "find-right-interval",
+      "leetCodeNumber": 436,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "1fed7b44-ab95-4822-a68b-d15cae3bb297",
+          "input": "intervals = []",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "9297cba0-e506-4530-b71f-8428200ddbc1",
+          "input": "intervals = [[1,1],[2,2]]",
+          "expectedOutput": "[1,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "fdef2937-a111-43d4-81f2-5889a0485405",
+          "input": "intervals = [[10,20],[20,30],[30,40],[40,50]]",
+          "expectedOutput": "[1,2,3,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "94e9f209-8aa1-4d55-8d4e-0542795698c4",
+          "input": "intervals = [[1,1]]",
+          "expectedOutput": "[0]",
+          "orderMatters": true
+        },
+        {
+          "id": "05ab48e8-41bc-41cd-9bcd-79f0fd93117a",
+          "input": "intervals = [[1,2],[2,3]]",
+          "expectedOutput": "[1,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "d0122ac3-ca50-4d89-bbd5-10fc716b63c6",
+          "input": "intervals = [[1,2],[3,4],[5,6]]",
+          "expectedOutput": "[1,2,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "0987c2e4-656e-4d81-abcc-14f3cf82dea6",
+          "input": "intervals = [[1,4],[2,3],[3,4],[4,5]]",
+          "expectedOutput": "[3,2,3,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "1d249d9d-c569-4698-9b84-eeaaef73a4eb",
+          "input": "intervals = [[-1,0],[0,1],[1,2]]",
+          "expectedOutput": "[1,2,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "60e7f0bb-ee65-4711-8b12-22acc1497250",
+          "input": "intervals = [[1,1],[1,1],[1,1]]",
+          "expectedOutput": "[0,0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "45a6a69d-deed-4e4d-bfe1-fe12b4d98e22",
+          "input": "intervals = [[1,2],[2,3],[3,4],[4,5],[5,6]]",
+          "expectedOutput": "[1,2,3,4,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "5a24d9b7-6f39-43bb-8b21-d7615a25776d",
+          "input": "intervals = [[10,20],[20,30],[30,40]]",
+          "expectedOutput": "[1,2,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "58d8d015-6beb-42c9-b848-92f21d85ec1b",
+          "input": "intervals = [[100,200],[200,300],[300,400]]",
+          "expectedOutput": "[1,2,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "f2163db1-0b97-4664-aa6f-67797195f0c6",
+          "input": "intervals = [[1,1000],[2,2000],[3,3000]]",
+          "expectedOutput": "[-1,-1,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "08ee0b39-5c1f-4da3-aa84-306594cfe690",
+          "input": "intervals = [[-100,-50],[-50,0],[0,50]]",
+          "expectedOutput": "[1,2,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "07d69b17-c1fe-4e37-b84f-6620f199bd2d",
+          "input": "intervals = [[-1000,-500],[-500,0],[0,500]]",
+          "expectedOutput": "[1,2,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "afc6fb11-9c86-4c9e-a926-4fa9dee32e38",
+          "input": "intervals = [[1,2],[3,4],[5,6],[7,8]]",
+          "expectedOutput": "[1,2,3,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "a1f80fd0-acce-4359-ab41-84ca11aed475",
+          "input": "intervals = [[1,10],[2,3],[3,4],[4,5]]",
+          "expectedOutput": "[-1,2,3,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "7a2efeb0-8219-41bc-859a-b1303777c6ad",
+          "input": "intervals = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]]",
+          "expectedOutput": "[1,2,3,4,5,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "4e6f4061-8f9c-499c-81de-bd5ba3d0686b",
+          "input": "intervals = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8]]",
+          "expectedOutput": "[1,2,3,4,5,6,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "2f36e633-3c26-4f4c-a97f-90c3da7a0a2a",
+          "input": "intervals = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9]]",
+          "expectedOutput": "[1,2,3,4,5,6,7,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "b178fe99-e2ea-4512-8dbe-2082f7fc86bd",
+          "input": "intervals = [[1,2],[1,2]]",
+          "expectedOutput": "[-1,-1]",
+          "orderMatters": true
+        },
+        {
+          "id": "727c599b-0422-4b7d-ae9e-ac6330f6ec77",
+          "input": "intervals = [[1,2],[2,3],[1,2]]",
+          "expectedOutput": "[1,-1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "50e2f3df-246b-4917-a09f-875e6641e8d4",
+          "input": "intervals = [[1,2],[2,3],[3,4],[1,2]]",
+          "expectedOutput": "[1,2,-1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "81305c4b-8a8f-4c60-90c5-6d35685c677e",
+          "input": "intervals = [[1,2],[2,3],[3,4],[4,5],[1,2]]",
+          "expectedOutput": "[1,2,3,-1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "e7500579-d2db-4644-8590-dfbcd53943d1",
+          "input": "intervals = [[1,2],[2,3],[3,4],[4,5],[5,6],[1,2]]",
+          "expectedOutput": "[1,2,3,4,-1,1]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "find-smallest-letter-greater-than-target",
+      "leetCodeNumber": 744,
+      "difficulty": "easy",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "69f1d70c-d20f-4816-b88e-08a0e2d94ac7",
+          "input": "letters = [\"a\"], target = \"b\"",
+          "expectedOutput": "\"a\"",
+          "orderMatters": true
+        },
+        {
+          "id": "5e9800e4-c1b9-4721-bf69-17a945f16250",
+          "input": "letters = [\"a\",\"b\"], target = \"c\"",
+          "expectedOutput": "\"a\"",
+          "orderMatters": true
+        },
+        {
+          "id": "cfb8996d-d257-4966-8eb1-e9bd193c7b8c",
+          "input": "letters = [\"b\",\"c\"], target = \"a\"",
+          "expectedOutput": "\"b\"",
+          "orderMatters": true
+        },
+        {
+          "id": "2ea96b61-5073-4a8e-97df-ce403896ba8d",
+          "input": "letters = [\"z\"], target = \"a\"",
+          "expectedOutput": "\"z\"",
+          "orderMatters": true
+        },
+        {
+          "id": "c3de5ef8-edf6-4435-9771-ecbe4d055e0a",
+          "input": "letters = [\"a\",\"a\"], target = \"b\"",
+          "expectedOutput": "\"a\"",
+          "orderMatters": true
+        },
+        {
+          "id": "d4539be4-edc3-471c-9844-c1b222859245",
+          "input": "letters = [\"a\",\"b\",\"c\"], target = \"d\"",
+          "expectedOutput": "\"a\"",
+          "orderMatters": true
+        },
+        {
+          "id": "c901f89a-5881-40e6-a652-ab67890a5349",
+          "input": "letters = [\"c\",\"d\",\"e\"], target = \"b\"",
+          "expectedOutput": "\"c\"",
+          "orderMatters": true
+        },
+        {
+          "id": "91a49635-f781-4afb-a7ba-09961afaa9e7",
+          "input": "letters = [\"z\",\"a\"], target = \"y\"",
+          "expectedOutput": "\"z\"",
+          "orderMatters": true
+        },
+        {
+          "id": "b773b28e-6852-4901-a98d-878de5f0d728",
+          "input": "letters = [\"a\",\"z\"], target = \"y\"",
+          "expectedOutput": "\"a\"",
+          "orderMatters": true
+        },
+        {
+          "id": "685d7bd2-4819-48eb-94f7-ae7bd9e82b3b",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"a\"",
+          "expectedOutput": "\"b\"",
+          "orderMatters": true
+        },
+        {
+          "id": "a0e7224b-1cfb-4224-b185-fdef42b0502c",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"z\"",
+          "expectedOutput": "\"a\"",
+          "orderMatters": true
+        },
+        {
+          "id": "1e797d3e-3f38-414a-a8e9-7c56cda80e86",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"m\"",
+          "expectedOutput": "\"n\"",
+          "orderMatters": true
+        },
+        {
+          "id": "c5dac4ff-7ce6-4a00-94c2-e351d3bb799e",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"n\"",
+          "expectedOutput": "\"o\"",
+          "orderMatters": true
+        },
+        {
+          "id": "9015c7da-3055-4623-b91a-4025c79a505e",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"p\"",
+          "expectedOutput": "\"q\"",
+          "orderMatters": true
+        },
+        {
+          "id": "61d7356c-dfe7-4e8d-a708-d47b6779d8f2",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"q\"",
+          "expectedOutput": "\"r\"",
+          "orderMatters": true
+        },
+        {
+          "id": "825e3bc1-ed0c-4703-833b-5f4a45ac14f4",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"r\"",
+          "expectedOutput": "\"s\"",
+          "orderMatters": true
+        },
+        {
+          "id": "520bff3e-25ba-4238-93a8-bdf7ea136882",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"s\"",
+          "expectedOutput": "\"t\"",
+          "orderMatters": true
+        },
+        {
+          "id": "31e85f0b-98f1-4c0a-bf9b-6606d5c30bb3",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"t\"",
+          "expectedOutput": "\"u\"",
+          "orderMatters": true
+        },
+        {
+          "id": "8ec75eef-1c10-4dd9-9cdc-2cae4e1ae7c8",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"u\"",
+          "expectedOutput": "\"v\"",
+          "orderMatters": true
+        },
+        {
+          "id": "b483c0c5-763c-4d18-9b66-7888c2745c4a",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"v\"",
+          "expectedOutput": "\"w\"",
+          "orderMatters": true
+        },
+        {
+          "id": "672257d9-f706-42f8-baba-d95e9b264245",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"w\"",
+          "expectedOutput": "\"x\"",
+          "orderMatters": true
+        },
+        {
+          "id": "fda29571-b7b7-4c23-a925-4ad6f2896071",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"x\"",
+          "expectedOutput": "\"y\"",
+          "orderMatters": true
+        },
+        {
+          "id": "ddd8884d-0be6-4ad5-843c-bda0e5d24ec8",
+          "input": "letters = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\",\"z\"], target = \"A\"",
+          "expectedOutput": "\"a\"",
+          "orderMatters": true
+        },
+        {
+          "id": "e04fbd66-26ca-486b-9fa4-750a1124be5e",
+          "input": "letters = [\"a\",\"b\",\"c\"], target = \"b\"",
+          "expectedOutput": "\"c\"",
+          "orderMatters": true
+        },
+        {
+          "id": "f5e587fa-d825-42c7-a352-86970a3fcb7b",
+          "input": "letters = [\"a\",\"b\",\"c\"], target = \"c\"",
+          "expectedOutput": "\"a\"",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "h-index-ii",
+      "leetCodeNumber": 275,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "f7f9d40b-a03b-4e3d-969a-e046914fd2c9",
+          "input": "citations = []",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "8c5e3d50-a15e-4ccc-83fd-fa50eb5fb998",
+          "input": "citations = [0]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "6861ec29-30bc-442a-a0b4-4a5d32363119",
+          "input": "citations = [1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "b126636f-fa53-400f-8b8a-3ba6bcade0f1",
+          "input": "citations = [1000]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "6f7271e1-80bc-45eb-b089-1e11cdddabec",
+          "input": "citations = [-1]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "ba4a4037-0dc6-44ce-aee0-6c4317211533",
+          "input": "citations = [1,1,1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "481bee6e-39bb-415f-b982-802e7f08b6b7",
+          "input": "citations = [1,2,3]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "1f6cd90a-3edd-45e0-8cad-c41111e27114",
+          "input": "citations = [3,2,1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "7cf9c07e-ff22-45c2-b53b-956c586bc078",
+          "input": "citations = [10,10,10,10,10]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "4c9e255d-3afd-4945-990a-a828e003ab31",
+          "input": "citations = [100,100,100,100,100]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "6de8e022-627b-4177-8b3e-f94474c79709",
+          "input": "citations = [0,0,0,0,0]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "4025f960-673e-4484-b70f-dcece1cf2bb9",
+          "input": "citations = [1,0,0,0,0]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "1bd22fd1-32b0-4909-b097-d52ad45f1735",
+          "input": "citations = [0,1,0,0,0]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "9e5e273e-3c75-4038-9980-ccd133bd435f",
+          "input": "citations = [0,0,1,0,0]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "ff65ada2-fdee-482e-8002-f515530c0603",
+          "input": "citations = [0,0,0,1,0]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "78b70a8a-9655-4139-9baa-1502fd7bc182",
+          "input": "citations = [0,0,0,0,1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "03288b6f-a5ec-4a0c-a9b9-dc392328ca1e",
+          "input": "citations = [10,20,30,40,50]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "cbd5b8a6-4af3-4af0-8c71-6052911444b4",
+          "input": "citations = [50,40,30,20,10]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "198d821d-5082-4da0-a57f-3e06361f85f7",
+          "input": "citations = [1000,1000,1000,1000,1000,1000,1000,1000,1000,1000]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "d04b692e-ca4a-41bc-b340-62de06a34a52",
+          "input": "citations = [1,1,1,1,1,1,1,1,1,1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "10f10d2c-119e-4b09-8281-df320cf1f9ed",
+          "input": "citations = [0,0,0,0,0,0,0,0,0,0]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "9dc2a1ee-0ecd-49a0-aa1f-1bb38c869977",
+          "input": "citations = [1,2,3,4,5,6,7,8,9,10]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "a4c981e4-1817-46db-9adf-c216b3cfc5c4",
+          "input": "citations = [10,9,8,7,6,5,4,3,2,1]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "a01cb88e-e681-429a-931d-849b2af0ca46",
+          "input": "citations = [100,200,300,400,500,600,700,800,900,1000]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "aa1412d4-d6c7-418f-863a-1b2e942d1c05",
+          "input": "citations = [1000,900,800,700,600,500,400,300,200,100]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "koko-eating-bananas",
+      "leetCodeNumber": 875,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "b54605b8-7baf-4e2b-82d1-335277ced7f6",
+          "input": "piles = [1], h = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "49ee9278-a3fc-443e-9780-751b7dfbeb88",
+          "input": "piles = [1, 1], h = 2",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "cbb9a3ec-5ca9-45cb-8557-06d4f4d96ce6",
+          "input": "piles = [2, 2], h = 2",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "c99d6b75-9310-44fb-84f2-46e0b8935a53",
+          "input": "piles = [1, 1, 1, 1, 1], h = 5",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "ec6a46d6-64a0-4520-a5c1-5d74573475c4",
+          "input": "piles = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], h = 10",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "ba01d682-e237-483a-a15b-47bc1de5bb62",
+          "input": "piles = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], h = 10",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "ff1caa59-0f80-401b-b033-8e6d43e11ac3",
+          "input": "piles = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], h = 100",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "7e4a31f3-eba2-47ff-922b-33201ddf7f94",
+          "input": "piles = [1, 1, 1, 1, 1], h = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "0e3e7e28-04c8-42ee-bb62-09a5f4989e8d",
+          "input": "piles = [1, 2, 3, 4, 5], h = 1",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "37a725a5-c2e8-47e8-aac4-069402335a47",
+          "input": "piles = [5, 4, 3, 2, 1], h = 1",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "b66b908d-76fe-4aca-bab7-c3c03a04b1f9",
+          "input": "piles = [1, 1, 1, 1, 1], h = 100",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "35b1b85e-28f5-4570-8492-a691b4f04243",
+          "input": "piles = [10, 20, 30, 40, 50], h = 1000",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "a6eadee5-c793-46df-b875-81a9dbee56b6",
+          "input": "piles = [50, 40, 30, 20, 10], h = 1000",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "43c97286-06df-4699-9330-d3d192cb7908",
+          "input": "piles = [1, 2, 3, 4, 5], h = 1000",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "14ff2fbf-7a07-4269-a492-cd87e13398f0",
+          "input": "piles = [5, 4, 3, 2, 1], h = 1000",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "6711450f-86de-4109-97c3-a3b2cecede7d",
+          "input": "piles = [1, 2, 3], h = 3",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "6255d1ee-7ab8-4a11-bc69-0c33d3c57b1a",
+          "input": "piles = [1, 2, 3], h = 5",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "207f88ba-7c45-4646-b133-9a20f5b6e950",
+          "input": "piles = [10, 20, 30], h = 10",
+          "expectedOutput": "7",
+          "orderMatters": true
+        },
+        {
+          "id": "987ed4c6-de00-48f2-90c9-d1cf908fee94",
+          "input": "piles = [100, 200, 300], h = 100",
+          "expectedOutput": "7",
+          "orderMatters": true
+        },
+        {
+          "id": "a3fe1f14-2c6b-40c8-acb7-73b227515883",
+          "input": "piles = [5, 5, 5, 5], h = 10",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "69abce69-0e66-4ab0-8c64-c2990d44bb21",
+          "input": "piles = [10, 10, 10, 10], h = 10",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "30f5d0b5-65bc-492e-91b5-1b23c41abf2d",
+          "input": "piles = [1, 2, 3, 4, 5], h = 10",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "7b6466bd-c127-417d-87a9-f99cd998dded",
+          "input": "piles = [5, 4, 3, 2, 1], h = 10",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "d79161c2-064d-4063-85cb-b22784445409",
+          "input": "piles = [-1, -2, -3], h = 3",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "4d0c381a-8d4f-434c-8867-4e2b224f4173",
+          "input": "piles = [3,6,7,11], h = 8",
+          "expectedOutput": "4",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "kth-smallest-element-in-a-sorted-matrix",
+      "leetCodeNumber": 378,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "9613d3e1-4a05-4ab5-bf1b-a4d657e1dcd5",
+          "input": "matrix = [[1]], k = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "e013d561-027d-423b-8e72-09bd0e13a4f2",
+          "input": "matrix = [[1,2],[3,4]], k = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "e5d74527-9fd8-496d-8fc2-d54f15b4ac7f",
+          "input": "matrix = [[1,2],[3,4]], k = 2",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "bb1801b5-6bac-409b-b935-206411e016e1",
+          "input": "matrix = [[1,2],[3,4]], k = 3",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "632b9e06-8619-46a9-92b8-6b469fc7947e",
+          "input": "matrix = [[1,2],[3,4]], k = 4",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "bcf4724d-200f-4eac-ab5f-2bca51effd06",
+          "input": "matrix = [[5,5],[5,5]], k = 1",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "f295e19f-701d-4bd7-9039-fcb0b868d8b8",
+          "input": "matrix = [[5,5],[5,5]], k = 2",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "9ec0ac20-345c-4e59-a85d-a723dabc6c1f",
+          "input": "matrix = [[5,5],[5,5]], k = 3",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "d269aab4-9fbb-4af0-8988-8d3c3102a401",
+          "input": "matrix = [[5,5],[5,5]], k = 4",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "2217eb94-919a-4efc-a026-a858529a004f",
+          "input": "matrix = [[-1,-2],[-3,-4]], k = 1",
+          "expectedOutput": "-4",
+          "orderMatters": true
+        },
+        {
+          "id": "e865688b-030a-446b-b840-0786527ad867",
+          "input": "matrix = [[-1,-2],[-3,-4]], k = 2",
+          "expectedOutput": "-3",
+          "orderMatters": true
+        },
+        {
+          "id": "8269644b-5caa-456b-952c-8ca94292577b",
+          "input": "matrix = [[-1,-2],[-3,-4]], k = 3",
+          "expectedOutput": "-2",
+          "orderMatters": true
+        },
+        {
+          "id": "f913dc59-139b-47fe-ac94-783d362b66fa",
+          "input": "matrix = [[-1,-2],[-3,-4]], k = 4",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "6e2e97b7-2d07-4068-ba50-3ab2435d0879",
+          "input": "matrix = [[1,100],[2,200]], k = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "02a0ba43-33aa-44af-9ccf-9db071eb2114",
+          "input": "matrix = [[1,100],[2,200]], k = 2",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "160af627-d6fa-48be-b948-7edf5d2bfffc",
+          "input": "matrix = [[1,100],[2,200]], k = 3",
+          "expectedOutput": "100",
+          "orderMatters": true
+        },
+        {
+          "id": "28501619-e2ff-407a-a7d3-1e6ed7abb77a",
+          "input": "matrix = [[1,100],[2,200]], k = 4",
+          "expectedOutput": "200",
+          "orderMatters": true
+        },
+        {
+          "id": "4cd23003-a1b0-4bd9-821e-e6df8639ef87",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], k = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "653e62a6-9e47-4433-ac64-f36b9fce1eef",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], k = 2",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "bed84d4c-c793-4317-86a7-e8cca9b96b11",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], k = 3",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "2b85c2a3-d90d-485a-b656-061f05d22a78",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], k = 9",
+          "expectedOutput": "9",
+          "orderMatters": true
+        },
+        {
+          "id": "40e9a9c3-991d-46b8-a24f-ffe3e0e15a48",
+          "input": "matrix = [[10,20,30],[40,50,60],[70,80,90]], k = 1",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "4af0e792-c933-4125-9394-0b8eb570b2c2",
+          "input": "matrix = [[10,20,30],[40,50,60],[70,80,90]], k = 2",
+          "expectedOutput": "20",
+          "orderMatters": true
+        },
+        {
+          "id": "c6955db0-ac19-4f45-ade9-451d58494779",
+          "input": "matrix = [[10,20,30],[40,50,60],[70,80,90]], k = 3",
+          "expectedOutput": "30",
+          "orderMatters": true
+        },
+        {
+          "id": "40c83b9e-3aec-4462-82f9-be143a9f5292",
+          "input": "matrix = [[10,20,30],[40,50,60],[70,80,90]], k = 9",
+          "expectedOutput": "90",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "max-consecutive-ones-iii",
+      "leetCodeNumber": 1004,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "ba396fec-bff7-4e0c-a31b-a8ba0fdc1711",
+          "input": "nums = [], k = 0",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "3e28e8db-771d-41e6-a3d1-288fa5f822cd",
+          "input": "nums = [1], k = 0",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "2c12b6cc-1bc3-4211-9f4a-f124975dcea8",
+          "input": "nums = [0], k = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "a34ee2a0-5082-4057-9bd9-53c1b285d08b",
+          "input": "nums = [1, 0], k = 1",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "598d1512-be62-4e70-922c-df153ba3950a",
+          "input": "nums = [0, 1], k = 1",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "d315ab2d-2e9b-4a76-9696-073ab82c82de",
+          "input": "nums = [1, 1], k = 0",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "bc8e4551-e367-485d-91c8-ffb2653447f1",
+          "input": "nums = [0, 0], k = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "4fc91eec-1e22-49aa-86aa-546dcca73830",
+          "input": "nums = [0, 0, 0], k = 2",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "64105daa-dca6-4d28-9a71-1f2b07b16356",
+          "input": "nums = [0, 1, 0], k = 1",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "b510a728-8559-4660-a700-586f445340df",
+          "input": "nums = [1, 1, 0], k = 1",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "57f2b494-5588-48d9-89d8-1013c1cdc921",
+          "input": "nums = [0, 0, 1], k = 1",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "a038a993-bcee-4bcb-b44f-b7aea9dfa037",
+          "input": "nums = [1, 0, 0], k = 1",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "95d11228-6596-408c-9cd9-cdf8c38c7801",
+          "input": "nums = [0, 1, 1], k = 1",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "28adfc25-2b28-4263-a2b4-2595cc23b209",
+          "input": "nums = [0, 0, 1, 1], k = 1",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "d9a9b16b-254f-47d3-99b2-35980260f18e",
+          "input": "nums = [1, 0, 0, 0], k = 2",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "c31c8ccf-4728-4aff-8e3d-ab8d820e8fe6",
+          "input": "nums = [0, 1, 1, 1], k = 1",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "11b2e1b6-605e-4d08-a8fd-5496aaf18f2a",
+          "input": "nums = [1, 1, 1, 0], k = 1",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "6ffbeadb-6eab-42dd-95c4-883be203ee65",
+          "input": "nums = [1, 0, 1, 1, 0], k = 2",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "003a31d0-48a3-4ff5-a1e4-78ce66b14263",
+          "input": "nums = [0, 0, 0, 0, 1], k = 3",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "1bb77671-905f-4d18-ba0b-268473919fb4",
+          "input": "nums = [1, 1, 1, 1, 0], k = 1",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "71de212c-a86a-4f54-8a06-62708b3f44ba",
+          "input": "nums = [0, 0, 0, 0, 0], k = 5",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "672f7790-e44f-4768-8609-c7dbaf64bf94",
+          "input": "nums = [1, 1, 1, 1, 1], k = 0",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "83bdce64-894a-4cdf-9b51-4f6ff493cacd",
+          "input": "nums = [1, 1, 1, 1, 1, 1], k = 0",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "d1fa41a7-b938-4592-9d28-985a3d29ca05",
+          "input": "nums = [0, 0, 0, 0, 0, 0], k = 6",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "b6d68fe7-7500-44f5-82ff-b271545ccfef",
+          "input": "nums = [1, 1, 1, 1, 1, 1, 1], k = 0",
+          "expectedOutput": "7",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "maximum-length-of-repeated-subarray",
+      "leetCodeNumber": 718,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "6b5c9f5e-97d9-43fd-8772-c9d00603e92e",
+          "input": "nums1 = [1,2,3], nums2 = [4,5,6]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "1a775765-171d-4598-9364-efec42f03a7c",
+          "input": "nums1 = [], nums2 = [1,2,3]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "41108114-1e14-4844-8f18-2672f0228abd",
+          "input": "nums1 = [1,2,3], nums2 = []",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "b1648f81-7bf7-448e-9814-3e2f95d398b0",
+          "input": "nums1 = [1], nums2 = [1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "5b986f41-5db7-47ad-828c-7aae290d7610",
+          "input": "nums1 = [1,1,1], nums2 = [1,1,1]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "2b12700c-5b08-474a-b1c4-cb364544ac12",
+          "input": "nums1 = [1,1,1,1,1], nums2 = [1,1,1,1,1]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "7c039501-69fa-47ac-91e0-cac7c68b3e07",
+          "input": "nums1 = [1,2,3,4,5,6,7,8,9,10], nums2 = [1,2,3,4,5,6,7,8,9,10]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "79593ffa-cd71-4a44-bcc4-24a7fc17215f",
+          "input": "nums1 = [1,1,1,1,1,1,1,1,1,1], nums2 = [1,1,1,1,1,1,1,1,1,1]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "84e0fae0-9e34-4991-bc1b-cd4bdc59be40",
+          "input": "nums1 = [1,2,3,4,5], nums2 = [1,2,3,4,6]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "6a575e7b-00d4-4ebb-a5dc-5c7ccff4f2fb",
+          "input": "nums1 = [1,2,3,4,5], nums2 = [6,7,8,9,10]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "e7d944fa-2d3f-494b-bb17-facb26e98791",
+          "input": "nums1 = [1,1,2,2,3,3], nums2 = [1,1,2,2,3,3]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "05dab676-f8b0-4660-bfb0-901384aabbeb",
+          "input": "nums1 = [1,2,3,4,5,6], nums2 = [4,5,6,7,8,9]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "abb9fc7e-f053-42e4-9aad-935704d4c0c7",
+          "input": "nums1 = [1,2,3,4,5,6,7,8,9], nums2 = [4,5,6,7,8,9,10]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "2230010b-6e9e-4822-a846-a3a5d078ba8d",
+          "input": "nums1 = [1,2,3,4,5,6,7,8,9,10,11,12], nums2 = [10,11,12,13,14,15,16,17,18,19,20,21]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "f0f05b13-08f0-450d-85b1-72e336c2c9f0",
+          "input": "nums1 = [1,2,3,4,5,6,7,8,9,10,11,12], nums2 = [1,2,3,4,5,6,7,8,9,10,11,12]",
+          "expectedOutput": "12",
+          "orderMatters": true
+        },
+        {
+          "id": "998a8c86-89a1-4d60-a0d8-8a45b58c0b60",
+          "input": "nums1 = [1,1,1,1,1,1,1,1,1,1,1,1], nums2 = [1,1,1,1,1,1,1,1,1,1,1,1]",
+          "expectedOutput": "12",
+          "orderMatters": true
+        },
+        {
+          "id": "75f21ded-ec35-43a4-8608-039ff147b231",
+          "input": "nums1 = [0,0,0,0,0,0,0,0,0,0,0,0], nums2 = [0,0,0,0,0,0,0,0,0,0,0,0]",
+          "expectedOutput": "12",
+          "orderMatters": true
+        },
+        {
+          "id": "812fd99d-ef3b-4a2a-957a-44ed5bf56081",
+          "input": "nums1 = [10,20,30,40,50,60,70,80,90,100,110,120], nums2 = [10,20,30,40,50,60,70,80,90,100,110,120]",
+          "expectedOutput": "12",
+          "orderMatters": true
+        },
+        {
+          "id": "8d78bbff-4592-4245-9f27-cf6852663a42",
+          "input": "nums1 = [-10,-20,-30,-40,-50,-60,-70,-80,-90,-100,-110,-120], nums2 = [-10,-20,-30,-40,-50,-60,-70,-80,-90,-100,-110,-120]",
+          "expectedOutput": "12",
+          "orderMatters": true
+        },
+        {
+          "id": "8fab3e13-1120-493b-877a-ee94b212f16c",
+          "input": "nums1 = [1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000], nums2 = [1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000]",
+          "expectedOutput": "12",
+          "orderMatters": true
+        },
+        {
+          "id": "fb3bc8a6-d045-4037-af2d-00a80d4aa2c9",
+          "input": "nums1 = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], nums2 = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]",
+          "expectedOutput": "15",
+          "orderMatters": true
+        },
+        {
+          "id": "b6023238-c91a-4724-bb7d-4417e46656e1",
+          "input": "nums1 = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], nums2 = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]",
+          "expectedOutput": "15",
+          "orderMatters": true
+        },
+        {
+          "id": "6c384781-0f91-45f7-8f5e-b9f6d4f37a74",
+          "input": "nums1 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], nums2 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+          "expectedOutput": "15",
+          "orderMatters": true
+        },
+        {
+          "id": "3e29c312-5e9f-40b7-bfdc-82beea7b090b",
+          "input": "nums1 = [1,2,3], nums2 = [3,2,1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "d8187c2c-c6e5-462e-90e0-c90294b336f9",
+          "input": "nums1 = [1,2,3,4,5], nums2 = [5,4,3,2,1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "minimum-size-subarray-sum",
+      "leetCodeNumber": 209,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "77e608d6-e18b-4e83-ac2f-ef426b4fc42e",
+          "input": "nums = [1], target = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "80343cdb-17f2-4fc1-bc8b-7caddd7db23d",
+          "input": "nums = [1,1], target = 2",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "83d085be-52a5-4434-800f-25bcefd405a3",
+          "input": "nums = [0,0,0], target = 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "11086295-954e-4872-a3e6-933cb6349cd1",
+          "input": "nums = [], target = 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "783f52b6-98b2-47a9-94f3-df1903ec6bf5",
+          "input": "nums = [1,2,3,4,5], target = 15",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "724e5e0b-80a9-4b35-93f2-5ba9ba125e31",
+          "input": "nums = [5,4,3,2,1], target = 15",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "abb835c1-f048-4221-a69b-4c3865ac4c1b",
+          "input": "nums = [1,1,1,1,1], target = 5",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "6d7e9aff-94ee-419d-b83c-ad66035e5fbd",
+          "input": "nums = [10,20,30,40,50], target = 100",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "14a49b99-b561-4297-a7ca-e2bba15205d3",
+          "input": "nums = [50,40,30,20,10], target = 100",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "80858e02-3fb0-4ac4-90d5-c3c7962933ed",
+          "input": "nums = [1,2,3,4,5], target = 100",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "ab9afd27-c763-4df6-9ea5-32429d6ecc6d",
+          "input": "nums = [100,200,300,400,500], target = 100",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "c953b5d0-485b-4551-a61a-31b024648a0c",
+          "input": "nums = [1000,2000,3000,4000,5000], target = 10000",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "665c0acd-91de-4aea-8d41-7d5be9af94a9",
+          "input": "nums = [5000,4000,3000,2000,1000], target = 10000",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "26cba858-7f41-45c1-a894-ab0b103484f9",
+          "input": "nums = [1,1,1,1,1,1,1,1,1,1], target = 10",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "91c90151-be4a-46be-8098-567535db0a46",
+          "input": "nums = [10,10,10,10,10,10,10,10,10,10], target = 100",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "474a3c76-e5e5-44b1-9f52-4ea0ec35483a",
+          "input": "nums = [1,2,3,4,5,6,7,8,9,10], target = 55",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "d4daa620-f055-4f79-a150-7886866e27a0",
+          "input": "nums = [10,9,8,7,6,5,4,3,2,1], target = 55",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "e9fe66a3-abe1-43d7-a301-0e2e2b59b520",
+          "input": "nums = [1,1,1,1,1,1,1,1,1,1], target = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "7e39a5b1-7bc4-4cae-97fc-2195afec506f",
+          "input": "nums = [1,2,3,4,5,6,7,8,9,10], target = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "b139bd4a-55ec-40bf-ac5a-a7ae6eb70a46",
+          "input": "nums = [10,9,8,7,6,5,4,3,2,1], target = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "df81dbe4-8c88-40a4-b11a-c381d7baa5cd",
+          "input": "nums = [1,1,1,1,1,1,1,1,1,1], target = 100",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "f0bc5a76-707d-4baa-bcb7-4a66bc1d1f68",
+          "input": "nums = [10,10,10,10,10,10,10,10,10,10], target = 1000",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "608a92f7-2e33-43c7-90ca-2aa0d9a7f9de",
+          "input": "nums = [1,2,3,4,5,6,7,8,9,10], target = 1000",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "73b9f85d-f259-4a13-ae58-69e19f17b609",
+          "input": "nums = [10,9,8,7,6,5,4,3,2,1], target = 1000",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "c48e3c44-0482-4d41-aa60-8dd4267c6f90",
+          "input": "nums = [-1,-2,-3,-4,-5], target = -15",
+          "expectedOutput": "1",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "my-calendar-i",
+      "leetCodeNumber": 729,
+      "difficulty": "medium",
+      "testCaseCount": 15,
+      "testCases": [
+        {
+          "id": "ce8710f2-bfa1-43ef-81eb-684e1f1d6457",
+          "input": "[\"MyCalendar\",\"book\",\"book\"]",
+          "expectedOutput": "[true,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "a070e873-deb6-474e-957b-c9f3eb696c4a",
+          "input": "[\"MyCalendar\",\"book\",\"book\",\"book\"]",
+          "expectedOutput": "[true,false,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "ec87d6ab-7086-4d83-a48c-d6dfd0ca1a73",
+          "input": "[\"MyCalendar\",\"book\",\"book\",\"book\",\"book\"]",
+          "expectedOutput": "[true,false,true,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "0ff7009e-bede-4324-b9c5-d3fec6f5483a",
+          "input": "[\"MyCalendar\",\"book\",\"book\",\"book\",\"book\",\"book\"]",
+          "expectedOutput": "[true,false,true,true,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "f7b48d79-9c3c-43b2-b854-b6e0623020c6",
+          "input": "[\"MyCalendar\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\"]",
+          "expectedOutput": "[true,false,true,true,false,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "bf9ff7cf-8ba1-4ad6-a555-1becfc098e28",
+          "input": "[\"MyCalendar\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\"]",
+          "expectedOutput": "[true,false,true,true,false,true,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "2935c34a-f327-4a26-a515-3fcde6aeaeed",
+          "input": "[\"MyCalendar\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\"]",
+          "expectedOutput": "[true,false,true,true,false,true,true,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "371c21de-c858-4a7b-8298-286fa337c270",
+          "input": "[\"MyCalendar\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\"]",
+          "expectedOutput": "[true,false,true,true,false,true,true,false,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "bd6d43ac-f78f-47bb-b4f5-8432e675aea6",
+          "input": "[\"MyCalendar\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\"]",
+          "expectedOutput": "[true,false,true,true,false,true,true,false,true,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "1444c849-1184-4f78-a447-695459ae2be7",
+          "input": "[\"MyCalendar\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\"]",
+          "expectedOutput": "[true,false,true,true,false,true,true,false,true,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "7a205404-a3ad-405a-80d1-89b2a75537a0",
+          "input": "[\"MyCalendar\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\"]",
+          "expectedOutput": "[true,false,true,true,true,false,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "ac33f36c-76ce-43b2-b5b6-eed9726a84b1",
+          "input": "[\"MyCalendar\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\"]",
+          "expectedOutput": "[true,false,true,true,true,false,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "636c168c-8f19-4df0-93af-84da2971eda0",
+          "input": "[\"MyCalendar\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\",\"book\"]",
+          "expectedOutput": "[true,false,true,true,true,false,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "451d66fa-61e0-4325-b6b1-914765107b5a",
+          "input": "['MyCalendar', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[true,false,true,true,true,false,true,false,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "7af125fa-2044-4b35-918d-cbf4c1be04a1",
+          "input": "['MyCalendar', 'book', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[true,false,true,true]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "my-calendar-ii",
+      "leetCodeNumber": 731,
+      "difficulty": "medium",
+      "testCaseCount": 15,
+      "testCases": [
+        {
+          "id": "37118e5d-42ea-4b77-8b01-5e16cc981ee4",
+          "input": "['MyCalendarTwo', 'book', 'book', 'book']",
+          "expectedOutput": "[null,true,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "98fe7a64-3e59-4f0e-905e-20289ab0388a",
+          "input": "['MyCalendarTwo', 'book', 'book']",
+          "expectedOutput": "[null,true,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "ee687316-6cd6-467c-abe8-4fc64dd8e2fa",
+          "input": "['MyCalendarTwo', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[null,true,false,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "d1b6cce8-068c-4e51-b8f9-8ac90eb18723",
+          "input": "['MyCalendarTwo', 'book']",
+          "expectedOutput": "[null,true]",
+          "orderMatters": true
+        },
+        {
+          "id": "4650ae61-7512-444c-b761-35f76c850ebd",
+          "input": "['MyCalendarTwo', 'book', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[null,true,false,false,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "fcd521e7-eac9-410f-b15f-76284dcba35f",
+          "input": "['MyCalendarTwo', 'book', 'book', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[null,true,false,false,false,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "f7734ffa-87fd-424a-9fdf-fc01d83027b6",
+          "input": "['MyCalendarTwo', 'book', 'book', 'book', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[null,true,false,false,false,false,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "2837d8f6-809d-4daf-af99-34877a26f8f3",
+          "input": "['MyCalendarTwo', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[null,true,false,false,false,false,false,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "d83572b5-c8a3-4b07-8846-fe2b8ad12d31",
+          "input": "['MyCalendarTwo', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[null,true,false,false,false,false,false,false,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "02eaeef1-ae35-42a3-a6c1-afc56ddcdaf6",
+          "input": "['MyCalendarTwo', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[null,true,false,false,false,false,false,false,false,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "e25a92a5-6666-4057-9a11-09ee6555984b",
+          "input": "['MyCalendarTwo', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[null,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "dcfc0c98-9745-4487-aa50-552f49d85b3e",
+          "input": "['MyCalendarTwo', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[null,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "c16f5e98-13ef-47cf-85e2-4276569d83e8",
+          "input": "['MyCalendarTwo', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[null,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "0467831c-eb46-4013-8eb6-2307371c7a3f",
+          "input": "['MyCalendarTwo', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[null,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]",
+          "orderMatters": true
+        },
+        {
+          "id": "2af4f235-4100-42fc-99bd-ddc5822ab704",
+          "input": "['MyCalendarTwo', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book', 'book']",
+          "expectedOutput": "[null,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "number-of-matching-subsequences",
+      "leetCodeNumber": 792,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "ca66fef8-395b-4bcd-bb39-02f11368ce8e",
+          "input": "S = \"abc\", words = [\"a\",\"b\",\"c\"]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "102d1a19-7040-4853-a088-a43ad721f111",
+          "input": "S = \"abc\", words = [\"abc\",\"abcd\",\"abce\"]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "8ee5feb8-36d3-485d-b4e3-5a17f78e2aac",
+          "input": "S = \"\", words = [\"a\",\"b\",\"c\"]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "41eed5f7-4993-49cc-b08d-9d57266d0f4f",
+          "input": "S = \"a\", words = [\"a\",\"b\",\"c\"]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "c43d2d9f-e00d-4683-ba61-d5f724776500",
+          "input": "S = \"abc\", words = []",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "00909111-0486-4ea0-ab71-d67e9ecbdbcd",
+          "input": "S = \"abc\", words = [\"abc\",\"abc\",\"abc\"]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "d3f7cd78-8dd2-423d-a7e1-9c9949a47e6e",
+          "input": "S = \"abcde\", words = [\"a\",\"b\",\"c\",\"d\",\"e\"]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "75666235-9310-4d03-b3fc-a75f7f9e6622",
+          "input": "S = \"abcde\", words = [\"abc\",\"bcd\",\"cde\"]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "ef30397a-af7f-4f35-883c-98a77672c09b",
+          "input": "S = \"aabbcc\", words = [\"ab\",\"bc\",\"cc\"]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "a11434de-d89d-476d-87bb-ece5aac1b920",
+          "input": "S = \"abcde\", words = [\"abcde\",\"abcde\",\"abcde\"]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "a2602bad-0730-4339-a6ec-8bcc3caefc70",
+          "input": "S = \"abc\", words = [\"abc\",\"def\",\"ghi\"]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "a1df7a63-efa1-4f9a-b0e8-96b042568bce",
+          "input": "S = \"abc\", words = [\"abc\",\"abc\",\"def\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "5b4f169c-ac41-4f02-82ca-2e46be1a9cd9",
+          "input": "S = \"abc\", words = [\"def\",\"ghi\",\"jkl\"]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "32ee385b-c356-444b-bc5d-5d2dfad1dea1",
+          "input": "S = \"abcde\", words = [\"abc\",\"def\",\"ghi\",\"jkl\"]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "d7d70701-b886-4285-95bc-0fda391a7979",
+          "input": "S = \"abcde\", words = [\"abc\",\"bcd\",\"cde\",\"def\"]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "e344abce-dcc7-40de-afff-4615c2bbc92a",
+          "input": "S = \"abcde\", words = [\"abc\",\"def\",\"ghi\",\"jkl\",\"mno\"]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "68088d5a-9521-4937-9eaf-96a1aec1a68f",
+          "input": "S = \"a\", words = [\"a\",\"a\",\"a\"]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "5fc6c3ef-bebe-4e88-8370-ab7544ef330f",
+          "input": "S = \"ab\", words = [\"a\",\"b\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "3698ef3f-da14-436b-82f2-165547890121",
+          "input": "S = \"abc\", words = [\"abc\",\"abc\",\"abc\",\"abc\",\"abc\"]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "257bb7a9-ac06-4576-9a80-bd4e6c6df39a",
+          "input": "S = \"abcde\", words = [\"abc\",\"bcd\",\"cde\",\"def\",\"efg\",\"fgh\",\"ghi\"]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "abfc3dbf-65e0-4ef6-b18b-c78935006aba",
+          "input": "S = \"abc\", words = [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\"]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "1a663550-66e1-4052-84a8-bc3ba060dfec",
+          "input": "S = \"abc\", words = [\"abc\",\"abc\",\"abc\",\"abc\",\"abc\",\"abc\"]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "d370ec23-b372-4683-86ee-b428a4472166",
+          "input": "S = \"abcde\", words = [\"abc\",\"bcd\",\"cde\",\"def\",\"efg\",\"fgh\",\"ghi\",\"hij\"]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "f5b2ab2b-f4bd-4049-90a0-dca7c076cc69",
+          "input": "S = \"abc\", words = [\"ab\",\"bc\",\"ac\"]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "a6ad1767-21eb-452d-89ec-b12161dd126d",
+          "input": "S = \"abcde\", words = [\"abcd\",\"bcde\",\"cde\"]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "online-election",
+      "leetCodeNumber": 911,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "d27fc963-34cc-43c1-a161-1dcf4cd04b68",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[0],[0,1,1],[0,5,10]],[0],[5]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "c04a1ff5-fb23-48d7-a998-ecfd21363e7e",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[0,1,1],[0,5,10]],[0],[10]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "e6cdf946-22a1-4ae9-9f63-be70a09bcb7b",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\",\"q\"],[[[0],[0,1,1],[0,5,10]],[0],[5],[10]]",
+          "expectedOutput": "[0,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "eef6bd96-a88e-4326-b209-5d275a15c2b6",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\",\"q\",\"q\"],[[[0,1,1,1,1],[0,5,10,15,20]],[0],[5],[10],[15]]",
+          "expectedOutput": "[0,0,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "8632c7fd-1709-4571-9305-c011e614a7a0",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[0,0,0,0,0],[0,5,10,15,20]],[0]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "c0063aa1-040e-41cc-b9ad-09d1d28b39a9",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[1,1,1,1,1],[0,5,10,15,20]],[20]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "20b419e6-d448-472f-94cc-72fc34e50265",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[0,1,0,1,0],[0,5,10,15,20]],[5]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "027fe83c-9150-4af5-bf13-9c6983150a3e",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[0,1,0,1,0],[0,5,10,15,20]],[10]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "a2d65a46-6714-4925-8b91-a71f05c29df2",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[0,1,0,1,0],[0,5,10,15,20]],[15]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "6ca779b4-2d4a-459d-acf4-4aea98b49a33",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[0,1,0,1,0],[0,5,10,15,20]],[20]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "76d7e61c-45eb-40dc-a7f2-a5cf27b1ef5a",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\",\"q\"],[[[0,1,0,1,0],[0,5,10,15,20]],[5],[10]]",
+          "expectedOutput": "[0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "7dd9217d-1c8b-4374-a563-e7f27f4245df",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\",\"q\"],[[[0,1,0,1,0],[0,5,10,15,20]],[10],[15]]",
+          "expectedOutput": "[0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "aad436d2-21a7-4ab0-9823-f7bc0d959f30",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\",\"q\"],[[[0,1,0,1,0],[0,5,10,15,20]],[15],[20]]",
+          "expectedOutput": "[0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "e757d549-522a-4c4b-a720-5b9b1626e3ad",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\",\"q\",\"q\"],[[[0,1,0,1,0],[0,5,10,15,20]],[5],[10],[15]]",
+          "expectedOutput": "[0,0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "8861fd5e-a785-430d-9f64-82e66709926f",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\",\"q\",\"q\"],[[[0,1,0,1,0],[0,5,10,15,20]],[5],[10],[20]]",
+          "expectedOutput": "[0,0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "09d9d972-b2e4-49e1-a25d-98e21f4ac02b",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\",\"q\",\"q\"],[[[0,1,0,1,0],[0,5,10,15,20]],[10],[15],[20]]",
+          "expectedOutput": "[0,0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "98002b6d-a659-4b78-b3c1-fb638160a85f",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\",\"q\",\"q\",\"q\"],[[[0,1,0,1,0],[0,5,10,15,20]],[5],[10],[15],[20]]",
+          "expectedOutput": "[0,0,0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "1b8876b7-ca67-4078-a4e0-7c37e4cb3ad2",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[0],[0]],[0]]",
+          "expectedOutput": "[0]",
+          "orderMatters": true
+        },
+        {
+          "id": "d34b30a3-e0da-4aaf-b3da-6c87f3df2586",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[1],[0]],[0]]",
+          "expectedOutput": "[1]",
+          "orderMatters": true
+        },
+        {
+          "id": "6aea55f4-49b8-42cb-9ae4-7df0a7f4259f",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[0,0],[0,0]],[0]]",
+          "expectedOutput": "[0]",
+          "orderMatters": true
+        },
+        {
+          "id": "8aef81dc-f9be-40a8-a05c-9af3af110b66",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[1,1],[0,0]],[0]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "3baa46aa-49b1-4f36-9a5e-50b8054bf4c9",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[0,1],[0,0]],[0]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "30caac78-42a4-40c4-9185-e5f8f11a2e39",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[0,0,0,0,0],[0,0,0,0,0]],[0]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "fc12eb72-98c9-4d91-8131-8f039c5a2200",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[1,1,1,1,1],[0,0,0,0,0]],[0]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "82ff4ba1-b1c1-463e-bafd-62b214e20e14",
+          "input": "[\"TopVotedCandidate\",\"__init__\",\"q\"],[[[0,1,0,1,0],[0,0,0,0,0]],[0]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "peak-index-in-a-mountain-array",
+      "leetCodeNumber": 852,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "e3945212-e3c7-43c2-b2ad-e49053f0c826",
+          "input": "nums = [1,2,1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "de062cdb-4137-4f30-8cf5-6b17dc73a5b8",
+          "input": "nums = [0,10,0]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "5b274f08-fb55-474b-84c9-2dee3526024c",
+          "input": "nums = [1,3,5,3,1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "e331aa9f-b11f-444a-820c-d80b5f3c78eb",
+          "input": "nums = [-1,0,1,-1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "8e5f538b-c152-4f07-be4a-73dbee2707d4",
+          "input": "nums = [1,2,3,4,5,4,3,2,1]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "16a7b332-d4a5-4980-b360-1aeae98cd293",
+          "input": "nums = [10,20,30,40,50,40,30,20,10]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "4ee7a004-2372-4dd9-a939-44afcbad6d5e",
+          "input": "nums = [1,1,2,1,1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "e6ae2660-0c0f-45dc-80ac-95548f019475",
+          "input": "nums = [0,0,1,0,0]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "1111aeac-7c58-48f8-85b4-5db13bfcf3b5",
+          "input": "nums = [100,200,300,400,500,400,300,200,100]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "2b759c63-2745-4b60-b185-8935abacab90",
+          "input": "nums = [1,100,1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "5d1afb0c-73e6-4590-bbb4-e9e5c14b8e41",
+          "input": "nums = [1000,2000,3000,4000,5000,4000,3000,2000,1000]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "b86c31f4-8fe7-494a-afa2-909aa4212352",
+          "input": "nums = [10,20,10]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "77bf24f3-3e4f-47d1-8e4b-66fe9b3b50b5",
+          "input": "nums = [5,10,15,20,25,20,15,10,5]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "8976a3cc-3399-4563-a33d-79f8d738207b",
+          "input": "nums = [1,2,3,2,1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "e5a1fb3e-f066-4f94-a458-7f1bea7e3e5e",
+          "input": "nums = [0,1,0]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "64f2daa5-5c11-444e-b9e5-46cc471ccc1e",
+          "input": "nums = [1,1,1,2,1,1,1]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "ecd36b23-92d1-4644-9cd7-66720b6ad2e1",
+          "input": "nums = [10,10,20,10,10]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "b344f7a8-144d-47ec-a606-733caee53ed6",
+          "input": "nums = [1,10,1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "ef43e0ea-485f-4615-8688-f40c26c07083",
+          "input": "nums = [100,100,200,100,100]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "1157933f-3d85-4370-bdf5-5740af7f8867",
+          "input": "nums = [1,2,3,4,3,2,1]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "9c8be10b-fbed-47e7-ad7e-7408044e66f3",
+          "input": "nums = [10,20,30,20,10]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "f7cf26d0-5c8d-45f1-915f-3f750baffd59",
+          "input": "nums = [0,0,0,1,0,0,0]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "10ae756c-fc21-46f4-a61f-b739e7538cb9",
+          "input": "nums = [1,1,1,1,2,1,1,1,1]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "6712f5af-b061-48c9-9fb9-ce67d3ee643e",
+          "input": "nums = [10,10,10,20,10,10,10]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "c5d462a5-57b2-4e77-8672-61df72378164",
+          "input": "nums = [1,10,100,10,1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "search-a-2d-matrix",
+      "leetCodeNumber": 74,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "098892B4-1974-429B-8714-D9876D3CABC0",
+          "input": "[[1,3,5,7],[10,11,16,20],[23,30,34,60]], 3",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "F1EB9F3C-B6FB-450F-B2B6-242EC53BAC3F",
+          "input": "[[]], 0",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "60254E89-B336-47D6-8B68-E509CEFDBA9F",
+          "input": "[[1]], 1",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "19BDAB70-938A-4F4D-B4E3-BAA947BFF58A",
+          "input": "[[1]], 0",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "0724A2AB-36CA-424C-A14B-A8A15CCCA157",
+          "input": "[[1,3]], 3",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "A4D95D43-BD3D-484B-9745-CB65CF7334CF",
+          "input": "[[1,3]], 1",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "0C0AE626-E01A-4B65-B5E8-B038803935C1",
+          "input": "[[1,3]], 2",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "CBDE25F7-3D55-4E55-AAB0-3EA434631CCA",
+          "input": "[[1,3,5,7],[10,11,16,20],[23,30,34,60]], 60",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "C7C6F9DA-BABC-4D41-BC5B-ACA2D0B232B1",
+          "input": "[[1,3,5,7],[10,11,16,20],[23,30,34,60]], 1",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "118238D1-A25D-4E91-9DA1-BC4F587BC2BE",
+          "input": "{\"matrix\": [[1,3,5,7],[10,11,16,20],[23,30,34,60]], \"target\": 3}",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "6BAAC9E4-7D79-4028-9B08-4C0DB1D4F71A",
+          "input": "{\"matrix\": [[1,3,5,7],[10,11,16,20],[23,30,34,60]], \"target\": 13}",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "84BA0F82-3E0F-4642-9ABB-15511A45B824",
+          "input": "{\"matrix\": [[1]], \"target\": 1}",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "ED83BAAB-D4FE-4F2B-BD67-2B9B6EB22B5D",
+          "input": "{\"matrix\": [[1]], \"target\": 0}",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "393E82ED-B1CC-4D55-A0D7-2B3BC41D152A",
+          "input": "{\"matrix\": [], \"target\": 0}",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "EFCB366E-4959-412D-BE71-1CCBD16382FA",
+          "input": "{\"matrix\": [[1,3,5,7],[10,11,16,20],[23,30,34,60]], \"target\": 60}",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "F2384560-1FBC-48AB-B4FA-C6FB7FA79C5F",
+          "input": "{\"matrix\": [[1,3,5,7],[10,11,16,20],[23,30,34,60]], \"target\": 1}",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "FD725832-07C2-4C36-8A47-4659BFBD0E78",
+          "input": "{\"matrix\": [[1,3,5,7],[10,11,16,20],[23,30,34,60]], \"target\": 20}",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "D2035523-B747-4474-B052-E1C772AC15A0",
+          "input": "{\"matrix\": [[-5]], \"target\": -5}",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "68466121-DF34-4C0D-B3F6-09A1A05230CA",
+          "input": "{\"matrix\": [[-9,-7,-5,-3,-1],[1,3,5,7,9]], \"target\": -2}",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "AFD5FF3E-A7E9-4670-89B2-8D43C55E9067",
+          "input": "{\"matrix\": [[1]], \"target\": 2}",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "71B4D25B-011B-43F0-94C6-6E53FFBA1674",
+          "input": "{\"matrix\": [[1,3,5,7],[10,11,16,20],[23,30,34,60]], \"target\": 0}",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "A622D5E5-FAA4-473C-8819-A4F11F1382FB",
+          "input": "{\"matrix\": [[1, 3]], \"target\": 3}",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "36C982A9-0A7F-425E-BE49-615ACF39BE36",
+          "input": "{\"matrix\": [[1,3,5]], \"target\": 0}",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "07239d5a-34d1-497f-8fb2-5a6cb1b5ad40",
+          "input": "matrix = [[1]], target = 1",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "27a35c60-33ef-4bef-a66d-3670439a1327",
+          "input": "matrix = [[1]], target = 2",
+          "expectedOutput": "false",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "search-a-2d-matrix-ii",
+      "leetCodeNumber": 240,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "194cadc2-fa5d-4637-9c95-30a95cb4bad8",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], target = 5",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "d1ca0974-7999-4002-b208-b4bb11450e86",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], target = 10",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "032c9239-2b8a-4aa4-b6f8-27c573d6be93",
+          "input": "matrix = [[1,4,7],[10,11,16],[23,30,34]], target = 3",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "2951dfda-0c94-4058-82bf-c47798cde152",
+          "input": "matrix = [[1,4,7],[10,11,16],[23,30,34]], target = 30",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "723c5cf3-9745-4130-8042-03977fbd95bf",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], target = 1",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "f973b241-4e97-4a7a-b9a8-d848339a0fbb",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], target = 9",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "1d58a84e-ce7d-4a5f-8222-010319764f52",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], target = 0",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "a4f843d9-6fca-4c17-8f6d-462f1714195f",
+          "input": "matrix = [[-1,-2,-3],[-4,-5,-6],[-7,-8,-9]], target = 5",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "3f896bd4-11b0-43d2-a053-fd180419ee49",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], target = -1",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "767e6278-afb4-4033-826f-825cda37a3a0",
+          "input": "matrix = [[1,1,1],[1,1,1],[1,1,1]], target = 1",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "b480254e-cedd-485e-91c5-b18b1b3aea3b",
+          "input": "matrix = [[1,1,1],[1,1,1],[1,1,1]], target = 2",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "ed78c1cc-3776-4c30-b9fc-cce7c73e9b50",
+          "input": "matrix = [[1]], target = 1",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "b45868b6-f601-4b4a-bdcf-03b91c3593e8",
+          "input": "matrix = [[1]], target = 2",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "639087c6-b5b8-4032-83b4-1b961fef7072",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], target = -10",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "04a8bed5-51ea-4b64-a492-bf2b6a53bd2f",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], target = 100",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "33acb1f0-bcb5-42db-aa1a-a728fc6aae55",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], target = -100",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "f5fb6efe-69c5-41f9-9653-d9e6260f9114",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], target = 1000",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "6f6be2a8-3ff3-46b1-940a-b83fd24c102f",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], target = -1000",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "368ae3b1-b116-4153-8fac-a08a43753d5f",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], target = 10000",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "a68faecd-3647-42a1-9387-8aaabc00f38a",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]], target = -10000",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "7cf1a08a-a347-4bb7-9a3c-35b5b814c4fe",
+          "input": "matrix = [[]], target = 5",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "4277d2c5-9c8e-4ebe-9c42-353bcd569015",
+          "input": "matrix = [[9,8,7],[6,5,4],[3,2,1]], target = 10",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "5315e269-68d2-4d32-875e-6b0aa7953d76",
+          "input": "matrix = [[1,2,3,4,5],[6,7,8,9,10],[11,12,13,14,15]], target = 13",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "69903d51-388a-4b2f-b68f-1d576880d660",
+          "input": "matrix = [[1,2,3,4,5],[6,7,8,9,10],[11,12,13,14,15]], target = 20",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "13efe339-a75c-4b77-9782-43176761f1a6",
+          "input": "matrix = [[1,2,3],[4,5,6],[7,8,9],[10,11,12]], target = 11",
+          "expectedOutput": "true",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "search-in-rotated-sorted-array",
+      "leetCodeNumber": 33,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "35D7EE00-4257-47EA-ADB8-5FE3104D68DB",
+          "input": "{\"nums\": [4,5,6,7,0,1,2], \"target\": 0}",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "D37B6A7D-35AF-497D-BC03-67A422301BDB",
+          "input": "{\"nums\": [4,5,6,7,0,1,2], \"target\": 3}",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "CD36332E-6623-49AF-9AFD-7C760BF6A217",
+          "input": "{\"nums\": [1], \"target\": 0}",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "6F48D81C-7488-46A2-B6BF-B40CBEC8CFB8",
+          "input": "{\"nums\": [1], \"target\": 1}",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "974B9643-1DBD-4E5B-9FE4-5C7B4543A721",
+          "input": "{\"nums\": [1,3], \"target\": 3}",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "156223B0-706F-47F5-9AF9-C9D947EC492A",
+          "input": "{\"nums\": [1,3], \"target\": 1}",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "4A21628D-3F74-4624-A3C9-29D912CD1596",
+          "input": "{\"nums\": [3,1], \"target\": 1}",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "3CA01450-80D2-4791-B641-C746B92E615A",
+          "input": "{\"nums\": [], \"target\": 5}",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "BD383402-E5E2-484E-8824-7EDBBC2B22AC",
+          "input": "{\"nums\": [1,3,5], \"target\": 5}",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "633DC201-D2FC-4B03-9A93-DCEAD975F29D",
+          "input": "{\"nums\": [5,1,3], \"target\": 5}",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "A7696842-12EB-47E6-AA09-79B9487ADE2E",
+          "input": "{\"nums\": [1,2,3,4,5,6,7], \"target\": 4}",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "514CDDE6-EC44-442A-B760-00B2D23EF59D",
+          "input": "{\"nums\": [7,8,1,2,3,4,5,6], \"target\": 2}",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "f1512c68-3f9a-4f8e-a665-9dddec45ee28",
+          "input": "nums = [1,2,3], target = 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "f0a7b85c-a18b-4ea4-8120-efe505150b0e",
+          "input": "nums = [3,1,2], target = 2",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "06f543ee-ad69-4cfa-819b-4ab427f127f7",
+          "input": "nums = [5,6,7,8,9,10,0,1,2,3,4], target = 8",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "56759588-8de5-4a44-b90a-ffeb47de0b04",
+          "input": "nums = [10,20,30,40,50], target = 30",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "9344c6a1-89a6-4695-a451-5d5922e391e3",
+          "input": "nums = [1,2,3,4,5], target = 6",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "d754d148-eb1e-4a95-a578-ba7b54bca8ef",
+          "input": "nums = [-5,-4,-3,-2,-1], target = -3",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "f8af475d-1c1f-4530-8420-d89567794a10",
+          "input": "nums = [10,20,30,40,50], target = 60",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "e2f6cd79-0a1c-4cf5-833f-d71d5226b23c",
+          "input": "nums = [1,3,5,7,9], target = 6",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "004704e0-6c98-42de-b2ac-4df01a3eefaa",
+          "input": "nums = [1,2,3,4,5,6,7,8,9,10], target = 5",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "23595309-87d3-4206-91ae-11cb124761c9",
+          "input": "nums = [5,1,3], target = 3",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "8794b38b-b572-44f3-81ad-c01d1572fb35",
+          "input": "nums = [1,2,3,4,5], target = 0",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "a6437cdd-5f22-4a2e-ba1e-12dc66c4d877",
+          "input": "nums = [1], target = 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "34774ebe-706d-4e75-89f9-bc226deeaa60",
+          "input": "nums = [4,5,6,7,0,1,2], target = 0",
+          "expectedOutput": "4",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "search-in-rotated-sorted-array-ii",
+      "leetCodeNumber": 81,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "6c57f224-1512-4dca-8a5e-3e4cdd611764",
+          "input": "nums = [1], target = 1",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "110c557c-b7f1-4ad5-95d7-f1ff8811f3e3",
+          "input": "nums = [1], target = 2",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "53e370ce-20f4-4fcd-abc6-77707ee06c18",
+          "input": "nums = [1, 2, 3], target = 2",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "7bf96cec-2cc0-47c5-b825-b44d79c43487",
+          "input": "nums = [1, 2, 3], target = 4",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "0cbf5ee0-d9d6-46d6-b160-d08d2cbf7dcc",
+          "input": "nums = [1, 1, 1], target = 1",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "dd75ef93-897f-49bc-91d3-c10c28d293c3",
+          "input": "nums = [1, 1, 1], target = 2",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "7c1b65aa-4896-42b8-8d99-6872c3a1fe95",
+          "input": "nums = [2, 2, 2, 0, 0, 1], target = 0",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "317f93bc-1aee-42b3-9271-8122f8b6e09d",
+          "input": "nums = [2, 2, 2, 0, 0, 1], target = 3",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "48ae6793-7f82-47bc-b5d3-0c616b987bbb",
+          "input": "nums = [1, 2, 3, 4, 5], target = 3",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "f8887db7-1868-4635-9f1c-16171f42aba6",
+          "input": "nums = [5, 4, 3, 2, 1], target = 3",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "856cb339-c7f1-4641-913d-e265417d78db",
+          "input": "nums = [1, 2, 3, 4, 5], target = 6",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "ad858ddf-9c27-4b50-b647-b58cd088d9fa",
+          "input": "nums = [5, 4, 3, 2, 1], target = 6",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "650ab519-53fd-45c9-a922-fcbc213c0452",
+          "input": "nums = [-1, 0, 1], target = 0",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "6ea2ecbb-7d5f-4e8e-9e80-04ed10344cb0",
+          "input": "nums = [-1, 0, 1], target = 2",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "789e91bb-492a-48db-afd4-70d7354bf5cd",
+          "input": "nums = [1, 0, -1], target = 0",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "032e374c-d1bf-426c-bd6a-07df278737dd",
+          "input": "nums = [1, 0, -1], target = 2",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "f505e071-8906-4245-ad43-6cb5786eb044",
+          "input": "nums = [10, 20, 30, 40, 50], target = 20",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "31e8ccf2-fa7c-4f35-a733-d5f46a8e638d",
+          "input": "nums = [10, 20, 30, 40, 50], target = 60",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "d3654e49-a63d-4156-a816-4f83b47c1fb4",
+          "input": "nums = [50, 40, 30, 20, 10], target = 20",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "c97496f5-3e16-4eb8-9feb-e4548c4f4146",
+          "input": "nums = [50, 40, 30, 20, 10], target = 60",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "b434b69b-0521-4dfc-97cc-17a133141246",
+          "input": "nums = [], target = 1",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "e7dff577-1c07-43cf-a5f4-facddd0f9cb7",
+          "input": "nums = [1, 1, 1, 1, 1], target = 1",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "0f9a38ea-97fb-4df1-a501-0fa68a051b29",
+          "input": "nums = [1, 1, 1, 1, 1], target = 2",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "8c9b84d0-403d-4439-97af-aad0adbef33d",
+          "input": "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9], target = 5",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "024870bc-97aa-4338-83b4-8802e960f95f",
+          "input": "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9], target = 10",
+          "expectedOutput": "false",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "search-insert-position",
+      "leetCodeNumber": 35,
+      "difficulty": "easy",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "DE03E109-ECDA-47BE-A20B-D59AC8EE1A05",
+          "input": "nums = [], target = 7",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "4622B34B-4DC9-4123-A058-415CB7ADAF42",
+          "input": "nums = [5], target = 5",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "6400E7F3-D4BB-4B9B-8D19-3F856774CC3E",
+          "input": "nums = [5], target = 2",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "865242CD-4ED1-485B-B903-7A9233446B76",
+          "input": "nums = [5], target = 7",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "B1195C20-5205-437C-96DA-ABF206193868",
+          "input": "nums = [1,3,5,6], target = 5",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "26FDB56F-8F4C-42ED-88E6-9C8D927C5FB7",
+          "input": "nums = [1,3,5,6], target = 0",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "5C186361-75D2-41A5-9F0F-E437397BD439",
+          "input": "nums = [1,3,5,6], target = 2",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "783A32CF-E065-47E3-AFD4-ACFF0167495C",
+          "input": "nums = [1,3,5,6], target = 7",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "4E4F1A6F-2575-4149-9620-E6C64956AE95",
+          "input": "nums = [-5,-1,0,3,7], target = -2",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "8136BCBB-573A-470D-894E-ECF4DCDE747F",
+          "input": "nums = [2,4,6,8,10,12,14,16,18,20], target = 9",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "8DED83A7-8142-4919-91FB-B92B4764C3F6",
+          "input": "[], 5",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "EA85887B-47D3-4D64-AC0E-C83F739D716A",
+          "input": "[3], 3",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "C26FFB11-E32D-4EA2-80D9-F9B3FE0CDF2C",
+          "input": "[3], 2",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "CF8D8AA3-9BF8-4BFC-B1B3-E4227AE5FA07",
+          "input": "[3], 4",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "41665140-4014-4B98-B21D-DADE3098D0A8",
+          "input": "[1,3,5,6], 5",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "BEBE4177-B30E-4202-B163-5A9B1A8D750B",
+          "input": "[1,3,5,6], 2",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "5ACD6306-3122-462C-9856-D22C8CCFD7D4",
+          "input": "[1,3,5,6], 0",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "32039242-7B75-4ABA-AAB5-B0318FF2A3B2",
+          "input": "[1,3,5,6], 7",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "4C39920C-E71C-40E3-BEC7-E7CBCDD54408",
+          "input": "[1,3,5,6], 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "E60CF6C1-820E-4E67-9612-11B2F3FCCB4B",
+          "input": "[1,3,5,6], 6",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "BE4947F6-6F33-494B-BF04-3FFF4BF4F6DD",
+          "input": "[5], 5",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "59999265-7723-44E3-87D1-1D57F283D547",
+          "input": "[5], 2",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "959C1D6E-0845-4BF2-A89A-11A962166870",
+          "input": "[5], 7",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "11DE07F1-C318-461D-8452-1BB7BB48C386",
+          "input": "[1,2,3,4,5,6,7,8,9,10], 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "501D493C-058F-48F8-96C4-78FD4CFD9F75",
+          "input": "[1,2,3,4,5,6,7,8,9,10], 10",
+          "expectedOutput": "9",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "single-element-in-a-sorted-array",
+      "leetCodeNumber": 540,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "23735ff5-aafc-44c0-8834-73c3e25790ec",
+          "input": "nums = [1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "40f32c94-65c5-4fb4-afd6-ec2a31f2f112",
+          "input": "nums = [1,1,2]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "22d11092-0c13-41c1-905c-f7b12b1060ec",
+          "input": "nums = [1,2,2]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "49c75f08-66e5-43a8-9b7d-85a5e276d07b",
+          "input": "nums = [-1,-1,0]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "a06a0e97-fdeb-4568-a5cb-30692bca951f",
+          "input": "nums = [0,0,1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "9777385f-c2d4-4d39-b01c-ab6d28187120",
+          "input": "nums = [1,2,3,3,4,4,5,5]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "d731521f-5ba9-4032-8226-32e24ca33742",
+          "input": "nums = [1,1,2,2,3,3,4,4,5]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "504443ec-59fa-4ddf-bd1d-0dda6815a579",
+          "input": "nums = [1,1,2,2,3,4,4,5,5]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "bbdedc6a-0a3c-4102-81ff-349a60b10d17",
+          "input": "nums = [1,2,2,3,3,4,4,5,5,6,6]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "474b7a7c-7533-4c63-8efc-efa52e136806",
+          "input": "nums = [1,1,2,2,3,3,4,4,5,5,6,6,7]",
+          "expectedOutput": "7",
+          "orderMatters": true
+        },
+        {
+          "id": "c949931c-01b6-43cd-a404-f5cc46718374",
+          "input": "nums = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8]",
+          "expectedOutput": "8",
+          "orderMatters": true
+        },
+        {
+          "id": "9e709a41-0ef0-4687-9a7f-731f2bcfa80d",
+          "input": "nums = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9]",
+          "expectedOutput": "9",
+          "orderMatters": true
+        },
+        {
+          "id": "d7eece23-3d04-4254-a9db-af46781289ff",
+          "input": "nums = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "5540494b-3d90-4ae7-abb3-3502bc04eff7",
+          "input": "nums = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11]",
+          "expectedOutput": "11",
+          "orderMatters": true
+        },
+        {
+          "id": "d8d31437-59cf-4319-953a-121ec5446d82",
+          "input": "nums = [1,2,3,4,5,6,7,8,9,10]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "aef14906-6319-47fd-b074-690cd83efadf",
+          "input": "nums = [10,9,8,7,6,5,4,3,2,1]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "6c8743bd-4a19-4d62-bd2f-ea4a236da92a",
+          "input": "nums = [1,1,1,2,2,3,3]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "44a0fafb-53f5-4795-9467-da41f3f1349a",
+          "input": "nums = [1,1,1,1,1,2,2,2,2,2,3,3,3,3,3]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "0e069adf-53a8-45fd-a90e-cf895709c5ce",
+          "input": "nums = [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "02714059-f15b-4d4e-b42c-6749dc8df380",
+          "input": "nums = [1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "0f2c2eed-0494-4ab8-9273-f867bb86a2ab",
+          "input": "nums = [1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "1d599b69-619a-431d-bb03-066e8cee6b8a",
+          "input": "nums = [1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "0941305a-8c24-4165-9817-60c07ecb0831",
+          "input": "nums = [1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "3cfee11c-aaf6-40b9-97b8-29348a4cb068",
+          "input": "nums = [1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "398a3187-1161-4090-8b07-016b0200a900",
+          "input": "nums = [1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "sqrt-x",
+      "leetCodeNumber": 69,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "cbef17d6-cb66-43dd-b025-920c5f93ded8",
+          "input": "x = 0",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "e28e7cca-cae0-4d90-b44c-101e6a439a43",
+          "input": "x = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "49c80659-a234-4e41-8023-c4095c7f2d22",
+          "input": "x = 4",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "bcaeedf8-ec2a-4178-b5a2-dda2f502bdf9",
+          "input": "x = 9",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "c6ca5e66-1491-4ace-b031-9ad81e105afa",
+          "input": "x = 16",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "ee470e19-6983-4abd-a13d-204dc0c530ca",
+          "input": "x = 25",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "331c7fc2-29c4-4ee5-ac9e-7e18740c57be",
+          "input": "x = 36",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "214c921b-1981-460c-9bed-ebf4a0fddd6e",
+          "input": "x = 49",
+          "expectedOutput": "7",
+          "orderMatters": true
+        },
+        {
+          "id": "f8f62766-9c7f-491e-b459-4196ec0b8497",
+          "input": "x = 64",
+          "expectedOutput": "8",
+          "orderMatters": true
+        },
+        {
+          "id": "35ce31c9-0ca2-49f2-a623-0194579d333c",
+          "input": "x = 81",
+          "expectedOutput": "9",
+          "orderMatters": true
+        },
+        {
+          "id": "51546464-56c3-4871-a79d-e8055d7ef628",
+          "input": "x = 100",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "73423906-fa5f-4d35-8914-d9139f08ecd2",
+          "input": "x = 121",
+          "expectedOutput": "11",
+          "orderMatters": true
+        },
+        {
+          "id": "a731c2c9-86a7-42e0-b21e-b3eb15482e07",
+          "input": "x = 144",
+          "expectedOutput": "12",
+          "orderMatters": true
+        },
+        {
+          "id": "4c411e8b-6d31-4b1d-b764-a18d2a035ff4",
+          "input": "x = 169",
+          "expectedOutput": "13",
+          "orderMatters": true
+        },
+        {
+          "id": "5ba3bba7-af6e-4332-b7e9-6db318d54218",
+          "input": "x = 196",
+          "expectedOutput": "14",
+          "orderMatters": true
+        },
+        {
+          "id": "de767b96-d3fc-4c50-ba89-598b591d42a6",
+          "input": "x = 225",
+          "expectedOutput": "15",
+          "orderMatters": true
+        },
+        {
+          "id": "6e9fec7d-4781-46f1-a130-9d61cd674e9d",
+          "input": "x = 256",
+          "expectedOutput": "16",
+          "orderMatters": true
+        },
+        {
+          "id": "218ed5d1-3291-4789-af85-30ad31553a4d",
+          "input": "x = 289",
+          "expectedOutput": "17",
+          "orderMatters": true
+        },
+        {
+          "id": "eaf0c18a-20e2-45ef-9675-76a5363330f9",
+          "input": "x = 324",
+          "expectedOutput": "18",
+          "orderMatters": true
+        },
+        {
+          "id": "1bf33bb1-793e-4335-9c1e-ac05aefb8c7e",
+          "input": "x = 361",
+          "expectedOutput": "19",
+          "orderMatters": true
+        },
+        {
+          "id": "d4178fb3-1ae5-47dc-b309-d06e0cfff95c",
+          "input": "x = 400",
+          "expectedOutput": "20",
+          "orderMatters": true
+        },
+        {
+          "id": "06d1fa51-808c-46c8-9331-90fe55711d31",
+          "input": "x = 441",
+          "expectedOutput": "21",
+          "orderMatters": true
+        },
+        {
+          "id": "6b630e1a-4084-40a5-9a14-d9c27902fc58",
+          "input": "x = 484",
+          "expectedOutput": "22",
+          "orderMatters": true
+        },
+        {
+          "id": "8bda71d3-86ef-427b-87b8-8f1609ac4dc2",
+          "input": "x = 529",
+          "expectedOutput": "23",
+          "orderMatters": true
+        },
+        {
+          "id": "11e76f67-97d9-4539-9e45-feb6eed4d1cc",
+          "input": "x = 576",
+          "expectedOutput": "24",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "subarray-product-less-than-k",
+      "leetCodeNumber": 713,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "c403418f-efdd-43c6-8035-b0183d5c6956",
+          "input": "nums = [1], k = 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "7c280601-3e15-4ceb-ab43-e4b74a1bc436",
+          "input": "nums = [], k = 10",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "0064565d-871b-4402-8737-aa765f018902",
+          "input": "nums = [5, 5, 5], k = 25",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "dd29f042-1557-4cfa-b086-1605581bfb58",
+          "input": "nums = [10, 5, 2, 6], k = 50",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "3949b5dd-389f-402f-aa34-205a1bc74fef",
+          "input": "nums = [5, 5, 5, 5, 5], k = 25",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "1fb892b3-c974-44d2-8dc8-b435f50526a1",
+          "input": "nums = [1, 1, 1, 1, 1], k = 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "add971e6-f8e3-4555-9881-addafbf1a4c6",
+          "input": "nums = [5, 5, 5, 5, 5], k = 5",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "ff7b35b9-42d3-4b2b-ae58-389f156aab57",
+          "input": "nums = [1, 2, 3, 4, 5], k = 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "94359ec5-1764-4f91-8047-6b41165f52cd",
+          "input": "nums = [10, 5, 2, 6], k = 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "cf178c6c-6011-444c-beb8-7d666a44b11f",
+          "input": "nums = [1, 2, 3, 4, 5], k = 100",
+          "expectedOutput": "13",
+          "orderMatters": true
+        },
+        {
+          "id": "515fce9b-9c90-4cb0-84d1-e5b471598532",
+          "input": "nums = [1, 2, 3], k = 10",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "03d03667-bef5-437e-b318-7d9f56cb0621",
+          "input": "nums = [10, 20, 30], k = 1000",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "5ba95424-cfab-479c-9af5-b0d885cae42f",
+          "input": "nums = [1, 1, 1], k = 2",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "825a6660-f618-4690-8594-f4750ccd456c",
+          "input": "nums = [1, 2, 3, 4, 5], k = 50",
+          "expectedOutput": "12",
+          "orderMatters": true
+        },
+        {
+          "id": "b410f93d-6143-420b-8cf7-756f8debb013",
+          "input": "nums = [1, 2, 3, 4, 5], k = 10",
+          "expectedOutput": "8",
+          "orderMatters": true
+        },
+        {
+          "id": "b130c10a-4307-402e-9bd5-f45c7b3d09cd",
+          "input": "nums = [1, 1, 1, 1, 1], k = 2",
+          "expectedOutput": "15",
+          "orderMatters": true
+        },
+        {
+          "id": "792167a9-280b-486e-8ca2-8fdb02909244",
+          "input": "nums = [1, 2, 3, 4, 5], k = 5",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "3e57b279-30a0-44a9-833c-f0d68e7e7c20",
+          "input": "nums = [10, 20, 30, 40, 50], k = 1000",
+          "expectedOutput": "7",
+          "orderMatters": true
+        },
+        {
+          "id": "ca587304-8670-480d-92a6-3b6dd36d3a18",
+          "input": "nums = [1, 2, 3, 4, 5], k = 1000",
+          "expectedOutput": "15",
+          "orderMatters": true
+        },
+        {
+          "id": "fdc8843c-79e2-4f8a-9f28-a4c8fdc0a8b2",
+          "input": "nums = [10, 20, 30, 40, 50], k = 10000",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "aab5286f-930d-4d21-ab4e-73c54540fbaf",
+          "input": "nums = [1, 1, 1, 1, 1], k = 10",
+          "expectedOutput": "15",
+          "orderMatters": true
+        },
+        {
+          "id": "c8f265d0-6ccd-4974-80af-7ebd80245661",
+          "input": "nums = [5, 5, 5, 5, 5], k = 100",
+          "expectedOutput": "9",
+          "orderMatters": true
+        },
+        {
+          "id": "642b632b-7cec-4de9-9ddc-59322613f23c",
+          "input": "nums = [10, 20, 30, 40, 50], k = 500",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "5dc7e9a0-1505-4c74-8d37-2c547ac8ba6c",
+          "input": "nums = [1, 1, 1, 1, 1], k = 5",
+          "expectedOutput": "15",
+          "orderMatters": true
+        },
+        {
+          "id": "361b1204-877a-4a8e-8b37-065ba220d097",
+          "input": "nums = [5, 5, 5, 5, 5], k = 50",
+          "expectedOutput": "9",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "time-based-key-value-store",
+      "leetCodeNumber": 981,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "158b44a3-dab9-4c7b-a9d1-8c9854f2cc06",
+          "input": "['TimeKeyValStore', 'set', 'get', 'set', 'get']",
+          "expectedOutput": "[\"bar1\",\"bar2\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "548b245b-fceb-453e-ab6a-a2187264a190",
+          "input": "['TimeKeyValStore', 'set', 'set', 'get']",
+          "expectedOutput": "[\"bar1\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "9279ea8f-b82b-4a60-b0c7-5a7b5f7a6688",
+          "input": "['TimeKeyValStore', 'get', 'set', 'get']",
+          "expectedOutput": "[\"\",\"bar1\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "f6337486-ee6f-4e85-9d6a-02d2a31f6848",
+          "input": "['TimeKeyValStore', 'set', 'get', 'set', 'get', 'get']",
+          "expectedOutput": "[\"bar1\",\"bar2\",\"bar2\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "9a5f4115-d3f5-4ad9-8173-675c649f42f3",
+          "input": "['TimeKeyValStore', 'set', 'set', 'get', 'set', 'get']",
+          "expectedOutput": "[\"bar1\",\"bar2\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "ed35dc44-ba4a-4a5b-b651-05e465e66fe4",
+          "input": "['TimeKeyValStore', 'set', 'set', 'set', 'get']",
+          "expectedOutput": "[\"bar2\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "9c153c56-3a26-4960-90d8-d8df51495f7e",
+          "input": "['TimeKeyValStore', 'set', 'get', 'get', 'set', 'get']",
+          "expectedOutput": "[\"bar1\",\"bar1\",\"bar1\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "5a9a94c2-5365-43de-aa9f-7d28e51b80ce",
+          "input": "['TimeKeyValStore', 'set', 'set', 'get', 'get', 'get']",
+          "expectedOutput": "[\"bar1\",\"bar2\",\"bar2\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "55d813d7-964c-4ffd-8f1b-392c2ef5c480",
+          "input": "['TimeKeyValStore', 'get', 'set', 'set', 'get', 'get']",
+          "expectedOutput": "[\"\",\"bar1\",\"bar2\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "d60fc242-ef38-48d8-a317-1b8020088dd3",
+          "input": "['TimeKeyValStore', 'set', 'get', 'set', 'set', 'get']",
+          "expectedOutput": "[\"bar1\",\"bar2\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "ab078be4-93a2-4c12-a78e-adef3736d071",
+          "input": "['TimeKeyValStore', 'set', 'set', 'set', 'get', 'get', 'get']",
+          "expectedOutput": "[\"bar\",\"baz\",\"qux\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "93ee0f2c-74be-4f2a-ad38-033d6bf3f70e",
+          "input": "['TimeKeyValStore', 'get', 'get', 'set', 'get', 'get']",
+          "expectedOutput": "[\"\",\"\",\"val1\",\"val1\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "2006c63f-dadd-4127-85b6-d1df520d8567",
+          "input": "['TimeKeyValStore', 'set', 'get', 'get', 'get', 'set', 'get']",
+          "expectedOutput": "[\"\",\"b\",\"b\",\"b\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "3406219a-9e8a-4380-82c6-abdafbf96752",
+          "input": "['TimeKeyValStore', 'set', 'set', 'get', 'get', 'get', 'set', 'get']",
+          "expectedOutput": "[\"v1\",\"v1\",\"v2\",\"v2\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "d505f224-9806-4e25-9e24-457a4aed3cb4",
+          "input": "['TimeKeyValStore', 'get', 'set', 'set', 'get', 'get', 'get', 'get']",
+          "expectedOutput": "[\"\",\"value1\",\"value1\",\"value2\",\"value2\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "3eb94f03-ba7e-4c65-a7b0-54989b2c5a10",
+          "input": "['TimeKeyValStore', 'set', 'get', 'set', 'set', 'get', 'get', 'get', 'get']",
+          "expectedOutput": "[\"apple\",\"apple\",\"banana\",\"\",\"berry\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "beb463a0-de7d-47ec-ac34-626979959754",
+          "input": "['TimeKeyValStore', 'set', 'set', 'set', 'get', 'get', 'get', 'get', 'set', 'get']",
+          "expectedOutput": "[\"v1\",\"v2\",\"v2\",\"v3\",\"v3\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "f5c1a0a6-a1df-45e6-9141-324c8d3fac15",
+          "input": "['TimeKeyValStore', 'get', 'get', 'set', 'set', 'get', 'get', 'get', 'get', 'set', 'get']",
+          "expectedOutput": "[\"\",\"\",\"x\",\"x\",\"\",\"y\",\"x\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "5e158b05-a1ba-4de3-a0ee-b0aa22a5322e",
+          "input": "['TimeKeyValStore', 'set', 'get', 'get', 'get', 'set', 'set', 'get', 'get', 'get', 'get']",
+          "expectedOutput": "[\"value1\",\"value1\",\"\",\"value1\",\"value2\",\"\",\"value3\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "9f45cc96-4c4e-4c41-bd4f-4ec3ada6f6a5",
+          "input": "['TimeKeyValStore', 'set', 'set', 'set', 'get', 'get', 'get', 'get', 'get', 'set', 'set', 'get']",
+          "expectedOutput": "[\"1\",\"2\",\"2\",\"\",\"3\",\"2\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "be4d9077-0f8c-4ce6-b93e-718b8bc88430",
+          "input": "['TimeKeyValStore', 'get', 'get', 'set', 'set', 'get', 'get', 'get', 'get', 'get', 'set', 'set', 'get']",
+          "expectedOutput": "[\"\",\"\",\"val1\",\"val2\",\"val2\",\"\",\"\",\"bval1\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "18fc8355-3c42-41da-b296-daba6836e979",
+          "input": "['TimeKeyValStore', 'set', 'get', 'set', 'set', 'get', 'get', 'get', 'get', 'get', 'set', 'set', 'set', 'get']",
+          "expectedOutput": "[\"bar\",\"bar\",\"bar2\",\"bar3\",\"bar3\",\"\",\"val2\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "f6aaf1a3-3546-4ad4-a201-5aaf9f73e267",
+          "input": "['TimeKeyValStore', 'set', 'set', 'set', 'get', 'get', 'get', 'get', 'get', 'get', 'set', 'set', 'set', 'set', 'get']",
+          "expectedOutput": "[\"1\",\"2\",\"3\",\"3\",\"\",\"\",\"30\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "210c6b95-e84f-48f3-af94-10d24f87ddd8",
+          "input": "['TimeKeyValStore', 'get', 'get', 'set', 'set', 'get', 'get', 'get', 'get', 'get', 'get', 'set', 'set', 'set', 'set', 'get']",
+          "expectedOutput": "[\"\",\"\",\"1\",\"2\",\"2\",\"\",\"\",\"\",\"30\"]",
+          "orderMatters": true
+        },
+        {
+          "id": "96299be2-cc07-4184-857c-02ca7accb429",
+          "input": "['TimeKeyValStore', 'set', 'get', 'get', 'get', 'set', 'set', 'get', 'get', 'get', 'get', 'get', 'set', 'set', 'set', 'set', 'get']",
+          "expectedOutput": "[\"1\",\"1\",\"\",\"1\",\"2\",\"3\",\"3\",\"\",\"30\"]",
+          "orderMatters": true
+        }
+      ]
+    }
+  ]
+}

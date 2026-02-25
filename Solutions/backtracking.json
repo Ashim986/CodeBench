@@ -1,0 +1,1473 @@
+{
+  "solutions": [
+    {
+      "approaches": [
+        {
+          "approach": "Try all possible combinations of numbers, check if the current combination is an additive sequence, if so, return True, otherwise continue trying other combinations.",
+          "code": "class Solution {\n    func isAdditiveNumber(_ num: String) -> Bool {\n        var ans = false\n        func backtrack(_ idx: Int, _ path: [Int]) {\n            if idx == num.count {\n                if path.count >= 3 {\n                    var add = true\n                    for i in 2..<path.count {\n                        if path[i] != path[i-1] + path[i-2] {\n                            add = false\n                            break\n                        }\n                    }\n                    if add {\n                        ans = true\n                    }\n                }\n                return\n            }\n            for i in idx...num.count-1 {\n                let cur = String(num[num.index(num.startIndex, offsetBy: idx)...num.index(num.startIndex, offsetBy: i+1)])\n                if cur.count > 1 && cur.first == \"0\" {\n                    continue\n                }\n                if let n = Int(cur) {\n                    backtrack(i+1, path + [n])\n                }\n            }\n        }\n        backtrack(0, [])\n        return ans\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we need to store the current combination of numbers.",
+            "time": "O(2^n)",
+            "timeExplanation": "The time complexity is O(2^n) because in the worst case, we have to try all possible combinations of numbers."
+          },
+          "explanation": "Start from the beginning of the string and try to split the string into two parts. For each split, try to split the remaining part into two parts again. If at any point we cannot split the string into two parts such that they form an additive sequence, backtrack and try a different split.",
+          "id": "344be635-eaca-4713-9757-06fba80e647d",
+          "intuition": "This approach works by trying all possible combinations of numbers to see if they form an additive sequence.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The given string represents the additive sequence 1, 1, 2, 3, 5, 8.",
+              "id": "38e6b10f-bae9-45c2-b276-1e0501104365",
+              "input": "112358"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "The given string represents the additive sequence 1, 99, 100, 199.",
+              "id": "01731914-5e00-41e8-91f8-0d90f133d0b2",
+              "input": "199100199"
+            }
+          ]
+        },
+        {
+          "approach": "Try all possible combinations of numbers but only consider combinations where the numbers are in increasing order and do not exceed the length of the string.",
+          "code": "class Solution {\n    func isAdditiveNumber(_ num: String) -> Bool {\n        func isValid(_ num: String) -> Bool {\n            return num.count == 1 || num.first != \"0\"\n        }\n        func backtrack(_ idx: Int, _ path: [Int]) -> Bool {\n            if idx == num.count {\n                return path.count >= 3\n            }\n            for i in idx...num.count-1 {\n                let cur = String(num[num.index(num.startIndex, offsetBy: idx)...num.index(num.startIndex, offsetBy: i+1)])\n                if !isValid(cur) {\n                    continue\n                }\n                if let n = Int(cur) {\n                    if path.count < 2 || n == path[path.count-1] + path[path.count-2] {\n                        if backtrack(i+1, path + [n]) {\n                            return true\n                        }\n                    }\n                }\n            }\n            return false\n        }\n        return backtrack(0, [])\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we need to store the current combination of numbers.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) because we are trying all possible combinations of numbers but with some optimization."
+          },
+          "explanation": "Use a helper function to check if a string represents a valid number. Then, try all possible combinations of numbers but only consider combinations where the numbers are in increasing order and do not exceed the length of the string.",
+          "id": "d90f63ae-bc44-4fa9-a365-e12e9d7d0119",
+          "intuition": "This approach works similarly to the brute force approach but uses optimization to reduce the number of combinations to try.",
+          "name": "Optimized Backtracking",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The given string represents the additive sequence 1, 1, 2, 3, 5, 8.",
+              "id": "6e912ca7-2d13-4f0a-977f-5d2934eaf984",
+              "input": "112358"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "The given string represents the additive sequence 1, 99, 100, 199.",
+              "id": "ff429113-806b-4813-9c89-2a9c32f98bf1",
+              "input": "199100199"
+            }
+          ]
+        }
+      ],
+      "id": "a9f9e104-3cbe-4229-9ca8-c05ea95173a5",
+      "lastUpdated": "2026-02-06T21:12:21Z",
+      "problemSlug": "additive-number",
+      "relatedProblems": [
+        "valid-number",
+        "integer-replacement"
+      ],
+      "summary": "The problem is to determine if a given string represents an additive number sequence. An additive number sequence is a sequence of integers in which every number is the sum of the two preceding ones. The key insight is to use backtracking to try all possible combinations."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start from the source node, explore all neighboring nodes, and recursively traverse their neighbors until the target node is found.",
+          "code": "class Solution {\n    func allPathsSourceTarget(_ graph: [[Int]]) -> [[Int]] {\n        let n = graph.count\n        var result: [[Int]] = []\n        func dfs(_ node: Int, _ path: [Int]) {\n            if node == n - 1 {\n                result.append(path)\n                return\n            }\n            for nextNode in graph[node] {\n                dfs(nextNode, path + [nextNode])\n            }\n        }\n        dfs(0, [0])\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The maximum depth of the recursion call stack is n, which corresponds to the number of nodes in the graph.",
+            "time": "O(2^n)",
+            "timeExplanation": "In the worst case, the algorithm has to explore all possible paths from the source node to the target node, resulting in exponential time complexity."
+          },
+          "explanation": "This approach involves using a recursive DFS function to explore all possible paths. It can be inefficient for large graphs due to its exponential time complexity.",
+          "id": "5c02bd29-9368-4d0f-b7da-971a8a26af61",
+          "intuition": "The brute-force approach works by traversing all possible paths from the source node and checking if they lead to the target node.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[0,1,3],[0,2,3]]",
+              "explanation": "The graph has 4 nodes, and there are two possible paths from node 0 to node 3: [0,1,3] and [0,2,3].",
+              "id": "415f1320-a42a-453a-b444-791c0c77d091",
+              "input": "graph = [[1,2],[3],[3],[]]"
+            },
+            {
+              "expectedOutput": "[[0,4],[0,3,4],[0,1,3,4],[0,1,2,3,4]]",
+              "explanation": "The graph has 5 nodes, and there are four possible paths from node 0 to node 4.",
+              "id": "ab3792a7-a028-43e0-b976-9ab4d58a365c",
+              "input": "graph = [[4,3,1],[3,2,4],[3],[4],[]]"
+            }
+          ]
+        },
+        {
+          "approach": "Use a memoization table to store the results of sub-problems and avoid redundant explorations.",
+          "code": "class Solution {\n    func allPathsSourceTarget(_ graph: [[Int]]) -> [[Int]] {\n        let n = graph.count\n        var result: [[Int]] = []\n        var memo: [Int: [[Int]]] = [:]\n        func dfs(_ node: Int, _ path: [Int]) -> [[Int]] {\n            if let cachedResult = memo[node] {\n                return cachedResult\n            }\n            if node == n - 1 {\n                return [path]\n            }\n            var paths: [[Int]] = []\n            for nextNode in graph[node] {\n                let newPaths = dfs(nextNode, path + [nextNode])\n                paths.append(contentsOf: newPaths)\n            }\n            memo[node] = paths\n            return paths\n        }\n        result = dfs(0, [0])\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n * m)",
+            "spaceExplanation": "The space complexity is also reduced due to the memoization table, which stores the results of sub-problems.",
+            "time": "O(n * m)",
+            "timeExplanation": "The time complexity is reduced to linear due to the memoization table, which avoids redundant explorations."
+          },
+          "explanation": "This approach involves using a memoization table to store the results of sub-problems. It can significantly reduce the time complexity of the algorithm for large graphs with many redundant paths.",
+          "id": "b22b26fb-18b0-4cda-8319-ece0b7f0b844",
+          "intuition": "The optimized approach uses a similar DFS traversal but avoids redundant explorations by storing intermediate results.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[[0,1,3],[0,2,3]]",
+              "explanation": "The graph has 4 nodes, and there are two possible paths from node 0 to node 3: [0,1,3] and [0,2,3].",
+              "id": "dabe8efa-c699-40ac-aa7b-76b22ea79524",
+              "input": "graph = [[1,2],[3],[3],[]]"
+            },
+            {
+              "expectedOutput": "[[0,4],[0,3,4],[0,1,3,4],[0,1,2,3,4]]",
+              "explanation": "The graph has 5 nodes, and there are four possible paths from node 0 to node 4.",
+              "id": "1b9c226b-0759-436b-a37b-c34e7f4c9548",
+              "input": "graph = [[4,3,1],[3,2,4],[3],[4],[]]"
+            }
+          ]
+        }
+      ],
+      "id": "459423b6-8b2a-47f9-b751-e17399d20257",
+      "lastUpdated": "2026-02-06T21:40:27Z",
+      "problemSlug": "all-paths-from-source-to-target",
+      "relatedProblems": [
+        "clone-graph",
+        "word-search-ii"
+      ],
+      "summary": "This problem requires finding all possible paths from the source node to the target node in a given graph. The key insight here is to use a depth-first search (DFS) traversal to explore all possible paths."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Step 1: Define the function to generate all possible interpretations. Step 2: Iterate over all possible interpretations and check if they are valid. Step 3: If an interpretation is valid, add it to the result list.",
+          "code": "import Foundation\n\nclass Solution {\n    func ambiguousCoordinates(_ s: String) -> [String] {\n        var res: [String] = []\n        let nums = Array(s.dropFirst().dropLast())\n        for i in 1...nums.count-1 {\n            let left = String(nums.prefix(i))\n            let right = String(nums.suffix(nums.count-i))\n            for l in possibleInterpretations(left) {\n                for r in possibleInterpretations(right) {\n                    res.append(\"(\\(l), \\(r))\")\n                }\n            }\n        }\n        return res\n    }\n\n    func possibleInterpretations(_ nums: String) -> [String] {\n        var res: [String] = []\n        if nums.first == \"0\" && nums.count > 1 {\n            return [\"0\"]\n        }\n        if nums.count == 1 {\n            return [nums]\n        }\n        for i in 1...nums.count-1 {\n            let left = String(nums.prefix(i))\n            let right = String(nums.suffix(nums.count-i))\n            res.append(left + \".\" + right)\n        }\n        res.append(nums)\n        return res\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We are using a recursive function which results in a space complexity of O(n).",
+            "time": "O(2^n)",
+            "timeExplanation": "We are using a recursive function to generate all possible interpretations of the given integer string. This results in a time complexity of O(2^n)."
+          },
+          "explanation": "We start by defining a recursive function that generates all possible interpretations of the given integer string. We then iterate over all possible interpretations and check if they are valid. If an interpretation is valid, we add it to the result list.",
+          "id": "85b60081-9cd7-427b-b662-255fcc708344",
+          "intuition": "This approach works by iterating over all possible interpretations of the given integer string and checking if they are valid.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"(1, 23)\", \"(12, 3)\", \"(1.2, 3)\", \"(1, 2.3)\"]",
+              "explanation": "The input string \"123\" can be interpreted in four different ways: (1, 23), (12, 3), (1.2, 3), and (1, 2.3).",
+              "id": "204a65b5-c985-4ea5-a6cb-f63eca1174f1",
+              "input": "s = \"123\""
+            },
+            {
+              "expectedOutput": "[\"(0, 004)\", \"(0, 0.04)\", \"(0.0, 04)\", \"(00, 04)\", \"(0, 0.4)\", \"(0.0, 4)\", \"(00, 0.4)\", \"(0, 04)\", \"(0.00, 4)\"]",
+              "explanation": "The input string \"0004\" can be interpreted in nine different ways.",
+              "id": "395fa6ba-3b0b-428f-8446-2990481bcd09",
+              "input": "s = \"0004\""
+            }
+          ]
+        },
+        {
+          "approach": "Step 1: Define the function to generate all possible interpretations. Step 2: Use dynamic programming to store the results of subproblems. Step 3: Iterate over all possible interpretations and check if they are valid.",
+          "code": "class Solution {\n    func ambiguousCoordinates(s: String) -> [String] {\n        var res: [String] = []\n        let nums = Array(s.dropFirst().dropLast())\n        let memo: [Substring: [String]] = [:]\n        for i in 1...nums.count-1 {\n            let left = nums.prefix(i)\n            let right = nums.suffix(nums.count-i)\n            let lOptions = memo[left] ?? possibleInterpretations(left)\n            let rOptions = memo[right] ?? possibleInterpretations(right)\n            for l in lOptions {\n                for r in rOptions {\n                    res.append(\"((l), (r))\")\n                }\n            }\n        }\n        return res\n    }\n\n    func possibleInterpretations(_ nums: Substring) -> [String] {\n        var res: [String] = []\n        if nums.first == \"0\" && nums.count > 1 {\n            return [\"0\"]\n        }\n        if nums.count == 1 {\n            return [String(nums)]\n        }\n        for i in 1...nums.count-1 {\n            let left = nums.prefix(i)\n            let right = nums.suffix(nums.count-i)\n            res.append(String(left) + \".\" + String(right))\n        }\n        res.append(String(nums))\n        return res\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We are using dynamic programming which results in a space complexity of O(n).",
+            "time": "O(n^2)",
+            "timeExplanation": "We are using dynamic programming to store the results of subproblems. This results in a time complexity of O(n^2)."
+          },
+          "explanation": "We start by defining a recursive function that generates all possible interpretations of the given integer string. We then use dynamic programming to store the results of subproblems. This allows us to avoid redundant calculations and improve the efficiency of the algorithm.",
+          "id": "c3a673cf-7b72-43b8-8ad6-b3a0745d6d68",
+          "intuition": "This approach works by using dynamic programming to generate all possible interpretations of the given integer string.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[\"(1, 23)\", \"(12, 3)\", \"(1.2, 3)\", \"(1, 2.3)\"]",
+              "explanation": "The input string \"123\" can be interpreted in four different ways: (1, 23), (12, 3), (1.2, 3), and (1, 2.3).",
+              "id": "7d7b0c26-4377-4237-bcd9-d0931d7b5987",
+              "input": "s = \"123\""
+            },
+            {
+              "expectedOutput": "[\"(0, 004)\", \"(0, 0.04)\", \"(0.0, 04)\", \"(00, 04)\", \"(0, 0.4)\", \"(0.0, 4)\", \"(00, 0.4)\", \"(0, 04)\", \"(0.00, 4)\"]",
+              "explanation": "The input string \"0004\" can be interpreted in nine different ways.",
+              "id": "67b52e8f-72f8-4736-a425-efdc86d9c157",
+              "input": "s = \"0004\""
+            }
+          ]
+        }
+      ],
+      "id": "1a3cdcc1-91e8-468a-917b-24aaf5a8ba25",
+      "lastUpdated": "2026-02-06T21:41:48Z",
+      "problemSlug": "ambiguous-coordinates",
+      "relatedProblems": [
+        "letter-combinations-of-a-phone-number",
+        "restore-ip-addresses"
+      ],
+      "summary": "Ambiguous Coordinates is a problem where we have to return all possible valid interpretations of an integer from the given string. The key insight here is to use backtracking to generate all possible interpretations."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start by defining a recursive function that takes a node and the current path as arguments. If the node is a leaf node, add the current path to the result list. Otherwise, recursively call the function on the node's left and right children, appending their values to the current path.",
+          "code": "class Solution {\n    func binaryTreePaths(_ root: TreeNode?) -> [String] {\n        var result = [String]()\n        dfs(root, [], &result)\n        return result\n    }\n\n    func dfs(_ node: TreeNode?, _ path: [Int], _ result: inout [String]) {\n        guard let node = node else { return }\n        var path = path + [node.val]\n        if node.left == nil && node.right == nil {\n            result.append(path.map { String($0) }.joined(separator: \"->\"))\n        } else {\n            dfs(node.left, path, &result)\n            dfs(node.right, path, &result)\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because of the recursive call stack and the space needed to store the result.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we visit each node once."
+          },
+          "explanation": "This approach works because it exhaustively explores all possible paths in the tree. However, it may be inefficient for large trees due to the recursive function calls.",
+          "id": "dc74abd2-f566-4c6c-a14f-23b838d1bf5e",
+          "intuition": "The brute force approach involves recursively traversing the tree and building all possible paths.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"1->2->5\",\"1->3\"]",
+              "explanation": "The root-to-leaf paths in the given tree are 1->2->5 and 1->3.",
+              "id": "f393fc87-9c93-4267-8954-0fa29d7b71b0",
+              "input": "root = [1,2,3,null,5]"
+            },
+            {
+              "expectedOutput": "[\"1\"]",
+              "explanation": "The only root-to-leaf path in the given tree is 1.",
+              "id": "064a1451-a685-47ff-8af3-7022a6b2f1f1",
+              "input": "root = [1]"
+            }
+          ]
+        },
+        {
+          "approach": "Use a stack to store nodes and their corresponding paths. Start by pushing the root node and its path onto the stack. Then, enter a loop where you pop a node and its path from the stack, and if the node is a leaf node, add its path to the result list. Otherwise, push the node's children and their paths onto the stack.",
+          "code": "class Solution {\n    func binaryTreePaths(_ root: TreeNode?) -> [String] {\n        var result = [String]()\n        var stack = [(node: TreeNode, path: String)]()\n        if let root = root {\n            stack.append((root, String(root.val)))\n        }\n        while !stack.isEmpty {\n            let (node, path) = stack.popLast()!\n            if node.left == nil && node.right == nil {\n                result.append(path)\n            } else {\n                if let left = node.left {\n                    stack.append((left, path + \"->\" + String(left.val)))\n                }\n                if let right = node.right {\n                    stack.append((right, path + \"->\" + String(right.val)))\n                }\n            }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because of the space needed to store the stack and the result.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we visit each node once."
+          },
+          "explanation": "This approach works because it also exhaustively explores all possible paths in the tree, but with reduced overhead due to the iterative approach.",
+          "id": "e58ecb1c-9133-48ea-9485-8579f3eb1bd4",
+          "intuition": "The optimized approach also uses DFS but avoids the overhead of recursive function calls by using an iterative approach.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[\"1->2->5\",\"1->3\"]",
+              "explanation": "The root-to-leaf paths in the given tree are 1->2->5 and 1->3.",
+              "id": "1aac4189-899e-42de-aaa2-566920f686a3",
+              "input": "root = [1,2,3,null,5]"
+            },
+            {
+              "expectedOutput": "[\"1->2\",\"1->3\"]",
+              "explanation": "The root-to-leaf paths in the given tree are 1->2 and 1->3.",
+              "id": "abdf97a9-c558-4d7c-98c6-05b333f80f30",
+              "input": "root = [1,2,3]"
+            }
+          ]
+        }
+      ],
+      "id": "502baad3-e570-42e5-b62f-4535ee856922",
+      "lastUpdated": "2026-02-06T21:11:28Z",
+      "problemSlug": "binary-tree-paths",
+      "relatedProblems": [
+        "binary-tree-inorder-traversal",
+        "binary-tree-preorder-traversal"
+      ],
+      "summary": "This problem asks us to return all root-to-leaf paths in a binary tree. The key insight is to use depth-first search (DFS) to traverse the tree and construct the paths."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Create an array of all possible times in 24-hour format, then for each time, calculate the number of turned on LED lights and compare it with the input.",
+          "code": "import Foundation\n\nclass Solution {\n    func readBinaryWatch(_ turnedOn: Int) -> [String] {\n        var result = [String]()\n        for h in 0...11 {\n            for m in 0...59 {\n                if ((h & h-1) == 0) && ((m & m-1) == 0) {\n                    if turnedOn == 1 {\n                        if h < 12 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                    } else if turnedOn == 2 {\n                        if (h & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                    } else if turnedOn == 3 {\n                        if (h & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                    } else if turnedOn == 4 {\n                        if (h & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                    } else if turnedOn == 5 {\n                        if (h & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b10) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                    } else if turnedOn == 6 {\n                        if (h & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b10) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b10) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                    } else if turnedOn == 7 {\n                        if (h & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b10) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b10) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                    } else if turnedOn == 8 {\n                        if (h & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b10) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b10) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                    } else if turnedOn == 9 {\n                        if (h & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b10) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b10) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (m & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                    } else if turnedOn == 10 {\n                        if (h & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b10) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b10) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (m & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                    } else if turnedOn == 11 {\n                        if (h & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1000) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b100) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b10) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b10) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (m & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                        if (h & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", h, m))\n                        }\n                        if (m & 0b1) != 0 {\n                            result.append(String(format: \"%02d:%02d\", 0, m))\n                        }\n                    }\n                }\n            }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We store all possible times in the result array, so the space complexity is also constant.",
+            "time": "O(1)",
+            "timeExplanation": "Since we have to check all possible times, the time complexity is constant with respect to the input."
+          },
+          "explanation": "The brute force approach involves calculating the number of turned on LED lights for each possible time and checking if it matches the input. This can be achieved by converting each time to its binary representation and using a loop to count the number of 1s in the binary representation.",
+          "id": "6466be40-8748-4c7a-8b53-f0ae3b4207c3",
+          "intuition": "This approach works by iterating over all possible combinations of hours and minutes and checking if the number of turned on LED lights matches the input.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"0:01\",\"0:02\",\"0:04\",\"0:08\",\"0:16\",\"0:32\",\"1:00\",\"2:00\",\"4:00\",\"8:00\"]",
+              "explanation": "The expected output includes all possible times where exactly one LED light is turned on.",
+              "id": "0090b683-4767-436d-9093-a8bab836b594",
+              "input": "turnedOn = 1"
+            },
+            {
+              "expectedOutput": "[\"0:11\",\"0:12\",\"0:13\",\"0:14\",\"0:15\",\"0:16\",\"0:17\",\"0:18\",\"0:19\",\"0:21\",\"0:22\",\"0:23\",\"0:24\",\"0:25\",\"0:26\",\"0:27\",\"0:28\",\"0:29\",\"0:31\",\"0:32\",\"0:33\",\"0:34\",\"0:35\",\"0:36\",\"0:37\",\"0:38\",\"0:39\",\"0:41\",\"0:42\",\"0:43\",\"0:44\",\"0:45\",\"0:46\",\"0:47\",\"0:48\",\"0:49\",\"0:51\",\"0:52\",\"0:53\",\"0:54\",\"0:55\",\"0:56\",\"0:57\",\"0:58\",\"0:59\",\"1:00\",\"2:00\",\"3:00\",\"4:00\",\"5:00\",\"6:00\",\"7:00\",\"8:00\",\"9:00\"]",
+              "explanation": "The expected output includes all possible times where exactly two LED lights are turned on.",
+              "id": "28e1f406-238f-4262-83be-3b1252f85d47",
+              "input": "turnedOn = 2"
+            }
+          ]
+        },
+        {
+          "approach": "Create arrays of all possible times for hours and minutes where the number of turned on LED lights matches the input, then combine these arrays to get all possible times.",
+          "code": "class Solution {\n    func readBinaryWatch(_ turnedOn: Int) -> [String] {\n        var res = [String]()\n        let hours = [1, 2, 4, 8]\n        let minutes = [1, 2, 4, 8, 16, 32]\n        var hourPowers = [Int]()\n        var minutePowers = [Int]()\n        for i in 0...3 {\n            hourPowers.append(hours[i])\n            minutePowers.append(minutes[i])\n        }\n        for h in hourPowers {\n            for m in minutePowers {\n                if ((h.nonzeroBitCount) + (m.nonzeroBitCount)) == turnedOn {\n                    let time = String(format: \"%02d:%02d\", h, m)\n                    res.append(time)\n                }\n            }\n        }\n        return res\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We store all possible times in the result array, so the space complexity is also constant.",
+            "time": "O(1)",
+            "timeExplanation": "Since we have to generate all possible combinations of turned on LED lights for hours and minutes, the time complexity is constant with respect to the input."
+          },
+          "explanation": "The optimized approach involves generating all possible combinations of turned on LED lights for hours and minutes separately. For hours, we need to check all numbers from 0 to 11. For minutes, we need to check all numbers from 0 to 59. Then we combine these arrays to get all possible times.",
+          "id": "a6daf527-3a3a-4fb2-9da5-d60abee37d91",
+          "intuition": "This approach works by generating all possible combinations of turned on LED lights for hours and minutes separately and then combining them.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[\"0:01\",\"0:02\",\"0:04\",\"0:08\",\"0:16\",\"0:32\",\"1:00\",\"2:00\",\"4:00\",\"8:00\"]",
+              "explanation": "The expected output includes all possible times where exactly one LED light is turned on.",
+              "id": "9bc1504e-dec3-4bec-95b6-cc6d42354f9c",
+              "input": "turnedOn = 1"
+            },
+            {
+              "expectedOutput": "[\"0:11\",\"0:12\",\"0:13\",\"0:14\",\"0:15\",\"0:16\",\"0:17\",\"0:18\",\"0:19\",\"0:21\",\"0:22\",\"0:23\",\"0:24\",\"0:25\",\"0:26\",\"0:27\",\"0:28\",\"0:29\",\"0:31\",\"0:32\",\"0:33\",\"0:34\",\"0:35\",\"0:36\",\"0:37\",\"0:38\",\"0:39\",\"0:41\",\"0:42\",\"0:43\",\"0:44\",\"0:45\",\"0:46\",\"0:47\",\"0:48\",\"0:49\",\"0:51\",\"0:52\",\"0:53\",\"0:54\",\"0:55\",\"0:56\",\"0:57\",\"0:58\",\"0:59\",\"1:00\",\"2:00\",\"3:00\",\"4:00\",\"5:00\",\"6:00\",\"7:00\",\"8:00\",\"9:00\"]",
+              "explanation": "The expected output includes all possible times where exactly two LED lights are turned on.",
+              "id": "129da63c-675a-4f0c-8450-33b244551c8a",
+              "input": "turnedOn = 2"
+            }
+          ]
+        }
+      ],
+      "id": "79312219-8825-4edb-a303-757f62517a49",
+      "lastUpdated": "2026-02-06T21:16:40Z",
+      "problemSlug": "binary-watch",
+      "relatedProblems": [
+        "number-of-1-bits",
+        "power-of-three"
+      ],
+      "summary": "Given a non-negative integer turnedOn representing the number of LED that is currently on, return all possible times in valid 24-hour format. The key insight is to use bit manipulation to generate all possible combinations of LED lights that are turned on."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Sort candidates (optional, for pruning)\n2. Backtrack: if sum==target, save; if sum>target, return\n3. For each candidate from current index, add and recurse (same index for reuse)",
+          "code": "class Solution {\n    func combinationSum(_ candidates: [Int], _ target: Int) -> [[Int]] {\n        var result: [[Int]] = []\n        var current: [Int] = []\n\n        func backtrack(_ index: Int, _ remaining: Int) {\n            if remaining == 0 {\n                result.append(current)\n                return\n            }\n            if remaining < 0 { return }\n\n            for i in index..<candidates.count {\n                current.append(candidates[i])\n                backtrack(i, remaining - candidates[i])  // same i for reuse\n                current.removeLast()\n            }\n        }\n\n        backtrack(0, target)\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(T/M)",
+            "spaceExplanation": "Max recursion depth",
+            "time": "O(n^(T/M))",
+            "timeExplanation": "T=target, M=min candidate. Branching factor n, depth T/M"
+          },
+          "explanation": "Key: pass same index to allow reuse of element. Advance index to avoid duplicate combinations.",
+          "id": "550e8400-e29b-41d4-a716-446655440131",
+          "intuition": "Try adding each candidate repeatedly until sum >= target, then backtrack to try other candidates.",
+          "name": "Backtracking",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[2,2,3],[7]]",
+              "explanation": "2+2+3=7 and 7=7",
+              "id": "550e8400-e29b-41d4-a716-446655440237",
+              "input": "candidates = [2,3,6,7], target = 7"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440020",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "combination-sum",
+      "relatedProblems": [
+        "combination-sum-ii",
+        "combination-sum-iii"
+      ],
+      "summary": "Find combinations that sum to target. Use backtracking, allowing same element multiple times."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Sort candidates\n2. Backtrack from index, skip if same as previous at same level\n3. Move to i+1 after using element (no reuse)",
+          "code": "class Solution {\n    func combinationSum2(_ candidates: [Int], _ target: Int) -> [[Int]] {\n        var result: [[Int]] = []\n        var current: [Int] = []\n        let sorted = candidates.sorted()\n\n        func backtrack(_ start: Int, _ remaining: Int) {\n            if remaining == 0 {\n                result.append(current)\n                return\n            }\n            for i in start..<sorted.count {\n                if sorted[i] > remaining { break }\n                if i > start && sorted[i] == sorted[i-1] { continue }\n                current.append(sorted[i])\n                backtrack(i + 1, remaining - sorted[i])\n                current.removeLast()\n            }\n        }\n\n        backtrack(0, target)\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Recursion depth",
+            "time": "O(2^n)",
+            "timeExplanation": "Each element included or not"
+          },
+          "explanation": "i > start ensures we only skip duplicates at same recursion level, not first occurrence.",
+          "id": "550e8400-e29b-41d4-a716-446655440134",
+          "intuition": "Like combination-sum but: 1) move to next index after use, 2) skip duplicate values at same level.",
+          "name": "Backtracking",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[1,1,6],[1,2,5],[1,7],[2,6]]",
+              "explanation": "Unique combinations, each element used at most once",
+              "id": "550e8400-e29b-41d4-a716-446655440240",
+              "input": "candidates = [10,1,2,7,6,1,5], target = 8"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440023",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "combination-sum-ii",
+      "relatedProblems": [
+        "combination-sum"
+      ],
+      "summary": "Find unique combinations summing to target, each element used once. Sort and skip duplicates."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start with an empty combination and try adding numbers from 1 to 9. For each added number, recursively try all other numbers. When k numbers have been added, check if the sum is equal to n.",
+          "code": "class Solution {\n    func combinationSum3(_ k: Int, _ n: Int) -> [[Int]] {\n        var result = [[Int]]()\n        var currentCombination = [Int]()\n        combinationSum3Helper(&result, &currentCombination, k, n, 1)\n        return result\n    }\n\n    func combinationSum3Helper(_ result: inout [[Int]], _ currentCombination: inout [Int], _ k: Int, _ n: Int, _ start: Int) {\n        if currentCombination.count == k {\n            if currentCombination.reduce(0, +) == n {\n                result.append(currentCombination)\n            }\n            return\n        }\n\n        for i in start...9 {\n            currentCombination.append(i)\n            combinationSum3Helper(&result, &currentCombination, k, n, i + 1)\n            currentCombination.removeLast()\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(k)",
+            "spaceExplanation": "The maximum depth of the recursion tree is k, where each recursive call corresponds to adding one number to the current combination.",
+            "time": "O(9^k)",
+            "timeExplanation": "In the worst case, we might have to generate all combinations of k numbers chosen from 1 to 9, which is 9^k."
+          },
+          "explanation": "We generate all possible combinations of k numbers from 1 to 9 and then filter those combinations whose sum equals n. The brute-force approach is helpful for understanding but is inefficient because it generates all combinations and then filters.",
+          "id": "dbe8f0ab-4d15-4231-b40a-a22882e38f48",
+          "intuition": "This approach works by checking every possible combination of k numbers and then verifying if their sum equals n.",
+          "name": "Brute-Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[1,2,6],[1,3,5],[2,3,4]]",
+              "explanation": "There are three combinations that sum up to 9: [1,2,6], [1,3,5], and [2,3,4].",
+              "id": "2a906282-fd15-43a0-b15d-c9b01745d315",
+              "input": "k = 3, n = 9"
+            },
+            {
+              "expectedOutput": "[[1,2,7],[1,3,6],[1,4,5],[2,3,5]]",
+              "explanation": "There are four combinations that sum up to 10: [1,2,7], [1,3,6], [1,4,5], and [2,3,5].",
+              "id": "08758c95-b85e-4cb7-8e8f-e8805d120e9f",
+              "input": "k = 3, n = 10"
+            }
+          ]
+        },
+        {
+          "approach": "Start with an empty combination and try adding numbers from 1 to 9. For each added number, recursively try all other numbers but only if the current sum is less than n. When k numbers have been added, check if the sum is equal to n.",
+          "code": "class Solution {\n    func combinationSum3(_ k: Int, _ n: Int) -> [[Int]] {\n        var result = [[Int]]()\n        var currentCombination = [Int]()\n        combinationSum3Helper(&result, &currentCombination, k, n, 1, 0)\n        return result\n    }\n\n    func combinationSum3Helper(_ result: inout [[Int]], _ currentCombination: inout [Int], _ k: Int, _ n: Int, _ start: Int, _ currentSum: Int) {\n        if currentCombination.count == k {\n            if currentSum == n {\n                result.append(currentCombination)\n            }\n            return\n        }\n\n        for i in start...9 {\n            if currentSum + i <= n {\n                currentCombination.append(i)\n                combinationSum3Helper(&result, &currentCombination, k, n, i + 1, currentSum + i)\n                currentCombination.removeLast()\n            } else {\n                break\n            }\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(k)",
+            "spaceExplanation": "The maximum depth of the recursion tree is still k, where each recursive call corresponds to adding one number to the current combination.",
+            "time": "O(9^k) in the worst case, but much less in practice",
+            "timeExplanation": "Although the worst-case time complexity remains the same as the brute-force approach, the optimized backtracking strategy significantly reduces the number of combinations generated and checked in practice."
+          },
+          "explanation": "We use an optimized backtracking strategy by adding a condition to prune branches when the sum exceeds n, thus reducing the number of combinations that need to be generated and checked.",
+          "id": "a83b1e56-5da4-4364-a6b9-f3aa8d4681a8",
+          "intuition": "This approach is similar to the brute-force approach but uses a more efficient backtracking strategy by adding a condition to prune branches when the sum exceeds n.",
+          "name": "Optimized Backtracking",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[[1,2,6],[1,3,5],[2,3,4]]",
+              "explanation": "There are three combinations that sum up to 9: [1,2,6], [1,3,5], and [2,3,4].",
+              "id": "fd0f1a0d-1799-43c0-9cef-8d5553254ad5",
+              "input": "k = 3, n = 9"
+            },
+            {
+              "expectedOutput": "[[1,2,7],[1,3,6],[1,4,5],[2,3,5]]",
+              "explanation": "There are four combinations that sum up to 10: [1,2,7], [1,3,6], [1,4,5], and [2,3,5].",
+              "id": "8f5f8119-8cf9-45df-891a-1e3ad9264be7",
+              "input": "k = 3, n = 10"
+            }
+          ]
+        }
+      ],
+      "id": "a0cecc3d-b421-48f6-8ece-e1c7420138aa",
+      "lastUpdated": "2026-02-06T21:10:34Z",
+      "problemSlug": "combination-sum-iii",
+      "relatedProblems": [
+        "combination-sum",
+        "combination-sum-ii",
+        "combination-sum-iv"
+      ],
+      "summary": "The Combination Sum III problem asks for all valid combinations of k numbers that sum up to n. A key insight is that backtracking can be used to find all combinations. "
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. If combo size = k, add to result\n2. Try adding each number from start to n\n3. Backtrack",
+          "code": "class Solution {\n    func combine(_ n: Int, _ k: Int) -> [[Int]] {\n        var result: [[Int]] = []\n        var combo: [Int] = []\n        func backtrack(_ start: Int) {\n            if combo.count == k { result.append(combo); return }\n            for i in start...n {\n                combo.append(i)\n                backtrack(i + 1)\n                combo.removeLast()\n            }\n        }\n        backtrack(1)\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(k)",
+            "spaceExplanation": "Recursion depth",
+            "time": "O(C(n,k))",
+            "timeExplanation": "Generate all combinations"
+          },
+          "explanation": "Standard combination generation. Use start parameter to avoid duplicates.",
+          "id": "457d0f20-81cd-49e5-916f-b4657cd64740",
+          "intuition": "At each step, include current number or skip. Stop when k numbers chosen.",
+          "name": "Backtracking",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]",
+              "explanation": "All 2-combinations from 1-4",
+              "id": "dbd73f1f-d35a-4b6b-ba45-b5f22e0cf568",
+              "input": "n=4, k=2"
+            }
+          ]
+        }
+      ],
+      "id": "41c366d0-a572-4cbc-9551-ea26370ac705",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "combinations",
+      "relatedProblems": [
+        "combination-sum",
+        "permutations"
+      ],
+      "summary": "Generate all combinations of k numbers from 1..n. Backtrack picking or skipping each number."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Track open and close counts\n2. Add '(' if open < n\n3. Add ')' if close < open\n4. When length == 2n, save result",
+          "code": "class Solution {\n    func generateParenthesis(_ n: Int) -> [String] {\n        var result: [String] = []\n        var current = \"\"\n\n        func backtrack(_ open: Int, _ close: Int) {\n            if current.count == 2 * n {\n                result.append(current)\n                return\n            }\n            if open < n {\n                current.append(\"(\")\n                backtrack(open + 1, close)\n                current.removeLast()\n            }\n            if close < open {\n                current.append(\")\")\n                backtrack(open, close + 1)\n                current.removeLast()\n            }\n        }\n\n        backtrack(0, 0)\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Recursion depth",
+            "time": "O(4^n / √n)",
+            "timeExplanation": "Catalan number complexity"
+          },
+          "explanation": "Never more ')' than '(' ensures every prefix is valid. Stop when counts reach n.",
+          "id": "550e8400-e29b-41d4-a716-446655440154",
+          "intuition": "Add '(' if openCount < n. Add ')' if closeCount < openCount. Ensures validity.",
+          "name": "Backtracking",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"((()))\",\"(()())\",\"(())()\",\"()(())\",\"()()()\"]",
+              "explanation": "All 5 valid combinations",
+              "id": "550e8400-e29b-41d4-a716-446655440260",
+              "input": "n = 3"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440043",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "generate-parentheses",
+      "relatedProblems": [
+        "valid-parentheses",
+        "letter-combinations-of-a-phone-number"
+      ],
+      "summary": "Generate all valid n pairs of parentheses. Backtrack, ensuring open >= close."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all permutations of the given digits. Then, check each permutation to see if it forms a valid time. If it does, compare it to the current maximum time found.",
+          "code": "class Solution {\n    func largestTimeFromDigits(A: [Int]) -> String {\n        var maxTime = -1\n        var time = \"\"\n        permute(A, 0, &time, &maxTime)\n        if maxTime == -1 { return \"\" }\n        return String(format: \"%02d:%02d\", maxTime / 60, maxTime % 60)\n    }\n\n    func permute(_ A: [Int], _ start: Int, _ time: inout String, _ maxTime: inout Int) {\n        if start == A.count {\n            if isValid(A) && timeToInt(A) > maxTime {\n                maxTime = timeToInt(A)\n            }\n        } else {\n            for i in start..<A.count {\n                swap(&A, start, i)\n                permute(A, start + 1, &time, &maxTime)\n                swap(&A, start, i)\n            }\n        }\n    }\n\n    func swap(_ A: inout [Int], _ i: Int, _ j: Int) {\n        let temp = A[i]\n        A[i] = A[j]\n        A[j] = temp\n    }\n\n    func isValid(_ A: [Int]) -> Bool {\n        if A[0] * 10 + A[1] > 23 || A[2] * 10 + A[3] > 59 {\n            return false\n        }\n        return true\n    }\n\n    func timeToInt(_ A: [Int]) -> Int {\n        return (A[0] * 10 + A[1]) * 60 + A[2] * 10 + A[3]\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we need to store the current permutation and the maximum time found.",
+            "time": "O(n!)",
+            "timeExplanation": "The time complexity is O(n!) because there are n! permutations of the digits and we check each one."
+          },
+          "explanation": "We use a recursive function to generate all permutations of the digits. For each permutation, we convert it into a string representing the time in 24-hour format. We then check if the time is valid by ensuring the hours are between 0 and 23 and the minutes are between 0 and 59. If the time is valid and greater than the current maximum time, we update the maximum time.",
+          "id": "9a07640a-a0a0-4460-8dd1-1f70fb378bfa",
+          "intuition": "This approach works by trying all possible permutations of the given digits and filtering out invalid times.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "23:41",
+              "explanation": "The largest time that can be formed from these digits is 23:41.",
+              "id": "34e72682-d57b-4e91-8ff9-a226f4df3e20",
+              "input": "A = [1,2,3,4]"
+            },
+            {
+              "expectedOutput": "",
+              "explanation": "There is no valid time that can be formed from these digits.",
+              "id": "2773a32a-afca-4c29-93dc-57424f4a43e1",
+              "input": "A = [5,5,5,5]"
+            }
+          ]
+        },
+        {
+          "approach": "Sort the digits in descending order. Then, try to form the largest possible time by placing the largest digits in the hours and minutes. Check if the time is valid after placing each digit.",
+          "code": "class Solution {\n    func largestTimeFromDigits(A: [Int]) -> String {\n        let sortedA = A.sorted() { $0 > $1 }\n        for h1 in 0..<4 {\n            for h2 in 0..<4 {\n                if h1 == h2 { continue }\n                for m1 in 0..<4 {\n                    if m1 == h1 || m1 == h2 { continue }\n                    for m2 in 0..<4 {\n                        if m2 == h1 || m2 == h2 || m2 == m1 { continue }\n                        let hours = sortedA[h1] * 10 + sortedA[h2]\n                        let minutes = sortedA[m1] * 10 + sortedA[m2]\n                        if hours < 24 && minutes < 60 {\n                            return String(format: \"%02d:%02d\", hours, minutes)\n                        }\n                    }\n                }\n            }\n        }\n        return \"\"\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are only using a fixed amount of space to store the input and the output.",
+            "time": "O(1)",
+            "timeExplanation": "The time complexity is O(1) because we are only trying a fixed number of permutations."
+          },
+          "explanation": "We sort the digits in descending order and then try to place them in the hours and minutes. We start with the hours and place the largest digit that will not exceed 23. Then, we place the next largest digit in the tens place of the hours. We do the same for the minutes, starting with the largest digit that will not exceed 59 and then placing the next largest digit in the tens place. If at any point we cannot place a digit without exceeding the valid range, we return an empty string.",
+          "id": "11a4b306-e770-4a5a-a7b8-0100ffe2ac48",
+          "intuition": "This approach works by sorting the digits and then trying to form the largest possible time by placing the largest digits in the hours and minutes.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "23:41",
+              "explanation": "The largest time that can be formed from these digits is 23:41.",
+              "id": "4ea81bf1-ecc6-4ac6-8419-aba3cdf92783",
+              "input": "A = [1,2,3,4]"
+            },
+            {
+              "expectedOutput": "",
+              "explanation": "There is no valid time that can be formed from these digits.",
+              "id": "5e5f10af-d4ce-428e-a004-cef169b44d89",
+              "input": "A = [5,5,5,5]"
+            }
+          ]
+        }
+      ],
+      "id": "af759557-5d34-45ad-aa10-e3f2ded35393",
+      "lastUpdated": "2026-02-06T21:50:44Z",
+      "problemSlug": "largest-time-for-given-digits",
+      "relatedProblems": [
+        "next-greater-element-i",
+        "next-greater-element-ii"
+      ],
+      "summary": "Given four digits, find the largest possible time in 24-hour format. The key insight is to consider all permutations of digits and check for valid times."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each character in the input string, try converting it to upper and lower case, then recursively generate all permutations of the remaining characters.",
+          "code": "class Solution {\n    import Foundation\n\n    func letterCasePermutation(_ s: String) -> [String] {\n        var result: [String] = []\n        backtrack(String(s), 0, &result)\n        return result\n    }\n\n    func backtrack(_ s: String, _ index: Int, _ result: inout [String]) {\n        if index == s.count {\n            result.append(s)\n            return\n        }\n        let currentChar = s[s.index(s.startIndex, offsetBy: index)]\n        if currentChar.isLetter {\n            let upper = String(currentChar).uppercased()\n            let lower = String(currentChar).lowercased()\n            var copy = s\n            copy.replaceSubrange(s.index(s.startIndex, offsetBy: index)...s.index(s.startIndex, offsetBy: index), with: upper)\n            backtrack(copy, index + 1, &result)\n            copy.replaceSubrange(s.index(s.startIndex, offsetBy: index)...s.index(s.startIndex, offsetBy: index), with: lower)\n            backtrack(copy, index + 1, &result)\n        } else {\n            backtrack(s, index + 1, &result)\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(2^n * n)",
+            "spaceExplanation": "The space complexity is also O(2^n * n), as we are storing all permutations in the result list.",
+            "time": "O(2^n * n)",
+            "timeExplanation": "In the worst case, the time complexity is O(2^n * n), where n is the length of the input string. This is because for each character, we are creating two new permutations."
+          },
+          "explanation": "Start with the input string and an empty result list. For each character, convert it to both upper and lower case, and recursively call the function with the rest of the string. This will generate all possible permutations.",
+          "id": "a77a694a-e79a-4378-a665-fe5c44c7d188",
+          "intuition": "This approach works by converting each character to both upper and lower case and generating all possible combinations.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"a1b2\", \"a1B2\", \"A1b2\", \"A1B2\"]",
+              "explanation": "For the input 'a1b2', we get four permutations: 'a1b2', 'a1B2', 'A1b2', 'A1B2'",
+              "id": "307d6716-09d2-4d2d-9374-3ac9a06c5a92",
+              "input": "a1b2"
+            },
+            {
+              "expectedOutput": "[\"3z4\", \"3Z4\"]",
+              "explanation": "For the input '3z4', we get two permutations: '3z4' and '3Z4'",
+              "id": "1158ab7a-3bb0-492c-bb1b-432273610614",
+              "input": "3z4"
+            }
+          ]
+        },
+        {
+          "approach": "For each character, we can use a bit to represent whether it's upper or lower case. Then, we can generate all permutations by iterating over all possible bit combinations.",
+          "code": "class Solution {\n    import Foundation\n\n    func letterCasePermutation(_ s: String) -> [String] {\n        let n = s.count\n        let numBits = s.reduce(0) { $0 + ($1.isLetter ? 1 : 0) }\n        var result: [String] = []\n        for i in 0..<1<<numBits {\n            var copy = s\n            var index = 0\n            for (j, char) in s.enumerated() {\n                if char.isLetter {\n                    if (i>>index)&1 == 1 {\n                        copy.replaceSubrange(s.index(s.startIndex, offsetBy: j)...s.index(s.startIndex, offsetBy: j), with: String(char).uppercased())\n                    } else {\n                        copy.replaceSubrange(s.index(s.startIndex, offsetBy: j)...s.index(s.startIndex, offsetBy: j), with: String(char).lowercased())\n                    }\n                    index += 1\n                }\n            }\n            result.append(copy)\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(2^n * n)",
+            "spaceExplanation": "The space complexity is also O(2^n * n), as we are storing all permutations in the result list.",
+            "time": "O(2^n * n)",
+            "timeExplanation": "In the worst case, the time complexity is O(2^n * n), where n is the number of letters in the input string."
+          },
+          "explanation": "We can use a binary number to represent the case of each character. For example, for the string 'a1b2', we can use 00 for 'a1b2', 01 for 'a1B2', 10 for 'A1b2', and 11 for 'A1B2'.",
+          "id": "4c29c40e-053b-4b39-b1a3-ba8052b6c84c",
+          "intuition": "This approach works by using bit manipulation to generate all possible cases.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[\"a1b2\", \"a1B2\", \"A1b2\", \"A1B2\"]",
+              "explanation": "For the input 'a1b2', we get four permutations: 'a1b2', 'a1B2', 'A1b2', 'A1B2'",
+              "id": "0d4817da-e113-4df3-85f2-beee96722c23",
+              "input": "a1b2"
+            },
+            {
+              "expectedOutput": "[\"3z4\", \"3Z4\"]",
+              "explanation": "For the input '3z4', we get two permutations: '3z4' and '3Z4'",
+              "id": "73da1597-b6c2-42e9-a2dc-97f0ad5d0f3a",
+              "input": "3z4"
+            }
+          ]
+        }
+      ],
+      "id": "172a203b-5663-4b79-99a0-7555ad3c8fda",
+      "lastUpdated": "2026-02-06T21:39:25Z",
+      "problemSlug": "letter-case-permutation",
+      "relatedProblems": [
+        "binary-search",
+        "subset-ii"
+      ],
+      "summary": "The problem requires generating all possible letter case permutations of a given string, and a key insight is to use backtracking to explore all possible cases."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Create digit-to-letters mapping\n2. Backtrack: at each digit position, try each letter\n3. When index == digits.length, add to result",
+          "code": "class Solution {\n    func letterCombinations(_ digits: String) -> [String] {\n        guard !digits.isEmpty else { return [] }\n\n        let map: [Character: String] = [\n            \"2\": \"abc\", \"3\": \"def\", \"4\": \"ghi\", \"5\": \"jkl\",\n            \"6\": \"mno\", \"7\": \"pqrs\", \"8\": \"tuv\", \"9\": \"wxyz\"\n        ]\n        let digitsArray = Array(digits)\n        var result: [String] = []\n        var current = \"\"\n\n        func backtrack(_ index: Int) {\n            if index == digitsArray.count {\n                result.append(current)\n                return\n            }\n            let letters = map[digitsArray[index]]!\n            for letter in letters {\n                current.append(letter)\n                backtrack(index + 1)\n                current.removeLast()\n            }\n        }\n\n        backtrack(0)\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Recursion depth n",
+            "time": "O(4^n)",
+            "timeExplanation": "At most 4 letters per digit, n digits"
+          },
+          "explanation": "Branching factor is 3-4 per digit, total combinations is product of letter counts.",
+          "id": "550e8400-e29b-41d4-a716-446655440135",
+          "intuition": "Each digit maps to 3-4 letters. For each digit, try each mapped letter and recurse to next digit.",
+          "name": "Backtracking",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"ad\",\"ae\",\"af\",\"bd\",\"be\",\"bf\",\"cd\",\"ce\",\"cf\"]",
+              "explanation": "2->abc, 3->def, 3*3=9 combinations",
+              "id": "550e8400-e29b-41d4-a716-446655440241",
+              "input": "\"23\""
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440024",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "letter-combinations-of-a-phone-number",
+      "relatedProblems": [
+        "generate-parentheses",
+        "combination-sum"
+      ],
+      "summary": "Generate all letter combinations for phone digits. Map digits to letters, backtrack through all combinations."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Track used columns, diagonals (row-col), anti-diagonals (row+col)\n2. For each row, try each column if not attacked\n3. When row == n, save board configuration",
+          "code": "class Solution {\n    func solveNQueens(_ n: Int) -> [[String]] {\n        var result: [[String]] = []\n        var board = [[Character]](repeating: [Character](repeating: \".\", count: n), count: n)\n        var cols = Set<Int>()\n        var diags = Set<Int>()  // row - col\n        var antiDiags = Set<Int>()  // row + col\n\n        func backtrack(_ row: Int) {\n            if row == n {\n                result.append(board.map { String($0) })\n                return\n            }\n            for col in 0..<n {\n                let diag = row - col, antiDiag = row + col\n                if cols.contains(col) || diags.contains(diag) || antiDiags.contains(antiDiag) {\n                    continue\n                }\n                board[row][col] = \"Q\"\n                cols.insert(col); diags.insert(diag); antiDiags.insert(antiDiag)\n                backtrack(row + 1)\n                board[row][col] = \".\"\n                cols.remove(col); diags.remove(diag); antiDiags.remove(antiDiag)\n            }\n        }\n\n        backtrack(0)\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n²)",
+            "spaceExplanation": "Board storage",
+            "time": "O(n!)",
+            "timeExplanation": "~n! valid placements to explore"
+          },
+          "explanation": "Diagonals identified by row-col (same for all cells), anti-diagonals by row+col.",
+          "id": "550e8400-e29b-41d4-a716-446655440137",
+          "intuition": "Place one queen per row. Track attacked columns and diagonals. Backtrack if no valid position.",
+          "name": "Backtracking",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[\".Q..\",\"...Q\",\"Q...\",\"..Q.\"],[\"..Q.\",\"Q...\",\"...Q\",\".Q..\"]]",
+              "explanation": "Two distinct solutions for 4-queens",
+              "id": "550e8400-e29b-41d4-a716-446655440243",
+              "input": "n = 4"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440026",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "n-queens",
+      "relatedProblems": [
+        "n-queens-ii"
+      ],
+      "summary": "Place n queens on n×n board. Backtrack row by row, checking column/diagonal conflicts."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all possible subsequences, then filter out non-decreasing ones.",
+          "code": "import Foundation\n\nclass Solution {\n    func findSubsequences(_ nums: [Int]) -> [[Int]] {\n        var result: [[Int]] = []\n        var n = nums.count\n        for i in 0..<1<<n {\n            var subsequence: [Int] = []\n            for j in 0..<n {\n                if (i & (1<<j)) != 0 {\n                    subsequence.append(nums[j])\n                }\n            }\n            if subsequence.count > 1 && isNonDecreasing(subsequence) {\n                result.append(subsequence)\n            }\n        }\n        return Array(Set(result.map { String($0.map { String($0) }.joined()) })).compactMap { $0.components(separatedBy: \",\").map { Int($0)! } }\n    }\n\n    func isNonDecreasing(_ subsequence: [Int]) -> Bool {\n        for i in 0..<subsequence.count-1 {\n            if subsequence[i] > subsequence[i+1] {\n                return false\n            }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(2^n * n)",
+            "spaceExplanation": "Storing all possible subsequences takes O(2^n * n) space.",
+            "time": "O(2^n * n)",
+            "timeExplanation": "Generating all possible subsequences takes O(2^n) time, and checking if each subsequence is non-decreasing takes O(n) time."
+          },
+          "explanation": "Generate all possible subsequences by using bit manipulation to represent the presence or absence of each element in the subsequence. Then, iterate through each subsequence and check if it's non-decreasing by comparing each element with the next one.",
+          "id": "a3caa727-5db9-40b0-a70b-cf41fd1800a6",
+          "intuition": "This approach works by generating all possible subsequences of the given array and then checking if each subsequence is non-decreasing.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[4,6],[4,6,7],[4,6,7,7],[4,7],[4,7,7],[6,7],[6,7,7],[7,7]]",
+              "explanation": "All possible non-decreasing subsequences.",
+              "id": "589bb721-b9b2-4cb2-933c-8cffe6bd3f37",
+              "input": "nums = [4,6,7,7]"
+            },
+            {
+              "expectedOutput": "[[1,2],[1,2,3],[1,3],[2,3]]",
+              "explanation": "All possible non-decreasing subsequences.",
+              "id": "f278a2fa-2e95-4fd6-bbe4-056fb826c63d",
+              "input": "nums = [1,2,3]"
+            }
+          ]
+        },
+        {
+          "approach": "Use backtracking to generate all possible non-decreasing subsequences.",
+          "code": "class Solution {\n    func findSubsequences(nums: [Int]) -> [[Int]] { \n        var result: [[Int]] = [] \n        var n = nums.count \n        backtrack(nums, 0, [], &result) \n        return result \n    } \n\n    func backtrack(_ nums: [Int], _ start: Int, _ current: [Int], _ result: inout [[Int]]) { \n        if start == nums.count { \n            if current.count > 1 { \n                result.append(current) \n            } \n            return \n        } \n        if current.isEmpty || nums[start] >= current.last! { \n            var newCurrent = current \n            newCurrent.append(nums[start]) \n            backtrack(nums, start + 1, newCurrent, &result) \n        } \n        backtrack(nums, start + 1, current, &result) \n    }\n}",
+          "complexity": {
+            "space": "O(2^n * n)",
+            "spaceExplanation": "Storing all possible non-decreasing subsequences takes O(2^n * n) space.",
+            "time": "O(2^n * n)",
+            "timeExplanation": "Generating all possible non-decreasing subsequences using backtracking takes O(2^n * n) time."
+          },
+          "explanation": "Use a helper function to generate all possible non-decreasing subsequences by adding each element to the current subsequence only if it's greater than or equal to the last element in the subsequence.",
+          "id": "ab0d41af-6733-461e-8434-37d9aab0b882",
+          "intuition": "This approach works by using backtracking to generate all possible non-decreasing subsequences.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[[4,6],[4,6,7],[4,6,7,7],[4,7],[4,7,7],[6,7],[6,7,7],[7,7]]",
+              "explanation": "All possible non-decreasing subsequences.",
+              "id": "53005407-9031-4dd3-a542-8018e4748a45",
+              "input": "nums = [4,6,7,7]"
+            },
+            {
+              "expectedOutput": "[[1,2],[1,2,3],[1,3],[2,3]]",
+              "explanation": "All possible non-decreasing subsequences.",
+              "id": "ee165cea-1bf9-489f-9283-79b5dcf978a2",
+              "input": "nums = [1,2,3]"
+            }
+          ]
+        }
+      ],
+      "id": "b5e44caa-453c-4b22-81c6-fb3a6ba36c1c",
+      "lastUpdated": "2026-02-06T21:21:49Z",
+      "problemSlug": "non-decreasing-subsequences",
+      "relatedProblems": [
+        "subsequence-enumeration",
+        "subarrays-with-k-different-integers"
+      ],
+      "summary": "Given an integer array, return all the different possible non-decreasing subsequences. The key insight here is to generate all possible subsequences and then filter out the non-decreasing ones."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all possible numbers of a given length, then check each number to see if the absolute difference between consecutive digits is the same.",
+          "code": "class Solution {\n    func numsSameConsecDiff(_ n: Int, _ k: Int) -> [Int] {\n        var result: [Int] = []\n\n        func backtrack(currentNumber: [Int], remainingDigits: Int) {\n            if remainingDigits == 0 {\n                result.append(Int(currentNumber.map { String($0) }.joined())!)\n            } else {\n                let lastDigit = currentNumber.last ?? -1\n\n                if k == 0 {\n                    if lastDigit >= 0 {\n                        var newNumber = currentNumber\n                        newNumber.append(lastDigit)\n                        backtrack(currentNumber: newNumber, remainingDigits: remainingDigits - 1)\n                    } else {\n                        for i in 1...9 {\n                            var newNumber = currentNumber\n                            newNumber.append(i)\n                            backtrack(currentNumber: newNumber, remainingDigits: remainingDigits - 1)\n                        }\n                    }\n                } else {\n                    if lastDigit >= 0 {\n                        let nextDigit = lastDigit + k\n                        if nextDigit <= 9 {\n                            var newNumber = currentNumber\n                            newNumber.append(nextDigit)\n                            backtrack(currentNumber: newNumber, remainingDigits: remainingDigits - 1)\n                        }\n\n                        let prevDigit = lastDigit - k\n                        if prevDigit >= 0 && prevDigit != nextDigit {\n                            var newNumber = currentNumber\n                            newNumber.append(prevDigit)\n                            backtrack(currentNumber: newNumber, remainingDigits: remainingDigits - 1)\n                        }\n                    } else {\n                        for i in 1...9 {\n                            var newNumber = currentNumber\n                            newNumber.append(i)\n                            backtrack(currentNumber: newNumber, remainingDigits: remainingDigits - 1)\n                        }\n                    }\n                }\n            }\n        }\n\n        backtrack(currentNumber: [], remainingDigits: n)\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear because we are storing the current number being generated.",
+            "time": "O(10^n)",
+            "timeExplanation": "The time complexity is exponential because we are generating all possible numbers of a given length."
+          },
+          "explanation": "This approach is straightforward but inefficient because it has to check a large number of numbers.",
+          "id": "3f1cebc6-9f24-4ce4-a5c3-3642c199baec",
+          "intuition": "This approach involves generating all possible numbers of a given length and checking if they satisfy the condition of having the same consecutive differences.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[181,292,383,484,585,686,787,878,979]",
+              "explanation": "These are all the 3-digit numbers that have a difference of 7 between consecutive digits.",
+              "id": "3f7e8e8c-54cf-4cc4-baee-66437f4df9c0",
+              "input": "n = 3, k = 7"
+            },
+            {
+              "expectedOutput": "[10,12,21,23,32,34,43,45,54,56,65,67,76,78,87,89,98]",
+              "explanation": "These are all the 2-digit numbers that have a difference of 1 between consecutive digits.",
+              "id": "e29324db-7429-4384-97bb-96807e267352",
+              "input": "n = 2, k = 1"
+            }
+          ]
+        },
+        {
+          "approach": "Start with all single-digit numbers, then for each number, append the digits that would result in the same consecutive difference.",
+          "code": "class Solution {\n    func numsSameConsecDiff(_ n: Int, _ k: Int) -> [Int] {\n        if n == 1 {\n            return [0,1,2,3,4,5,6,7,8,9]\n        }\n\n        var result: [Int] = []\n        var queue: [[Int]] = []\n\n        for i in 1...9 {\n            queue.append([i])\n        }\n\n        while !queue.isEmpty {\n            let currentNumber = queue.removeFirst()\n\n            if currentNumber.count == n {\n                result.append(Int(currentNumber.map { String($0) }.joined())!)\n            } else {\n                let lastDigit = currentNumber.last!\n\n                if k == 0 {\n                    queue.append(currentNumber + [lastDigit])\n                } else {\n                    let nextDigit = lastDigit + k\n                    if nextDigit <= 9 {\n                        queue.append(currentNumber + [nextDigit])\n                    }\n\n                    let prevDigit = lastDigit - k\n                    if prevDigit >= 0 && prevDigit != nextDigit {\n                        queue.append(currentNumber + [prevDigit])\n                    }\n                }\n            }\n        }\n\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(10^n)",
+            "spaceExplanation": "The space complexity is exponential because we are storing all the numbers being generated in the queue.",
+            "time": "O(10^n)",
+            "timeExplanation": "The time complexity is exponential because we are generating all possible numbers of a given length."
+          },
+          "explanation": "This approach is more efficient because it directly constructs the numbers with the same consecutive differences, rather than checking all possible numbers.",
+          "id": "5a141677-c1ca-47ae-8d9e-f14318e49173",
+          "intuition": "This approach involves using a breadth-first search to construct the numbers with the same consecutive differences, which is more efficient than the brute force approach.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[181,292,383,484,585,686,787,878,979]",
+              "explanation": "These are all the 3-digit numbers that have a difference of 7 between consecutive digits.",
+              "id": "6dda2f96-5447-4540-8bfd-0cb657e1fe13",
+              "input": "n = 3, k = 7"
+            },
+            {
+              "expectedOutput": "[10,12,21,23,32,34,43,45,54,56,65,67,76,78,87,89,98]",
+              "explanation": "These are all the 2-digit numbers that have a difference of 1 between consecutive digits.",
+              "id": "b4c191b8-66a0-4cc7-a283-7bd62183b6f5",
+              "input": "n = 2, k = 1"
+            }
+          ]
+        }
+      ],
+      "id": "7bebaeff-c3d5-40df-9e7a-06f4d07e9c8a",
+      "lastUpdated": "2026-02-06T21:52:13Z",
+      "problemSlug": "numbers-with-same-consecutive-differences",
+      "relatedProblems": [
+        "letter-combinations-of-a-phone-number",
+        "binary-tree-paths"
+      ],
+      "summary": "The problem asks for numbers of a given length with the same consecutive differences, and the key insight is to use a breadth-first search to construct these numbers."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. At index i, try substrings s[i...j] for all j >= i\n2. If s[i...j] is palindrome, add to current, recurse from j+1\n3. When index reaches end, save partition",
+          "code": "class Solution {\n    func partition(_ s: String) -> [[String]] {\n        let chars = Array(s)\n        var result: [[String]] = []\n        var current: [String] = []\n\n        func isPalindrome(_ start: Int, _ end: Int) -> Bool {\n            var l = start, r = end\n            while l < r {\n                if chars[l] != chars[r] { return false }\n                l += 1; r -= 1\n            }\n            return true\n        }\n\n        func backtrack(_ start: Int) {\n            if start == chars.count {\n                result.append(current)\n                return\n            }\n            for end in start..<chars.count {\n                if isPalindrome(start, end) {\n                    current.append(String(chars[start...end]))\n                    backtrack(end + 1)\n                    current.removeLast()\n                }\n            }\n        }\n\n        backtrack(0)\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Recursion depth",
+            "time": "O(n * 2^n)",
+            "timeExplanation": "2^n partitions possible, O(n) palindrome check"
+          },
+          "explanation": "Only extend partition if current substring is valid palindrome.",
+          "id": "550e8400-e29b-41d4-a716-446655440136",
+          "intuition": "At each position, try all possible prefixes. If prefix is palindrome, recurse on remainder.",
+          "name": "Backtracking",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[\"a\",\"a\",\"b\"],[\"aa\",\"b\"]]",
+              "explanation": "Two valid palindromic partitions",
+              "id": "550e8400-e29b-41d4-a716-446655440242",
+              "input": "\"aab\""
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440025",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "palindrome-partitioning",
+      "relatedProblems": [
+        "palindrome-partitioning-ii"
+      ],
+      "summary": "Partition string into all palindromic substrings. Backtrack, checking if each prefix is palindrome."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start at the root node and recursively traverse the tree, keeping a running sum of node values and adding paths to the result when the target sum is reached.",
+          "code": "class Solution {\n   func pathSum(_ root: TreeNode?, _ targetSum: Int) -> [[Int]] {\n      var result: [[Int]] = []\n      dfs(root, 0, [], &result, targetSum)\n      return result\n   }\n\n   func dfs(_ node: TreeNode?, _ sum: Int, _ path: [Int], _ result: inout [[Int]], _ targetSum: Int) {\n      guard let node = node else { return }\n      let newSum = sum + node.val\n      var newPath = path\n      newPath.append(node.val)\n\n      if newSum == targetSum && node.left == nil && node.right == nil {\n         result.append(newPath)\n      }\n\n      dfs(node.left, newSum, newPath, &result, targetSum)\n      dfs(node.right, newSum, newPath, &result, targetSum)\n   }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity comes from the recursive call stack, which can reach a maximum depth of n in the worst case.",
+            "time": "O(2^n)",
+            "timeExplanation": "The worst-case time complexity arises when the tree is completely unbalanced, effectively becoming a linked list, resulting in O(2^n) time to traverse all nodes."
+          },
+          "explanation": "This approach is straightforward but inefficient because it checks every possible path, resulting in potential duplicate work and wasted computation.",
+          "id": "69b5542a-6a83-48e0-9f4d-be8bc7ee4eb2",
+          "intuition": "This approach works by performing a depth-first search of the binary tree, checking every possible path to see if its sum equals the target.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[5,4,11,2], [5,8,4,5]]",
+              "explanation": "The two paths [5,4,11,2] and [5,8,4,5] both sum to the target value of 22.",
+              "id": "96057db7-722b-4c8d-9e75-71788dc613b6",
+              "input": "root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "There are no paths in the tree that sum to the target value of 5.",
+              "id": "cb73a64d-68d1-44da-aeb1-64277a89f7d2",
+              "input": "root = [1,2,3], targetSum = 5"
+            }
+          ]
+        },
+        {
+          "approach": "Perform a depth-first search, keeping track of the current path and sum, but pruning branches as soon as the sum exceeds the target, thereby avoiding unnecessary traversal.",
+          "code": "class Solution {\n   func pathSum(_ root: TreeNode?, _ targetSum: Int) -> [[Int]] {\n      var result: [[Int]] = []\n      dfs(root, 0, [], &result, targetSum)\n      return result\n   }\n\n   func dfs(_ node: TreeNode?, _ sum: Int, _ path: [Int], _ result: inout [[Int]], _ targetSum: Int) {\n      guard let node = node else { return }\n      if sum > targetSum {\n         return\n      }\n      let newSum = sum + node.val\n      var newPath = path\n      newPath.append(node.val)\n\n      if newSum == targetSum && node.left == nil && node.right == nil {\n         result.append(newPath)\n      } else {\n         dfs(node.left, newSum, newPath, &result, targetSum)\n         dfs(node.right, newSum, newPath, &result, targetSum)\n      }\n   }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Similar to the brute force approach, the space complexity remains O(n) due to the recursive call stack.",
+            "time": "O(n)",
+            "timeExplanation": "In the best case, this approach can achieve linear time complexity because it prunes branches early, avoiding traversing parts of the tree that cannot lead to a path sum equal to the target."
+          },
+          "explanation": "This optimization significantly reduces the number of nodes that need to be visited, especially in cases where the target sum is small compared to the values in the tree.",
+          "id": "e43e19fe-3d06-42f0-a635-99b07b33e603",
+          "intuition": "This approach works similarly to the brute force approach but with an optimization that prunes branches early, avoiding unnecessary work and reducing computational complexity.",
+          "name": "Optimized Depth-First Search",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[[5,4,11,2], [5,8,4,5]]",
+              "explanation": "The paths [5,4,11,2] and [5,8,4,5] both sum to the target of 22.",
+              "id": "500e09b3-8903-48dc-846b-b8fe611f807f",
+              "input": "root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "There are no paths in the tree that sum to the target of 0.",
+              "id": "8b18ebef-0da3-470d-93a8-338220a49d3f",
+              "input": "root = [1,2], targetSum = 0"
+            }
+          ]
+        }
+      ],
+      "id": "474cc5b5-9ad0-4c76-94f2-1765aba29011",
+      "lastUpdated": "2026-02-06T21:06:53Z",
+      "problemSlug": "path-sum-ii",
+      "relatedProblems": [
+        "path-sum",
+        "binary-tree-paths"
+      ],
+      "summary": "The problem involves finding all root-to-leaf paths in a binary tree where the sum of the node values equals a given target sum, with a key insight being the use of depth-first search to traverse and sum paths."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Track used indices with boolean array\n2. At each position, try each unused element\n3. When length == n, save permutation",
+          "code": "class Solution {\n    func permute(_ nums: [Int]) -> [[Int]] {\n        var result: [[Int]] = []\n        var current: [Int] = []\n        var used = [Bool](repeating: false, count: nums.count)\n\n        func backtrack() {\n            if current.count == nums.count {\n                result.append(current)\n                return\n            }\n            for i in 0..<nums.count {\n                if used[i] { continue }\n                used[i] = true\n                current.append(nums[i])\n                backtrack()\n                current.removeLast()\n                used[i] = false\n            }\n        }\n\n        backtrack()\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Recursion depth and used array",
+            "time": "O(n * n!)",
+            "timeExplanation": "n! permutations, O(n) to copy each"
+          },
+          "explanation": "For n elements, n! permutations. Each position has decreasing choices: n, n-1, ..., 1.",
+          "id": "550e8400-e29b-41d4-a716-446655440132",
+          "intuition": "Build permutation one element at a time, skipping already-used elements.",
+          "name": "Backtracking with Used Set",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]",
+              "explanation": "All 6 permutations",
+              "id": "550e8400-e29b-41d4-a716-446655440238",
+              "input": "[1,2,3]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440021",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "permutations",
+      "relatedProblems": [
+        "permutations-ii",
+        "next-permutation"
+      ],
+      "summary": "Generate all permutations using backtracking. Swap elements or track used indices."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Sort nums\n2. Skip if nums[i] == nums[i-1] and !used[i-1]\n3. Standard backtracking",
+          "code": "class Solution {\n    func permuteUnique(_ nums: [Int]) -> [[Int]] {\n        let sorted = nums.sorted()\n        var result: [[Int]] = []\n        var perm: [Int] = []\n        var used = [Bool](repeating: false, count: nums.count)\n        func backtrack() {\n            if perm.count == sorted.count { result.append(perm); return }\n            for i in 0..<sorted.count {\n                if used[i] { continue }\n                if i > 0 && sorted[i] == sorted[i-1] && !used[i-1] { continue }\n                used[i] = true; perm.append(sorted[i])\n                backtrack()\n                perm.removeLast(); used[i] = false\n            }\n        }\n        backtrack()\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Recursion and used array",
+            "time": "O(n!)",
+            "timeExplanation": "Up to n! permutations"
+          },
+          "explanation": "Sorting groups duplicates. Skip duplicate at same recursion level to avoid repeats.",
+          "id": "a29875d5-9308-42f1-b230-7d6297f7691c",
+          "intuition": "Sort input. Skip if same as previous and previous not used (same level).",
+          "name": "Backtracking with Dedup",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[1,1,2],[1,2,1],[2,1,1]]",
+              "explanation": "3 unique permutations",
+              "id": "49f8da2f-e841-4184-8a6e-8a1d3bb26d91",
+              "input": "[1,1,2]"
+            }
+          ]
+        }
+      ],
+      "id": "c57e5800-cdb4-4e89-8c49-569132e8778d",
+      "lastUpdated": "2026-02-06T01:03:48.939Z",
+      "problemSlug": "permutations-ii",
+      "relatedProblems": [
+        "permutations",
+        "next-permutation"
+      ],
+      "summary": "Generate unique permutations with duplicates. Sort, skip duplicates at same level."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all possible pyramid transitions by considering all possible letters at each level. Then, check the validity of each transition by comparing it to the given allowed transitions.",
+          "code": "class Solution {\n    func pyramidTransition(_ bottom: String, _ allowed: [String]) -> [String] {\n        var result: [String] = []\n        let chars: [Character] = Array<Character>(bottom)\n\n        func backtrack(_ index: Int, _ current: String) {\n            if index == chars.count - 1 {\n                result.append(current)\n                return\n            }\n            for str in allowed {\n                let strStart = str.index(str.startIndex, offsetBy: 0)\n                let strEnd = str.index(strStart, offsetBy: 1)\n                let pair = String(chars[index]) + String(chars[index + 1])\n                if String(str[strStart...strEnd]) == pair {\n                    let newStr = current + String(str.last!)\n                    backtrack(index + 1, newStr)\n                }\n            }\n        }\n        backtrack(0, String())\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear due to the recursive call stack.",
+            "time": "O(2^n)",
+            "timeExplanation": "The time complexity is exponential due to the recursive nature of the backtracking algorithm."
+          },
+          "explanation": "This approach is straightforward but can be inefficient for large inputs. It involves generating all possible pyramid transitions and then checking which ones are valid.",
+          "id": "4b3b921b-8578-4777-86df-87ba85dd0132",
+          "intuition": "The brute force approach involves generating all possible pyramid transitions and then checking which ones are valid according to the given transitions.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"ABC\"]",
+              "explanation": "The only valid pyramid transition is the one that starts with the bottom string itself.",
+              "id": "5d77c3e8-110b-41e7-915f-b33636980e56",
+              "input": "bottom = \"ABC\", allowed = [\"ABC\"]"
+            },
+            {
+              "expectedOutput": "[\"ABCD\"]",
+              "explanation": "The only valid pyramid transition is the one that starts with the bottom string itself.",
+              "id": "66027391-eaa0-4cfa-87be-919f9db2d987",
+              "input": "bottom = \"ABCD\", allowed = [\"ABCD\"]"
+            }
+          ]
+        },
+        {
+          "approach": "Store the allowed transitions in a hash table for efficient lookup. Then, use backtracking to generate all possible pyramid transitions.",
+          "code": "class Solution { func pyramidTransition(_ bottom: String, _ allowed: [String]) -> [String] { var transitions: [String: [Character]] = [:] for str in allowed { let key = str.substring(to: str.index(str.startIndex, offsetBy: 2)) transitions[key] = Array<Character>(str.suffix(1)) } var result: [String] = [] let chars: [Character] = Array<Character>(bottom) func backtrack(_ index: Int, _ current: String) { if index == chars.count - 1 { result.append(current) return } if let validTransitions = transitions[String(chars[index]) + String(chars[index + 1])] { for transition in validTransitions { let newStr = current + String(transition) backtrack(index + 1, newStr) } } } backtrack(0, String()) return result } }",
+          "complexity": {
+            "space": "O(n * m)",
+            "spaceExplanation": "The space complexity is linear with respect to the number of allowed transitions and the length of the bottom string.",
+            "time": "O(n * m)",
+            "timeExplanation": "The time complexity is linear with respect to the number of allowed transitions and the length of the bottom string."
+          },
+          "explanation": "This approach is more efficient than the brute force approach because it uses a hash table to store the allowed transitions, reducing the time complexity of the algorithm.",
+          "id": "6e43d761-b310-46bc-9150-a4f3a5387a26",
+          "intuition": "The optimized approach involves using a hash table to store the allowed transitions and then using backtracking to explore all possible pyramid transitions.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[\"ABC\"]",
+              "explanation": "The only valid pyramid transition is the one that starts with the bottom string itself.",
+              "id": "d2855c17-b4c3-4a05-9294-cfbb63ef221d",
+              "input": "bottom = \"ABC\", allowed = [\"ABC\"]"
+            },
+            {
+              "expectedOutput": "[\"XYA\", \"XYB\", \"XYC\"]",
+              "explanation": "The valid pyramid transitions are the ones that start with the bottom string and have valid transitions.",
+              "id": "aaff0931-be6f-420a-b72d-42b18bbd42dd",
+              "input": "bottom = \"XYZ\", allowed = [\"XYA\", \"XYB\", \"XYC\"]"
+            }
+          ]
+        }
+      ],
+      "id": "5357308b-a430-4c2d-8ccc-364ac429f009",
+      "lastUpdated": "2026-02-06T21:38:32Z",
+      "problemSlug": "pyramid-transition-matrix",
+      "relatedProblems": [
+        "word-ladder",
+        "regex-validation"
+      ],
+      "summary": "The problem involves generating a pyramid transition matrix given a list of allowed transitions between letters. The key insight is to use backtracking to explore all possible pyramid transitions."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start by iterating over all possible positions in the string where the first dot could go, then for each of those positions, iterate over all possible positions for the second dot, and so on. For each of these possible positions, check if the segments formed are valid IP segments. If they are, add the resulting IP address to the list of results.",
+          "code": "class Solution {\n    let s = \"25525511135\"\n    func restoreIpAddresses(_ s: String) -> [String] {\n        let n = s.count\n        var res: [String] = []\n        func backtrack(_ s: String, _ path: [String], _ start: Int) {\n            if path.count == 4 {\n                if start == n {\n                    res.append(path.joined(separator: \".\"))\n                }\n                return\n            }\n            for i in 1...3 {\n                if start + i <= n {\n                    let segment = String(s.startIndex..., offsetBy: start + i - start)\n                    if Int(segment) ?? 0 <= 255 && (segment.first == \"0\" ? segment.count == 1 : true) {\n                        backtrack(String(s.startIndex..., offsetBy: start + i), path + [segment], start + i)\n                    }\n                }\n            }\n        }\n        backtrack(s, [], 0)\n        return res\n    }\n    print(restoreIpAddresses(s))\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because in the worst case, the recursion stack can go as deep as n, which is the length of the input string.",
+            "time": "O(3^n)",
+            "timeExplanation": "The time complexity is O(3^n) because in the worst case, for each character in the string, we have three possible positions for the next dot."
+          },
+          "explanation": "This approach works by exploring all possible combinations of IP segments. However, it is inefficient because it involves a lot of repeated work. For example, if a segment is found to be invalid, the approach will still continue to explore all possible combinations that start with that segment.",
+          "id": "35e6dfe2-82c6-4bb8-990e-b2094fd532f4",
+          "intuition": "This approach involves trying all possible ways to split the string into four parts, and checking each part to see if it forms a valid IP segment. If a valid IP address is found, it is added to the list of results.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"255.255.11.135\",\"255.255.111.35\"]",
+              "explanation": "The string can be split into two valid IP addresses: 255.255.11.135 and 255.255.111.35.",
+              "id": "95a50eb1-3bf9-4171-962c-613e035f60c5",
+              "input": "s = \"25525511135\""
+            },
+            {
+              "expectedOutput": "[\"0.0.0.0\"]",
+              "explanation": "The string can be split into one valid IP address: 0.0.0.0.",
+              "id": "69a683e3-193b-46fb-87b4-61f07219415f",
+              "input": "s = \"0000\""
+            }
+          ]
+        },
+        {
+          "approach": "Start by defining a helper function to check if a segment is valid. Then, use three nested loops to generate the possible positions for the dots. For each of these positions, check if the segments formed are valid using the helper function. If they are, add the resulting IP address to the list of results.",
+          "code": "class Solution {\n    let s = \"25525511135\"\n    func restoreIpAddresses(_ s: String) -> [String] {\n        let n = s.count\n        var res: [String] = []\n        func isValid(_ segment: String) -> Bool {\n            if segment.first == \"0\" && segment.count > 1 {\n                return false\n            }\n            return Int(segment) ?? 0 <= 255\n        }\n        for i in 1...3 {\n            for j in i+1...i+3 {\n                for k in j+1...j+3 {\n                    if k <= n - 1 {\n                        let a = String(s.startIndex..., offsetBy: i)\n                        let b = String(s.index(s.startIndex, offsetBy: i)..., offsetBy: j - i)\n                        let c = String(s.index(s.startIndex, offsetBy: j)..., offsetBy: k - j)\n                        let d = String(s.index(s.startIndex, offsetBy: k)...) if isValid(a) && isValid(b) && isValid(c) && isValid(d) {\n                            res.append(\"(a).(b).(c).(d)\")\n                        }\n                    }\n                }\n            }\n        }\n        return res\n    }\n    print(restoreIpAddresses(s))\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we only use a constant amount of space to store the segments and the resulting IP addresses.",
+            "time": "O(n^3)",
+            "timeExplanation": "The time complexity is O(n^3) because we have three nested loops, each of which can go up to n."
+          },
+          "explanation": "This approach works by exploring all possible combinations of IP segments, but it is more efficient than the brute force approach because it uses a more efficient algorithm to generate the possible IP addresses.",
+          "id": "470c91b8-ff4a-4ede-be53-6cfb9ecc47f2",
+          "intuition": "This approach is similar to the brute force approach, but it uses a more efficient algorithm to generate the possible IP addresses. It uses a helper function to check if a segment is valid, and it uses a loop to generate the possible positions for the dots.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[\"255.255.11.135\",\"255.255.111.35\"]",
+              "explanation": "The string can be split into two valid IP addresses: 255.255.11.135 and 255.255.111.35.",
+              "id": "d555fb80-638c-41bf-b812-266a18df1254",
+              "input": "s = \"25525511135\""
+            },
+            {
+              "expectedOutput": "[\"1.0.10.23\",\"1.0.102.3\",\"10.1.0.23\",\"10.10.2.3\",\"101.0.2.3\"]",
+              "explanation": "The string can be split into five valid IP addresses: 1.0.10.23, 1.0.102.3, 10.1.0.23, 10.10.2.3, and 101.0.2.3.",
+              "id": "4985f1fb-cdb8-4e51-b082-3c2fc97c06dc",
+              "input": "s = \"101023\""
+            }
+          ]
+        }
+      ],
+      "id": "4cc8809a-ebfa-4d11-893f-aca05c81f849",
+      "lastUpdated": "2026-02-06T21:06:02Z",
+      "problemSlug": "restore-ip-addresses",
+      "relatedProblems": [
+        "letter-combinations-of-a-phone-number",
+        "generate-parentheses"
+      ],
+      "summary": "The problem requires us to take a string of digits and return all possible valid IP addresses that can be formed by adding dots to split the string into four parts, with each part being a valid IP segment. The key insight here is to understand the valid range of IP segments (0 to 255) and to use backtracking to explore all possible combinations."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start by performing a Depth-First Search on the binary tree. During the search, concatenate the labels of each node to form a string. When a leaf node is encountered, compare the string with the current smallest string found so far and update it if necessary. Finally, return the smallest string found.",
+          "code": "// Definition for a binary tree node.\n\nclass Solution {\n    func smallestFromLeaf(_ root: TreeNode?) -> String {\n        var smallest: String = \"#\"\n\n        var path: [String] = []\n\n        smallestFromLeaf(root, &path, &smallest)\n\n        return smallest\n    }\n\n    func smallestFromLeaf(_ node: TreeNode?, _ path: inout [String], _ smallest: inout String) {\n        guard let node = node else { return }\n        path.append(node.label)\n        if node.left == nil && node.right == nil {\n            let current: String = path.reversed().joined()\n            if smallest == \"#\" || current < smallest {\n                smallest = current\n            }\n        }\n        smallestFromLeaf(node.left, &path, &smallest)\n        smallestFromLeaf(node.right, &path, &smallest)\n        path.removeLast()\n    }\n}",
+          "complexity": {
+            "space": "O(h)",
+            "spaceExplanation": "Where h is the height of the tree. We use recursive calls to store the path and the smallest string so far, which requires O(h) space.",
+            "time": "O(n * M * log(n))",
+            "timeExplanation": "Where n is the number of nodes in the tree and M is the maximum length of a path. In the worst case, we have to explore all nodes and for each node, we have to concatenate its label and compare with the current smallest string."
+          },
+          "explanation": "The brute force approach is straightforward and works well for small inputs, but it can be inefficient for large inputs due to the need to compare all possible paths.",
+          "id": "27b05d30-157a-438e-acaf-c98e445d87e2",
+          "intuition": "This approach works by using Depth-First Search to find all possible paths from the root to a leaf node, and then return the smallest one",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "dba",
+              "explanation": "The lexicographically smallest string is dba.",
+              "id": "5fd71162-4d09-4aa3-8fbe-c0908e7fd2e1",
+              "input": "root = [0,1,2,3,4,3,4]\nroot's children are labeled as [3,4,3,4]"
+            },
+            {
+              "expectedOutput": "adz",
+              "explanation": "The lexicographically smallest string is adz.",
+              "id": "612c43bc-5b3f-4136-b4f2-45c9b51ecca4",
+              "input": "root = [25,1,3,1,3,0,2]"
+            }
+          ]
+        },
+        {
+          "approach": "Start by performing a Depth-First Search on the binary tree. During the search, maintain a current string by concatenating the labels of each node. When a leaf node is encountered, compare the current string with the current smallest string found so far and update it if necessary. However, if at any point the current string is larger than the smallest string found so far, we can immediately prune the current branch and backtrack.",
+          "code": "// Definition for a binary tree node.\n\nclass Solution {\n    func smallestFromLeaf(_ root: TreeNode?) -> String {\n        var smallest: String = \"#\"\n\n        var path: [String] = []\n\n        smallestFromLeaf(root, &path, &smallest)\n\n        return smallest\n    }\n\n    func smallestFromLeaf(_ node: TreeNode?, _ path: inout [String], _ smallest: inout String) {\n        guard let node = node else { return }\n        path.append(node.label)\n        if node.left == nil && node.right == nil {\n            let current: String = path.reversed().joined()\n            if smallest == \"#\" || current < smallest {\n                smallest = current\n            }\n            path.removeLast()\n            return\n        }\n        smallestFromLeaf(node.left, &path, &smallest)\n        smallestFromLeaf(node.right, &path, &smallest)\n        path.removeLast()\n    }\n\n    func isLarger(_ str1: String, _ str2: String) -> Bool {\n        if str1.count < str2.count {\n            return false\n        } else if str1.count > str2.count {\n            return true\n        }\n        return str1 > str2\n    }\n}",
+          "complexity": {
+            "space": "O(h)",
+            "spaceExplanation": "Where h is the height of the tree. We use recursive calls to store the path and the smallest string so far, which requires O(h) space.",
+            "time": "O(n * M)",
+            "timeExplanation": "Where n is the number of nodes in the tree and M is the maximum length of a path. In the worst case, we have to explore all nodes and for each node, we have to concatenate its label."
+          },
+          "explanation": "The optimized approach takes advantage of the fact that we can prune branches that are guaranteed to lead to larger strings, reducing the number of paths that need to be explored.",
+          "id": "0ed96efa-3b2f-4d89-95e5-c25064a3790e",
+          "intuition": "This approach works by using a similar Depth-First Search strategy but instead of comparing all possible paths, we can prune branches that are guaranteed to lead to larger strings",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "dba",
+              "explanation": "The lexicographically smallest string is dba.",
+              "id": "530786f1-184d-4d0d-b119-acaf84df7bac",
+              "input": "root = [0,1,2,3,4,3,4]\nroot's children are labeled as [3,4,3,4]"
+            },
+            {
+              "expectedOutput": "adz",
+              "explanation": "The lexicographically smallest string is adz.",
+              "id": "1f8481d0-9c1f-4d17-b6c2-5ec5396fe4f4",
+              "input": "root = [25,1,3,1,3,0,2]"
+            }
+          ]
+        }
+      ],
+      "id": "7db0579b-39b7-4a3b-b5db-1c503d2fb1b7",
+      "lastUpdated": "2026-02-06T21:53:26Z",
+      "problemSlug": "smallest-string-starting-from-leaf",
+      "relatedProblems": [
+        "binary-tree-level-order-traversal",
+        "path-sum"
+      ],
+      "summary": "The problem asks to return the lexicographically smallest string that can be formed by concatenating strings from a root node to a leaf node in a binary tree. Key insight is using Depth-First Search and backtracking to find all possible paths and return the smallest one."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start with the first number and try all possible numbers that can be added to it. Then, try all possible numbers that can be added to the sum of the first two numbers, and so on.",
+          "code": "class Solution {\n    func splitIntoFibonacci(_ S: String) -> [Int] {\n        guard S.count >= 3 else { return [] }\n\n        func backtrack(_ path: [Int], _ i: Int) -> [[Int]] {\n            guard i == S.count else {\n                var result: [[Int]] = []\n                for len in 1...10 {\n                    if i + len > S.count { break }\n                    let substr = String(S.prefix(i + len).suffix(len))\n                    guard let num = Int(substr) else { continue }\n                    if len > 1 && substr.first == \"0\" { continue }\n                    if path.count < 2 {\n                        result.append(contentsOf: backtrack(path + [num], i + len))\n                    } else if path[path.count - 1] + path[path.count - 2] == num {\n                        if let res = backtrack(path + [num], i + len) {\n                            return res\n                        }\n                    }\n                }\n                return []\n            }\n            return [path]\n        }\n\n        return backtrack([], 0).first ?? []\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear because of the recursion stack.",
+            "time": "O(2^n)",
+            "timeExplanation": "The time complexity is exponential because in the worst case, we have to try all possible combinations of numbers."
+          },
+          "explanation": "This approach involves a lot of repeated work, which can be optimized by using dynamic programming or memoization.",
+          "id": "9750a4d9-c755-40ee-a5ca-9b7554a7389a",
+          "intuition": "This approach works by trying all possible combinations of the array and checking if they form a Fibonacci-like sequence.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,3]",
+              "explanation": "The Fibonacci-like sequence is formed by the numbers 1, 2, and 3.",
+              "id": "9cb979c8-c073-45a8-b129-34611da5473d",
+              "input": "123"
+            },
+            {
+              "expectedOutput": "[1,2,3,5,8,13,21,34,55]",
+              "explanation": "The Fibonacci-like sequence is formed by the numbers 1, 2, 3, 5, 8, 13, 21, 34, and 55.",
+              "id": "bb572e9d-3cda-478c-8659-bb7d5c234dd5",
+              "input": "123456789"
+            }
+          ]
+        },
+        {
+          "approach": "Start by building a Trie of the Fibonacci-like sequences. Then, use a depth-first search to try all possible combinations of the array.",
+          "code": "class Solution {\n    class TrieNode {\n        var children: [String: TrieNode] = [:]\n        var isEnd: Bool = false\n    }\n\n    func splitIntoFibonacci(_ S: String) -> [Int] {\n        guard S.count >= 3 else { return [] }\n\n        func buildTrie(_ seq: [Int]) {\n            var root = TrieNode()\n            var node = root\n            for num in seq {\n                let numStr = String(num)\n                if node.children[numStr] == nil {\n                    node.children[numStr] = TrieNode()\n                }\n                node = node.children[numStr]!\n            }\n            node.isEnd = true\n        }\n\n        func dfs(_ node: TrieNode, _ path: [Int], _ i: Int) -> [[Int]] {\n            if i == S.count {\n                return [[Int]]()\n            }\n\n            var result: [[Int]] = []\n            for len in 1...10 {\n                if i + len > S.count { break }\n                let substr = String(S.prefix(i + len).suffix(len))\n                guard let num = Int(substr) else { continue }\n                if len > 1 && substr.first == \"0\" { continue }\n                if let child = node.children[String(num)] {\n                    if path.count < 2 {\n                        if let res = dfs(child, path + [num], i + len) {\n                            return res\n                        }\n                    } else if path[path.count - 1] + path[path.count - 2] == num {\n                        if let res = dfs(child, path + [num], i + len) {\n                            return res\n                        }\n                    }\n                }\n            }\n            return []\n        }\n\n        let root = TrieNode()\n        buildTrie([1, 2, 3])\n        return dfs(root, [], 0).first ?? []\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is linear because of the recursion stack and the Trie.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is linear because we only need to iterate over the array once."
+          },
+          "explanation": "This approach involves using a Trie to reduce the time complexity of the solution.",
+          "id": "73d5f5fc-e44b-4d9e-8ae7-71d7132d4512",
+          "intuition": "This approach works by using a Trie to store the Fibonacci-like sequences and then using a depth-first search to try all possible combinations.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1,2,3]",
+              "explanation": "The Fibonacci-like sequence is formed by the numbers 1, 2, and 3.",
+              "id": "5d30da24-cc5b-4f74-983c-cedfb606b53b",
+              "input": "123"
+            },
+            {
+              "expectedOutput": "[1,2,3,5,8,13,21,34,55]",
+              "explanation": "The Fibonacci-like sequence is formed by the numbers 1, 2, 3, 5, 8, 13, 21, 34, and 55.",
+              "id": "bfdaf57e-916a-439b-ba6e-c1cc0bd0dbb5",
+              "input": "123456789"
+            }
+          ]
+        }
+      ],
+      "id": "211e4474-7c03-4c8d-a8f8-6ed9e7073857",
+      "lastUpdated": "2026-02-06T21:43:44Z",
+      "problemSlug": "split-array-into-fibonacci-sequence",
+      "relatedProblems": [
+        "minimum-window-substring",
+        "substring-with-concatenation-of-all-words"
+      ],
+      "summary": "The problem is to split a given array of integers into a Fibonacci-like sequence where a number is the sum of the last two preceding numbers. The key insight is to use backtracking to try all possible combinations."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Start with empty subset\n2. At each index, branch: include nums[i] or not\n3. When index reaches end, add current subset to result",
+          "code": "class Solution {\n    func subsets(_ nums: [Int]) -> [[Int]] {\n        var result: [[Int]] = []\n        var current: [Int] = []\n\n        func backtrack(_ index: Int) {\n            if index == nums.count {\n                result.append(current)\n                return\n            }\n            // Include nums[index]\n            current.append(nums[index])\n            backtrack(index + 1)\n            current.removeLast()\n            // Exclude nums[index]\n            backtrack(index + 1)\n        }\n\n        backtrack(0)\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Recursion depth n",
+            "time": "O(n * 2^n)",
+            "timeExplanation": "2^n subsets, O(n) to copy each"
+          },
+          "explanation": "Backtracking explores all 2^n combinations. Add element, recurse, remove (backtrack), recurse again.",
+          "id": "550e8400-e29b-41d4-a716-446655440130",
+          "intuition": "For each element, make two choices: include it or skip it. This creates a binary tree of decisions.",
+          "name": "Backtracking",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]",
+              "explanation": "All 8 subsets of 3 elements",
+              "id": "550e8400-e29b-41d4-a716-446655440236",
+              "input": "[1,2,3]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440019",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "subsets",
+      "relatedProblems": [
+        "subsets-ii",
+        "combinations"
+      ],
+      "summary": "Generate all subsets using backtracking or iterative bit manipulation. Each element is either included or not."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Sort nums\n2. Backtrack: add current subset, then try each remaining element\n3. Skip if nums[i] == nums[i-1] at same recursion level",
+          "code": "class Solution {\n    func subsetsWithDup(_ nums: [Int]) -> [[Int]] {\n        var result: [[Int]] = []\n        var current: [Int] = []\n        let sorted = nums.sorted()\n\n        func backtrack(_ start: Int) {\n            result.append(current)\n            for i in start..<sorted.count {\n                // Skip duplicates at same level\n                if i > start && sorted[i] == sorted[i-1] { continue }\n                current.append(sorted[i])\n                backtrack(i + 1)\n                current.removeLast()\n            }\n        }\n\n        backtrack(0)\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Recursion depth",
+            "time": "O(n * 2^n)",
+            "timeExplanation": "At most 2^n subsets"
+          },
+          "explanation": "Sorting groups duplicates. Skip condition prevents same value being chosen twice for same position.",
+          "id": "550e8400-e29b-41d4-a716-446655440133",
+          "intuition": "Sort array so duplicates are adjacent. When iterating, skip if same as previous (at same level).",
+          "name": "Backtracking with Duplicate Skip",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[],[1],[1,2],[1,2,2],[2],[2,2]]",
+              "explanation": "No duplicate subsets like [2] appearing twice",
+              "id": "550e8400-e29b-41d4-a716-446655440239",
+              "input": "[1,2,2]"
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440022",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "subsets-ii",
+      "relatedProblems": [
+        "subsets"
+      ],
+      "summary": "Generate unique subsets from array with duplicates. Sort first, skip consecutive duplicates."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. For each cell matching word[0], start DFS\n2. At each step, check if current cell matches current char\n3. Mark cell visited (modify to special char)\n4. Recurse to 4 neighbors for next char\n5. Backtrack: restore cell value\n6. Return true if word fully matched",
+          "code": "class Solution {\n    func exist(_ board: [[Character]], _ word: String) -> Bool {\n        var board = board\n        let m = board.count, n = board[0].count\n        let word = Array(word)\n\n        func dfs(_ i: Int, _ j: Int, _ k: Int) -> Bool {\n            if k == word.count { return true }\n            if i < 0 || i >= m || j < 0 || j >= n || board[i][j] != word[k] {\n                return false\n            }\n\n            let temp = board[i][j]\n            board[i][j] = \"#\"  // Mark visited\n\n            let found = dfs(i+1, j, k+1) || dfs(i-1, j, k+1) ||\n                        dfs(i, j+1, k+1) || dfs(i, j-1, k+1)\n\n            board[i][j] = temp  // Backtrack\n            return found\n        }\n\n        for i in 0..<m {\n            for j in 0..<n {\n                if dfs(i, j, 0) { return true }\n            }\n        }\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(L)",
+            "spaceExplanation": "Recursion stack depth equals word length",
+            "time": "O(m * n * 4^L)",
+            "timeExplanation": "Try each cell, DFS explores up to 4^L paths where L = word length"
+          },
+          "explanation": "Backtracking is key: we temporarily mark cells as visited during exploration, then restore them when backtracking. This allows the same cell to be used in different paths.",
+          "id": "550e8400-e29b-41d4-a716-446655440177",
+          "intuition": "Start from each cell matching first letter. Explore all 4 directions, marking visited cells to avoid cycles.",
+          "name": "DFS Backtracking",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "Path: A(0,0)->B(0,1)->C(0,2)->C(1,2)->E(2,2)->D(2,1)",
+              "id": "550e8400-e29b-41d4-a716-446655440283",
+              "input": "board=[[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word=\"ABCCED\""
+            }
+          ]
+        }
+      ],
+      "id": "550e8400-e29b-41d4-a716-446655440066",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "word-search",
+      "relatedProblems": [
+        "word-search-ii",
+        "number-of-islands"
+      ],
+      "summary": "Find if word exists in grid by traversing adjacent cells. Use DFS with backtracking."
+    }
+  ],
+  "topic": "backtracking",
+  "version": "2.0.0"
+}

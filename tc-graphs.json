@@ -1,0 +1,3021 @@
+{
+  "topic": "graphs",
+  "version": "1.0.0",
+  "generatedAt": "2026-02-20T02:08:37Z",
+  "problems": [
+    {
+      "problemSlug": "accounts-merge",
+      "leetCodeNumber": 721,
+      "difficulty": "medium",
+      "testCaseCount": 17,
+      "testCases": [
+        {
+          "id": "09ae9a97-489b-4f00-a9a3-069148612d91",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "01e1cd5c-09c7-46fb-b164-5377e688a457",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "6f44ec5f-71a3-4294-920f-29c1bfc3f4ff",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "fdcbecf1-1903-4e68-97e5-a2caea1e521d",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "70c4e24c-83c7-4b6f-9279-9ea1806034b9",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "d170f7f9-17dd-4663-80fb-a8075c8c4be5",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "5cddef3a-98ea-4f88-b57f-434b3e9d20aa",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "b48682fb-e5b0-44f1-95e3-b0830f684582",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "812882a4-cb4f-480f-b65b-8dc5554273b2",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "c33e310a-daae-45d2-be3a-8a314eb72e0b",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "ac5af1d2-6a26-431b-b15e-b6f03c020ba5",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "3ad1161a-eda0-4a01-b78c-2ac606a9e149",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "4e3ea7c2-85dc-452f-9bc2-d24cb2881242",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "c1916551-bc48-4ea5-bb38-b32746f611c7",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "2062ed99-6342-4ea4-87f9-a2558afed26f",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"],[\"John\",\"john00@mail.com\"],[\"John\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "d8b75c2a-d001-459e-b05f-36cabbaae9d9",
+          "input": "accounts = [[\"John\",\"johnsmith@mail.com\",\"john_newyork@mail.com\"],[\"John\",\"johnsmith@mail.com\",\"john00@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnnybravo@mail.com\"]]",
+          "expectedOutput": "[[\"John\",\"john00@mail.com\",\"john_newyork@mail.com\",\"johnsmith@mail.com\"],[\"Mary\",\"mary@mail.com\"],[\"John\",\"johnnybravo@mail.com\"]]",
+          "orderMatters": false
+        },
+        {
+          "id": "e0598e2e-db04-4474-a63a-866344b86e9e",
+          "input": "accounts = [[\"Gabe\",\"Gabe0@m.co\",\"Gabe3@m.co\",\"Gabe1@m.co\"],[\"Kevin\",\"Kevin3@m.co\",\"Kevin5@m.co\",\"Kevin0@m.co\"],[\"Ethan\",\"Ethan5@m.co\",\"Ethan4@m.co\",\"Ethan0@m.co\"],[\"Hanzo\",\"Hanzo3@m.co\",\"Hanzo1@m.co\",\"Hanzo0@m.co\"],[\"Fern\",\"Fern5@m.co\",\"Fern1@m.co\",\"Fern0@m.co\"]]",
+          "expectedOutput": "[[\"Ethan\",\"Ethan0@m.co\",\"Ethan4@m.co\",\"Ethan5@m.co\"],[\"Gabe\",\"Gabe0@m.co\",\"Gabe1@m.co\",\"Gabe3@m.co\"],[\"Hanzo\",\"Hanzo0@m.co\",\"Hanzo1@m.co\",\"Hanzo3@m.co\"],[\"Kevin\",\"Kevin0@m.co\",\"Kevin3@m.co\",\"Kevin5@m.co\"],[\"Fern\",\"Fern0@m.co\",\"Fern1@m.co\",\"Fern5@m.co\"]]",
+          "orderMatters": false
+        }
+      ]
+    },
+    {
+      "problemSlug": "clone-graph",
+      "leetCodeNumber": 133,
+      "difficulty": "medium",
+      "testCaseCount": 3,
+      "testCases": [
+        {
+          "id": "21137d78-1741-46b3-bd4d-c28ee41e57b4",
+          "input": "adjList = [[2,4],[1,3],[2,4],[1,3]]",
+          "expectedOutput": "[[2,4],[1,3],[2,4],[1,3]]",
+          "orderMatters": true
+        },
+        {
+          "id": "68e66756-7e3d-442d-a7ff-72364c17d29e",
+          "input": "adjList = [[]]",
+          "expectedOutput": "[[]]",
+          "orderMatters": true
+        },
+        {
+          "id": "a99d96cb-ceb1-484c-a19e-5ce2ef1841b7",
+          "input": "adjList = []",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "course-schedule",
+      "leetCodeNumber": 207,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "25366753-8e6e-4de7-a95d-8d11722cc913",
+          "input": "numCourses = 1, prerequisites = []",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "465be266-a9bc-43bc-af7b-800a66d86044",
+          "input": "numCourses = 2, prerequisites = [[1,0],[0,1]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "70b965c6-142e-4837-8e4b-541c7804571a",
+          "input": "numCourses = 3, prerequisites = [[1,0],[2,1]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "ce871821-2142-49a1-8e0a-8d4071a3d3c0",
+          "input": "numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "0fa057f9-698d-414b-a1a0-cd83ce35718b",
+          "input": "numCourses = 5, prerequisites = [[1,4],[2,4],[3,1],[3,2]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "d54aafdb-6f64-4f6e-b3b3-73a4f4c9eede",
+          "input": "numCourses = 6, prerequisites = [[1,0],[2,0],[3,1],[3,2],[4,3],[5,4]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "ea39ea7b-052e-48cf-875d-1178aa3133a5",
+          "input": "numCourses = 7, prerequisites = [[1,0],[2,0],[3,1],[3,2],[4,3],[5,4],[6,5]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "00bf7d36-8220-4b13-9dcb-21e77ab910b8",
+          "input": "numCourses = 8, prerequisites = [[1,0],[2,0],[3,1],[3,2],[4,3],[5,4],[6,5],[7,6]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "44556789-c9a5-494d-a285-97f6581a05e3",
+          "input": "numCourses = 9, prerequisites = [[1,0],[2,0],[3,1],[3,2],[4,3],[5,4],[6,5],[7,6],[8,7]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "9f49f4f1-50e3-4996-acb6-5218749c9855",
+          "input": "numCourses = 10, prerequisites = [[1,0],[2,0],[3,1],[3,2],[4,3],[5,4],[6,5],[7,6],[8,7],[9,8]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "1e25aebc-f7a5-40d5-8bd4-119fbdbd51c1",
+          "input": "numCourses = 2, prerequisites = [[1,0],[1,0]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "2e1fe247-653f-4d11-84aa-9c0134114223",
+          "input": "numCourses = 3, prerequisites = [[1,0],[1,0],[2,1]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "00a06b79-754d-4911-b7b3-abd4717c3edc",
+          "input": "numCourses = 4, prerequisites = [[1,0],[1,0],[2,0],[3,1]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "53809188-9419-4dca-8c23-18f2774f4302",
+          "input": "numCourses = 5, prerequisites = [[1,0],[1,0],[2,0],[3,1],[4,2]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "11a03751-1f96-4fb0-b77c-274e51204abc",
+          "input": "numCourses = 6, prerequisites = [[1,0],[1,0],[2,0],[3,1],[4,2],[5,3]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "62bd6be0-051c-449b-8d0e-84e563182092",
+          "input": "numCourses = 7, prerequisites = [[1,0],[1,0],[2,0],[3,1],[4,2],[5,3],[6,4]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "282efbbe-5d98-461d-a6ec-e51c8d055d16",
+          "input": "numCourses = 8, prerequisites = [[1,0],[1,0],[2,0],[3,1],[4,2],[5,3],[6,4],[7,5]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "ee05384f-9d4c-4380-80e4-b13355ed3791",
+          "input": "numCourses = 9, prerequisites = [[1,0],[1,0],[2,0],[3,1],[4,2],[5,3],[6,4],[7,5],[8,6]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "0a2b1b19-c94d-44c5-8843-d8798e48e0db",
+          "input": "numCourses = 10, prerequisites = [[1,0],[1,0],[2,0],[3,1],[4,2],[5,3],[6,4],[7,5],[8,6],[9,7]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "f0f6c895-6625-4ea6-b0e8-7c7d4f552837",
+          "input": "numCourses = 2, prerequisites = [[0,1],[1,0]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "b1149957-806e-4790-afb7-c0953d95bb14",
+          "input": "numCourses = 3, prerequisites = [[0,1],[1,2],[2,0]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "f4f2d109-71a0-47f2-9a5d-6f56088bad43",
+          "input": "numCourses = 4, prerequisites = [[0,1],[1,2],[2,3],[3,0]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "93494771-2ee6-497f-931f-8978aeb69c77",
+          "input": "numCourses = 5, prerequisites = [[0,1],[1,2],[2,3],[3,4],[4,0]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "c4f641ed-33a8-4ffa-a776-e47e720de7dc",
+          "input": "numCourses = 6, prerequisites = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,0]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "19da4243-69b5-40d3-9f46-0de82d7b0dee",
+          "input": "numCourses = 7, prerequisites = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,0]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "course-schedule-ii",
+      "leetCodeNumber": 210,
+      "difficulty": "medium",
+      "testCaseCount": 21,
+      "testCases": [
+        {
+          "id": "3cb7c80c-d769-408c-a2be-aa363fc55802",
+          "input": "numCourses = 1, prerequisites = []",
+          "expectedOutput": "[0]",
+          "orderMatters": true
+        },
+        {
+          "id": "c2d4deb7-3a3e-44b4-bebc-2b4b86c949c5",
+          "input": "numCourses = 2, prerequisites = [[1,0]]",
+          "expectedOutput": "[0,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "5b453922-4fca-4f55-9a95-9c85e3691a49",
+          "input": "numCourses = 3, prerequisites = [[1,0],[2,0]]",
+          "expectedOutput": "[0,1,2]",
+          "orderMatters": true
+        },
+        {
+          "id": "7c130de8-374d-4d4b-a4e3-d1997a2ba362",
+          "input": "numCourses = 5, prerequisites = [[1,0],[2,0],[3,1],[3,2],[4,3]]",
+          "expectedOutput": "[0,1,2,3,4]",
+          "orderMatters": true
+        },
+        {
+          "id": "67b98c9b-38cc-40cb-a0f0-3632424cda6b",
+          "input": "numCourses = 6, prerequisites = [[1,0],[2,0],[3,1],[3,2],[4,3],[5,4]]",
+          "expectedOutput": "[0,1,2,3,4,5]",
+          "orderMatters": true
+        },
+        {
+          "id": "ac403c94-3cd0-4af3-b2cb-f36ec992eac9",
+          "input": "numCourses = 2, prerequisites = [[1,0],[0,1]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "6f6b67c3-5556-47d0-ad01-751c7830987c",
+          "input": "numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2],[0,3]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "74c44b2d-652d-433a-93d3-dd762acec41e",
+          "input": "numCourses = 5, prerequisites = [[1,0],[2,0],[3,1],[3,2],[4,3],[0,4]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "e88dff21-4514-402b-9de8-2d7104751b89",
+          "input": "numCourses = 1, prerequisites = [[0,0]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "c728c2a3-50f4-4ef0-80e7-b7342ebcb7b2",
+          "input": "numCourses = 3, prerequisites = [[1,0],[2,0],[0,2]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "0a747da3-86fb-4b6c-a57d-4b30b7d881fe",
+          "input": "numCourses = 2, prerequisites = [[1,1]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "cd511158-8d97-4183-aef9-4fdf723d8ce7",
+          "input": "numCourses = 3, prerequisites = [[1,1],[2,2]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "25eaa7c5-f7dc-4875-a5bf-6f51ecfa45ab",
+          "input": "numCourses = 4, prerequisites = [[1,1],[2,2],[3,3]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "03cc37af-a6d8-40d7-9499-40fb65824409",
+          "input": "numCourses = 5, prerequisites = [[1,1],[2,2],[3,3],[4,4]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "91a5a254-06b9-4747-8c56-e9ae50d3445f",
+          "input": "numCourses = 6, prerequisites = [[1,1],[2,2],[3,3],[4,4],[5,5]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "1ae1cada-11a1-4955-8d06-7d045aafc935",
+          "input": "numCourses = 2, prerequisites = [[0,0],[1,1]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "a5ab2772-5b38-4088-9c5a-e7bfaf8b6612",
+          "input": "numCourses = 3, prerequisites = [[0,0],[1,1],[2,2]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "ff8bf86c-3422-4347-8d87-fcabf9319b1d",
+          "input": "numCourses = 4, prerequisites = [[0,0],[1,1],[2,2],[3,3]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "98d8c172-d6fc-457d-8686-c404e137a68b",
+          "input": "numCourses = 5, prerequisites = [[0,0],[1,1],[2,2],[3,3],[4,4]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "dd83a89c-222e-45ab-8299-b71b6ceb4f4f",
+          "input": "numCourses = 6, prerequisites = [[0,0],[1,1],[2,2],[3,3],[4,4],[5,5]]",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "10b5c37c-bdb1-41c2-96b9-d7b7aff91b77",
+          "input": "numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]",
+          "expectedOutput": "[0,2,1,3]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "evaluate-division",
+      "leetCodeNumber": 399,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "2bea7da3-7f40-4b4f-b2c2-f5ed68be0bb8",
+          "input": "equations = [[\"a\",\"b\"]], values = [2.0], queries = [[\"a\",\"b\"]]",
+          "expectedOutput": "[2.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "70b82ca1-1276-4bdc-9469-43b2ea97d3d7",
+          "input": "equations = [[\"a\",\"b\"]], values = [2.0], queries = [[\"b\",\"a\"]]",
+          "expectedOutput": "[0.5]",
+          "orderMatters": true
+        },
+        {
+          "id": "e0d4b838-c6c6-4159-abcc-b608c6fea468",
+          "input": "equations = [[\"a\",\"b\"]], values = [2.0], queries = [[\"a\",\"a\"]]",
+          "expectedOutput": "[1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "1f923dd3-5326-4ab1-ba25-83192063ddca",
+          "input": "equations = [[\"a\",\"b\"]], values = [2.0], queries = [[\"b\",\"b\"]]",
+          "expectedOutput": "[1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "34299017-bc47-4ee4-93d0-c9056bba5515",
+          "input": "equations = [[\"a\",\"b\"]], values = [2.0], queries = [[\"c\",\"d\"]]",
+          "expectedOutput": "[-1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "58a32d75-5cdd-4ead-8842-f159826e977d",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"c\",\"a\"]]",
+          "expectedOutput": "[0.16666666666666666]",
+          "orderMatters": true
+        },
+        {
+          "id": "ef679351-c859-4e3a-a80b-23210713903e",
+          "input": "equations = [], values = [], queries = [[\"a\",\"b\"]]",
+          "expectedOutput": "[-1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "26dffbcb-ac17-424c-84fc-47bf8982a68e",
+          "input": "equations = [[\"a\",\"b\"]], values = [2.0], queries = []",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "e7a1c7d9-ad2a-4974-848f-dfab19efeed7",
+          "input": "equations = [[\"a\",\"b\"],[\"a\",\"b\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"]]",
+          "expectedOutput": "[2.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "a30b95b2-59bf-4c9b-973a-5ab06923e7f8",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"]]",
+          "expectedOutput": "[2.0,3.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "115c1c7a-23da-467b-8752-f0c3f0e3c42d",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"]]",
+          "expectedOutput": "[2.0,3.0,6.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "4f852dcd-c6c9-4716-a055-294da1433c7b",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666]",
+          "orderMatters": true
+        },
+        {
+          "id": "975697c7-b4ca-4a42-850d-25f564f4a058",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"],[\"a\",\"a\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666,1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "375c426a-15ae-4790-b00f-811d5e426ef9",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"],[\"a\",\"a\"],[\"b\",\"b\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666,1.0,1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "1a32ad4d-6077-4411-a667-05eca878f05a",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"],[\"a\",\"a\"],[\"b\",\"b\"],[\"c\",\"c\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666,1.0,1.0,1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "bc589d0c-cbd2-404e-88f0-527d7d7d727b",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"],[\"a\",\"a\"],[\"b\",\"b\"],[\"c\",\"c\"],[\"d\",\"e\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666,1.0,1.0,1.0,-1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "65cf7f2b-541e-497e-92f1-50dff9febf35",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"],[\"a\",\"a\"],[\"b\",\"b\"],[\"c\",\"c\"],[\"d\",\"e\"],[\"e\",\"d\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666,1.0,1.0,1.0,-1.0,-1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "71881d38-a3a4-4982-ac26-b8bc36f04fc7",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"],[\"a\",\"a\"],[\"b\",\"b\"],[\"c\",\"c\"],[\"d\",\"e\"],[\"e\",\"d\"],[\"f\",\"g\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666,1.0,1.0,1.0,-1.0,-1.0,-1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "4e93e07d-4bc1-460c-8fac-9d71a08e8395",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"],[\"a\",\"a\"],[\"b\",\"b\"],[\"c\",\"c\"],[\"d\",\"e\"],[\"e\",\"d\"],[\"f\",\"g\"],[\"g\",\"f\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666,1.0,1.0,1.0,-1.0,-1.0,-1.0,-1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "b92eaa3b-7b63-4714-a99d-ab5c4767a6db",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"],[\"a\",\"a\"],[\"b\",\"b\"],[\"c\",\"c\"],[\"d\",\"e\"],[\"e\",\"d\"],[\"f\",\"g\"],[\"g\",\"f\"],[\"h\",\"i\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666,1.0,1.0,1.0,-1.0,-1.0,-1.0,-1.0,-1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "205a8146-652a-4b4d-a0b3-bd23a23c6ea7",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"],[\"a\",\"a\"],[\"b\",\"b\"],[\"c\",\"c\"],[\"d\",\"e\"],[\"e\",\"d\"],[\"f\",\"g\"],[\"g\",\"f\"],[\"h\",\"i\"],[\"i\",\"h\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666,1.0,1.0,1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "3ffb4698-6612-474e-aa8b-bdb14b8c0125",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"],[\"a\",\"a\"],[\"b\",\"b\"],[\"c\",\"c\"],[\"d\",\"e\"],[\"e\",\"d\"],[\"f\",\"g\"],[\"g\",\"f\"],[\"h\",\"i\"],[\"i\",\"h\"],[\"j\",\"k\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666,1.0,1.0,1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "50df8704-b9cb-4231-96a8-275ca5cdcb97",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"],[\"a\",\"a\"],[\"b\",\"b\"],[\"c\",\"c\"],[\"d\",\"e\"],[\"e\",\"d\"],[\"f\",\"g\"],[\"g\",\"f\"],[\"h\",\"i\"],[\"i\",\"h\"],[\"j\",\"k\"],[\"k\",\"j\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666,1.0,1.0,1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "daf427f4-5ea6-4ce0-aab1-e17a4ab68b82",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"],[\"a\",\"a\"],[\"b\",\"b\"],[\"c\",\"c\"],[\"d\",\"e\"],[\"e\",\"d\"],[\"f\",\"g\"],[\"g\",\"f\"],[\"h\",\"i\"],[\"i\",\"h\"],[\"j\",\"k\"],[\"k\",\"j\"],[\"l\",\"m\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666,1.0,1.0,1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0]",
+          "orderMatters": true
+        },
+        {
+          "id": "c24a4870-45f5-4f26-9f25-8c747a4683de",
+          "input": "equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"b\"],[\"b\",\"c\"],[\"a\",\"c\"],[\"c\",\"a\"],[\"a\",\"a\"],[\"b\",\"b\"],[\"c\",\"c\"],[\"d\",\"e\"],[\"e\",\"d\"],[\"f\",\"g\"],[\"g\",\"f\"],[\"h\",\"i\"],[\"i\",\"h\"],[\"j\",\"k\"],[\"k\",\"j\"],[\"l\",\"m\"],[\"m\",\"l\"]]",
+          "expectedOutput": "[2.0,3.0,6.0,0.16666666666666666,1.0,1.0,1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "find-eventual-safe-states",
+      "leetCodeNumber": 802,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "945fefdd-790a-4652-85ef-aa90c8259322",
+          "input": "graph = [[],[0,2,3,4],[3],[4],[]]",
+          "expectedOutput": "[0,1,2,3,4]",
+          "orderMatters": true
+        },
+        {
+          "id": "1b066e37-0557-4b28-b09a-7f3efa4fbd74",
+          "input": "graph = [[1,2,3,4],[1,2],[3,4],[0,4],[]]",
+          "expectedOutput": "[4]",
+          "orderMatters": true
+        },
+        {
+          "id": "d24ef8ea-c204-48eb-a071-03e76e2e514e",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]",
+          "orderMatters": true
+        },
+        {
+          "id": "e50753ee-ea6f-4fe0-8f76-25c2465dbe5a",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]",
+          "orderMatters": true
+        },
+        {
+          "id": "855a980a-8bf1-4064-9ea5-9927dc8534f3",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]",
+          "orderMatters": true
+        },
+        {
+          "id": "4039890c-67f3-458d-83aa-52c1ce7376d5",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]",
+          "orderMatters": true
+        },
+        {
+          "id": "d3360be9-235f-4373-b91c-48182c05d494",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]",
+          "orderMatters": true
+        },
+        {
+          "id": "5a3adc2b-bf30-495b-a94b-17c3e14083b4",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]",
+          "orderMatters": true
+        },
+        {
+          "id": "2eb603b9-7316-440c-b960-6acaac067c0a",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]",
+          "orderMatters": true
+        },
+        {
+          "id": "9aa92a8f-d356-42d2-95e7-e57a7082265f",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]",
+          "orderMatters": true
+        },
+        {
+          "id": "a1a3c6b9-6f3e-4897-bfc8-6cc539458ebc",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,25]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]",
+          "orderMatters": true
+        },
+        {
+          "id": "b7ce4401-b295-4093-ac60-a51aebcaa7c1",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,25],[25,26]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]",
+          "orderMatters": true
+        },
+        {
+          "id": "1a45bf2e-755c-433f-95ca-71d017563277",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,25],[25,26],[26,27]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]",
+          "orderMatters": true
+        },
+        {
+          "id": "8ee61d56-97d5-4f13-9b15-f44970709d9b",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,25],[25,26],[26,27],[27,28]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]",
+          "orderMatters": true
+        },
+        {
+          "id": "4775f9fd-56f6-412e-bc11-24cfae8425fa",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,25],[25,26],[26,27],[27,28],[28,29]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]",
+          "orderMatters": true
+        },
+        {
+          "id": "526523ae-7944-465d-9eaa-d4f9cb343a5c",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,25],[25,26],[26,27],[27,28],[28,29],[29,30]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]",
+          "orderMatters": true
+        },
+        {
+          "id": "eb4491b3-829a-494d-92e0-83232cb3fbb5",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,25],[25,26],[26,27],[27,28],[28,29],[29,30],[30,31]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]",
+          "orderMatters": true
+        },
+        {
+          "id": "7d14d4d2-b5e5-4b3a-a616-d960f343d50c",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,25],[25,26],[26,27],[27,28],[28,29],[29,30],[30,31],[31,32]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]",
+          "orderMatters": true
+        },
+        {
+          "id": "9d9adb9f-1cd7-41f8-aef0-d2c12ac763a0",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,25],[25,26],[26,27],[27,28],[28,29],[29,30],[30,31],[31,32],[32,33]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]",
+          "orderMatters": true
+        },
+        {
+          "id": "52c607d8-c42e-4d62-b342-0da65b65ae40",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,25],[25,26],[26,27],[27,28],[28,29],[29,30],[30,31],[31,32],[32,33],[33,34]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34]",
+          "orderMatters": true
+        },
+        {
+          "id": "f8d08f1d-4c71-4d13-aa8f-7fd204af0c66",
+          "input": "graph = [[0,1],[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,25],[25,26],[26,27],[27,28],[28,29],[29,30],[30,31],[31,32],[32,33],[33,34],[34,35]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35]",
+          "orderMatters": true
+        },
+        {
+          "id": "10c1a5c3-8cfd-4ec6-a6a6-67e7210c7333",
+          "input": "graph = [[1],[2],[3],[]]",
+          "expectedOutput": "[0,1,2,3]",
+          "orderMatters": true
+        },
+        {
+          "id": "1ce2c8fa-74bc-41c3-aaf0-dac45f4b0ae5",
+          "input": "graph = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10]",
+          "orderMatters": true
+        },
+        {
+          "id": "0a748442-4411-4706-99e4-b1d784a42596",
+          "input": "graph = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11]",
+          "orderMatters": true
+        },
+        {
+          "id": "04a4ea90-8334-4b56-a315-b531e59fed49",
+          "input": "graph = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12]]",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8,9,10,11,12]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "flood-fill",
+      "leetCodeNumber": 733,
+      "difficulty": "easy",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "6425dcea-fa4e-428a-8ec8-067b71ce3334",
+          "input": "image = [[0]], sr = 0, sc = 0, color = 1",
+          "expectedOutput": "[[1]]",
+          "orderMatters": true
+        },
+        {
+          "id": "7733acb6-49ff-4bad-888e-9b6dd5159df0",
+          "input": "image = [[1,1,1],[1,1,1],[1,1,1]], sr = 1, sc = 1, color = 2",
+          "expectedOutput": "[[2,2,2],[2,2,2],[2,2,2]]",
+          "orderMatters": true
+        },
+        {
+          "id": "b716f8b2-99ed-4bab-9c55-de89fd25a7ab",
+          "input": "image = [[0,0,0],[0,0,0],[0,0,0]], sr = 0, sc = 0, color = 0",
+          "expectedOutput": "[[0,0,0],[0,0,0],[0,0,0]]",
+          "orderMatters": true
+        },
+        {
+          "id": "2c7889d7-e394-4898-969b-604e868aa272",
+          "input": "image = [[1,1],[1,1]], sr = 0, sc = 0, color = 1",
+          "expectedOutput": "[[1,1],[1,1]]",
+          "orderMatters": true
+        },
+        {
+          "id": "041dcde4-da21-4df3-bbf1-6f4df74fd1dd",
+          "input": "image = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]], sr = 2, sc = 2, color = 2",
+          "expectedOutput": "[[2,2,2,2],[2,2,2,2],[2,2,2,2],[2,2,2,2]]",
+          "orderMatters": true
+        },
+        {
+          "id": "59504c9b-6583-4b3e-aa9b-ebbf16f5d4d8",
+          "input": "image = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]], sr = 0, sc = 0, color = 1",
+          "expectedOutput": "[[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]]",
+          "orderMatters": true
+        },
+        {
+          "id": "4578fbf1-88cf-40e1-b44f-86500d7b8e6a",
+          "input": "image = [[1,0],[0,1]], sr = 0, sc = 0, color = 2",
+          "expectedOutput": "[[2,0],[0,1]]",
+          "orderMatters": true
+        },
+        {
+          "id": "13088d79-6fe5-4272-9408-445cab491aed",
+          "input": "image = [[1,1,1],[1,0,1],[1,1,1]], sr = 1, sc = 0, color = 2",
+          "expectedOutput": "[[2,2,2],[2,0,2],[2,2,2]]",
+          "orderMatters": true
+        },
+        {
+          "id": "77ff158f-9fc6-462f-b44a-01c92fd24444",
+          "input": "image = [[0,0],[0,0]], sr = 0, sc = 0, color = 0",
+          "expectedOutput": "[[0,0],[0,0]]",
+          "orderMatters": true
+        },
+        {
+          "id": "0c015f22-5e65-4c23-89d0-f89b8f5807fc",
+          "input": "image = [[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1]], sr = 2, sc = 2, color = 2",
+          "expectedOutput": "[[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2]]",
+          "orderMatters": true
+        },
+        {
+          "id": "7c927a82-eec2-4071-8a82-7e41621e7bed",
+          "input": "image = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]], sr = 0, sc = 0, color = 1",
+          "expectedOutput": "[[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1]]",
+          "orderMatters": true
+        },
+        {
+          "id": "5264bd0b-fedc-4797-a830-daa7710fca2c",
+          "input": "image = [[1,0,0],[0,1,0],[0,0,1]], sr = 0, sc = 0, color = 2",
+          "expectedOutput": "[[2,0,0],[0,1,0],[0,0,1]]",
+          "orderMatters": true
+        },
+        {
+          "id": "167e321a-6b19-47bc-b835-2333e33292a8",
+          "input": "image = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]], sr = 0, sc = 0, color = 2",
+          "expectedOutput": "[[2,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]",
+          "orderMatters": true
+        },
+        {
+          "id": "a850014c-7e33-4f95-b2d7-c0c0ba7f9064",
+          "input": "image = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]], sr = 0, sc = 0, color = 2",
+          "expectedOutput": "[[2,2,2,2],[2,2,2,2],[2,2,2,2],[2,2,2,2]]",
+          "orderMatters": true
+        },
+        {
+          "id": "f4a6285f-1b3c-4886-9c84-24d0d40cbe58",
+          "input": "image = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]], sr = 3, sc = 3, color = 1",
+          "expectedOutput": "[[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]]",
+          "orderMatters": true
+        },
+        {
+          "id": "3a7ed5ed-d556-4b7b-a6e7-ec9d26589769",
+          "input": "image = [[1,0,1],[0,1,0],[1,0,1]], sr = 1, sc = 1, color = 2",
+          "expectedOutput": "[[1,0,1],[0,2,0],[1,0,1]]",
+          "orderMatters": true
+        },
+        {
+          "id": "ecc8f83f-834e-435a-a1fc-49f82c10e809",
+          "input": "image = [[0,1,0],[1,0,1],[0,1,0]], sr = 1, sc = 1, color = 2",
+          "expectedOutput": "[[0,1,0],[1,2,1],[0,1,0]]",
+          "orderMatters": true
+        },
+        {
+          "id": "23295364-5c66-4ce0-832e-9b0f0a65afbd",
+          "input": "image = [[1,1,1],[0,0,0],[1,1,1]], sr = 0, sc = 0, color = 2",
+          "expectedOutput": "[[2,2,2],[0,0,0],[1,1,1]]",
+          "orderMatters": true
+        },
+        {
+          "id": "440d36b8-aeb7-4f2f-b9e6-b50a788b845e",
+          "input": "image = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]], sr = 3, sc = 3, color = 2",
+          "expectedOutput": "[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,2]]",
+          "orderMatters": true
+        },
+        {
+          "id": "0bd77604-faaf-4068-9bd4-46f914efe0f1",
+          "input": "image = [[1,1,1],[1,1,1],[1,1,1]], sr = 0, sc = 0, color = 1",
+          "expectedOutput": "[[1,1,1],[1,1,1],[1,1,1]]",
+          "orderMatters": true
+        },
+        {
+          "id": "fb5eee97-9f9b-4153-9290-c20bbdf7ea92",
+          "input": "image = [[1,0,1],[0,1,0],[1,0,1]], sr = 0, sc = 0, color = 2",
+          "expectedOutput": "[[2,0,1],[0,1,0],[1,0,1]]",
+          "orderMatters": true
+        },
+        {
+          "id": "36325e5d-f4d6-4992-b2fb-5913cb286eb2",
+          "input": "image = [[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]], sr = 0, sc = 1, color = 2",
+          "expectedOutput": "[[0,2,0,0],[0,2,0,0],[0,2,0,0],[0,2,0,0]]",
+          "orderMatters": true
+        },
+        {
+          "id": "d474f171-a9ec-4210-9685-a77bdb43bdd4",
+          "input": "image = [[1,1,1],[1,1,1],[1,1,1]], sr = 1, sc = 0, color = 1",
+          "expectedOutput": "[[1,1,1],[1,1,1],[1,1,1]]",
+          "orderMatters": true
+        },
+        {
+          "id": "9d66019e-f4ec-4be6-964a-6ab5482a3c18",
+          "input": "image = [[1,0,0],[0,1,0],[0,0,1]], sr = 2, sc = 2, color = 2",
+          "expectedOutput": "[[1,0,0],[0,1,0],[0,0,2]]",
+          "orderMatters": true
+        },
+        {
+          "id": "cfc5a260-5196-4fd8-8225-5680522912bf",
+          "input": "image = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]], sr = 1, sc = 1, color = 1",
+          "expectedOutput": "[[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "is-graph-bipartite",
+      "leetCodeNumber": 785,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "3933f8a4-94d1-471f-826c-1d339a470713",
+          "input": "graph = [[1,3],[0,2],[1,3],[0,2]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "ceaa2f7c-486c-44a3-898a-c56e4b900594",
+          "input": "graph = [[1,2,3],[0,2],[0,1,3],[0,2]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "357b79e2-1d3e-44fb-a799-68de29f86aff",
+          "input": "graph = []",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "a037c270-436d-4a38-a410-388f1c2928ad",
+          "input": "graph = [[1],[0]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "f223ea5c-45bf-4e6c-99c1-f15eb5eadd85",
+          "input": "graph = [[1,2],[0,3],[1,3],[0,2]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "8258794d-2e74-4365-a16a-55d571a5149b",
+          "input": "graph = [[1,2,3,4],[0,2,3,4],[0,1,3,4],[0,1,2,4],[0,1,2,3]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "789fa6d6-cf36-4a10-872a-8d780930e049",
+          "input": "graph = [[1,2,3],[0,2,3],[0,1,3],[0,1,2]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "c8df440a-16b2-495d-b403-140749e51246",
+          "input": "graph = [[1,2],[0,3],[1,3],[0,2],[4,5],[4,6],[5,6]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "22325606-c643-466c-94ae-c0ffdf72c213",
+          "input": "graph = [[1,2,3,4,5],[0,2,3,4,5],[0,1,3,4,5],[0,1,2,4,5],[0,1,2,3,5],[0,1,2,3,4]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "fe1efbe8-bdc9-4bd3-8b2f-238efd970749",
+          "input": "graph = [[1,2,3],[0,2,3],[0,1,3],[0,1,2],[4,5,6],[4,5,6],[4,5,6],[4,5,6]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "7eff1956-82b4-4aa8-8478-5796ab78d865",
+          "input": "graph = [[1,2,3,4,5,6],[0,2,3,4,5,6],[0,1,3,4,5,6],[0,1,2,4,5,6],[0,1,2,3,5,6],[0,1,2,3,4,6],[0,1,2,3,4,5]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "efb8dfe3-aa02-414a-b712-1e34676b3c65",
+          "input": "graph = [[1,2,3],[0,2,3],[0,1,3],[0,1,2],[4,5,6],[4,5,6],[4,5,6],[4,5,6],[7,8,9]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "774e6b0e-0d76-4115-ae00-ed5dd9b66ed4",
+          "input": "graph = [[1,2,3,4,5,6,7],[0,2,3,4,5,6,7],[0,1,3,4,5,6,7],[0,1,2,4,5,6,7],[0,1,2,3,5,6,7],[0,1,2,3,4,6,7],[0,1,2,3,4,5,7],[0,1,2,3,4,5,6]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "5cbe02c5-600b-4d51-9188-e45fcd800745",
+          "input": "graph = [[1,2,3],[0,2,3],[0,1,3],[0,1,2],[4,5,6],[4,5,6],[4,5,6],[4,5,6],[7,8,9],[10,11,12]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "11a6c5e2-ef31-4592-9d2d-889ba2d99f67",
+          "input": "graph = [[1,2,3,4,5,6,7,8],[0,2,3,4,5,6,7,8],[0,1,3,4,5,6,7,8],[0,1,2,4,5,6,7,8],[0,1,2,3,5,6,7,8],[0,1,2,3,4,6,7,8],[0,1,2,3,4,5,7,8],[0,1,2,3,4,5,6,8],[0,1,2,3,4,5,6,7]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "e04dddb0-69d4-446a-9071-c6fb2246dd14",
+          "input": "graph = [[1,2,3],[0,2,3],[0,1,3],[0,1,2],[4,5,6],[4,5,6],[4,5,6],[4,5,6],[7,8,9],[10,11,12],[13,14,15]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "5141d0c3-59b7-4117-aefe-b34e7f05a4ce",
+          "input": "graph = [[1,2,3,4,5,6,7,8,9],[0,2,3,4,5,6,7,8,9],[0,1,3,4,5,6,7,8,9],[0,1,2,4,5,6,7,8,9],[0,1,2,3,5,6,7,8,9],[0,1,2,3,4,6,7,8,9],[0,1,2,3,4,5,7,8,9],[0,1,2,3,4,5,6,8,9],[0,1,2,3,4,5,6,7,9],[0,1,2,3,4,5,6,7,8]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "752a0684-72c0-495e-a472-31eafd5c90fd",
+          "input": "graph = [[1,2,3],[0,2,3],[0,1,3],[0,1,2],[4,5,6],[4,5,6],[4,5,6],[4,5,6],[7,8,9],[10,11,12],[13,14,15],[16,17,18]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "07786eab-98ef-4ada-8e23-23fe6e4966f3",
+          "input": "graph = [[1],[0],[2],[3]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "6c9d28e5-4587-4ada-b72c-5a139fd7c76e",
+          "input": "graph = [[1],[0],[2],[3],[4],[5]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "4eb86552-7d5e-4abc-97a1-0b326c8d7a49",
+          "input": "graph = [[1,2],[0,3],[1,3],[0,2],[4,5],[4,6],[5,7],[6,7]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "240bdbbb-e281-4876-ae11-7292572bd3dc",
+          "input": "graph = [[1],[0],[2],[3],[4],[5],[6]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "a32d6dce-60c0-4cf4-8fe7-da05760e08e1",
+          "input": "graph = [[1,2],[0,3],[1,3],[0,2],[4,5],[4,6],[5,6],[7,8]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "5ed5bb1d-b946-40db-997a-abc092cb623e",
+          "input": "graph = [[1,2],[0,3],[1,3],[0,2],[4,5],[4,6],[5,7],[6,7],[8,9]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "49323486-faf9-4e5c-ae42-3477dbc04024",
+          "input": "graph = [[1],[0],[2],[3],[4],[5],[6],[7]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "keys-and-rooms",
+      "leetCodeNumber": 841,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "bee64758-6f64-4897-9068-22d97202690f",
+          "input": "rooms = [[]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "0bebb9e9-5f7e-432f-9640-3148bbca0223",
+          "input": "rooms = [[0]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "fa48348f-5961-40d1-b015-eaed64a8615c",
+          "input": "rooms = [[1]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "f7bb2c51-ea98-4269-9dde-d35566375641",
+          "input": "rooms = [[1], [0]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "ea220337-7d10-406d-a465-c290e79ef806",
+          "input": "rooms = [[0], [0]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "b0b7cf77-5dca-462b-b94a-7c81d252f8a7",
+          "input": "rooms = [[1, 2], [3, 4], [5, 6]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "1a3f4d86-9cbe-42fe-b5d4-b806fe31b51a",
+          "input": "rooms = [[0, 1, 2, 3]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "80f828c6-70a4-4723-9f75-4a7c4bb7e5f4",
+          "input": "rooms = [[0, 1], [1, 2], [2, 0]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "7b0e55e3-422d-4fe4-b227-c7b56dc454b3",
+          "input": "rooms = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "f1591f5b-72c2-4385-af7f-76c1e318831a",
+          "input": "rooms = [[1], [1], [1], [1], [1]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "bc97ed9b-cc31-4e23-a900-6c8f0aa80c5a",
+          "input": "rooms = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "78671188-d975-4bf0-b17d-2cb7f580011e",
+          "input": "rooms = [[1], [1], [1], [1], [1], [1], [1], [1], [1], [1]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "eaaf66f2-07e6-4d08-a4fb-392540463dd9",
+          "input": "rooms = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [20, 21, 22, 23, 24, 25, 26, 27, 28, 29]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "00d00c4c-4206-4533-9c16-e2290c8c2f90",
+          "input": "rooms = [[1], [1], [1], [1], [1], [1], [1], [1], [1], [1], [1], [1], [1], [1], [1], [1], [1], [1], [1], [1]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "88b385ea-ff2e-4e38-abd5-98bda8d2ca6a",
+          "input": "rooms = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [20, 21, 22, 23, 24, 25, 26, 27, 28, 29], [30, 31, 32, 33, 34, 35, 36, 37, 38, 39]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "b23e6f06-9419-440b-8e59-ceb64b9095cc",
+          "input": "rooms = [[0], [1]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "e6a6d15f-89dc-479d-b4b6-0158db08d415",
+          "input": "rooms = [[0], [1], [2], [3]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "f5ebc9ce-00f6-47f8-9c87-f98382b6ec9b",
+          "input": "rooms = [[1, 3], [3, 0, 1], [2, 0], [0]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "1f747857-3ec0-491f-85ab-77325ed03c21",
+          "input": "rooms = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "015528f1-bfbb-48e8-8ca4-bb5eee6dccae",
+          "input": "rooms = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "86c9ef12-e3c5-442f-969d-b1c47dc906bb",
+          "input": "rooms = [[0], [0], [0], [0], [0]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "7674f7a8-ac5e-438a-af84-ffb45da4a8f1",
+          "input": "rooms = [[0, 1], [0, 1], [0, 1], [0, 1], [0, 1]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "d5a8e3c9-c92b-47a5-930b-07bcec715c3e",
+          "input": "rooms = [[1, 2], [2, 3], [3, 4], [4, 5], [5, 6]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "4800377c-ad8f-4b23-b786-df741cbf4500",
+          "input": "rooms = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "9e8a7fd9-ff42-436d-8d37-7e4070967764",
+          "input": "rooms = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10], [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]]",
+          "expectedOutput": "true",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "loud-and-rich",
+      "leetCodeNumber": 851,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "3b2b6c00-0cea-4e76-af0c-962c72e35f66",
+          "input": "richer = [[1,0]], quiet = [0,1]",
+          "expectedOutput": "[0,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "6e4aaf06-dbc8-4ec0-a674-1927b5584e71",
+          "input": "richer = [], quiet = [1]",
+          "expectedOutput": "[0]",
+          "orderMatters": true
+        },
+        {
+          "id": "38c37dca-ad18-4b93-a7c6-a243fe909db5",
+          "input": "richer = [[0,1]], quiet = [1,0]",
+          "expectedOutput": "[0,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "4d263681-a9b0-4421-83db-bec8d5bf1e13",
+          "input": "richer = [[1,0],[2,1]], quiet = [0,1,2]",
+          "expectedOutput": "[0,1,2]",
+          "orderMatters": true
+        },
+        {
+          "id": "84553347-832a-4f38-a29b-05e9ae36279a",
+          "input": "richer = [[0,1],[1,2]], quiet = [1,0,2]",
+          "expectedOutput": "[0,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "256436c8-0712-4acd-9597-c19882231a66",
+          "input": "richer = [[1,0],[2,1],[3,2]], quiet = [0,1,2,3]",
+          "expectedOutput": "[0,1,2,3]",
+          "orderMatters": true
+        },
+        {
+          "id": "225cdd63-1b8a-4956-8668-d8a241a6c2d5",
+          "input": "richer = [[0,1],[0,2],[0,3]], quiet = [1,0,2,3]",
+          "expectedOutput": "[0,1,0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "52d0a933-3004-46ba-87b7-c7a148c85b52",
+          "input": "richer = [[1,0],[2,0],[3,0]], quiet = [0,1,2,3]",
+          "expectedOutput": "[0,1,2,3]",
+          "orderMatters": true
+        },
+        {
+          "id": "6d525184-d75c-40bf-9f1d-e926a099ecfd",
+          "input": "richer = [[1,0],[1,2],[1,3]], quiet = [0,1,2,3]",
+          "expectedOutput": "[0,1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "70ee610b-b40b-4f1f-9a33-25cccf57f0d2",
+          "input": "richer = [[0,1],[1,2],[2,3]], quiet = [1,0,2,3]",
+          "expectedOutput": "[0,1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "94ad0498-0e04-4632-9a7f-e4ee52e1016d",
+          "input": "richer = [[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]], quiet = [1,0,2,3]",
+          "expectedOutput": "[0,1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "0bd7833b-e17e-472c-a6d4-5a877eec8294",
+          "input": "richer = [[1,0],[2,1],[3,2],[4,3]], quiet = [0,1,2,3,4]",
+          "expectedOutput": "[0,1,2,3,4]",
+          "orderMatters": true
+        },
+        {
+          "id": "96de66d1-9884-4ff4-9272-5fb61932ba50",
+          "input": "richer = [[0,1],[1,2],[2,3],[3,4]], quiet = [1,0,2,3,4]",
+          "expectedOutput": "[0,1,1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "ff96dbaf-d770-461c-ae15-68cce0d6e076",
+          "input": "richer = [[0,1],[0,2],[0,3],[0,4]], quiet = [1,0,2,3,4]",
+          "expectedOutput": "[0,1,0,0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "8c19cee0-eb8f-4b46-ab4e-a432ac26b0ba",
+          "input": "richer = [[1,0],[1,2],[1,3],[1,4]], quiet = [0,1,2,3,4]",
+          "expectedOutput": "[0,1,1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "0de2aa9c-079e-4936-852f-8c25dc19a902",
+          "input": "richer = [[0,1],[1,2],[2,3],[3,4],[4,5]], quiet = [1,0,2,3,4,5]",
+          "expectedOutput": "[0,1,1,1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "74138f57-0324-47bd-8cfd-d53d2bdbec7b",
+          "input": "richer = [[0,1],[0,2],[0,3],[0,4],[0,5]], quiet = [1,0,2,3,4,5]",
+          "expectedOutput": "[0,1,0,0,0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "b67c35e1-a001-4aef-b014-131c690c1a9f",
+          "input": "richer = [[1,0],[1,2],[1,3],[1,4],[1,5]], quiet = [0,1,2,3,4,5]",
+          "expectedOutput": "[0,1,1,1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "cb395833-55c6-4399-b06e-ac45c35dcfed",
+          "input": "richer = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6]], quiet = [1,0,2,3,4,5,6]",
+          "expectedOutput": "[0,1,1,1,1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "eed90b5d-546d-476d-b527-26b6e1c5f961",
+          "input": "richer = [[0,1],[0,2],[0,3],[0,4],[0,5],[0,6]], quiet = [1,0,2,3,4,5,6]",
+          "expectedOutput": "[0,1,0,0,0,0,0]",
+          "orderMatters": true
+        },
+        {
+          "id": "8283f8a7-9558-4912-b519-d43ded563c88",
+          "input": "richer = [[1,0],[1,2],[1,3],[1,4],[1,5],[1,6]], quiet = [0,1,2,3,4,5,6]",
+          "expectedOutput": "[0,1,1,1,1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "e741df6d-5b1e-4bad-887b-0c592c2eb59f",
+          "input": "richer = [[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[1,2],[1,3],[1,4],[1,5],[1,6]], quiet = [1,0,2,3,4,5,6]",
+          "expectedOutput": "[0,1,1,1,1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "4d68a9f5-a89f-4e51-864e-78b183803e64",
+          "input": "richer = [[1,0],[2,1],[3,2],[4,3],[5,4],[6,5]], quiet = [0,1,2,3,4,5,6]",
+          "expectedOutput": "[0,1,2,3,4,5,6]",
+          "orderMatters": true
+        },
+        {
+          "id": "effb9a14-0507-4224-8562-f686d016d185",
+          "input": "richer = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]], quiet = [1,0,2,3,4,5,6,7]",
+          "expectedOutput": "[0,1,1,1,1,1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "d5e11036-7b35-4ece-9464-d00621329f99",
+          "input": "richer = [[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7]], quiet = [1,0,2,3,4,5,6,7]",
+          "expectedOutput": "[0,1,0,0,0,0,0,0]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "max-area-of-island",
+      "leetCodeNumber": 695,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "3cb09799-32f5-4067-bd3d-fd52c4c511a2",
+          "input": "grid = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "83490540-c77a-4d15-88bb-7492549654ad",
+          "input": "grid = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]]",
+          "expectedOutput": "16",
+          "orderMatters": true
+        },
+        {
+          "id": "4811fc4d-650d-4f8c-8d36-19d08822946f",
+          "input": "grid = [[0,1,0],[1,1,1],[0,1,0]]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "295f387b-c819-482d-8c7d-123ce95bc975",
+          "input": "grid = [[1,0,0],[0,1,0],[0,0,1]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "a0ca98d3-f433-4463-af50-7487d4ffeff0",
+          "input": "grid = [[0,0,0],[0,0,0],[0,0,0]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "8f043298-7bf5-4018-8200-66c04e4f30a0",
+          "input": "grid = [[1,1,0],[1,1,0],[0,0,0]]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "25b09a8d-2b82-467c-bfdf-6c9f0a4f02ab",
+          "input": "grid = [[0,0,1],[0,0,1],[0,0,1]]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "5c2d9a7b-27f0-49e6-bdf8-47834f679090",
+          "input": "grid = [[0,1,0,0],[1,1,1,0],[0,1,0,0]]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "2cfb5289-4e95-4a39-92e0-a14afa874cc2",
+          "input": "grid = [[1,1,1,1],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "938ad512-9e10-4602-bdf8-4a6ff111303c",
+          "input": "grid = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[1,1,1,1]]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "4627b408-20a4-4050-8914-63f0b4b831b4",
+          "input": "grid = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "de3d8d9e-b23d-4d64-9072-9f627b6c2a73",
+          "input": "grid = [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "151a188e-df6d-42e9-8505-6558bb391654",
+          "input": "grid = [[0,0,0,0],[0,1,0,0],[0,0,0,0],[0,0,0,0]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "82611426-60b3-4fca-93fb-bb633727083e",
+          "input": "grid = [[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "7bd19dc0-c0ea-4434-bf08-fdbbdd5d19e6",
+          "input": "grid = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[1,0,0,0]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "3d7a04f1-ab62-487f-ac13-6cd062c49ade",
+          "input": "grid = [[0,0,0,0],[1,0,0,0],[0,0,0,0],[0,0,0,0]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "be82a92f-0c00-4977-a1e0-701a6858bb2e",
+          "input": "grid = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,1]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "b51c840f-e95b-42fc-b2fd-beb489283950",
+          "input": "grid = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,0]]",
+          "expectedOutput": "15",
+          "orderMatters": true
+        },
+        {
+          "id": "86e1c68b-481d-4130-a05b-3e602c270b7e",
+          "input": "grid = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,0]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "1cdfe174-9f0b-4882-bb16-fc475c501cc3",
+          "input": "grid = [[1,1,0,0],[1,0,0,0],[0,0,0,0],[0,0,0,0]]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "a55af41d-1455-4a9a-8c0f-9c68016f5824",
+          "input": "grid = [[0,0,0,0],[0,1,1,0],[0,1,1,0],[0,0,0,0]]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "865ebb8b-edf3-4e07-900f-55cf8f03897b",
+          "input": "grid = [[0,0,0,0],[0,0,0,0],[1,1,1,1],[0,0,0,0]]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "5e2ad48e-4904-4e54-9548-a3f737bb502f",
+          "input": "grid = [[1,1,1,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "53d37d99-9dd5-4f74-965b-ecae72eb21c2",
+          "input": "grid = [[1,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "447fbde7-6b04-4fa7-97a5-dd6a7662959a",
+          "input": "grid = [[0,0,0],[0,1,0],[0,0,0]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "minimum-genetic-mutation",
+      "leetCodeNumber": 433,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "1437b17c-732c-48bc-bc13-97f9a390ddc1",
+          "input": "start = \"\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\"]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "e8a0b37f-7bd3-4fd6-940f-7fa130a60cae",
+          "input": "start = \"AACCGGTT\", end = \"\", bank = [\"AACCGGTA\",\"AACCGCTA\"]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "28b85d5b-6ca7-4ef2-8876-85057d9cf00a",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = []",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "ceb6ddfd-5770-4943-94f6-eb63dcff87fd",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGCTA\",\"AACCGCTA\"]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "5b7d9414-69b9-4f7c-9346-81f0c971b013",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AAACGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "e9464f60-810a-4501-a607-05a8ead84a41",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "e72a2914-336b-445a-8b0a-8b04e06aa027",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGCTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "922f35f5-6794-4d38-b705-efa588a54a8d",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AAACGGTA\",\"AACCGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "fe0c27f9-fc16-43a8-95f6-b21d55223306",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGCTA\",\"AAACGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "02d7b878-0a93-4fbc-a47a-445ca2b58b56",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\",\"AACCGCTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "10fa66bc-e4fc-47d1-9fab-48d50f578b19",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "9cb80466-de86-4916-8ca2-9747fcdf3e04",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGCTA\",\"AACCGCTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "128f1315-971c-48fe-995a-d538accaefec",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\",\"AACCGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "5faaec01-f0e5-4f30-831e-1b014845f0c6",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGCTA\",\"AACCGCTA\",\"AAACGGTA\",\"AAACGGTA\"]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "a9ccf60d-609e-406b-b563-21a1b99f374d",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGCTA\",\"AACCGCTA\",\"AACCGCTA\",\"AACCGCTA\"]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "9290788a-adf2-456f-9e04-30f94285cc80",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "c38ceec3-8ffc-4229-8bdd-468685becf53",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "593fea21-3cb1-4a87-b8ae-aff44ce74b21",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGCTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "1e7a878f-2a8c-4d9b-af63-9935c4880c86",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AAACGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "a46db1a3-df44-4c4d-9475-e54a8d8ee37f",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "d9a424e7-505f-4961-816d-b22351869d7a",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "50e07521-a3b6-42b2-a5e7-a1058be7ca0c",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "9bdaab4b-ea1e-48b7-8768-aeb8e52d749d",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "e5780b87-db1b-4275-a7d5-a2cf52e81afa",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "e0fe7429-81f2-4a1a-a76d-0f07dff9e620",
+          "input": "start = \"AACCGGTT\", end = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\",\"AAACGGTA\"]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "minimum-height-trees",
+      "leetCodeNumber": 310,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "1d5f1cd7-1ea2-408f-bce4-cb711c3ba998",
+          "input": "n = 1, edges = []",
+          "expectedOutput": "[0]",
+          "orderMatters": false
+        },
+        {
+          "id": "8583125f-756a-4a04-99ae-d01f34c7c0da",
+          "input": "n = 2, edges = [[0,1]]",
+          "expectedOutput": "[0,1]",
+          "orderMatters": false
+        },
+        {
+          "id": "ff0a5f85-2194-40d9-a733-b4dc711dbf63",
+          "input": "n = 3, edges = [[0,1],[1,2]]",
+          "expectedOutput": "[1]",
+          "orderMatters": false
+        },
+        {
+          "id": "7f72527f-8a6a-4392-8d71-8d337a15dbb7",
+          "input": "n = 4, edges = [[1,0],[1,2],[1,3]]",
+          "expectedOutput": "[1]",
+          "orderMatters": false
+        },
+        {
+          "id": "86797458-0ffe-48bc-af1d-7e84ed91e1b0",
+          "input": "n = 5, edges = [[0,1],[0,2],[0,3],[0,4]]",
+          "expectedOutput": "[0]",
+          "orderMatters": false
+        },
+        {
+          "id": "016a1fa0-548f-428b-8607-d87fee1a297d",
+          "input": "n = 7, edges = [[0,1],[0,2],[0,3],[0,4],[0,5],[0,6]]",
+          "expectedOutput": "[0]",
+          "orderMatters": false
+        },
+        {
+          "id": "551a22ee-995a-45c4-9d4a-6ed28e0625b1",
+          "input": "n = 8, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]]",
+          "expectedOutput": "[3,4]",
+          "orderMatters": false
+        },
+        {
+          "id": "3334677e-f83f-4d56-9305-b35947a75d58",
+          "input": "n = 9, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8]]",
+          "expectedOutput": "[4]",
+          "orderMatters": false
+        },
+        {
+          "id": "9ef1de29-d2b8-4777-bfe2-8d4c4812a36f",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9]]",
+          "expectedOutput": "[4,5]",
+          "orderMatters": false
+        },
+        {
+          "id": "365ef80d-83cc-4c1c-803d-40ad07c56208",
+          "input": "n = 0, edges = []",
+          "expectedOutput": "[]",
+          "orderMatters": false
+        },
+        {
+          "id": "91489fed-e61c-44e4-b7a4-9a5d3c9240b9",
+          "input": "n = 100, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,25],[25,26],[26,27],[27,28],[28,29],[29,30],[30,31],[31,32],[32,33],[33,34],[34,35],[35,36],[36,37],[37,38],[38,39],[39,40],[40,41],[41,42],[42,43],[43,44],[44,45],[45,46],[46,47],[47,48],[48,49],[49,50],[50,51],[51,52],[52,53],[53,54],[54,55],[55,56],[56,57],[57,58],[58,59],[59,60],[60,61],[61,62],[62,63],[63,64],[64,65],[65,66],[66,67],[67,68],[68,69],[69,70],[70,71],[71,72],[72,73],[73,74],[74,75],[75,76],[76,77],[77,78],[78,79],[79,80],[80,81],[81,82],[82,83],[83,84],[84,85],[85,86],[86,87],[87,88],[88,89],[89,90],[90,91],[91,92],[92,93],[93,94],[94,95],[95,96],[96,97],[97,98],[98,99]]",
+          "expectedOutput": "[49,50]",
+          "orderMatters": false
+        },
+        {
+          "id": "923a62b0-16d6-4d51-9941-b385e94d1bc2",
+          "input": "n = 6, edges = [[0,1],[0,2],[0,3],[3,4],[3,5]]",
+          "expectedOutput": "[0,3]",
+          "orderMatters": false
+        },
+        {
+          "id": "332e44a2-b36d-4636-9f41-fe0419dd4ff6",
+          "input": "n = 100, edges = []",
+          "expectedOutput": "Infinite Loop",
+          "orderMatters": false
+        },
+        {
+          "id": "9d8e0ee2-b98c-4a80-89b4-1fca0e413fa0",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,0]]",
+          "expectedOutput": "Infinite Loop",
+          "orderMatters": false
+        },
+        {
+          "id": "a1ded9ab-012b-4f47-a539-10e790088f8d",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,1]]",
+          "expectedOutput": "Infinite Loop",
+          "orderMatters": false
+        },
+        {
+          "id": "76446772-d14f-452e-b342-8c7521d80834",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,0],[0,9]]",
+          "expectedOutput": "Infinite Loop",
+          "orderMatters": false
+        },
+        {
+          "id": "3e255b27-48b5-477a-805c-b3e60e967597",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,0],[0,9],[1,9]]",
+          "expectedOutput": "Infinite Loop",
+          "orderMatters": false
+        },
+        {
+          "id": "1e473c20-83d1-4d0c-a72c-100c7563f07a",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,0],[0,9],[1,9],[2,9]]",
+          "expectedOutput": "Infinite Loop",
+          "orderMatters": false
+        },
+        {
+          "id": "849f8f79-e646-4b76-af0c-ca2cbc80af0f",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,0],[0,9],[1,9],[2,9],[3,9]]",
+          "expectedOutput": "Infinite Loop",
+          "orderMatters": false
+        },
+        {
+          "id": "87cbdd22-5055-4796-813a-b6ee8e1a8a51",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,0],[0,9],[1,9],[2,9],[3,9],[4,9]]",
+          "expectedOutput": "null",
+          "orderMatters": false
+        },
+        {
+          "id": "53cbf922-ba76-4ca6-8a4a-a34b1a953854",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,0],[0,9],[1,9],[2,9],[3,9],[4,9],[5,9]]",
+          "expectedOutput": "null",
+          "orderMatters": false
+        },
+        {
+          "id": "46e2c0c7-b43a-418e-8b26-21de05c650ba",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,0],[0,9],[1,9],[2,9],[3,9],[4,9],[5,9],[6,9]]",
+          "expectedOutput": "null",
+          "orderMatters": false
+        },
+        {
+          "id": "34112636-3101-4375-8d54-96b58b131fd1",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,0],[0,9],[1,9],[2,9],[3,9],[4,9],[5,9],[6,9],[7,9]]",
+          "expectedOutput": "null",
+          "orderMatters": false
+        },
+        {
+          "id": "53fe4b3e-abba-4c58-896a-7e0d2dd4ed1e",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,0],[0,9],[1,9],[2,9],[3,9],[4,9],[5,9],[6,9],[7,9],[8,9]]",
+          "expectedOutput": "null",
+          "orderMatters": false
+        },
+        {
+          "id": "f82f7985-8cfa-4317-97b7-d81cd9c37fb9",
+          "input": "n = 6, edges = [[3,0],[3,1],[3,2],[3,4],[5,4]]",
+          "expectedOutput": "[3,4]",
+          "orderMatters": false
+        }
+      ]
+    },
+    {
+      "problemSlug": "number-of-islands",
+      "leetCodeNumber": 200,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "a0bba084-8788-41ae-aef3-3f0d794665e2",
+          "input": "grid = [[]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "92cc2ebf-f4a4-4102-9138-414adcd0de6b",
+          "input": "grid = [[\"0\"]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "a47b05ab-0b78-478e-a071-cbde6ecbba9b",
+          "input": "grid = [[\"1\"]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "b6910486-918c-4834-9a9a-9a61aa7acce9",
+          "input": "grid = [[\"1\",\"0\"]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "892c78bd-ec2d-4770-bdd6-2c37c40092e2",
+          "input": "grid = [[\"0\",\"1\"]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "44ae1cff-b51e-460d-ab2f-b8893dede662",
+          "input": "grid = [[\"1\",\"1\"]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "06081f47-9fd9-4eac-9c86-98662fcd05f1",
+          "input": "grid = [[\"0\",\"0\"]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "bde6500c-1031-4fe0-9f7c-fb491d39585a",
+          "input": "grid = [[\"1\",\"0\",\"0\"],[\"0\",\"1\",\"0\"],[\"0\",\"0\",\"1\"]]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "887d06a1-5c16-4a60-b92c-1fd682cd3db4",
+          "input": "grid = [[\"1\",\"1\",\"1\"],[\"1\",\"1\",\"1\"],[\"1\",\"1\",\"1\"]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "0cb53458-349f-40a9-acce-7476d99f73d4",
+          "input": "grid = [[\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\"]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "cb1b18fc-12da-46dd-aec0-58a41ffab51d",
+          "input": "grid = [[\"0\",\"1\",\"0\"],[\"1\",\"0\",\"1\"],[\"0\",\"1\",\"0\"]]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "6dd77d46-db10-42a2-a319-e5882f5e7ae1",
+          "input": "grid = [[\"1\",\"1\",\"0\"],[\"1\",\"1\",\"0\"],[\"0\",\"0\",\"1\"]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "480661c1-4c55-4a91-bc09-5fe2e9517900",
+          "input": "grid = [[\"1\",\"0\",\"0\"],[\"0\",\"1\",\"1\"],[\"0\",\"0\",\"1\"]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "40435042-e0b0-4e94-8da3-27eae362f0eb",
+          "input": "grid = [[\"1\",\"1\",\"1\"],[\"0\",\"0\",\"0\"],[\"1\",\"1\",\"1\"]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "73b5ee1e-f338-4d24-b42a-5d41c32e769c",
+          "input": "grid = [[\"0\",\"0\",\"0\"],[\"1\",\"1\",\"1\"],[\"0\",\"0\",\"0\"]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "73148e68-376a-426c-a63a-775607a29198",
+          "input": "grid = [[\"1\",\"0\",\"1\"],[\"0\",\"1\",\"0\"],[\"0\",\"0\",\"0\"]]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "d971054d-e274-4dc9-a70d-0af821456b61",
+          "input": "grid = [[\"0\",\"0\",\"0\"],[\"0\",\"1\",\"0\"],[\"0\",\"0\",\"0\"]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "d1ff6638-3b46-4320-88ba-e036105f9a9c",
+          "input": "grid = [[\"1\",\"1\",\"0\"],[\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\"]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "dd5514af-5460-4793-a3a1-1317f627565c",
+          "input": "grid = [[\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\"],[\"1\",\"1\",\"0\"]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "9095a08d-3aa2-41a6-b6a0-2d26adb0e161",
+          "input": "grid = [[\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\"],[\"0\",\"0\",\"1\"]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "5b33ac4d-db2c-4789-a577-9db07d3f79f0",
+          "input": "grid = [[\"1\",\"0\",\"0\"],[\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\"]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "b942810b-17d4-4cc9-bec8-25117d3f9b2f",
+          "input": "grid = [[\"0\",\"0\",\"0\"],[\"1\",\"0\",\"0\"],[\"0\",\"0\",\"0\"]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "882f09ed-3544-49a4-8753-1b4337b83521",
+          "input": "grid = [[\"0\",\"0\",\"0\"],[\"0\",\"1\",\"0\"],[\"1\",\"0\",\"0\"]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "a6594f1c-caff-43f1-beba-3f4c316264e5",
+          "input": "grid = [[\"1\",\"0\",\"0\"],[\"0\",\"1\",\"0\"],[\"1\",\"0\",\"0\"]]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "cd648c6b-abfe-433d-8bf1-4baca82d3082",
+          "input": "grid = [[\"0\",\"1\",\"0\"],[\"0\",\"1\",\"0\"],[\"0\",\"1\",\"0\"]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "number-of-provinces",
+      "leetCodeNumber": 547,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "0130e3ae-8e94-4cfb-baa7-17bd5052abaf",
+          "input": "isConnected = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "996b714a-5c9e-45ce-8f5b-645cf4a3b894",
+          "input": "isConnected = [[1,1,1],[1,1,1],[1,1,1]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "aad106c3-63e2-4cb2-9ff9-20ebc2941e5a",
+          "input": "isConnected = [[1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0],[0,0,0,1,0],[0,0,0,0,1]]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "c1e163de-c05c-4550-8661-dd15e6d2e374",
+          "input": "isConnected = [[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "966de192-bda4-4d0f-b110-607e8b07bfd5",
+          "input": "isConnected = [[1,0],[0,1]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "4b99fc3e-aa9a-4f4b-a207-6e4bd948b501",
+          "input": "isConnected = [[1,1],[1,1]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "45812afa-9664-4e08-9c3d-ac55cd865af8",
+          "input": "isConnected = []",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "008d9789-a922-4753-a91d-19ce46eae794",
+          "input": "isConnected = [[1]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "36519979-6758-4332-9e76-2a185ee539a5",
+          "input": "isConnected = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1],[0,0,0,0,1]]",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "4b06e425-86cc-422b-b7d9-c5d42c22ddf0",
+          "input": "isConnected = [[1,1,0,0],[1,1,0,0],[0,0,1,1],[0,0,1,1]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "cb02e715-9ccb-466b-aead-952927a6db7a",
+          "input": "isConnected = [[1,0,0,0,0,0],[0,1,0,0,0,0],[0,0,1,0,0,0],[0,0,0,1,0,0],[0,0,0,0,1,0],[0,0,0,0,0,1]]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "7d0aeefd-b996-4ef4-9959-18e95203c01e",
+          "input": "isConnected = [[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "2cbc8b84-1520-4702-8b67-9a6470d691c3",
+          "input": "isConnected = [[1,0,0],[0,1,1],[0,1,1]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "897d5b08-0663-4d38-81c6-53e0347e4a17",
+          "input": "isConnected = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "ae52574a-67e3-488d-b0b8-c91ff12a185b",
+          "input": "isConnected = [[1,1,0,0,0],[1,1,0,0,0],[0,0,1,1,0],[0,0,1,1,0],[0,0,0,0,1]]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "bbbded0f-935b-4711-af45-1e0ca213c6c1",
+          "input": "isConnected = [[0,0,0],[0,0,0],[0,0,0]]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "271e3f92-e5ba-4397-b460-59c2e57e4c83",
+          "input": "isConnected = [[0,1,0],[1,0,1],[0,1,0]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "744722c2-805d-4140-948e-16c06bbbc150",
+          "input": "isConnected = [[0,1,0,0,0,0],[1,0,1,0,0,0],[0,1,0,1,0,0],[0,0,1,0,1,0],[0,0,0,1,0,1],[0,0,0,0,1,0]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "f65804fa-a3df-416c-88f2-6bce4f7a705a",
+          "input": "isConnected = [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "7a3b5e19-51b5-42b9-ac45-898e6f2c9199",
+          "input": "isConnected = [[0,1,1,1,1,1],[1,0,1,1,1,1],[1,1,0,1,1,1],[1,1,1,0,1,1],[1,1,1,1,0,1],[1,1,1,1,1,0]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "c989fd4a-0bf4-405e-be43-364ccaf514b2",
+          "input": "isConnected = [[1,1,0,0,0,0],[1,1,0,0,0,0],[0,0,1,1,0,0],[0,0,1,1,0,0],[0,0,0,0,1,1],[0,0,0,0,1,1]]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "991da721-c063-446b-b973-fb5ebb525c67",
+          "input": "isConnected = [[1,0,1],[0,1,0],[1,0,1]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "c9c22f09-3eef-432b-a6e7-4397d25e6e52",
+          "input": "isConnected = [[0,0,1,0],[0,0,0,1],[1,0,0,0],[0,1,0,0]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "06e76a10-63d8-466d-8d7a-91b2be03bfa1",
+          "input": "isConnected = [[1,1,0],[1,1,0],[0,0,1]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "2ec8c927-05eb-41ac-b0c8-cd593c2b8e6d",
+          "input": "isConnected = [[1,0,0],[0,1,0],[0,0,1]]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "pacific-atlantic-water-flow",
+      "leetCodeNumber": 417,
+      "difficulty": "medium",
+      "testCaseCount": 3,
+      "testCases": [
+        {
+          "id": "97d2e226-f1a8-419f-af7d-3de364376673",
+          "input": "heights = [[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10]]",
+          "expectedOutput": "[[0,9],[1,9],[2,9],[3,9],[4,9],[5,9],[6,9],[7,9],[8,9],[9,0],[9,1],[9,2],[9,3],[9,4],[9,5],[9,6],[9,7],[9,8],[9,9]]",
+          "orderMatters": true
+        },
+        {
+          "id": "7e5efc10-4c1b-45d4-99ed-0f9f81ec9705",
+          "input": "heights = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]",
+          "expectedOutput": "[[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]",
+          "orderMatters": true
+        },
+        {
+          "id": "dda1ba1e-828e-49ab-9a00-e0d96f2fbc5b",
+          "input": "heights = [[1]]",
+          "expectedOutput": "[[0,0]]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "path-with-maximum-probability",
+      "leetCodeNumber": 1514,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "1362bdb7-b8ad-4fc5-8b13-fb39395a382d",
+          "input": "n = 1, edges = [], succProb = [], start = 0, end = 0",
+          "expectedOutput": "1.0",
+          "orderMatters": true
+        },
+        {
+          "id": "6ab657e7-3222-424b-be38-7f8b6450a67b",
+          "input": "n = 2, edges = [[0,1]], succProb = [1.0], start = 0, end = 1",
+          "expectedOutput": "1.0",
+          "orderMatters": true
+        },
+        {
+          "id": "d191c0b1-f4c9-4e12-9aff-62197d26d7ac",
+          "input": "n = 2, edges = [[0,1]], succProb = [0.0], start = 0, end = 1",
+          "expectedOutput": "0.0",
+          "orderMatters": true
+        },
+        {
+          "id": "91bd901c-1d19-4e9d-911c-3df40dd53222",
+          "input": "n = 3, edges = [[0,1],[1,2]], succProb = [0.5,0.5], start = 0, end = 2",
+          "expectedOutput": "0.25",
+          "orderMatters": true
+        },
+        {
+          "id": "8743f509-eea5-4b9e-93e2-a779bc2186d3",
+          "input": "n = 3, edges = [[0,1],[1,2]], succProb = [0.0,0.0], start = 0, end = 2",
+          "expectedOutput": "0.0",
+          "orderMatters": true
+        },
+        {
+          "id": "49ab43e0-e31e-484d-b75d-2da6c421489c",
+          "input": "n = 4, edges = [[0,1],[1,2],[2,3]], succProb = [0.5,0.5,0.5], start = 0, end = 3",
+          "expectedOutput": "0.125",
+          "orderMatters": true
+        },
+        {
+          "id": "34006c8b-ec88-435c-abad-4f6de92f7f3f",
+          "input": "n = 5, edges = [[0,1],[1,2],[2,3],[3,4]], succProb = [0.5,0.5,0.5,0.5], start = 0, end = 4",
+          "expectedOutput": "0.0625",
+          "orderMatters": true
+        },
+        {
+          "id": "45c6f8a6-3028-4c90-98e9-4328da93a240",
+          "input": "n = 6, edges = [[0,1],[1,2],[2,3],[3,4],[4,5]], succProb = [0.5,0.5,0.5,0.5,0.5], start = 0, end = 5",
+          "expectedOutput": "0.03125",
+          "orderMatters": true
+        },
+        {
+          "id": "8390c96d-ecb7-4ef1-ae9e-fcb2b267976d",
+          "input": "n = 7, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6]], succProb = [0.5,0.5,0.5,0.5,0.5,0.5], start = 0, end = 6",
+          "expectedOutput": "0.015625",
+          "orderMatters": true
+        },
+        {
+          "id": "f894a202-7aec-4c79-99af-28f2d00b2a38",
+          "input": "n = 8, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]], succProb = [0.5,0.5,0.5,0.5,0.5,0.5,0.5], start = 0, end = 7",
+          "expectedOutput": "0.0078125",
+          "orderMatters": true
+        },
+        {
+          "id": "5347b4c8-90ed-430b-b030-7332533204c0",
+          "input": "n = 9, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8]], succProb = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5], start = 0, end = 8",
+          "expectedOutput": "0.00390625",
+          "orderMatters": true
+        },
+        {
+          "id": "c72fd9d6-8349-4ded-8b22-8ea2eb470f13",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9]], succProb = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5], start = 0, end = 9",
+          "expectedOutput": "0.001953125",
+          "orderMatters": true
+        },
+        {
+          "id": "a2354de6-1dd8-493e-8552-8d4518682274",
+          "input": "n = 3, edges = [[0,1],[1,2],[0,2]], succProb = [0.0,0.0,0.0], start = 0, end = 2",
+          "expectedOutput": "0.0",
+          "orderMatters": true
+        },
+        {
+          "id": "ab931bc8-f516-4a19-b7c1-457dbdd5e7dd",
+          "input": "n = 3, edges = [[0,1],[1,2],[0,2]], succProb = [1.0,1.0,1.0], start = 0, end = 2",
+          "expectedOutput": "1.0",
+          "orderMatters": true
+        },
+        {
+          "id": "88825568-981e-4215-a7ad-5d77249f9df3",
+          "input": "n = 3, edges = [[0,1],[1,2],[0,2]], succProb = [0.5,0.5,0.5], start = 0, end = 2",
+          "expectedOutput": "0.5",
+          "orderMatters": true
+        },
+        {
+          "id": "21986e31-1d53-415a-9dfb-78866db37b62",
+          "input": "n = 4, edges = [[0,1],[1,2],[2,3],[0,3]], succProb = [0.5,0.5,0.5,0.5], start = 0, end = 3",
+          "expectedOutput": "0.5",
+          "orderMatters": true
+        },
+        {
+          "id": "6f0bf11a-78ad-4767-8f50-0fb3073a49e4",
+          "input": "n = 5, edges = [[0,1],[1,2],[2,3],[3,4],[0,4]], succProb = [0.5,0.5,0.5,0.5,0.5], start = 0, end = 4",
+          "expectedOutput": "0.5",
+          "orderMatters": true
+        },
+        {
+          "id": "4a178a65-feb6-48e1-9bf0-23e8861341eb",
+          "input": "n = 6, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[0,5]], succProb = [0.5,0.5,0.5,0.5,0.5,0.5], start = 0, end = 5",
+          "expectedOutput": "0.5",
+          "orderMatters": true
+        },
+        {
+          "id": "69e76158-8929-4ca6-87a3-189fbacfca4a",
+          "input": "n = 7, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[0,6]], succProb = [0.5,0.5,0.5,0.5,0.5,0.5,0.5], start = 0, end = 6",
+          "expectedOutput": "0.5",
+          "orderMatters": true
+        },
+        {
+          "id": "c545b4a2-10c6-44d0-af61-6e66e3205961",
+          "input": "n = 8, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[0,7]], succProb = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5], start = 0, end = 7",
+          "expectedOutput": "0.5",
+          "orderMatters": true
+        },
+        {
+          "id": "34942581-5dab-4677-b063-4020e82f66cc",
+          "input": "n = 9, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[0,8]], succProb = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5], start = 0, end = 8",
+          "expectedOutput": "0.5",
+          "orderMatters": true
+        },
+        {
+          "id": "29a83447-aa95-4f3f-947e-067ac17016cb",
+          "input": "n = 10, edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[0,9]], succProb = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5], start = 0, end = 9",
+          "expectedOutput": "0.5",
+          "orderMatters": true
+        },
+        {
+          "id": "73b5cf57-0ce8-4f06-90cd-1ce99f0b33cf",
+          "input": "n = 3, edges = [[0,1],[1,2],[0,2]], succProb = [0.2,0.2,0.2], start = 0, end = 2",
+          "expectedOutput": "0.2",
+          "orderMatters": true
+        },
+        {
+          "id": "7b0fd395-04a9-418e-9daa-2a5ac866a3a0",
+          "input": "n = 3, edges = [[0,1],[1,2],[0,2]], succProb = [0.8,0.8,0.8], start = 0, end = 2",
+          "expectedOutput": "0.8",
+          "orderMatters": true
+        },
+        {
+          "id": "e5cf97a1-dccc-4b7e-89d0-2873a98e2012",
+          "input": "n = 4, edges = [[0,1],[1,2],[2,3],[0,3]], succProb = [0.2,0.2,0.2,0.2], start = 0, end = 3",
+          "expectedOutput": "0.2",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "possible-bipartition",
+      "leetCodeNumber": 886,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "4b170bbf-6f39-4c89-88fd-abb426bbc260",
+          "input": "N = 1, dislikes = []",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "da4f5364-9c32-4ec4-846a-a2fbe027a331",
+          "input": "N = 2, dislikes = [[1,2]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "330a75f2-ad3d-4fd1-bfa0-2429b7355d03",
+          "input": "N = 3, dislikes = [[1,2],[2,3]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "3e6c4e05-d97d-44ad-82b1-ac76618f7886",
+          "input": "N = 5, dislikes = [[1,2],[2,3],[3,4],[4,5]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "57f6e564-0ddd-44b3-b757-b20bf9fa6582",
+          "input": "N = 6, dislikes = [[1,2],[1,3],[2,4],[3,5],[4,6]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "17b2030d-4282-4e07-97f4-d89c85ed8e75",
+          "input": "N = 7, dislikes = [[1,2],[1,3],[2,4],[3,5],[4,6],[5,7]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "e9f88f00-890d-4058-a03e-4226a3ef3041",
+          "input": "N = 9, dislikes = [[1,2],[3,4],[5,6],[7,8],[1,9]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "49a44144-4fc8-4325-b47b-0fed5fd1ff5e",
+          "input": "N = 11, dislikes = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "fcf424ba-23cb-4c04-a2c8-caecf662520f",
+          "input": "N = 13, dislikes = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "c8b6b176-2418-4b47-8dda-a6e2cb79cceb",
+          "input": "N = 15, dislikes = [[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],[1,10],[1,11],[1,12],[1,13],[1,14],[1,15]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "9806be9e-68a0-473e-be13-754c1269aec3",
+          "input": "N = 17, dislikes = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "c56e612b-6931-4df5-82ba-47a08d8700d9",
+          "input": "N = 19, dislikes = [[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],[1,10],[1,11],[1,12],[1,13],[1,14],[1,15],[1,16],[1,17],[1,18],[1,19]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "0c774d54-ad44-466c-a9a6-3e17f2f9d937",
+          "input": "N = 2, dislikes = [[1,2],[2,1]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "2dcd7e7f-0bcc-4ffa-9c12-592396b84e24",
+          "input": "N = 3, dislikes = [[1,2],[2,1],[1,3],[3,1]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "3b6b8ad9-e166-4271-9cb1-3c03a9465974",
+          "input": "N = 5, dislikes = [[1,2],[2,1],[3,4],[4,3],[5,1],[1,5]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "4a389fec-1ac1-42f3-bfaa-599ac9f90a40",
+          "input": "N = 7, dislikes = [[1,2],[2,1],[3,4],[4,3],[5,6],[6,5],[7,1],[1,7]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "bbbffdee-13a8-4fbc-ac77-6f9358a1ccfd",
+          "input": "N = 9, dislikes = [[1,2],[2,1],[3,4],[4,3],[5,6],[6,5],[7,8],[8,7],[9,1],[1,9]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "4c3717e2-989f-4e0c-b136-aee38a3d4bed",
+          "input": "N = 0, dislikes = []",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "016cab5c-99f1-4f7e-a163-1f8d096b357c",
+          "input": "N = 100, dislikes = []",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "3e96d280-0eff-4c6e-bce5-6b8cae5c72a2",
+          "input": "N = 1000, dislikes = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],[18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,25],[25,26],[26,27],[27,28],[28,29],[29,30],[30,31],[31,32],[32,33],[33,34],[34,35],[35,36],[36,37],[37,38],[38,39],[39,40],[40,41],[41,42],[42,43],[43,44],[44,45],[45,46],[46,47],[47,48],[48,49],[49,50],[50,51],[51,52],[52,53],[53,54],[54,55],[55,56],[56,57],[57,58],[58,59],[59,60],[60,61],[61,62],[62,63],[63,64],[64,65],[65,66],[66,67],[67,68],[68,69],[69,70],[70,71],[71,72],[72,73],[73,74],[74,75],[75,76],[76,77],[77,78],[78,79],[79,80],[80,81],[81,82],[82,83],[83,84],[84,85],[85,86],[86,87],[87,88],[88,89],[89,90],[90,91],[91,92],[92,93],[93,94],[94,95],[95,96],[96,97],[97,98],[98,99],[99,100]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "85f35485-dff7-42a2-953b-16f2f8a1e12b",
+          "input": "N = 5, dislikes = [[1,2],[2,3],[3,4],[4,5],[5,1]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "2c966589-4fca-40b8-805f-9fa5cca1e746",
+          "input": "N = 4, dislikes = [[1,2],[3,4]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "f31b9cd8-7c07-4fab-840f-1a4647f15081",
+          "input": "N = 8, dislikes = [[1,2],[3,4],[5,6],[7,8]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "b85a5d7e-0ede-4c59-b18c-50f2f4e560d5",
+          "input": "N = 10, dislikes = [[1,2],[3,4],[5,6],[7,8],[9,10]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "bdc4b2e1-277a-49d7-a0b6-ca8efdc90608",
+          "input": "N = 12, dislikes = [[1,2],[3,4],[5,6],[7,8],[9,10],[11,12]]",
+          "expectedOutput": "false",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "redundant-connection",
+      "leetCodeNumber": 684,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "bacd8371-2b17-4455-a003-e72e6b59ce4e",
+          "input": "edges = [[1,2],[2,3],[3,4],[1,4]]",
+          "expectedOutput": "[1,4]",
+          "orderMatters": true
+        },
+        {
+          "id": "df558f6b-bb47-4d8b-a948-0048eb45efdd",
+          "input": "edges = [[1,2],[1,3],[2,3],[3,4]]",
+          "expectedOutput": "[2,3]",
+          "orderMatters": true
+        },
+        {
+          "id": "e156f489-d5db-44fa-8874-e656932aadfb",
+          "input": "edges = [[1,2],[2,3],[3,1]]",
+          "expectedOutput": "[3,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "c70d9df5-7bcd-4c05-b60c-c0b5ee7e7c0e",
+          "input": "edges = [[1,2],[2,3],[3,2]]",
+          "expectedOutput": "[3,2]",
+          "orderMatters": true
+        },
+        {
+          "id": "c97f59e8-364b-43cc-8e6d-f5f988ee5f5b",
+          "input": "edges = [[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]",
+          "expectedOutput": "[2,3]",
+          "orderMatters": true
+        },
+        {
+          "id": "0a6f54f9-a365-4d1f-89d7-5d5e7cfef373",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,1]]",
+          "expectedOutput": "[5,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "5099ab21-ef7d-4f02-91dd-c92d6cb86870",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,2]]",
+          "expectedOutput": "[5,2]",
+          "orderMatters": true
+        },
+        {
+          "id": "7c6fcd3c-2d57-4da3-b833-c1205703f152",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,3]]",
+          "expectedOutput": "[5,3]",
+          "orderMatters": true
+        },
+        {
+          "id": "493fdd1e-3f4b-420b-bf55-664ef99c7219",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,4]]",
+          "expectedOutput": "[5,4]",
+          "orderMatters": true
+        },
+        {
+          "id": "b8bc0445-2a62-4c1b-a301-827bc9f69dc4",
+          "input": "edges = [[1,2],[1,3],[1,4],[1,5],[2,3],[2,4],[2,5],[3,4],[3,5],[4,5]]",
+          "expectedOutput": "[2,3]",
+          "orderMatters": true
+        },
+        {
+          "id": "38d739a8-fcfd-4f20-b570-2e1cd21d2644",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,1]]",
+          "expectedOutput": "[10,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "6ffdd86a-3a7d-41b9-8d35-f2add9de5700",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,2]]",
+          "expectedOutput": "[10,2]",
+          "orderMatters": true
+        },
+        {
+          "id": "69ab2d1b-713b-42a6-8a44-6c7b699039c4",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,3]]",
+          "expectedOutput": "[10,3]",
+          "orderMatters": true
+        },
+        {
+          "id": "7f566019-378c-4814-a81b-65c9013b5d85",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,4]]",
+          "expectedOutput": "[10,4]",
+          "orderMatters": true
+        },
+        {
+          "id": "9ba27139-1f25-430b-8a2b-0739ff673f08",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,5]]",
+          "expectedOutput": "[10,5]",
+          "orderMatters": true
+        },
+        {
+          "id": "909149ba-6a35-4f03-9950-d52876fe148e",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,6]]",
+          "expectedOutput": "[10,6]",
+          "orderMatters": true
+        },
+        {
+          "id": "761047ae-a3d2-44ca-b7df-81e9307de836",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,7]]",
+          "expectedOutput": "[10,7]",
+          "orderMatters": true
+        },
+        {
+          "id": "08c17f29-b1b0-4473-a42c-ec843d4e07dd",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,8]]",
+          "expectedOutput": "[10,8]",
+          "orderMatters": true
+        },
+        {
+          "id": "1b3714fb-ad68-47a0-ac32-0603979afcd1",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,9]]",
+          "expectedOutput": "[10,9]",
+          "orderMatters": true
+        },
+        {
+          "id": "306d886c-8679-45da-8a5c-9340b3c85a43",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,10]]",
+          "expectedOutput": "[10,10]",
+          "orderMatters": true
+        },
+        {
+          "id": "0f47dbce-b6d9-4c7d-824d-b5bc36bab3a5",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[1,10]]",
+          "expectedOutput": "[1,10]",
+          "orderMatters": true
+        },
+        {
+          "id": "2a1666fa-f0b3-4118-916e-08a5cc2fb9b8",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[2,10]]",
+          "expectedOutput": "[2,10]",
+          "orderMatters": true
+        },
+        {
+          "id": "aa5fc463-3a8c-448d-b393-92f00eeb8985",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[3,10]]",
+          "expectedOutput": "[3,10]",
+          "orderMatters": true
+        },
+        {
+          "id": "161be58a-abfc-4f06-86dd-e86771ed62da",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[4,10]]",
+          "expectedOutput": "[4,10]",
+          "orderMatters": true
+        },
+        {
+          "id": "4dbd685b-f133-4e3c-8b60-28d9ad519f03",
+          "input": "edges = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[5,10]]",
+          "expectedOutput": "[5,10]",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "rotting-oranges",
+      "leetCodeNumber": 994,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "d9e55e01-7030-4d77-af0b-261a3f662a38",
+          "input": "grid = [[1,1,1],[1,1,1],[1,1,1]]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "a5851fc4-cb36-4186-9391-98700e36a1db",
+          "input": "grid = [[2,1,1],[1,1,1],[1,1,1]]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "20197f81-1658-466a-8607-206ccba317f8",
+          "input": "grid = [[0,0,0],[0,0,0],[0,0,0]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "d08dd3f6-ccff-486d-b140-928f300ed542",
+          "input": "grid = [[1,0,1],[0,1,0],[1,0,1]]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "73360bb3-00d8-4257-b8de-3f2431a06f0f",
+          "input": "grid = [[1,1,1],[1,2,1],[1,1,1]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "24758f08-3976-4b49-8cf8-d2f554c2c9f5",
+          "input": "grid = [[2,2,2],[2,2,2],[2,2,2]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "e058f55f-3c21-4cc7-8d4a-b8bbf0b81000",
+          "input": "grid = [[0,0,0,0],[0,1,1,0],[0,1,1,0],[0,0,0,0]]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "463de285-28c0-4081-bc64-674fc4dd4a96",
+          "input": "grid = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "04b68a8e-7614-4565-a2e9-7b68b60661d1",
+          "input": "grid = [[1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0],[0,0,0,1,0],[0,0,0,0,1]]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "ea861c6b-0773-4772-b276-6f5aa2da3620",
+          "input": "grid = [[0,0,0,0,0],[0,2,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "7d99b3d0-5d55-44d5-ba58-71fd4cf9eefe",
+          "input": "grid = [[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1]]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "a210fad3-a940-4683-91cc-ae813e8af01d",
+          "input": "grid = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "61414d93-2822-4a10-913a-3a893615ded3",
+          "input": "grid = [[0,1,0,0,0],[0,0,1,0,0],[0,0,0,1,0],[0,0,0,0,1],[0,0,0,0,0]]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "39e2001a-e1aa-4591-9c52-36da31261bd7",
+          "input": "grid = [[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "fc601e6f-832a-4545-98d3-75c40165739e",
+          "input": "grid = [[0,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0],[0,0,0,1,0],[0,0,0,0,1]]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "c07f0852-9e1f-4503-88f9-deff636ced60",
+          "input": "grid = [[1,2,1],[1,1,1],[0,1,2]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "c6a49f1b-588b-493f-97bb-3d70bf1948a9",
+          "input": "grid = [[2]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "8f7fffab-08d4-45e9-944a-818d8b584dc8",
+          "input": "grid = [[1,1,0],[0,1,0],[0,0,2]]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "22cb8f91-5d50-48a0-9c98-884b1783512f",
+          "input": "grid = [[2,1,0],[0,1,1],[1,0,1]]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "1e26aa10-93de-41d6-9845-357f25599e11",
+          "input": "grid = [[1,2,1],[0,1,1],[1,0,1]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "3651cf65-d46a-469f-8a80-5f583b3ce8e6",
+          "input": "grid = [[0,0,0,0,0,0],[0,2,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "e5b582f5-04a4-44d8-92c5-c21a52298dcb",
+          "input": "grid = [[1,2,1],[1,1,1],[1,1,1]]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "c9d597bb-8cb9-4898-b7cd-122ea9fa24c5",
+          "input": "grid = [[1,1,1],[1,1,2],[1,1,1]]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "254b171d-a7b3-4fe8-ad33-fd5efaa66719",
+          "input": "grid = [[2,1,0,2,1],[1,0,1,2,1],[1,0,1,2,1],[2,2,1,1,1],[1,0,0,2,1]]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "fda17003-2f83-4b78-a845-8286b3af3b59",
+          "input": "grid = [[2,0,0,0,0],[0,2,0,0,0],[0,0,2,0,0],[0,0,0,2,0],[0,0,0,0,2]]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "snakes-and-ladders",
+      "leetCodeNumber": 909,
+      "difficulty": "medium",
+      "testCaseCount": 9,
+      "testCases": [
+        {
+          "id": "89d517fc-67a4-406e-b5e4-83ef7b1d8b0e",
+          "input": "board = [[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,36]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "cbf4f21a-6570-4eea-88b6-6f72bdb31e4b",
+          "input": "board = [[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1]]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "39866839-8d9a-45fa-be19-fc2e2755bc53",
+          "input": "board = [[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1]]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "1715dedc-20e7-460b-9da5-2106dda42f6e",
+          "input": "board = [[-1,-1,-1,-1,-1,-1],[-1,2,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1]]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "7c0ff23c-3a58-487d-8f67-8717bfe26ed5",
+          "input": "board = [[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,36]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "9d1a1c24-b982-4e92-832a-b25620cd1e66",
+          "input": "board = [[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,-1]]",
+          "expectedOutput": "-1",
+          "orderMatters": true
+        },
+        {
+          "id": "6be117b1-d36b-43bb-8ad3-918c35210819",
+          "input": "board = [[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,1]]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "40ac7766-4463-497b-b433-cba59238c30d",
+          "input": "board = [[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,35,-1,-1,13,-1],[-1,-1,-1,-1,-1,-1],[-1,15,-1,-1,-1,-1]]",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "841cf945-5493-4f2d-af75-0279e8762ed0",
+          "input": "board = [[-1,-1],[-1,3]]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "surrounded-regions",
+      "leetCodeNumber": 130,
+      "difficulty": "medium",
+      "testCaseCount": 20,
+      "testCases": [
+        {
+          "id": "55fbe2cf-e4c4-4bad-a9a6-f9073312c4a7",
+          "input": "board = [[\"X\"]]",
+          "expectedOutput": "[[\"X\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "58aa9092-6465-4f45-8c73-3e3b0a8034af",
+          "input": "board = [[\"O\"]]",
+          "expectedOutput": "[[\"O\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "6ac06379-bd2c-4765-9999-a658e8ead584",
+          "input": "board = [[\"X\",\"O\"],[\"O\",\"X\"]]",
+          "expectedOutput": "[[\"X\",\"O\"],[\"O\",\"X\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "bd1afb4f-d58f-45fb-8723-c24ca0596072",
+          "input": "board = [[\"X\",\"X\"],[\"X\",\"X\"]]",
+          "expectedOutput": "[[\"X\",\"X\"],[\"X\",\"X\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "99ac8ec9-3ba7-4906-9697-c418f746ffda",
+          "input": "board = [[\"O\",\"O\"],[\"O\",\"O\"]]",
+          "expectedOutput": "[[\"O\",\"O\"],[\"O\",\"O\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "cd9530f0-d7d4-40ab-b7eb-548d5f632a25",
+          "input": "board = [[\"X\",\"O\",\"X\"],[\"O\",\"X\",\"O\"],[\"X\",\"O\",\"X\"]]",
+          "expectedOutput": "[[\"X\",\"O\",\"X\"],[\"O\",\"X\",\"O\"],[\"X\",\"O\",\"X\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "5a3953f0-27e3-415a-9d48-4e9855afe415",
+          "input": "board = [[\"O\",\"O\",\"O\"],[\"O\",\"O\",\"O\"],[\"O\",\"O\",\"O\"]]",
+          "expectedOutput": "[[\"O\",\"O\",\"O\"],[\"O\",\"O\",\"O\"],[\"O\",\"O\",\"O\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "e6a76ba9-30a2-40e1-86b9-7174687f3c83",
+          "input": "board = [[\"X\",\"X\",\"X\"],[\"X\",\"O\",\"X\"],[\"X\",\"X\",\"X\"]]",
+          "expectedOutput": "[[\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "6e8fbd9e-910c-4f6b-a869-ede57a87f6ad",
+          "input": "board = [[\"O\",\"X\",\"O\",\"X\"],[\"X\",\"O\",\"X\",\"O\"],[\"O\",\"X\",\"O\",\"X\"],[\"X\",\"O\",\"X\",\"O\"]]",
+          "expectedOutput": "[[\"O\",\"X\",\"O\",\"X\"],[\"X\",\"O\",\"X\",\"O\"],[\"O\",\"X\",\"O\",\"X\"],[\"X\",\"O\",\"X\",\"O\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "e296a302-ef57-4154-b454-d4c8a8be350c",
+          "input": "board = [[\"X\",\"X\",\"O\",\"O\"],[\"X\",\"X\",\"O\",\"O\"],[\"O\",\"O\",\"X\",\"X\"],[\"O\",\"O\",\"X\",\"X\"]]",
+          "expectedOutput": "[[\"X\",\"X\",\"O\",\"O\"],[\"X\",\"X\",\"O\",\"O\"],[\"O\",\"O\",\"X\",\"X\"],[\"O\",\"O\",\"X\",\"X\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "2a0a4c47-b439-4d2e-ac3b-9f29e30a047f",
+          "input": "board = [[\"O\",\"O\",\"X\",\"X\"],[\"O\",\"O\",\"X\",\"X\"],[\"X\",\"X\",\"O\",\"O\"],[\"X\",\"X\",\"O\",\"O\"]]",
+          "expectedOutput": "[[\"O\",\"O\",\"X\",\"X\"],[\"O\",\"O\",\"X\",\"X\"],[\"X\",\"X\",\"O\",\"O\"],[\"X\",\"X\",\"O\",\"O\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "492b9bee-718f-4a6f-883f-39b3433eff3b",
+          "input": "board = [[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"O\",\"O\",\"X\"],[\"X\",\"O\",\"O\",\"X\"],[\"X\",\"X\",\"X\",\"X\"]]",
+          "expectedOutput": "[[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\",\"X\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "8d1e5440-2340-4797-9fbb-4a698848d74c",
+          "input": "board = [[\"O\",\"O\",\"O\",\"O\"],[\"O\",\"X\",\"X\",\"O\"],[\"O\",\"X\",\"X\",\"O\"],[\"O\",\"O\",\"O\",\"O\"]]",
+          "expectedOutput": "[[\"O\",\"O\",\"O\",\"O\"],[\"O\",\"X\",\"X\",\"O\"],[\"O\",\"X\",\"X\",\"O\"],[\"O\",\"O\",\"O\",\"O\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "3d56b2cc-e7de-429d-9fa3-003a76e3bf1c",
+          "input": "board = [[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\",\"X\"]]",
+          "expectedOutput": "[[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\",\"X\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "314fce62-bfda-4478-aa1d-5dcece60c80a",
+          "input": "board = [[\"O\",\"O\",\"O\",\"O\"],[\"O\",\"O\",\"O\",\"O\"],[\"O\",\"O\",\"O\",\"O\"],[\"O\",\"O\",\"O\",\"O\"]]",
+          "expectedOutput": "[[\"O\",\"O\",\"O\",\"O\"],[\"O\",\"O\",\"O\",\"O\"],[\"O\",\"O\",\"O\",\"O\"],[\"O\",\"O\",\"O\",\"O\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "b690d184-ae9e-4faf-a9bc-8c4b8acf6a03",
+          "input": "board = []",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "21bf8f93-27db-4102-be6a-78751f49b12c",
+          "input": "board = [[\"X\",\"O\",\"X\",\"X\"],[\"O\",\"X\",\"O\",\"X\"],[\"X\",\"O\",\"X\",\"O\"],[\"O\",\"X\",\"O\",\"X\"]]",
+          "expectedOutput": "[[\"X\",\"O\",\"X\",\"X\"],[\"O\",\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\",\"O\"],[\"O\",\"X\",\"O\",\"X\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "230d2d3d-010c-43e7-80c7-9f596f42e982",
+          "input": "board = [[\"O\",\"X\",\"O\"],[\"X\",\"O\",\"X\"],[\"O\",\"X\",\"O\"]]",
+          "expectedOutput": "[[\"O\",\"X\",\"O\"],[\"X\",\"X\",\"X\"],[\"O\",\"X\",\"O\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "908ed1e2-0867-4f86-a0aa-e5dbca32a8f5",
+          "input": "board = [[\"X\",\"X\",\"O\"],[\"X\",\"O\",\"X\"],[\"O\",\"X\",\"X\"]]",
+          "expectedOutput": "[[\"X\",\"X\",\"O\"],[\"X\",\"X\",\"X\"],[\"O\",\"X\",\"X\"]]",
+          "orderMatters": true
+        },
+        {
+          "id": "25325a69-7cea-4de4-93f9-2d440eaf6eb5",
+          "input": "board = [[\"X\",\"O\",\"X\",\"O\"],[\"O\",\"X\",\"O\",\"X\"],[\"X\",\"O\",\"X\",\"O\"],[\"O\",\"X\",\"O\",\"X\"]]",
+          "expectedOutput": "[[\"X\",\"O\",\"X\",\"O\"],[\"O\",\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\",\"O\"],[\"O\",\"X\",\"O\",\"X\"]]",
+          "orderMatters": true
+        }
+      ]
+    }
+  ]
+}

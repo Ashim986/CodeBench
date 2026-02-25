@@ -1,0 +1,1903 @@
+{
+  "topic": "sliding-window",
+  "version": "1.0.0",
+  "generatedAt": "2026-02-20T12:55:48Z",
+  "problems": [
+    {
+      "problemSlug": "binary-subarrays-with-sum",
+      "leetCodeNumber": 930,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "02b9db83-9074-4353-b66a-f2b2060eda40",
+          "input": "nums = [1,1,1,1,1], goal = 5",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "163ace99-0c83-414b-ba2a-a978ca7d814c",
+          "input": "nums = [0,0,0,0,0], goal = 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "30126580-0612-403f-a25a-032287d13a13",
+          "input": "nums = [1,1,1,1,1], goal = 0",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "669c51e9-99f9-4f51-9969-22e466d7c129",
+          "input": "nums = [0,0,0,0,0], goal = -1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "12f3b6af-d066-481b-8e7f-4d7c5d38c706",
+          "input": "nums = [1,2,3,4,5], goal = 10",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "6e0fb1c9-9a45-4395-abb4-75063c21a7f8",
+          "input": "nums = [5,4,3,2,1], goal = 10",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "bc5cccc5-fc05-4900-908e-0b6af6525900",
+          "input": "nums = [1,1,1,1,1], goal = 1",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "b08364bc-6bbf-4063-b78c-9581d5bc5b53",
+          "input": "nums = [], goal = 0",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "a4f0854e-49eb-439b-8302-84c08dc7acfc",
+          "input": "nums = [1], goal = 1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "fa37610f-0617-456d-80c4-a92b06445485",
+          "input": "nums = [1], goal = 0",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "93f43120-a40d-475e-a765-1181f7646c9e",
+          "input": "nums = [0], goal = 0",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "cd443583-26f8-4b6a-bb75-28a81ca59df4",
+          "input": "nums = [0], goal = 1",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "33d4e85a-ba5c-4fe4-8b83-866bbe76dcd9",
+          "input": "nums = [1,1,1,1,1], goal = 3",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "860a9455-a7e6-492f-b1d0-035eeccb4f18",
+          "input": "nums = [1,0,1,0,1], goal = 0",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "80e7c4ed-a098-4db1-b43e-eddd8fb3f897",
+          "input": "nums = [1,0,1,0,1], goal = 3",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "a7f5cc30-5046-4606-9d85-5ce693b9613d",
+          "input": "nums = [1,0,1,0,1], goal = 1",
+          "expectedOutput": "8",
+          "orderMatters": true
+        },
+        {
+          "id": "8598588c-bd35-4878-92aa-5d7a1df80d4a",
+          "input": "nums = [0,1,0,1,0], goal = 1",
+          "expectedOutput": "8",
+          "orderMatters": true
+        },
+        {
+          "id": "ac723515-dd56-4525-9bb0-f15b45a3e79d",
+          "input": "nums = [0,0,1,0,0], goal = 1",
+          "expectedOutput": "9",
+          "orderMatters": true
+        },
+        {
+          "id": "da3b08c4-2c92-4a1d-933c-6ba2841d0892",
+          "input": "nums = [1,0,0,0,0], goal = 1",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "71d1e51c-9c77-4b4d-9503-300493688e33",
+          "input": "nums = [0,0,0,0,1], goal = 1",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "178dcb66-f569-4a29-8acf-c92a1bb06b04",
+          "input": "nums = [1,1,0,0,0], goal = 2",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "eb339f13-ab8e-49ed-8453-d074092d41cf",
+          "input": "nums = [0,0,0,1,1], goal = 2",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "58a9cfd9-d635-4f67-99b1-403e19ad63b2",
+          "input": "nums = [1,1,1,0,0], goal = 3",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "94571a80-1ed5-49fa-b74d-7cb678da4191",
+          "input": "nums = [0,0,1,1,1], goal = 3",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "723f325d-ef44-4b7c-8f0f-ed138c37670f",
+          "input": "nums = [1,0,1,1,0], goal = 2",
+          "expectedOutput": "5",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "contains-duplicate-ii",
+      "leetCodeNumber": 219,
+      "difficulty": "easy",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "BFC6D26D-C8DE-47D9-A620-D3D516862DD3",
+          "input": "[1,2,3,1]\n3",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "4B1B2CD3-BCFC-4EDA-AF1D-A33AAD7052DE",
+          "input": "[1,0,1,1]\n1",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "9154470B-1FB7-470C-AC56-C759BB59F8A2",
+          "input": "[1,2,3,4,5]\n100",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "C10F0CE9-3A87-4E3E-AF50-4EE7B55C658D",
+          "input": "[]\n1",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "C8FFEA41-CE3E-42CE-B4E6-FAEF071C4659",
+          "input": "[1]\n1",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "4E4EFA04-F814-486F-98FA-45F51B0EC05D",
+          "input": "[1,2,3,4,5,6,7,8,9,1]\n10",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "5453A78F-BBB7-431E-985E-7197A181D409",
+          "input": "[1,1,1,1,1,1,1,1,1,1]\n1",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "894BC8C9-C9DE-41FC-A326-7DF63D1B0057",
+          "input": "[1,2,3,4,5,6,7,8,9,10]\n1",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "97AAD976-CA2C-4E2C-91F0-6174EFF2F7D8",
+          "input": "[-1,-2,-3,-4,-5]\n5",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "CC7CAEBF-E5A3-42F5-89BF-3B61AAC13E4A",
+          "input": "[1,2,2,3,4,5,6,7,8,9,1]\n11",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "4CF327EE-D7F1-4C82-AEEA-C892F9984F7B",
+          "input": "[1,1,1,1,1,1,1,1,1,1]\n10",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "791AB622-8797-43CE-8042-06F5C4665263",
+          "input": "[0,0,0,0,0,0,0,0,0,0]\n9",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "7AF5F354-F48E-4CA2-A369-DF100714C22E",
+          "input": "[5,5,5,5,5,5,5,5,5,5]\n2",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "89ED3070-42FB-4179-9D8A-16ED60B5EA53",
+          "input": "[1,2,3,4,5,6,7,8,9,1]\n0",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "BF1AB9EB-E527-40CF-B76A-3C0AFF574799",
+          "input": "[1,2,3,4,5]\n1",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "91FC4828-61A3-47AA-8E44-01C887E11586",
+          "input": "[1,2,3,4,5,6,7,8,9,1]\n1",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "63EC92ED-1CAF-4EFB-A6AD-85839DEB5592",
+          "input": "[1,2,3,4,5,6,7,8,9,1]\n2",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "29A3C0FB-D256-4BE8-99F6-36D99590DA3E",
+          "input": "[1,2,3,4,5,6,7,8,9,10]\n2",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "8605E11A-D7E8-4FE0-B185-503A9BAD5676",
+          "input": "[-1,-2,-3,-4,-5]\n2",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "665E75DC-D663-4ED0-88A9-AC477901FC49",
+          "input": "[0,0,0,0,0,0,0,0,0,0]\n1",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "FE672EDF-DD75-49F3-8AD0-09A504DE1613",
+          "input": "[5,5,5,5,5,5,5,5,5,5]\n3",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "F502587C-D215-4977-A3AF-D1C9CC068960",
+          "input": "[0,1,0,3,2,5,6,7,1,9,4,8,3,7]\n4",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "7159F835-0B76-41A5-89CC-5C8061BC6C8C",
+          "input": "[1,2,3,4,1,2,3,4]\n1",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "58FAFCA5-9A5C-432C-960D-8403043A181D",
+          "input": "[1,2,3,4,1,2,3,4]\n4",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "7CE64D51-2B99-4332-B215-8B41B07BE14D",
+          "input": "[1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8]\n8",
+          "expectedOutput": "true",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "find-all-anagrams-in-a-string",
+      "leetCodeNumber": 438,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "E8ED6B86-8230-4D37-A39F-A1D01F7F7191",
+          "input": "cbaebabacd\nabc",
+          "expectedOutput": "[0,6]",
+          "orderMatters": false
+        },
+        {
+          "id": "3307705A-0CEC-4648-A649-8A007D1CDE8B",
+          "input": "abab\nab",
+          "expectedOutput": "[0,1,2]",
+          "orderMatters": false
+        },
+        {
+          "id": "F551F7A1-C959-4503-8022-6CC04BDEB960",
+          "input": "aaaa\naa",
+          "expectedOutput": "[0,1,2]",
+          "orderMatters": false
+        },
+        {
+          "id": "1E3AEAE9-4067-41A1-965B-BCA6DD367D8B",
+          "input": "a\na",
+          "expectedOutput": "[0]",
+          "orderMatters": false
+        },
+        {
+          "id": "DB94DB9A-419E-4605-834D-0321A2621CA1",
+          "input": "abcdef\nxyz",
+          "expectedOutput": "[]",
+          "orderMatters": false
+        },
+        {
+          "id": "4111D426-3BEE-4302-885F-9D3AB1A83329",
+          "input": "aaa\naa",
+          "expectedOutput": "[0,1]",
+          "orderMatters": false
+        },
+        {
+          "id": "A204AF03-500A-4936-83B6-FF4827D87DCE",
+          "input": "bac\nabc",
+          "expectedOutput": "[0]",
+          "orderMatters": false
+        },
+        {
+          "id": "7E2DB343-3610-4822-A798-5E4051A86819",
+          "input": "abcdef\nabcdef",
+          "expectedOutput": "[0]",
+          "orderMatters": false
+        },
+        {
+          "id": "5991F5CC-90F5-4327-805F-AFC4B53F8531",
+          "input": "aaaaaa\naaaaa",
+          "expectedOutput": "[0,1]",
+          "orderMatters": false
+        },
+        {
+          "id": "A7BCC4AB-95C6-4CD7-9B7A-CD5C57D1A98F",
+          "input": "aaaaaa\naaaa",
+          "expectedOutput": "[0,1,2]",
+          "orderMatters": false
+        },
+        {
+          "id": "E87BFDB8-56EB-4D47-AFBB-B13851361435",
+          "input": "aaaaaaa\naaa",
+          "expectedOutput": "[0,1,2,3,4]",
+          "orderMatters": false
+        },
+        {
+          "id": "169F1215-9EAD-4576-8B20-D72CE335D638",
+          "input": "def\nabc",
+          "expectedOutput": "[]",
+          "orderMatters": false
+        },
+        {
+          "id": "F1FCAD18-98B8-4C60-B0D2-609D92621BC5",
+          "input": "aabac\nabc",
+          "expectedOutput": "[2]",
+          "orderMatters": false
+        },
+        {
+          "id": "EE3018ED-0586-4FD3-A060-725DF3229A9A",
+          "input": "aaaaaa\na",
+          "expectedOutput": "[0,1,2,3,4,5]",
+          "orderMatters": false
+        },
+        {
+          "id": "2EA3101C-378F-4F9A-A3AF-B1E184EB18CD",
+          "input": "aaaaaa\naa",
+          "expectedOutput": "[0,1,2,3,4]",
+          "orderMatters": false
+        },
+        {
+          "id": "43323990-7242-4C58-B204-6330B5F5A691",
+          "input": "b",
+          "expectedOutput": "[1]",
+          "orderMatters": false
+        },
+        {
+          "id": "CD973BB7-5AC5-4BBD-8263-C8D8AC606CA8",
+          "input": "abcdef\nbca",
+          "expectedOutput": "[0]",
+          "orderMatters": false
+        },
+        {
+          "id": "662EC637-7FED-4102-AA4D-6E52F63A06B8",
+          "input": "bba\nab",
+          "expectedOutput": "[1]",
+          "orderMatters": false
+        },
+        {
+          "id": "3024F526-8875-4DBF-807F-526AA4C182C3",
+          "input": "abcdabc\nabc",
+          "expectedOutput": "[0,4]",
+          "orderMatters": false
+        },
+        {
+          "id": "1443373B-9D5A-4808-9414-AC5F7B92B48C",
+          "input": "acac\naca",
+          "expectedOutput": "[0]",
+          "orderMatters": false
+        },
+        {
+          "id": "2CE0E2E6-303E-496E-904B-3E448DF16527",
+          "input": "abcabcabc\nabc",
+          "expectedOutput": "[0,1,2,3,4,5,6]",
+          "orderMatters": false
+        },
+        {
+          "id": "D6CFC233-EA27-4255-8B43-A8B9DF8527E5",
+          "input": "abcdabcde\nabc",
+          "expectedOutput": "[0,4]",
+          "orderMatters": false
+        },
+        {
+          "id": "B3EC4705-1E14-4D4A-B082-91CFCE168F0D",
+          "input": "abcdabcdabcd\nabcd",
+          "expectedOutput": "[0,1,2,3,4,5,6,7,8]",
+          "orderMatters": false
+        },
+        {
+          "id": "AAB2EC11-7945-4D28-B701-E760C9360993",
+          "input": "abc",
+          "expectedOutput": "[1,2,3]",
+          "orderMatters": false
+        },
+        {
+          "id": "7AE039E7-8E90-4E10-BF2F-82647A3DBEEF",
+          "input": "def",
+          "expectedOutput": "[1,2,3]",
+          "orderMatters": false
+        }
+      ]
+    },
+    {
+      "problemSlug": "fruit-into-baskets",
+      "leetCodeNumber": 904,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "adc97203-bd79-4621-814e-f8652ba99d78",
+          "input": "fruits = [1]",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "62f3dab8-0c9a-4c4c-b6ec-3bc6c7f3871b",
+          "input": "fruits = [1,1,1]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "19734e82-e9d1-4ecf-8ecf-3bda01882c1d",
+          "input": "fruits = [1,2]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "e59bd2f2-a8b2-49fd-991e-c2106fe97bdc",
+          "input": "fruits = []",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "ce9ef274-9c24-4265-b477-db1d58eb6078",
+          "input": "fruits = [-1,-1,-1]",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "fd13afed-9699-4290-8fa0-17b573045356",
+          "input": "fruits = [1,1,2,2,1,1,2,2]",
+          "expectedOutput": "8",
+          "orderMatters": true
+        },
+        {
+          "id": "e09a9e48-6be4-4214-8bfa-843b78de1e53",
+          "input": "fruits = [1,2,3,4,5,6,7,8,9,10]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "32c86afc-7e34-47d1-95a0-abd75861b50f",
+          "input": "fruits = [1,1,1,1,1,1,1,1,1,1]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "7b5d4b82-0982-4957-bde2-030cb72806af",
+          "input": "fruits = [1,2,1,2,1,2,1,2,1,2]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "5497e322-a3d6-4382-a9d5-2206646251b6",
+          "input": "fruits = [1,1,1,2,2,2,3,3,3]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "ac69e03b-ef89-4715-abe3-2d96f76f073d",
+          "input": "fruits = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]",
+          "expectedOutput": "20",
+          "orderMatters": true
+        },
+        {
+          "id": "d1652353-9633-42ed-9b84-124a72745c0b",
+          "input": "fruits = [1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2]",
+          "expectedOutput": "20",
+          "orderMatters": true
+        },
+        {
+          "id": "dfa9a538-389b-48c4-97ff-4afc3ac57d20",
+          "input": "fruits = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]",
+          "expectedOutput": "40",
+          "orderMatters": true
+        },
+        {
+          "id": "f56e5f47-b776-4b58-a323-6c0a652d52ee",
+          "input": "fruits = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "e6b67e3b-667d-4143-a0a0-fe78f0d4a8a1",
+          "input": "fruits = [20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "b271c1b0-8b5e-4e9d-8ff2-10432aeb9676",
+          "input": "fruits = [1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2]",
+          "expectedOutput": "20",
+          "orderMatters": true
+        },
+        {
+          "id": "c180ed47-f98e-4009-b1ae-b8678530a802",
+          "input": "fruits = [1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "c664477e-84e0-4f80-ad0b-9d5addb7c528",
+          "input": "fruits = [10,9,8,7,6,5,4,3,2,1,10,9,8,7,6,5,4,3,2,1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "7a612776-4a08-4338-bc7c-acd8730edaed",
+          "input": "fruits = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "39eb0e11-131f-4830-8f55-be4a6eb5e689",
+          "input": "fruits = [30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "0ca32e66-3bd0-46de-abb1-64f0940a6530",
+          "input": "fruits = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "5d7c152c-0f09-4ab1-9340-1bfc80ffa715",
+          "input": "fruits = [40,39,38,37,36,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "40f2eecf-db38-4bb3-a864-ecad4562934b",
+          "input": "fruits = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "71595bdb-7e0a-4b0b-810e-20ce9173cb5b",
+          "input": "fruits = [50,49,48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "a30d1c07-3266-485b-907a-d121df8f6c12",
+          "input": "fruits = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "longest-harmonious-subsequence",
+      "leetCodeNumber": 594,
+      "difficulty": "easy",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "12095b04-b731-4030-9569-ce13771d41cd",
+          "input": "nums = []",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "de1ac824-ce08-4ef1-8316-4aa9d5e708d7",
+          "input": "nums = [1]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "a6fb776f-5309-46db-a320-6abde74f4d09",
+          "input": "nums = [1, 2]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "8bc82c35-b5e6-4079-9158-5029fa5cb45e",
+          "input": "nums = [1, 1, 1, 1, 2, 2, 2, 2]",
+          "expectedOutput": "8",
+          "orderMatters": true
+        },
+        {
+          "id": "13b7f755-c276-4cf2-a8d9-031eda5d9d75",
+          "input": "nums = [10, 10, 10, 10, 11, 11, 11, 11]",
+          "expectedOutput": "8",
+          "orderMatters": true
+        },
+        {
+          "id": "26fa6acc-b619-4e22-aba7-26927ca54347",
+          "input": "nums = [1, 1, 1, 2, 2, 2, 3, 3, 3]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "ee06c884-299c-4ccf-96a3-d69020f5f28d",
+          "input": "nums = [5, 5, 5, 5, 5, 6, 6, 6, 6, 6]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "6b5c8180-9394-4673-8d50-52312507a415",
+          "input": "nums = [1000, 1001, 1002, 1003, 1004]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "33460ef6-2d0f-4284-9a93-c6358c3cda9d",
+          "input": "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "5da47985-5475-405c-889a-12fad29f3a45",
+          "input": "nums = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "cba883cf-a48c-4263-a006-a274851c69b1",
+          "input": "nums = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "e155e228-2383-4408-a325-e24a150efc2e",
+          "input": "nums = [2, 2, 2, 2, 2, 3, 3, 3, 3, 3]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "6dcddc2a-a75e-4991-8edf-c4a0b8b57074",
+          "input": "nums = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "cfa0c449-8c0f-4824-ae3f-25cd61e2ebb1",
+          "input": "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "b446718c-821f-4586-99bb-87dd04065101",
+          "input": "nums = [100, 100, 100, 100, 100, 101, 101, 101, 101, 101]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "394d899b-94bd-4ef8-b1dd-90b42d90b0dc",
+          "input": "nums = [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4]",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "65f575dd-0211-424a-a865-76a56a853d5f",
+          "input": "nums = [5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "3b1c1ade-c329-46c6-836b-57813060c403",
+          "input": "nums = [10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12]",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "65d4d781-e65c-4ec8-9f38-f27c37959175",
+          "input": "nums = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]",
+          "expectedOutput": "20",
+          "orderMatters": true
+        },
+        {
+          "id": "e16653f9-8d9d-4779-9282-25f2ddd73db7",
+          "input": "nums = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "7ef20e57-da40-4448-8b64-93f33c3e6932",
+          "input": "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "72fc6b4e-55f2-42c8-a9d6-333dc721fbb3",
+          "input": "nums = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101]",
+          "expectedOutput": "20",
+          "orderMatters": true
+        },
+        {
+          "id": "80b49f97-21ff-4004-9e94-ecb4b4f65b71",
+          "input": "nums = [-1, 0, 1]",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "4d3cc1f8-a49e-49f5-ae68-6247e7d2b7e9",
+          "input": "nums = [1, 3, 5, 7, 9, 11]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "8d0b123c-dee8-4938-8f6b-024ca363d4f0",
+          "input": "nums = [2, 4, 6, 8, 10]",
+          "expectedOutput": "0",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "longest-repeating-character-replacement",
+      "leetCodeNumber": 424,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "C771C538-98A0-4325-835F-2B8E6BC30A88",
+          "input": "ABAB\n2",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "26D4ED74-654B-4F73-9E46-AB1BC5C10659",
+          "input": "AABABBA\n1",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "BBDA1B00-8A57-425C-B1AD-DEEE4837B297",
+          "input": "0",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "5858BA82-0713-4E70-A576-4C1F88C23B9B",
+          "input": "AAAA\n2",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "AC2A0393-A4B1-4560-9F9B-79495134D207",
+          "input": "ABC\n0",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "59AE8172-C920-4751-8365-C3AA4E336982",
+          "input": "A\n0",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "D93D485A-BC89-4934-B726-0FD8B21C032F",
+          "input": "ABABAB\n3",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "4D7363F8-EB8C-4814-814C-D292CB19B095",
+          "input": "AAAAAAAAAA\n5",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "4B7EB5BE-8FEA-45A4-B30A-02699C68AFE8",
+          "input": "AAB\n1",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "42180F45-D785-4501-9781-469F778B3C68",
+          "input": "AA\n1",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "5CC4BB85-CD9A-40FC-A019-EFFC9271283F",
+          "input": "AB\n0",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "7CCD205E-9D47-496C-AECA-543887C0C6A4",
+          "input": "AAAAB\n2",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "F6E9D5B9-3415-4F94-8EAD-4A00736FB5E9",
+          "input": "AAB\n2",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "622AADF4-6C41-4B86-B3CE-D206E3986495",
+          "input": "ABC\n1",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "F63E12A4-C9EB-469E-9E70-4E9F16AFDBD5",
+          "input": "AAABBBCCC\n3",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "B88F1FE7-1FA3-4E5E-9F02-CBADC5A72DBF",
+          "input": "AAAAAAA\n2",
+          "expectedOutput": "7",
+          "orderMatters": true
+        },
+        {
+          "id": "AE7C6F0C-D65C-4133-9661-E234E9E84CC0",
+          "input": "A\n2",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "AAD74678-8B51-41D0-9901-95126F1EF117",
+          "input": "ABABAB\n2",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "4873FAC7-0C3C-4C2F-9C29-365D2D67D0C4",
+          "input": "AAAAA\n1",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "4E5B31A6-3CA2-4EBE-B90C-C3316D5F353A",
+          "input": "2",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "DF4AA644-FB9D-49D9-85A3-A9E898506750",
+          "input": "AB\n1",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "A834167B-56F2-4F1E-8285-E6B8A592CDFC",
+          "input": "ABBB\n2",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "6BE5A1B7-5E4A-489A-8065-3B66E047F62E",
+          "input": "ABABABAB\n3",
+          "expectedOutput": "7",
+          "orderMatters": true
+        },
+        {
+          "id": "6C9DCC81-66B2-488D-9828-6B546DAE765D",
+          "input": "ABCABC\n2",
+          "expectedOutput": "4",
+          "orderMatters": true
+        },
+        {
+          "id": "63BFCE2A-14AE-47F4-B701-393ED6B60019",
+          "input": "AAABBB\n2",
+          "expectedOutput": "5",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "longest-substring-with-at-least-k-repeating-characters",
+      "leetCodeNumber": 395,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "970031EB-5F30-477E-B7AB-DE092CF0E400",
+          "input": "aaabb\n3",
+          "expectedOutput": "aaa",
+          "orderMatters": true
+        },
+        {
+          "id": "C0D7EAA8-4659-49F0-800A-F07C58830D5D",
+          "input": "ababbc\n2",
+          "expectedOutput": "ababb",
+          "orderMatters": true
+        },
+        {
+          "id": "43B43D2C-C132-4E91-9D76-69986310C1FF",
+          "input": "aaaabbbb\n4",
+          "expectedOutput": "aaaabbbb",
+          "orderMatters": true
+        },
+        {
+          "id": "9E49046D-79FF-4ABB-9FD0-5DF783DC3D13",
+          "input": "ababc\n2",
+          "expectedOutput": "abab",
+          "orderMatters": true
+        },
+        {
+          "id": "469A1F98-DA92-4E39-9206-8309461A88CF",
+          "input": "aaaaaaaa\n1",
+          "expectedOutput": "aaaaaaaa",
+          "orderMatters": true
+        },
+        {
+          "id": "B8A95DD3-7C4D-4D9A-BA3F-6D08A180734B",
+          "input": "aaaaaaaa\n2",
+          "expectedOutput": "aaaaaaaa",
+          "orderMatters": true
+        },
+        {
+          "id": "AC63577E-5FCF-4410-9C1B-A99C7A766F95",
+          "input": "aaaaa\n5",
+          "expectedOutput": "aaaaa",
+          "orderMatters": true
+        },
+        {
+          "id": "30E15AD0-3DBF-479E-95A9-E833119BB216",
+          "input": "aaaaa\n1",
+          "expectedOutput": "aaaaa",
+          "orderMatters": true
+        },
+        {
+          "id": "133C7C69-2E1F-4221-A561-60A200C24D89",
+          "input": "aaaaa\n4",
+          "expectedOutput": "aaaaa",
+          "orderMatters": true
+        },
+        {
+          "id": "12DDD65B-9F93-4D0C-9D44-1827F7DF2FB2",
+          "input": "a\n1",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "EBC816FA-DEE8-483E-A55E-92F8692E4FC6",
+          "input": "ab\n1",
+          "expectedOutput": "ab",
+          "orderMatters": true
+        },
+        {
+          "id": "15101BB6-9867-4F08-B8AD-C817E764AC42",
+          "input": "3",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "3C317C32-D772-4671-BF68-03DA4B321AFD",
+          "input": "1",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "4666E836-0BBE-4A7F-9906-86E201739942",
+          "input": "abcabcabc\n3",
+          "expectedOutput": "abcabcabc",
+          "orderMatters": true
+        },
+        {
+          "id": "3F61188E-3ABA-4E44-8D3C-E148E7C8FCAB",
+          "input": "abcabcabc\n2",
+          "expectedOutput": "abcabcabc",
+          "orderMatters": true
+        },
+        {
+          "id": "2C88EA69-8762-4DC6-9068-6CDC94186F31",
+          "input": "aaaaabc\n2",
+          "expectedOutput": "aaaaa",
+          "orderMatters": true
+        },
+        {
+          "id": "DEAFB70F-C5B8-4560-82CA-54F70AE05FA0",
+          "input": "aabb\n2",
+          "expectedOutput": "aabb",
+          "orderMatters": true
+        },
+        {
+          "id": "BE257332-7C14-4F11-BF19-45B0C33461AD",
+          "input": "aabb\n1",
+          "expectedOutput": "aabb",
+          "orderMatters": true
+        },
+        {
+          "id": "40BB4D90-D133-46EB-9AC8-8817D059FF65",
+          "input": "aaaabbccc\n3",
+          "expectedOutput": "aaaa",
+          "orderMatters": true
+        },
+        {
+          "id": "E5B02FF9-A478-48B0-A128-62C9C64A240B",
+          "input": "aaaabbccc\n2",
+          "expectedOutput": "aaaabbccc",
+          "orderMatters": true
+        },
+        {
+          "id": "BCAA9560-62C7-4E85-9697-33F222F29AA4",
+          "input": "aabbccddeeff\n2",
+          "expectedOutput": "aabbccddeeff",
+          "orderMatters": true
+        },
+        {
+          "id": "C6B482D3-9DAC-4309-A57F-ACAB8E201262",
+          "input": "aaaaaaaaaa\n2",
+          "expectedOutput": "aaaaaaaaaa",
+          "orderMatters": true
+        },
+        {
+          "id": "08C97DED-420D-4BAA-B924-2E2C27E4CC3E",
+          "input": "aaaaaaaaaa\n1",
+          "expectedOutput": "aaaaaaaaaa",
+          "orderMatters": true
+        },
+        {
+          "id": "005A6DB7-0CF9-4B9A-9BAC-8A73EC8A8148",
+          "input": "aaaaaaaaaa\n5",
+          "expectedOutput": "aaaaaaaaaa",
+          "orderMatters": true
+        },
+        {
+          "id": "51F3D5BE-50E8-4C73-A987-D567AF2D6AFD",
+          "input": "bbbbbbbbbb\n2",
+          "expectedOutput": "bbbbbbbbbb",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "longest-substring-without-repeating-characters",
+      "leetCodeNumber": 3,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "FA756497-16F4-4C38-A23E-EE4D8EF231A2",
+          "input": "\"abcabcbb\"",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "E1965AA3-EB8A-479E-90A5-A3F709203312",
+          "input": "\"bbbbb\"",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "14F71826-7D9A-494E-9244-D4F84639CB86",
+          "input": "\"pwwkew\"",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "605E7DE8-52EE-4600-A5AF-72BCB226311C",
+          "input": "\"\"",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "C99B620F-2277-4194-873F-6B9BDFE8DD6D",
+          "input": "\"a\"",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "97E1B46D-6799-4425-A22E-997E8B49E8B7",
+          "input": "\"au\"",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "7A6839A0-1ABD-41B1-AFBD-28C7B9F923E4",
+          "input": "\"dvdf\"",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "9844A45E-9A80-43C8-9C89-53F343471FF6",
+          "input": "\" \"",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "0EF38CF1-EA30-4E99-9894-A9CBBF460F8D",
+          "input": "\"abcdefgh\"",
+          "expectedOutput": "8",
+          "orderMatters": true
+        },
+        {
+          "id": "1F6ACB77-6ABC-4815-AB25-79F9EA4D5F28",
+          "input": "\"tmmzuxt\"",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "99024B76-1A0B-4780-AF41-D2EBB656909A",
+          "input": "\"ohomm\"",
+          "expectedOutput": "3",
+          "orderMatters": true
+        },
+        {
+          "id": "e2399282-c5a7-4322-8706-c31f24f41a07",
+          "input": "s = \"\"",
+          "expectedOutput": "0",
+          "orderMatters": true
+        },
+        {
+          "id": "cf6e85a6-98ee-4b34-8f4e-29e96c8ed1f7",
+          "input": "s = \"a\"",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "9b72efe0-7e39-4497-af2d-40a3ddf1c35e",
+          "input": "s = \"ab\"",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "b99f7720-4465-499e-9dbc-ddb4c597c058",
+          "input": "s = \"aba\"",
+          "expectedOutput": "2",
+          "orderMatters": true
+        },
+        {
+          "id": "369ff494-4047-443d-803f-70c1b46aad93",
+          "input": "s = \"abcde\"",
+          "expectedOutput": "5",
+          "orderMatters": true
+        },
+        {
+          "id": "e720cd4e-111c-40c1-9838-2e7964d4bf7f",
+          "input": "s = \"aaaaa\"",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "5dc48fec-c4b3-4b33-a64f-95d44b5b5049",
+          "input": "s = \"abcdefabcdef\"",
+          "expectedOutput": "6",
+          "orderMatters": true
+        },
+        {
+          "id": "54cce3ed-071f-4ada-8505-a431b1e6b062",
+          "input": "s = \"abcdefghij\"",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "771d809a-540a-40f1-b349-59c1429062a8",
+          "input": "s = \"abcdefghijabcdefghij\"",
+          "expectedOutput": "10",
+          "orderMatters": true
+        },
+        {
+          "id": "f63d6b5e-9f88-4e73-8a44-5ac1e54368e8",
+          "input": "s = \"abcdefghijklmnopqrstuvwxyz\"",
+          "expectedOutput": "26",
+          "orderMatters": true
+        },
+        {
+          "id": "f464ebcc-14ee-46d2-86ea-32942bb3fa80",
+          "input": "s = \"zyxwvutsrqponmlkjihgfedcba\"",
+          "expectedOutput": "26",
+          "orderMatters": true
+        },
+        {
+          "id": "e45c345d-2381-473e-aeae-1b5e2dc9006a",
+          "input": "s = \"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz\"",
+          "expectedOutput": "26",
+          "orderMatters": true
+        },
+        {
+          "id": "81242ca4-c543-42b3-bcfd-2aa7e93ec92b",
+          "input": "s = \"aaaaaaaaaaaaaaaaaaaaaa\"",
+          "expectedOutput": "1",
+          "orderMatters": true
+        },
+        {
+          "id": "343eced1-3e25-4583-bc35-d00ae2125c5c",
+          "input": "s = \"ababababababababababab\"",
+          "expectedOutput": "2",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "maximum-average-subarray-i",
+      "leetCodeNumber": 643,
+      "difficulty": "easy",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "a283e203-7657-4ca4-acd2-05fb4f6cd111",
+          "input": "nums = [1], k = 1",
+          "expectedOutput": "1.0",
+          "orderMatters": true
+        },
+        {
+          "id": "100a6cc6-c41e-4461-9646-6f4e48f55245",
+          "input": "nums = [1, 2], k = 1",
+          "expectedOutput": "2.0",
+          "orderMatters": true
+        },
+        {
+          "id": "059ed2d5-bc9a-4d2a-bec9-1b70fd583a51",
+          "input": "nums = [1, 2], k = 2",
+          "expectedOutput": "1.5",
+          "orderMatters": true
+        },
+        {
+          "id": "f8b435b2-da38-4dce-94c8-a39abf618263",
+          "input": "nums = [1, 2, 3], k = 1",
+          "expectedOutput": "3.0",
+          "orderMatters": true
+        },
+        {
+          "id": "3a371c62-9698-42fd-bea6-415171cc7afd",
+          "input": "nums = [1, 2, 3], k = 2",
+          "expectedOutput": "2.5",
+          "orderMatters": true
+        },
+        {
+          "id": "0b931c85-dc70-4e53-8dc5-1b69e347fc82",
+          "input": "nums = [1, 2, 3], k = 3",
+          "expectedOutput": "2.0",
+          "orderMatters": true
+        },
+        {
+          "id": "fa01e204-5f8c-4cb6-9a38-373d501ea595",
+          "input": "nums = [1, 1, 1], k = 1",
+          "expectedOutput": "1.0",
+          "orderMatters": true
+        },
+        {
+          "id": "70befc84-75d1-4522-8194-9f8bb0de40e4",
+          "input": "nums = [1, 1, 1], k = 2",
+          "expectedOutput": "1.0",
+          "orderMatters": true
+        },
+        {
+          "id": "b451ae93-e8a5-4003-9805-e99960adac23",
+          "input": "nums = [1, 1, 1], k = 3",
+          "expectedOutput": "1.0",
+          "orderMatters": true
+        },
+        {
+          "id": "125383c6-c44c-40e4-a52f-a93cabbdba3a",
+          "input": "nums = [-1, -2, -3], k = 1",
+          "expectedOutput": "-1.0",
+          "orderMatters": true
+        },
+        {
+          "id": "25978e08-df33-437d-b4b5-d873e902847e",
+          "input": "nums = [-1, -2, -3], k = 2",
+          "expectedOutput": "-1.5",
+          "orderMatters": true
+        },
+        {
+          "id": "09d8e8e7-13b9-49eb-8c51-d1c3b1e2c75d",
+          "input": "nums = [-1, -2, -3], k = 3",
+          "expectedOutput": "-2.0",
+          "orderMatters": true
+        },
+        {
+          "id": "621c8799-df22-415f-b889-b8c9b37cf0b0",
+          "input": "nums = [10, 20, 30], k = 1",
+          "expectedOutput": "30.0",
+          "orderMatters": true
+        },
+        {
+          "id": "4724ca27-477b-474f-945b-8c8b7f725418",
+          "input": "nums = [10, 20, 30], k = 2",
+          "expectedOutput": "25.0",
+          "orderMatters": true
+        },
+        {
+          "id": "1f1c9377-0c9d-4d86-928c-7c340303a64e",
+          "input": "nums = [10, 20, 30], k = 3",
+          "expectedOutput": "20.0",
+          "orderMatters": true
+        },
+        {
+          "id": "6d678ac9-13e1-4cc5-90e5-3eb97b903269",
+          "input": "nums = [1000, 2000, 3000], k = 1",
+          "expectedOutput": "3000.0",
+          "orderMatters": true
+        },
+        {
+          "id": "1fe3a2dd-f68b-4506-af75-1d7e83ff67c2",
+          "input": "nums = [1000, 2000, 3000], k = 2",
+          "expectedOutput": "2500.0",
+          "orderMatters": true
+        },
+        {
+          "id": "d263efba-0db8-4c77-b363-5219f230b4cd",
+          "input": "nums = [1000, 2000, 3000], k = 3",
+          "expectedOutput": "2000.0",
+          "orderMatters": true
+        },
+        {
+          "id": "328e2505-f92a-40ac-bc0a-34c93ff54fb3",
+          "input": "nums = [1, 2, 3, 4, 5], k = 1",
+          "expectedOutput": "5.0",
+          "orderMatters": true
+        },
+        {
+          "id": "7b29a38d-a7dd-4244-8de7-6aad31538622",
+          "input": "nums = [1, 2, 3, 4, 5], k = 2",
+          "expectedOutput": "4.5",
+          "orderMatters": true
+        },
+        {
+          "id": "17271c49-c425-4640-b240-9c407f4e0512",
+          "input": "nums = [1, 2, 3, 4, 5], k = 5",
+          "expectedOutput": "3.0",
+          "orderMatters": true
+        },
+        {
+          "id": "78fd1463-c672-435d-bf5a-06aa9b8e10b7",
+          "input": "nums = [5, 4, 3, 2, 1], k = 1",
+          "expectedOutput": "5.0",
+          "orderMatters": true
+        },
+        {
+          "id": "ef644cae-e6d6-4879-947b-6152d2ff1d79",
+          "input": "nums = [5, 4, 3, 2, 1], k = 2",
+          "expectedOutput": "4.5",
+          "orderMatters": true
+        },
+        {
+          "id": "77538d0a-12a3-4057-859d-e935883b24a4",
+          "input": "nums = [5, 4, 3, 2, 1], k = 3",
+          "expectedOutput": "4.0",
+          "orderMatters": true
+        },
+        {
+          "id": "f8647524-0786-4c87-8370-9a33843d922a",
+          "input": "nums = [5, 4, 3, 2, 1], k = 4",
+          "expectedOutput": "3.5",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "minimum-window-substring",
+      "leetCodeNumber": 76,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "3fdb18fb-e690-4ee9-b935-8b2f5833e917",
+          "input": "s=\"a\", t=\"a\"",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "7be2cc2b-0a27-4e93-9bd4-1c6f38fbaa58",
+          "input": "s=\"aa\", t=\"a\"",
+          "expectedOutput": "a",
+          "orderMatters": true
+        },
+        {
+          "id": "ba4b6983-e0ba-43d7-ad3d-a2a53265ff47",
+          "input": "s=\"ab\", t=\"b\"",
+          "expectedOutput": "b",
+          "orderMatters": true
+        },
+        {
+          "id": "c5b8a099-9aa5-449e-9f38-9b817e802d20",
+          "input": "s=\"abc\", t=\"bc\"",
+          "expectedOutput": "bc",
+          "orderMatters": true
+        },
+        {
+          "id": "89d09188-4f67-44ac-b35c-352b779d7610",
+          "input": "s=\"abcd\", t=\"cd\"",
+          "expectedOutput": "cd",
+          "orderMatters": true
+        },
+        {
+          "id": "f8d5afdb-efe6-4700-a574-4df706c3947e",
+          "input": "s=\"abcde\", t=\"cde\"",
+          "expectedOutput": "cde",
+          "orderMatters": true
+        },
+        {
+          "id": "b5a107fd-4197-4470-8ab7-a697789a6472",
+          "input": "s=\"abcdef\", t=\"def\"",
+          "expectedOutput": "def",
+          "orderMatters": true
+        },
+        {
+          "id": "d698b241-73c7-4108-8470-5df261aa39dd",
+          "input": "s=\"abcdefg\", t=\"efg\"",
+          "expectedOutput": "efg",
+          "orderMatters": true
+        },
+        {
+          "id": "be8b48e1-4d3c-4b5f-ac18-3611ca732e58",
+          "input": "s=\"abcdefgh\", t=\"fgh\"",
+          "expectedOutput": "fgh",
+          "orderMatters": true
+        },
+        {
+          "id": "9cc38454-7b89-41a8-b075-85a45245cda6",
+          "input": "s=\"abcdefghi\", t=\"ghi\"",
+          "expectedOutput": "ghi",
+          "orderMatters": true
+        },
+        {
+          "id": "4486768b-a452-4838-9814-4c0b27f5a93d",
+          "input": "s=\"abcdefghij\", t=\"hij\"",
+          "expectedOutput": "hij",
+          "orderMatters": true
+        },
+        {
+          "id": "64570357-7e44-4acb-a3ff-afa3e8218793",
+          "input": "s=\"aaa\", t=\"aa\"",
+          "expectedOutput": "aa",
+          "orderMatters": true
+        },
+        {
+          "id": "f106beeb-f248-4d99-86ab-aac8f28c0dc6",
+          "input": "s=\"aaaa\", t=\"aaa\"",
+          "expectedOutput": "aaa",
+          "orderMatters": true
+        },
+        {
+          "id": "3ee3cbf2-1a99-4e62-81a7-ff987a6bc611",
+          "input": "s=\"aaaaa\", t=\"aaaa\"",
+          "expectedOutput": "aaaa",
+          "orderMatters": true
+        },
+        {
+          "id": "3cc4128b-4b51-4b3b-9a7f-6b705e2deeda",
+          "input": "s=\"ababab\", t=\"abab\"",
+          "expectedOutput": "abab",
+          "orderMatters": true
+        },
+        {
+          "id": "a6267722-09a4-40c8-85a6-2ccf7ad41de5",
+          "input": "s=\"abababa\", t=\"ababa\"",
+          "expectedOutput": "ababa",
+          "orderMatters": true
+        },
+        {
+          "id": "b09e56db-27d6-4ca0-984a-a0e7d5e2a486",
+          "input": "s=\"abababab\", t=\"ababab\"",
+          "expectedOutput": "ababab",
+          "orderMatters": true
+        },
+        {
+          "id": "725059e8-fe65-407d-bd59-0ef1ba976ffa",
+          "input": "s=\"abcabcabc\", t=\"abcabc\"",
+          "expectedOutput": "abcabc",
+          "orderMatters": true
+        },
+        {
+          "id": "ddd7896a-0437-4785-8b8e-1144d74a6caf",
+          "input": "s=\"abcabcabcd\", t=\"abcabcd\"",
+          "expectedOutput": "abcabcd",
+          "orderMatters": true
+        },
+        {
+          "id": "0f0b104b-2a0e-4895-887a-8e6266ffbc0a",
+          "input": "s=\"abcdabcdabcd\", t=\"abcdabcd\"",
+          "expectedOutput": "abcdabcd",
+          "orderMatters": true
+        },
+        {
+          "id": "68d17c86-ef0f-4fab-afdb-d8af74c72352",
+          "input": "s=\"abcdeabcde\", t=\"abcde\"",
+          "expectedOutput": "abcde",
+          "orderMatters": true
+        },
+        {
+          "id": "0213eef0-5b74-4fb9-a419-77a098c541d0",
+          "input": "s=\"abcdefabcdef\", t=\"abcdef\"",
+          "expectedOutput": "abcdef",
+          "orderMatters": true
+        },
+        {
+          "id": "eb4d3af9-f703-4307-b061-fd34f7c172c7",
+          "input": "s=\"abcdefghabcdefgh\", t=\"abcdefgh\"",
+          "expectedOutput": "abcdefgh",
+          "orderMatters": true
+        },
+        {
+          "id": "2f783151-7a6e-475c-b1dd-8770cd520b01",
+          "input": "s=\"abcdefghijabcdefghij\", t=\"abcdefghij\"",
+          "expectedOutput": "abcdefghij",
+          "orderMatters": true
+        },
+        {
+          "id": "a9ce62df-4c34-4035-9e45-42c3dacf2fdc",
+          "input": "s=\"abcdefghijklmnopqrstuvwxyz\", t=\"abcdefghijklmnopqrstuvwxyz\"",
+          "expectedOutput": "abcdefghijklmnopqrstuvwxyz",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "permutation-in-string",
+      "leetCodeNumber": 567,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "E85635DA-4BD1-4E8F-BB4B-A3D71B8015A4",
+          "input": "ab\neidbaooo",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "18E3A10A-D5B9-42A2-A1E8-80FC763E21D1",
+          "input": "ab\neidboaoo",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "0EF81D59-E277-4324-8A82-CCDEEDAC9A44",
+          "input": "a\na",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "5B8BF84E-759A-4ADB-8BDE-0781356B9936",
+          "input": "abc\ncab",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "13CD5680-4755-427E-A10C-DB374562F0E8",
+          "input": "abc\ncba",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "E363B8CA-29FD-4430-8587-AE071892C976",
+          "input": "abc\ndefabc",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "3E92A8F3-5FDD-4E65-932B-9A813D6C8F30",
+          "input": "abcd\nefgh",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "203B03CB-D575-4CD8-BE92-D72C583E61DF",
+          "input": "abcdefgh\nhgfedcba",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "D0110CC8-CCCB-4ACE-9F14-25E5BC4691FE",
+          "input": "abcdefgh\nabcdeff",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "A3014604-05F6-4D8D-B8D0-EB97BD8E068E",
+          "input": "abcdefgh\nhgfedcbah",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "7B1B5104-6307-4A46-B9C1-240FFBE17805",
+          "input": "abcdefghij\njihgfedcba",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "2F55A705-6455-486D-A0E9-27CCFFF1424C",
+          "input": "abcdefghij\nhgfedcbaij",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "F0F6C1A3-2CDC-4781-A3B1-2819C548CBB8",
+          "input": "abcdefghij\nhgfedcbaix",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "CA5EB777-D73B-43E6-B36F-937566E45EAF",
+          "input": "abcdefghijk\nkjihgfedcba",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "4AC9DFB8-74A5-426B-B9A3-82C687363692",
+          "input": "abcdefghijk\nabcdefghxj",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "372F9C1D-7D45-47D1-AD5D-C692F268E9CB",
+          "input": "abcdefghijkm\nkjihgfedcbax",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "7903A0F2-3C5B-4469-9423-3CB8506DF6DC",
+          "input": "abcdefgh\naa",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "E49F694C-D6C9-4DCD-8447-99FCAC1B47F4",
+          "input": "aa\nabcdefgh",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "F49535B1-E0EB-4FAB-9877-1F529F679645",
+          "input": "abcdefabcdef\nabcdefabcdef",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "C08718CB-AEBB-4B77-92B8-1DD8E0673D73",
+          "input": "abcdefabcdef\nabcdefabcd",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "0D7C2423-AEFE-4328-8D52-05E6611FE839",
+          "input": "abcdefghij\nabcdefgh",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "3840B508-A139-4C56-ACA8-FCB49C3627DA",
+          "input": "abcdefghabcdefgh\nabcdefgh",
+          "expectedOutput": "false",
+          "orderMatters": true
+        },
+        {
+          "id": "9E38971D-22E8-4E28-B77D-2EEC54C351EB",
+          "input": "eidbaooo",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "0A1BAEE7-934F-43B3-B9AE-9725CECC18EF",
+          "input": "abc\ncbabad",
+          "expectedOutput": "true",
+          "orderMatters": true
+        },
+        {
+          "id": "DD3978F7-6D5B-42FE-A0AE-DB289677E42B",
+          "input": "abc\ncbbad",
+          "expectedOutput": "false",
+          "orderMatters": true
+        }
+      ]
+    },
+    {
+      "problemSlug": "sliding-window-maximum",
+      "leetCodeNumber": 239,
+      "difficulty": "medium",
+      "testCaseCount": 25,
+      "testCases": [
+        {
+          "id": "22ae1065-a380-411d-898d-23d1297263ec",
+          "input": "nums = [1,2,3], k = 1",
+          "expectedOutput": "[1,2,3]",
+          "orderMatters": true
+        },
+        {
+          "id": "82e8eead-1c08-49c5-8f75-7eeb5e858307",
+          "input": "nums = [1,2,3], k = 2",
+          "expectedOutput": "[2,3]",
+          "orderMatters": true
+        },
+        {
+          "id": "30c59262-a1a0-49ef-aa80-7214df05e0c2",
+          "input": "nums = [1,2,3], k = 3",
+          "expectedOutput": "[3]",
+          "orderMatters": true
+        },
+        {
+          "id": "ca842ae7-329a-441c-acc6-4983459dee43",
+          "input": "nums = [], k = 1",
+          "expectedOutput": "[]",
+          "orderMatters": true
+        },
+        {
+          "id": "a5a77dc4-f1a7-43a7-828a-fb3a0af0f475",
+          "input": "nums = [1], k = 1",
+          "expectedOutput": "[1]",
+          "orderMatters": true
+        },
+        {
+          "id": "edac511d-ed4c-4f06-b4fc-8e09d2a0416e",
+          "input": "nums = [1,2,3,4,5], k = 5",
+          "expectedOutput": "[5]",
+          "orderMatters": true
+        },
+        {
+          "id": "71f09af3-cf0f-4232-9450-3ea3b17bdab0",
+          "input": "nums = [5,4,3,2,1], k = 1",
+          "expectedOutput": "[5,4,3,2,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "ea6cdc1b-46e3-4755-9c96-63134a7d6418",
+          "input": "nums = [1,1,1,1,1], k = 3",
+          "expectedOutput": "[1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "7f953db2-9009-432f-9cd8-c68c7dc9a7c0",
+          "input": "nums = [-1,-2,-3,-4,-5], k = 2",
+          "expectedOutput": "[-1,-2,-3,-4]",
+          "orderMatters": true
+        },
+        {
+          "id": "945a13a0-465d-4ae1-be37-82b6047cc460",
+          "input": "nums = [1,2,3,4,5], k = 1",
+          "expectedOutput": "[1,2,3,4,5]",
+          "orderMatters": true
+        },
+        {
+          "id": "2f7c395b-f600-480e-b069-8390cbb82ae0",
+          "input": "nums = [10,20,30,40,50], k = 3",
+          "expectedOutput": "[30,40,50]",
+          "orderMatters": true
+        },
+        {
+          "id": "fb56ca61-c5dc-47f1-8c26-3c0938c0a74e",
+          "input": "nums = [1,3,5,7,9], k = 2",
+          "expectedOutput": "[3,5,7,9]",
+          "orderMatters": true
+        },
+        {
+          "id": "a71738bf-4f6f-4e00-9c45-54dfd1c3969a",
+          "input": "nums = [1,1,1,1,1], k = 5",
+          "expectedOutput": "[1]",
+          "orderMatters": true
+        },
+        {
+          "id": "c1832a6c-938e-408d-bf03-2ec9669a574f",
+          "input": "nums = [1,-1,1,-1,1], k = 2",
+          "expectedOutput": "[1,1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "c256f877-a134-4bd4-bb77-959f72432ea0",
+          "input": "nums = [10,-10,10,-10,10], k = 3",
+          "expectedOutput": "[10,10,10]",
+          "orderMatters": true
+        },
+        {
+          "id": "51f0bf4f-abe7-4466-8e2f-fb063e72c240",
+          "input": "nums = [1000,2000,3000,4000,5000], k = 1",
+          "expectedOutput": "[1000,2000,3000,4000,5000]",
+          "orderMatters": true
+        },
+        {
+          "id": "77a0123e-00bc-4669-acb3-c84b236156de",
+          "input": "nums = [1,2,3,4,5,6,7,8,9,10], k = 5",
+          "expectedOutput": "[5,6,7,8,9,10]",
+          "orderMatters": true
+        },
+        {
+          "id": "8a4d08a1-de01-429f-a059-830a552636c3",
+          "input": "nums = [1,1,1,1,1,1,1,1,1,1], k = 10",
+          "expectedOutput": "[1]",
+          "orderMatters": true
+        },
+        {
+          "id": "bed36666-b3bf-46fe-9fad-de8b3e9d91f7",
+          "input": "nums = [1,2,3,4,5,6,7,8,9,10], k = 10",
+          "expectedOutput": "[10]",
+          "orderMatters": true
+        },
+        {
+          "id": "ab7e3947-1f16-4009-a3fb-2bff9b342502",
+          "input": "nums = [10,20,30,40,50,60,70,80,90,100], k = 5",
+          "expectedOutput": "[50,60,70,80,90,100]",
+          "orderMatters": true
+        },
+        {
+          "id": "82146af5-1f95-4e49-b619-d5756d14f8c7",
+          "input": "nums = [1,2,3,4,5,6,7,8,9,10], k = 1",
+          "expectedOutput": "[1,2,3,4,5,6,7,8,9,10]",
+          "orderMatters": true
+        },
+        {
+          "id": "286ea971-0948-4693-a9f2-6e9b6d9128ac",
+          "input": "nums = [10,9,8,7,6,5,4,3,2,1], k = 1",
+          "expectedOutput": "[10,9,8,7,6,5,4,3,2,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "7af2cb72-db1b-45ee-a238-8c9a52c6b780",
+          "input": "nums = [1,1,1,1,1,1,1,1,1,1], k = 1",
+          "expectedOutput": "[1,1,1,1,1,1,1,1,1,1]",
+          "orderMatters": true
+        },
+        {
+          "id": "f7bdcf1a-217d-42f5-b7d3-14957b2aa062",
+          "input": "nums = [10,20,30,40,50,60,70,80,90,100], k = 1",
+          "expectedOutput": "[10,20,30,40,50,60,70,80,90,100]",
+          "orderMatters": true
+        },
+        {
+          "id": "656ec9ac-f423-4f11-9fcd-1bd8dcb6d0f2",
+          "input": "nums = [100,200,300,400,500,600,700,800,900,1000], k = 5",
+          "expectedOutput": "[500,600,700,800,900,1000]",
+          "orderMatters": true
+        }
+      ]
+    }
+  ]
+}

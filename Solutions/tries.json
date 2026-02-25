@@ -1,0 +1,607 @@
+{
+  "solutions": [
+    {
+      "approaches": [
+        {
+          "approach": "1. addWord inserts into a trie.\n2. search uses DFS: if char is dot, try all children; otherwise follow the matching child.\n3. If end of word, require node.isEnd.",
+          "code": "class Solution {\n    class WordDictionary {\n\n\n        private let root = Node()\n\n        func addWord(_ word: String) {\n            var node = root\n            for char in word {\n                let index = Int(char.asciiValue! - Character(\"a\").asciiValue!)\n                if node.children[index] == nil {\n                    node.children[index] = Node()\n                }\n                node = node.children[index]!\n            }\n            node.isEnd = true\n        }\n\n        func search(_ word: String) -> Bool {\n            let chars = Array(word)\n            func dfs(_ node: Node?, _ i: Int) -> Bool {\n                guard let node = node else { return false }\n                if i == chars.count { return node.isEnd }\n                let c = chars[i]\n                if c == \".\" {\n                    for child in node.children {\n                        if dfs(child, i + 1) { return true }\n                    }\n                    return false\n                }\n                let index = Int(c.asciiValue! - Character(\"a\").asciiValue!)\n                return dfs(node.children[index], i + 1)\n            }\n            return dfs(root, 0)\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(total chars)",
+            "spaceExplanation": "Trie stores all inserted characters",
+            "time": "O(L) average, O(26^L) worst",
+            "timeExplanation": "Wildcards can branch across children in the worst case"
+          },
+          "explanation": "The trie compresses shared prefixes, and DFS handles the wildcard branching only when needed.",
+          "id": "1439dfbb-c19a-451d-a4df-44f0ed92869e",
+          "intuition": "A dot can match any child, so search must branch when encountering a dot.",
+          "name": "Trie + DFS Wildcard",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[null,null,null,null,false,true,true,true]",
+              "explanation": "Wildcards match any letter (\".ad\" matches bad/dad/mad).",
+              "id": "528c7f9f-bd8d-46d8-8e95-c313e0b4b2e1",
+              "input": "[\"WordDictionary\",\"addWord\",\"addWord\",\"addWord\",\"search\",\"search\",\"search\",\"search\"]\n[[],[\"bad\"],[\"dad\"],[\"mad\"],[\"pad\"],[\"bad\"],[\".ad\"],[\"b..\"]]"
+            }
+          ]
+        }
+      ],
+      "id": "5c72dc35-6d92-4233-8cab-5483ab374461",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "design-add-and-search-words-data-structure",
+      "relatedProblems": [
+        "implement-trie-prefix-tree",
+        "word-search-ii"
+      ],
+      "summary": "Use a trie with DFS to support wildcard dots in search while keeping addWord efficient."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each search query, iterate through all words in the dictionary and count the number of different characters.",
+          "code": "class Solution {\n    class MagicDictionary {\n        var dictionary: [String] = []\n        func buildDictionary(_ dictionary: [String]) {\n            self.dictionary = dictionary\n        }\n        func search(_ searchWord: String) -> Bool {\n            for word in dictionary {\n                if word.count == searchWord.count {\n                    var diff = 0\n                    for (i, char) in searchWord.enumerated() {\n                        if word[i] != char {\n                            diff += 1\n                        }\n                    }\n                    if diff == 1 {\n                        return true\n                    }\n                }\n            }\n            return false\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Where n is the number of words.",
+            "time": "O(n*m)",
+            "timeExplanation": "Where n is the number of words and m is the length of the words."
+          },
+          "explanation": "This approach involves checking every word in the dictionary for each search query which can be slow for large dictionaries.",
+          "id": "76e8eff2-0896-431e-b2c0-b844916a6472",
+          "intuition": "This approach works by iterating through each word in the dictionary and checking if it differs by only one character from the target word.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "false",
+              "explanation": "Because there is no word in the dictionary that differs from \"hello\" by only one character.",
+              "id": "deb2ee84-39d4-4b2d-969a-5cd518c84947",
+              "input": "MagicDictionary().buildDictionary([\"hello\",\"leetcode\"]).search(\"hello\")"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "Because \"hell\" has a different length than the words in the dictionary.",
+              "id": "a21961ac-6a64-4d3c-a860-ed4fe4646380",
+              "input": "MagicDictionary().buildDictionary([\"hello\",\"leetcode\"]).search(\"hell\")"
+            }
+          ]
+        },
+        {
+          "approach": "Build a Trie from the dictionary and then for each search query traverse the Trie and count the number of different characters.",
+          "code": "class Solution {\n    class TrieNode {\n        var children: [Character: TrieNode] = [:]\n        var isEndOfWord = false\n    }\n    class MagicDictionary {\n        var root: TrieNode = TrieNode()\n        func buildDictionary(_ dictionary: [String]) {\n            for word in dictionary {\n                var node = root\n                for char in word {\n                    if node.children[char] == nil {\n                        node.children[char] = TrieNode()\n                    }\n                    node = node.children[char]!\n                }\n                node.isEndOfWord = true\n            }\n        }\n        func search(_ searchWord: String) -> Bool {\n            return searchFromNode(root, searchWord, 0, 0)\n        }\n        func searchFromNode(_ node: TrieNode, _ word: String, _ index: Int, _ diff: Int) -> Bool {\n            if index == word.count {\n                return diff == 1 && node.isEndOfWord\n            }\n            if diff > 1 {\n                return false\n            }\n            for (char, childNode) in node.children {\n                if char == word[word.index(word.startIndex, offsetBy: index)] {\n                    if searchFromNode(childNode, word, index + 1, diff) {\n                        return true\n                    }\n                }\n                else {\n                    if searchFromNode(childNode, word, index + 1, diff + 1) {\n                        return true\n                    }\n                }\n            }\n            return false\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n*m)",
+            "spaceExplanation": "Where n is the number of words and m is the length of the words.",
+            "time": "O(26^m)",
+            "timeExplanation": "Where m is the length of the words."
+          },
+          "explanation": "The Trie allows for fast lookup of words and checking if a word differs by only one character is done by traversing the Trie and counting the differences.",
+          "id": "b675348c-db09-40a9-8f72-a92b944ea5f8",
+          "intuition": "This approach works by using a Trie data structure to store the words, allowing for efficient search.",
+          "name": "Trie",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "false",
+              "explanation": "Because there is no word in the dictionary that differs from \"hello\" by only one character.",
+              "id": "6e695343-e220-4ba6-9007-563804b6abcb",
+              "input": "MagicDictionary().buildDictionary([\"hello\",\"leetcode\"]).search(\"hello\")"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "Because \"hell\" has a different length than the words in the dictionary.",
+              "id": "47108b48-d067-479e-b4de-c657813e558c",
+              "input": "MagicDictionary().buildDictionary([\"hello\",\"leetcode\"]).search(\"hell\")"
+            }
+          ]
+        }
+      ],
+      "id": "548bbc5b-7875-41eb-8b1e-0f36b827cfe1",
+      "lastUpdated": "2026-02-06T21:33:05Z",
+      "problemSlug": "implement-magic-dictionary",
+      "relatedProblems": [
+        "implement-trie-prefix-tree",
+        "add-and-search-word-data-structure-design"
+      ],
+      "summary": "Implement Magic Dictionary is a problem about designing a dictionary that supports search and building with given words, key insight is to use a Trie for optimized solution."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Insert: create missing children for each character, then mark end.\n2. Search: walk characters and ensure end marker.\n3. StartsWith: walk characters and ensure path exists.",
+          "code": "class Solution {\n    class Trie {\n\n\n        private let root = Node()\n\n        func insert(_ word: String) {\n            var node = root\n            for char in word {\n                let index = Int(char.asciiValue! - Character(\"a\").asciiValue!)\n                if node.children[index] == nil {\n                    node.children[index] = Node()\n                }\n                node = node.children[index]!\n            }\n            node.isEnd = true\n        }\n\n        func search(_ word: String) -> Bool {\n            guard let node = walk(word) else { return false }\n            return node.isEnd\n        }\n\n        func startsWith(_ prefix: String) -> Bool {\n            return walk(prefix) != nil\n        }\n\n        private func walk(_ word: String) -> Node? {\n            var node: Node? = root\n            for char in word {\n                let index = Int(char.asciiValue! - Character(\"a\").asciiValue!)\n                node = node?.children[index]\n                if node == nil { return nil }\n            }\n            return node\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(total chars)",
+            "spaceExplanation": "Trie stores one node per character inserted",
+            "time": "O(L)",
+            "timeExplanation": "Each operation scans L characters"
+          },
+          "explanation": "All operations traverse at most L nodes where L is the word length.",
+          "id": "d23ec3a2-765a-4364-9cac-9fe8c9c8b47f",
+          "intuition": "Each node keeps 26 children for a-z. Walking characters from the root visits the prefix path.",
+          "name": "Array-Backed Trie",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[null,null,true,false,true,null,true]",
+              "explanation": "search(\"app\") is false before inserting \"app\" and true afterward.",
+              "id": "d5b74d5e-0be1-4a54-9b51-b831e8f9a06b",
+              "input": "[\"Trie\",\"insert\",\"search\",\"search\",\"startsWith\",\"insert\",\"search\"]\n[[],[\"apple\"],[\"apple\"],[\"app\"],[\"app\"],[\"app\"],[\"app\"]]"
+            }
+          ]
+        }
+      ],
+      "id": "5631cebc-4b66-43d6-b7a3-e5cceade37a0",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "implement-trie-prefix-tree",
+      "relatedProblems": [
+        "design-add-and-search-words-data-structure",
+        "word-search-ii"
+      ],
+      "summary": "Store characters in a trie so insert/search/startsWith all run in time proportional to the word length."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, generate numbers from 1 to n. Then, convert these numbers to strings and sort them. The sorted array will be in lexicographical order.",
+          "code": "class Solution {\n    func lexicalOrder(_ n: Int) -> [Int] { let strNums = (1...n).map { String($0) }; let sortedStrNums = strNums.sorted(); return sortedStrNums.map { Int($0)! } }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) as we need to store all numbers from 1 to n.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity is O(n log n) due to the sorting operation."
+          },
+          "explanation": "For example, if n is 13, generate numbers from 1 to 13, convert them to strings, and sort these strings. The result will be [\"1\", \"10\", \"11\", \"12\", \"13\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"8\", \"9\"] which is the lexicographical order.",
+          "id": "b9751804-5fc5-4a83-8ad4-81441d9fa2e5",
+          "intuition": "This approach involves directly generating numbers from 1 to n and sorting them as strings to achieve lexicographical order.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,10,11,12,13,2,3,4,5,6,7,8,9]",
+              "explanation": "The lexicographical order for numbers 1 to 13.",
+              "id": "638e24b5-6006-4213-a586-bce02adc239a",
+              "input": "n = 13"
+            },
+            {
+              "expectedOutput": "[1,10,11,12,13,14,15,16,17,18,19,2,20,3,4,5,6,7,8,9]",
+              "explanation": "The lexicographical order for numbers 1 to 20.",
+              "id": "70f8b514-88a2-4b20-bffc-a9c007f4bb59",
+              "input": "n = 20"
+            }
+          ]
+        },
+        {
+          "approach": "Start with the number 1, and then explore all possible next numbers in lexicographical order by appending digits from 0 to 9 and ensuring the resulting number does not exceed n.",
+          "code": "class Solution {\n    func lexicalOrder(_ n: Int) -> [Int] { var result = [Int](); func dfs(_ current: Int) { if current <= n { result.append(current); let next = current * 10; if next <= n { for i in 0...9 { dfs(next + i) } } } }; dfs(1); return result }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) for storing the result and the recursion stack in the worst case.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we potentially visit each number once."
+          },
+          "explanation": "For example, starting with 1, the next numbers in lexicographical order would be 10, 11, and so on, until reaching the given limit n.",
+          "id": "a0cf4fe3-7c61-44f4-9829-6a5d7d370597",
+          "intuition": "This approach involves using a depth-first search strategy to directly generate numbers in lexicographical order without needing to sort.",
+          "name": "Optimized DFS",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1,10,11,12,13,2,3,4,5,6,7,8,9]",
+              "explanation": "The lexicographical order for numbers 1 to 13.",
+              "id": "46e2e6bd-70bb-4514-85ac-48ace940f649",
+              "input": "n = 13"
+            },
+            {
+              "expectedOutput": "[1,2]",
+              "explanation": "The lexicographical order for numbers 1 to 2.",
+              "id": "56b1cebf-5ab6-47aa-81cd-2f5a4be53319",
+              "input": "n = 2"
+            }
+          ]
+        }
+      ],
+      "id": "06199c3b-0d8a-443c-a53a-376549ec40ae",
+      "lastUpdated": "2026-02-06T21:15:34Z",
+      "problemSlug": "lexicographical-numbers",
+      "relatedProblems": [
+        "integer-replacement",
+        "ugly-number-ii"
+      ],
+      "summary": "The problem requires generating lexicographical numbers from 1 to n, where n is a given input. The key insight is to utilize a depth-first search approach or a simple iterative method to produce these numbers in lexicographical order."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Sort the list of words by their lengths. Iterate over each word in the sorted list. For each word, generate all possible substrings and check if they exist in the list of words.",
+          "code": "class Solution {\n    import Foundation\n\n    func longestWord(_ words: [String]) -> String {\n        let sortedWords = words.sorted { $0.count < $1.count }\n        var wordSet: Set<String> = []\n        var longestWord = \"\"\n\n        for word in sortedWords {\n            if word.count == 1 {\n                wordSet.insert(word)\n                if word.count > longestWord.count {\n                    longestWord = word\n                }\n            } else {\n                var isFormed = true\n                for i in 1...word.count {\n                    let substring = String(word.prefix(i))\n                    if !wordSet.contains(substring) {\n                        isFormed = false\n                        break\n                    }\n                }\n                if isFormed {\n                    wordSet.insert(word)\n                    if word.count > longestWord.count {\n                        longestWord = word\n                    }\n                }\n            }\n        }\n        return longestWord\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we are storing the list of words in a set for efficient lookups.",
+            "time": "O(n^3)",
+            "timeExplanation": "The time complexity is O(n^3) because we are iterating over the list of words, and for each word, we are generating all possible substrings and checking if they exist in the list of words."
+          },
+          "explanation": "The brute-force approach is straightforward but inefficient. It checks all possible substrings for each word, resulting in a high time complexity.",
+          "id": "1e7b4d77-c17a-4d0e-b809-d32ac5aeb27a",
+          "intuition": "This approach involves checking for each word in the list if it can be formed from other words. We can achieve this by generating all possible substrings of the current word and checking if they exist in the list of words.",
+          "name": "Brute-Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "\"word\"",
+              "explanation": "The longest word that can be formed from other words in the list is \"word\".",
+              "id": "d2154af4-ef4f-466e-8265-580512c350e2",
+              "input": "words = [\"w\",\"wo\",\"wor\",\"word\"]"
+            },
+            {
+              "expectedOutput": "\"apple\"",
+              "explanation": "The longest word that can be formed from other words in the list is \"apple\".",
+              "id": "bc300315-b641-4511-bb54-d886ed0e5718",
+              "input": "words = [\"a\",\"banana\",\"app\",\"appl\",\"ap\",\"apply\",\"apple\"]"
+            }
+          ]
+        },
+        {
+          "approach": "Create a trie and insert all words into it. Then, for each word, traverse the trie and check if it can be formed from other words.",
+          "code": "class Solution {\n    import Foundation\n\n    class TrieNode {\n        var children: [Character: TrieNode] = [:]\n        var endOfWord: Bool = false\n    }\n\n    class Trie {\n        var root: TrieNode\n\n        init() {\n            root = TrieNode()\n        }\n\n        func insert(_ word: String) {\n            var node = root\n            for char in word {\n                if node.children[char] == nil {\n                    node.children[char] = TrieNode()\n                }\n                node = node.children[char]!\n            }\n            node.endOfWord = true\n        }\n\n        func search(_ word: String) -> Bool {\n            var node = root\n            for char in word {\n                if node.children[char] == nil {\n                    return false\n                }\n                node = node.children[char]!\n            }\n            return node.endOfWord\n        }\n    }\n\n    func longestWord(_ words: [String]) -> String {\n        let trie = Trie()\n        for word in words {\n            trie.insert(word)\n        }\n        var longestWord = \"\"\n        for word in words.sorted(by: { $0.count > $1.count }) {\n            var isFormed = true\n            for i in 1...word.count {\n                let substring = String(word.prefix(i))\n                if !trie.search(substring) {\n                    isFormed = false\n                    break\n                }\n            }\n            if isFormed {\n                longestWord = word\n                break\n            }\n        }\n        return longestWord\n    }\n}",
+          "complexity": {
+            "space": "O(n*m)",
+            "spaceExplanation": "The space complexity is O(n*m) because we are storing the trie, which can contain up to n*m nodes, where n is the number of words and m is the average length of a word.",
+            "time": "O(n*m)",
+            "timeExplanation": "The time complexity is O(n*m) because we are iterating over the list of words and for each word, we are inserting it into the trie and then searching for its substrings."
+          },
+          "explanation": "The trie-based approach is more efficient than the brute-force approach because it uses a trie data structure to store the words, resulting in a lower time complexity.",
+          "id": "0abc4c49-13e4-479c-bc1f-9039749e365d",
+          "intuition": "This approach involves using a trie data structure to store the words. We can then check for each word if it can be formed from other words by traversing the trie.",
+          "name": "Trie-Based",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "\"word\"",
+              "explanation": "The longest word that can be formed from other words in the list is \"word\".",
+              "id": "82dd6649-e3cc-4101-8cac-ec50e9c9104e",
+              "input": "words = [\"w\",\"wo\",\"wor\",\"word\"]"
+            },
+            {
+              "expectedOutput": "\"apple\"",
+              "explanation": "The longest word that can be formed from other words in the list is \"apple\".",
+              "id": "1811624a-d2f7-4109-882f-816b4200b5a8",
+              "input": "words = [\"a\",\"banana\",\"app\",\"appl\",\"ap\",\"apply\",\"apple\"]"
+            }
+          ]
+        }
+      ],
+      "id": "1dd3ff92-a783-4523-8c0c-7ed057b6054c",
+      "lastUpdated": "2026-02-06T21:35:54Z",
+      "problemSlug": "longest-word-in-dictionary",
+      "relatedProblems": [
+        "word-ladder",
+        "implement-trie-prefix-tree"
+      ],
+      "summary": "Given a list of strings which are all in lowercase, the task is to return the longest word that can be formed using other words from the list. The key insight here is to sort the list of words by their lengths and then check for each word if it can be formed from shorter words."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "To implement the brute-force approach, we need to maintain a map of key-value pairs. When the insert operation is called, we simply add the key-value pair to the map. When the sum operation is called, we iterate over all the keys in the map and check if the key starts with the given prefix. If it does, we add the value to the sum.",
+          "code": "class Solution {\n    class MapSum {\n        var map: [String: Int] = [:]\n\n        func insert(_ key: String, _ val: Int) {\n            map[key] = val\n        }\n\n        func sum(_ prefix: String) -> Int {\n            var sum = 0\n            for key in map.keys {\n                if key.startsWith(prefix) {\n                    sum += map[key] ?? 0\n                }\n            }\n            return sum\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) because we need to store all the key-value pairs in the map.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity of the insert operation is O(1) because we can add a key-value pair to the map in constant time. The time complexity of the sum operation is O(n) because we have to iterate over all the keys in the map."
+          },
+          "explanation": "The brute-force approach is straightforward but it can be slow for large maps because the sum operation has to iterate over all the keys in the map.",
+          "id": "87bb6756-a285-4deb-99b4-a8f4889509c4",
+          "intuition": "The brute-force approach works by iterating over all the keys in the map and checking if the key starts with the given prefix. This approach is simple but not efficient.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "We insert the key-value pair (\"apple\", 3) into the map. Then we call the sum operation with the prefix \"ap\". The sum operation returns 3 because \"apple\" starts with \"ap\".",
+              "id": "204e4507-cf90-4b6e-8201-8efcbae6ea62",
+              "input": "insert(\"apple\", 3), sum(\"ap\")"
+            },
+            {
+              "expectedOutput": "5",
+              "explanation": "We insert the key-value pairs (\"apple\", 3) and (\"app\", 2) into the map. Then we call the sum operation with the prefix \"ap\". The sum operation returns 5 because both \"apple\" and \"app\" start with \"ap\".",
+              "id": "72cae6c1-4083-479d-a2a1-e9f1d7125b43",
+              "input": "insert(\"apple\", 3), insert(\"app\", 2), sum(\"ap\")"
+            }
+          ]
+        },
+        {
+          "approach": "To implement the Trie approach, we need to maintain a Trie data structure. When the insert operation is called, we add the key-value pair to the Trie. When the sum operation is called, we traverse the Trie to find all the keys that start with the given prefix and add up their values.",
+          "code": "class Solution {\n    class TrieNode {\n        var children: [Character: TrieNode] = [:]\n        var value: Int = 0\n    }\n\n    class MapSum {\n        var root: TrieNode = TrieNode()\n        var map: [String: Int] = [:]\n\n        func insert(_ key: String, _ val: Int) {\n            let diff = val - (map[key] ?? 0)\n            map[key] = val\n            var node = root\n            for char in key {\n                if node.children[char] == nil {\n                    node.children[char] = TrieNode()\n                }\n                node = node.children[char]!\n                node.value += diff\n            }\n        }\n\n        func sum(_ prefix: String) -> Int {\n            var node = root\n            for char in prefix {\n                if node.children[char] == nil {\n                    return 0\n                }\n                node = node.children[char]!\n            }\n            return node.value\n        }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) where n is the total number of characters in all keys.",
+            "time": "O(m)",
+            "timeExplanation": "The time complexity of the insert operation is O(m) where m is the length of the key. The time complexity of the sum operation is O(m) where m is the length of the prefix."
+          },
+          "explanation": "The Trie approach is more efficient than the brute-force approach because it allows us to quickly find all the keys that start with a given prefix.",
+          "id": "b69ad335-7c6a-4832-853d-4aeb3c6d011c",
+          "intuition": "The Trie approach works by using a Trie data structure to store the key-value pairs. This approach is more efficient than the brute-force approach because it allows us to quickly find all the keys that start with a given prefix.",
+          "name": "Trie Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "We insert the key-value pair (\"apple\", 3) into the Trie. Then we call the sum operation with the prefix \"ap\". The sum operation returns 3 because \"apple\" starts with \"ap\".",
+              "id": "e35c83b5-b145-43bc-a2a4-00bb83f12c57",
+              "input": "insert(\"apple\", 3), sum(\"ap\")"
+            },
+            {
+              "expectedOutput": "5",
+              "explanation": "We insert the key-value pairs (\"apple\", 3) and (\"app\", 2) into the Trie. Then we call the sum operation with the prefix \"ap\". The sum operation returns 5 because both \"apple\" and \"app\" start with \"ap\".",
+              "id": "715cef12-652b-4d43-aac9-ec4fa39c9bdc",
+              "input": "insert(\"apple\", 3), insert(\"app\", 2), sum(\"ap\")"
+            }
+          ]
+        }
+      ],
+      "id": "8eb40287-3c17-4fc5-8ca3-b1cd4b9d0c0a",
+      "lastUpdated": "2026-02-06T21:33:10Z",
+      "problemSlug": "map-sum-pairs",
+      "relatedProblems": [
+        "trie-based-problems",
+        "hash-table-problems"
+      ],
+      "summary": "Design a class MapSum that supports two operations: insert and sum. Given a string key and a value, insert the key-value pair into the map. Given a non-empty string prefix, return the sum of values for all key-value pairs in the map where the key starts with the given prefix."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each word in the sentence, generate all prefixes and check if any of them exist in the list of words. If a prefix is found, replace the word with the prefix.",
+          "code": "class Solution {\n    let dictionary: [String] = [...]\n    let sentence: String = \"...\"\n    func replaceWords(_ dictionary: [String], _ sentence: String) -> String {\n        let words = sentence.components(separatedBy: \" \")\n        var result: [String] = []\n        for word in words {\n            for dictWord in dictionary {\n                if word.hasPrefix(dictWord) {\n                    result.append(dictWord)\n                    break\n                }\n            }\n            if result.count == words.count {\n                break\n            }\n            else if word != dictWord {\n                result.append(word)\n            }\n        }\n        return result.joined(separator: \" \")\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We need to store the result and potentially all words from the sentence and dictionary.",
+            "time": "O(n*m*k)",
+            "timeExplanation": "Where n is the number of words in the sentence, m is the number of words in the dictionary, and k is the average length of a word."
+          },
+          "explanation": "This approach involves a simple iteration over the sentence and the list of words but is inefficient due to its quadratic nature.",
+          "id": "13176d48-2c74-4910-b49a-adcdc50866e4",
+          "intuition": "This approach works by checking all possible prefixes of each word in the sentence against the given list of words to find the shortest matching prefix.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "the cat was rat by the bat",
+              "explanation": "Each word in the sentence is replaced by the shortest prefix that matches a word in the dictionary.",
+              "id": "3b842c82-3f4c-4dad-bc51-1eb1375abef9",
+              "input": "dictionary = [\"cat\",\"bat\",\"rat\"], sentence = \"the cattle was rattled by the battery\""
+            },
+            {
+              "expectedOutput": "a a b a",
+              "explanation": "Only exact matches are replaced with shorter prefixes if available.",
+              "id": "38584b07-1f57-4999-baf8-dfa31b38d811",
+              "input": "dictionary = [\"a\",\"b\",\"c\"], sentence = \"aadsfasf abbfa wef bbbbbbbbbbbbbb b bb a a\""
+            }
+          ]
+        },
+        {
+          "approach": "Build a Trie from the dictionary, then for each word in the sentence, traverse the Trie to find the shortest prefix that is a complete word in the Trie.",
+          "code": "class TrieNode {\n    var children: [Character: TrieNode] = [:]\n    var isWord: Bool = false\n}\nclass Solution {\n    func replaceWords(_ dictionary: [String], _ sentence: String) -> String {\n        let trie = TrieNode()\n        for word in dictionary {\n            var node = trie\n            for char in word {\n                if node.children[char] == nil {\n                    node.children[char] = TrieNode()\n                }\n                node = node.children[char]!\n            }\n            node.isWord = true\n        }\n        let words = sentence.components(separatedBy: \" \")\n        var result: [String] = []\n        for word in words {\n            var node = trie\n            var prefix = \"\"\n            for char in word {\n                prefix += String(char)\n                if node.children[char] == nil {\n                    break\n                }\n                node = node.children[char]!\n                if node.isWord {\n                    result.append(prefix)\n                    break\n                }\n            }\n            if !node.isWord {\n                result.append(word)\n            }\n        }\n        return result.joined(separator: \" \")\n    }\n}",
+          "complexity": {
+            "space": "O(m*k)",
+            "spaceExplanation": "Space is needed to store the Trie and the result.",
+            "time": "O(n*k + m*k)",
+            "timeExplanation": "Where n is the number of words in the sentence, and m is the number of words in the dictionary, and k is the average length of a word."
+          },
+          "explanation": "This approach significantly improves the lookup efficiency compared to the brute force method by leveraging the Trie data structure.",
+          "id": "9abbb29c-ee4a-418d-8463-3f5eaac1d694",
+          "intuition": "Using a Trie to store the dictionary words allows for efficient lookup of prefixes.",
+          "name": "Trie-Based Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "the cat was rat by the bat",
+              "explanation": "The Trie-based approach correctly replaces words with their shortest matching prefixes from the dictionary.",
+              "id": "29b7d560-42a9-4553-ad84-8b304b9d8873",
+              "input": "dictionary = [\"cat\",\"bat\",\"rat\"], sentence = \"the cattle was rattled by the battery\""
+            },
+            {
+              "expectedOutput": "a a b a",
+              "explanation": "The Trie efficiently stores the dictionary, allowing for quick lookup and replacement of prefixes.",
+              "id": "146acf78-6e2d-4793-a878-3d59d33c3ce2",
+              "input": "dictionary = [\"a\",\"b\",\"c\"], sentence = \"aadsfasf abbfa wef bbbbbbbbbbbbbb b bb a a\""
+            }
+          ]
+        }
+      ],
+      "id": "293af936-f165-48a1-963c-7da24eb661a3",
+      "lastUpdated": "2026-02-06T21:30:42Z",
+      "problemSlug": "replace-words",
+      "relatedProblems": [
+        "word-ladder",
+        "implement-trie-prefix-tree"
+      ],
+      "summary": "The problem involves building a Trie from a list of words and then replacing each word in a given sentence with the shortest prefix that exists in the Trie. The key insight here is to use a Trie data structure to efficiently store and query word prefixes."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start with an empty string, then try appending each word to the string and calculate the new length. Keep track of the minimum length and the corresponding encoding.",
+          "code": "import Foundation\n\nclass Solution {\n    func minimumLengthEncoding(_ words: [String]) -> Int {\n        var res: Int = 0\n        let sortedWords = words.sorted { $0.count > $1.count }\n        var result = \"\"\n        for word in sortedWords {\n            if result.range(of: word + \"#\") == nil {\n                result += word + \"#\"\n                res += word.count + 1\n            }\n        }\n        return res\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) where n is the total number of characters in all words.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity is O(n log n) due to sorting the words by length."
+          },
+          "explanation": "However, the brute force approach is inefficient as it has a high time complexity due to the numerous possible combinations of the words. A more efficient solution would utilize a Trie data structure.",
+          "id": "772a9d91-aa40-48f5-968b-dd706a56de19",
+          "intuition": "This approach tries all possible combinations of the given words and calculates the length of each possible encoding.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "10",
+              "explanation": "The output 'time#bell#' has a total length of 10.",
+              "id": "77515cd7-7db5-474c-a7ec-3cdb680920aa",
+              "input": "words = [\"time\", \"me\", \"bell\"]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "A single word will always have a length of the word plus one for the '#' character.",
+              "id": "224365ce-2e27-4d25-81fc-fee7aa16b00f",
+              "input": "words = [\"t\"]"
+            }
+          ]
+        },
+        {
+          "approach": "Create a Trie and insert each word in reverse order. Then, traverse the Trie to find the shortest encoding.",
+          "code": "import Foundation\n\nclass TrieNode {\n    var children: [Character: TrieNode] = [:]\n    var isEndOfWord: Bool = false\n}\n\nclass Solution {\n    func minimumLengthEncoding(_ words: [String]) -> Int {\n        let root = TrieNode()\n        var nodes: [TrieNode] = []\n        for word in words {\n            var node = root\n            for char in word.reversed() {\n                if node.children[char] == nil {\n                    node.children[char] = TrieNode()\n                }\n                node = node.children[char]!\n            }\n            node.isEndOfWord = true\n            nodes.append(node)\n        }\n        var res: Int = 0\n        for node in nodes {\n            var temp: TrieNode? = node\n            var len: Int = 0\n            while temp != nil && temp!.children.count == 1 && !temp!.isEndOfWord {\n                len += 1\n                temp = temp!.children.first?.value\n            }\n            if temp != nil {\n                res += len + 1\n            }\n        }\n        return res\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) where n is the total number of characters in all words.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) where n is the total number of characters in all words."
+          },
+          "explanation": "The Trie approach reduces the time complexity to O(n) as it eliminates the need for sorting and checking all combinations of words.",
+          "id": "45328198-1809-4f83-ac07-8750001c774e",
+          "intuition": "This approach uses a Trie to store the words and efficiently find the shortest encoding.",
+          "name": "Trie Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "10",
+              "explanation": "The output 'time#bell#' has a total length of 10.",
+              "id": "51590371-39a4-4cf2-ba01-47fdf5aac704",
+              "input": "words = [\"time\", \"me\", \"bell\"]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "A single word will always have a length of the word plus one for the '#' character.",
+              "id": "ae289624-3e58-433e-937b-57c9b84daa47",
+              "input": "words = [\"t\"]"
+            }
+          ]
+        }
+      ],
+      "id": "7f24746a-4b8f-4ea8-b5e9-092fccd5cfd1",
+      "lastUpdated": "2026-02-06T21:42:03Z",
+      "problemSlug": "short-encoding-of-words",
+      "relatedProblems": [
+        "validate-ip-address",
+        "word-ladder"
+      ],
+      "summary": "The problem requests generating the shortest possible encoding of a list of words by appending a '#' to the end of each word and then trying all possible combinations to create the shortest string. A key insight to this problem is to use a Trie to efficiently store and compare the words."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Count the frequency of each word using a hash map.\n2. Add all words to an array of tuples where each tuple contains a word and its frequency.\n3. Sort the array of tuples in descending order of frequency and then lexicographically.\n4. Return the top k words from the sorted array.",
+          "code": "class Solution {\n    let topKFrequent = { (words: [String], k: Int) -> [String] in\n        let wordCount = Dictionary(grouping: words, by: { $0 }).mapValues { $0.count }\n        let sortedWords = wordCount.sorted { $0.value > $1.value || ($0.value == $1.value && $0.key < $1.key) }\n        return Array(sortedWords.prefix(k)).map { $0.key }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is due to the hash map and the array of tuples which take O(n) space.",
+            "time": "O(n log n)",
+            "timeExplanation": "The time complexity is due to the sorting step which takes O(n log n) time."
+          },
+          "explanation": "This approach is straightforward but has a high time complexity due to the sorting step.",
+          "id": "3f8cb65c-7d0c-4e63-8cce-6535dc6ab444",
+          "intuition": "This approach works by first counting the frequency of each word and then sorting all the words based on their frequency.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"i\",\"love\"]",
+              "explanation": "The words \"i\" and \"love\" are the top 2 frequent words.",
+              "id": "81f0aea1-adad-4156-819d-d34457a3d7bf",
+              "input": "words = [\"i\",\"love\",\"leetcode\",\"i\",\"love\",\"coding\"], k = 2"
+            },
+            {
+              "expectedOutput": "[\"the\",\"is\",\"sunny\",\"day\"]",
+              "explanation": "The words \"the\", \"is\", \"sunny\", and \"day\" are the top 4 frequent words.",
+              "id": "fae11c6e-2b9b-4f06-9c64-39c935f66d86",
+              "input": "words = [\"the\",\"day\",\"is\",\"sunny\",\"the\",\"the\",\"the\",\"sunny\",\"is\",\"is\"], k = 4"
+            }
+          ]
+        },
+        {
+          "approach": "1. Count the frequency of each word using a hash map.\n2. Use a heap to find the top k frequent words.\n3. Return the top k words from the heap.",
+          "code": "class Solution {\n    import Foundation\n    let topKFrequent = { (words: [String], k: Int) -> [String] in\n        let wordCount = Dictionary(grouping: words, by: { $0 }).mapValues { $0.count }\n        var heap = [(word: String, count: Int)]()\n        for (word, count) in wordCount {\n            heap.append((word, count))\n        }\n        heap.sort { $0.count > $1.count || ($0.count == $1.count && $0.word < $1.word) }\n        return Array(heap.prefix(k)).map { $0.word }\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is due to the hash map and the heap which take O(n) space.",
+            "time": "O(n log k)",
+            "timeExplanation": "The time complexity is due to the heap operations which take O(n log k) time."
+          },
+          "explanation": "This approach is more efficient than the brute force approach because it uses a heap to find the top k frequent words.",
+          "id": "286a9638-6ad5-470e-8033-8317e02b53f5",
+          "intuition": "This approach works by using a heap to find the top k frequent words.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[\"i\",\"love\"]",
+              "explanation": "The words \"i\" and \"love\" are the top 2 frequent words.",
+              "id": "01f4fa8c-dd3e-4a3d-83f7-6c2c9ea8c06f",
+              "input": "words = [\"i\",\"love\",\"leetcode\",\"i\",\"love\",\"coding\"], k = 2"
+            },
+            {
+              "expectedOutput": "[\"the\",\"is\",\"sunny\",\"day\"]",
+              "explanation": "The words \"the\", \"is\", \"sunny\", and \"day\" are the top 4 frequent words.",
+              "id": "cb716088-5fd1-4dd4-a7d9-6bc94b32d3de",
+              "input": "words = [\"the\",\"day\",\"is\",\"sunny\",\"the\",\"the\",\"the\",\"sunny\",\"is\",\"is\"], k = 4"
+            }
+          ]
+        }
+      ],
+      "id": "fceb0f05-f1f7-40c4-bcb9-b787f5b60f7e",
+      "lastUpdated": "2026-02-06T21:34:14Z",
+      "problemSlug": "top-k-frequent-words",
+      "relatedProblems": [
+        "valid-anagram",
+        "group-anagrams"
+      ],
+      "summary": "The problem asks to return the top k frequent words from a given list of words. The key insight is to use a hash map to count the frequency of each word and then use a heap or sorting to find the top k frequent words."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Insert all words into a trie.\n2. For each board cell, DFS while tracking trie nodes.\n3. When a trie node contains a word, add it to results and mark as used.\n4. Mark cells as visited during DFS to avoid reuse.",
+          "code": "class Solution {\n    func findWords(_ board: [[Character]], _ words: [String]) -> [String] {\n        class TrieNode {\n            var children: [TrieNode?] = Array(repeating: nil, count: 26)\n            var word: String? = nil\n        }\n\n        let root = TrieNode()\n        for word in words {\n            var node = root\n            for char in word {\n                let index = Int(char.asciiValue! - Character(\"a\").asciiValue!)\n                if node.children[index] == nil { node.children[index] = TrieNode() }\n                node = node.children[index]!\n            }\n            node.word = word\n        }\n\n        var board = board\n        let rows = board.count\n        let cols = board.first?.count ?? 0\n        var results: [String] = []\n        let dirs = [(1,0),(-1,0),(0,1),(0,-1)]\n\n        func dfs(_ r: Int, _ c: Int, _ node: TrieNode) {\n            let char = board[r][c]\n            let index = Int(char.asciiValue! - Character(\"a\").asciiValue!)\n            guard let next = node.children[index] else { return }\n\n            if let word = next.word {\n                results.append(word)\n                next.word = nil\n            }\n\n            board[r][c] = \"#\"\n            for (dr, dc) in dirs {\n                let nr = r + dr\n                let nc = c + dc\n                if nr >= 0, nr < rows, nc >= 0, nc < cols, board[nr][nc] != \"#\" {\n                    dfs(nr, nc, next)\n                }\n            }\n            board[r][c] = char\n        }\n\n        for r in 0..<rows {\n            for c in 0..<cols {\n                dfs(r, c, root)\n            }\n        }\n        return results\n    }\n}",
+          "complexity": {
+            "space": "O(total chars + L)",
+            "spaceExplanation": "Trie plus recursion depth up to max word length",
+            "time": "O(m * n * 4^L)",
+            "timeExplanation": "Worst-case DFS from each cell with pruning by trie"
+          },
+          "explanation": "The trie avoids checking every word separately, and DFS explores only viable prefixes from each cell.",
+          "id": "104fbf07-a53f-4c54-a1d8-f574d1b2edfd",
+          "intuition": "A trie lets us prune searches early when a prefix does not exist. DFS explores valid paths on the board.",
+          "name": "Trie + DFS",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"eat\",\"oath\"]",
+              "explanation": "Only \"eat\" and \"oath\" can be formed by adjacent cells.",
+              "id": "8134f717-85dc-4975-a0e3-7659b08d15a1",
+              "input": "board = [[\"o\",\"a\",\"a\",\"n\"],[\"e\",\"t\",\"a\",\"e\"],[\"i\",\"h\",\"k\",\"r\"],[\"i\",\"f\",\"l\",\"v\"]], words = [\"oath\",\"pea\",\"eat\",\"rain\"]"
+            },
+            {
+              "expectedOutput": "[]",
+              "explanation": "Cannot reuse the same cell twice to form \"abcb\".",
+              "id": "061876ba-28aa-4184-b735-8db3209332ed",
+              "input": "board = [[\"a\",\"b\"],[\"c\",\"d\"]], words = [\"abcb\"]"
+            }
+          ]
+        }
+      ],
+      "id": "d90f3c15-1512-4eab-8c4d-7da3267a3264",
+      "lastUpdated": "2026-02-04T00:00:00Z",
+      "problemSlug": "word-search-ii",
+      "relatedProblems": [
+        "word-search",
+        "implement-trie-prefix-tree"
+      ],
+      "summary": "Build a trie of all words, then DFS the board to find any paths that match trie prefixes."
+    }
+  ],
+  "topic": "tries",
+  "version": "2.0.0"
+}

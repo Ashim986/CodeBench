@@ -1,0 +1,283 @@
+{
+  "solutions": [
+    {
+      "approaches": [
+        {
+          "approach": "1. Add all intervals that end before newInterval starts (no overlap)\n2. Merge all intervals that overlap with newInterval\n3. Add the merged interval\n4. Add all remaining intervals (start after newInterval ends)",
+          "code": "class Solution {\n    func insert(_ intervals: [[Int]], _ newInterval: [Int]) -> [[Int]] {\n        var result: [[Int]] = []\n        var newInterval = newInterval\n        var i = 0\n        let n = intervals.count\n\n        // Phase 1: Add intervals that end before newInterval starts\n        while i < n && intervals[i][1] < newInterval[0] {\n            result.append(intervals[i])\n            i += 1\n        }\n\n        // Phase 2: Merge overlapping intervals\n        while i < n && intervals[i][0] <= newInterval[1] {\n            newInterval[0] = min(newInterval[0], intervals[i][0])\n            newInterval[1] = max(newInterval[1], intervals[i][1])\n            i += 1\n        }\n        result.append(newInterval)\n\n        // Phase 3: Add remaining intervals\n        while i < n {\n            result.append(intervals[i])\n            i += 1\n        }\n\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Output array can contain up to n+1 intervals",
+            "time": "O(n)",
+            "timeExplanation": "Single pass through all n intervals"
+          },
+          "explanation": "Two intervals [a,b] and [c,d] overlap if a <= d AND c <= b. For overlapping intervals, we merge by taking min of starts and max of ends. The key insight is that once we pass intervals that could overlap, all remaining intervals must come after.",
+          "id": "df1ec182-5cf8-4451-828c-a8545cbd2617",
+          "intuition": "Since intervals are sorted and non-overlapping, we can process them in order: add all intervals that end before the new one starts, merge all that overlap with the new interval, then add remaining intervals.",
+          "name": "Linear Scan with Three Phases",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[1,5],[6,9]]",
+              "explanation": "[1,3] overlaps with [2,5] → merge to [1,5]. [6,9] comes after.",
+              "id": "7f6edf21-9fac-4c2c-b63a-bed9d76182f6",
+              "input": "intervals = [[1,3],[6,9]], newInterval = [2,5]"
+            },
+            {
+              "expectedOutput": "[[1,2],[3,10],[12,16]]",
+              "explanation": "[3,5], [6,7], [8,10] all overlap with [4,8] → merge to [3,10]",
+              "id": "63fa4600-8327-4db9-be86-b65d0d65d6d9",
+              "input": "intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]"
+            },
+            {
+              "expectedOutput": "[[5,7]]",
+              "explanation": "Empty list - just add the new interval",
+              "id": "9a40ce24-9c31-480f-8cea-2db806d4f00d",
+              "input": "intervals = [], newInterval = [5,7]"
+            },
+            {
+              "expectedOutput": "[[1,5]]",
+              "explanation": "New interval is completely inside existing one - merge is just [1,5]",
+              "id": "8d13d3c1-ad3f-4c88-ba50-ec4d4c186d56",
+              "input": "intervals = [[1,5]], newInterval = [2,3]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Binary search to find first interval that could overlap (start <= newInterval.end)\n2. Binary search to find last interval that could overlap (end >= newInterval.start)\n3. Merge all intervals in that range with newInterval\n4. Construct result with non-overlapping + merged + remaining",
+          "code": "class Solution {\n    func insert(_ intervals: [[Int]], _ newInterval: [Int]) -> [[Int]] {\n        if intervals.isEmpty {\n            return [newInterval]\n        }\n\n        var result: [[Int]] = []\n        var merged = newInterval\n        var inserted = false\n\n        for interval in intervals {\n            if interval[1] < merged[0] {\n                // Current interval ends before merged starts\n                result.append(interval)\n            } else if interval[0] > merged[1] {\n                // Current interval starts after merged ends\n                if !inserted {\n                    result.append(merged)\n                    inserted = true\n                }\n                result.append(interval)\n            } else {\n                // Overlap - expand merged interval\n                merged[0] = min(merged[0], interval[0])\n                merged[1] = max(merged[1], interval[1])\n            }\n        }\n\n        if !inserted {\n            result.append(merged)\n        }\n\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Output array stores all resulting intervals",
+            "time": "O(n)",
+            "timeExplanation": "Process each interval once"
+          },
+          "explanation": "Binary search finds the boundaries faster, but we still need to merge intervals in the overlapping range. This approach shines when there are few or no overlaps, as binary search is O(log n). However, worst case is still O(n) when many intervals merge.",
+          "id": "d89c66e4-0239-48cd-9979-f2cd4aafe7dc",
+          "intuition": "Use binary search to find where the new interval should be inserted, then handle merging. This can be faster for finding the insertion point but still O(n) overall due to potential merging.",
+          "name": "Binary Search + Merge",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[[1,3],[6,9],[10,11]]",
+              "explanation": "No overlap - new interval added at end",
+              "id": "a3a73289-40f2-4112-bcff-3d260c085332",
+              "input": "intervals = [[1,3],[6,9]], newInterval = [10,11]"
+            },
+            {
+              "expectedOutput": "[[1,2],[3,5],[6,9]]",
+              "explanation": "No overlap - new interval added at beginning",
+              "id": "7e504eb2-9b6d-4e6f-9bbe-31a52f8cc338",
+              "input": "intervals = [[3,5],[6,9]], newInterval = [1,2]"
+            }
+          ]
+        }
+      ],
+      "id": "b443a1cd-9001-45a3-99cd-27885c49e65a",
+      "lastUpdated": "2026-02-06T08:31:51Z",
+      "problemSlug": "insert-interval",
+      "relatedProblems": [
+        "merge-intervals",
+        "range-module",
+        "data-stream-as-disjoint-intervals"
+      ],
+      "summary": "Insert a new interval into a sorted list of non-overlapping intervals, merging if necessary. Process intervals in three phases: those before, those overlapping, and those after the new interval."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Sort meetings by start time\n2. For each consecutive pair:\n   a. If current start < previous end, return false\n3. Return true",
+          "code": "class Solution {\n    func canAttendMeetings(_ intervals: [[Int]]) -> Bool {\n        guard intervals.count > 1 else { return true }\n\n        let sorted = intervals.sorted { $0[0] < $1[0] }\n\n        for i in 1..<sorted.count {\n            if sorted[i][0] < sorted[i-1][1] {\n                return false\n            }\n        }\n\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Sorted copy of intervals",
+            "time": "O(n log n)",
+            "timeExplanation": "Sorting dominates"
+          },
+          "explanation": "After sorting, we only need to check adjacent meetings. If meeting[i] starts before meeting[i-1] ends, there's a conflict.",
+          "id": "3f211ec6-e757-4151-b6ed-d284cb924dbb",
+          "intuition": "If meetings are sorted by start time, overlaps happen when a meeting starts before the previous one ends.",
+          "name": "Sort and Check",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "false",
+              "explanation": "[0,30] overlaps with both others",
+              "id": "8d9f4454-944c-49a2-9d75-988e1462e018",
+              "input": "intervals = [[0,30],[5,10],[15,20]]"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "No overlaps after sorting",
+              "id": "09b76456-205c-4645-8b58-9aa59048f7cc",
+              "input": "intervals = [[7,10],[2,4]]"
+            }
+          ]
+        }
+      ],
+      "id": "5fb82176-4fdc-429e-9b2c-526d543bd74c",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "meeting-rooms",
+      "relatedProblems": [
+        "meeting-rooms-ii",
+        "merge-intervals"
+      ],
+      "summary": "Check if person can attend all meetings (no overlaps). Sort by start time, check if any meeting starts before previous ends."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Sort meetings by start time\n2. Use min-heap for end times\n3. For each meeting:\n   a. While heap's min <= current start, pop (room freed)\n   b. Push current end time\n4. Heap size is rooms needed",
+          "code": "class Solution {\n    func minMeetingRooms(_ intervals: [[Int]]) -> Int {\n        guard !intervals.isEmpty else { return 0 }\n\n        let sorted = intervals.sorted { $0[0] < $1[0] }\n        var endTimes: [Int] = []  // Simulating min-heap\n\n        for interval in sorted {\n            // Remove ended meetings\n            if let minEnd = endTimes.min(), minEnd <= interval[0] {\n                if let idx = endTimes.firstIndex(of: minEnd) {\n                    endTimes.remove(at: idx)\n                }\n            }\n            endTimes.append(interval[1])\n        }\n\n        return endTimes.count\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Heap can hold all meetings",
+            "time": "O(n log n)",
+            "timeExplanation": "Sorting + heap operations"
+          },
+          "explanation": "The heap maintains end times of ongoing meetings. When starting a new meeting, we free any rooms from meetings that have already ended (end time <= start time).",
+          "id": "7b9c619a-c2b9-463e-99fb-90d693ea95af",
+          "intuition": "Track ongoing meetings with a min-heap of end times. When a new meeting starts, free rooms from meetings that ended.",
+          "name": "Min Heap for End Times",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "[5,10] and [0,30] overlap, need 2 rooms",
+              "id": "2af21d9b-2177-4758-ba58-7e567b1419c2",
+              "input": "intervals = [[0,30],[5,10],[15,20]]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "No overlap, 1 room enough",
+              "id": "ac19174c-a617-4fec-b91e-460b2d669121",
+              "input": "intervals = [[7,10],[2,4]]"
+            }
+          ]
+        }
+      ],
+      "id": "112eefba-95e0-4d14-98c1-ba3905da6c66",
+      "lastUpdated": "2026-02-06T14:42:10Z",
+      "problemSlug": "meeting-rooms-ii",
+      "relatedProblems": [
+        "meeting-rooms",
+        "merge-intervals"
+      ],
+      "summary": "Find minimum meeting rooms needed. Use min-heap to track end times, or count overlapping intervals at any point."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Sort intervals by start.\n2. Initialize result with the first interval.\n3. For each subsequent interval, either merge it into the last or append it.",
+          "code": "class Solution {\n    func merge(_ intervals: [[Int]]) -> [[Int]] {\n        if intervals.isEmpty { return [] }\n        let sorted = intervals.sorted { $0[0] < $1[0] }\n        var result: [[Int]] = [sorted[0]]\n        for interval in sorted.dropFirst() {\n            if interval[0] <= result[result.count - 1][1] {\n                result[result.count - 1][1] = max(result[result.count - 1][1], interval[1])\n            } else {\n                result.append(interval)\n            }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Result list can store up to n intervals.",
+            "time": "O(n log n)",
+            "timeExplanation": "Sorting dominates the time cost."
+          },
+          "explanation": "Sorting ensures overlaps are adjacent, so we only compare with the last merged interval.",
+          "id": "804d61a0-ef94-4021-a081-82fa69522244",
+          "intuition": "After sorting by start, any overlap can only occur with the most recent merged interval.",
+          "name": "Sort + Merge",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[[1,6],[8,10],[15,18]]",
+              "explanation": "[1,3] and [2,6] merge into [1,6].",
+              "id": "e1a38ac4-6f16-43f9-8eae-772092c14f3b",
+              "input": "intervals = [[1,3],[2,6],[8,10],[15,18]]"
+            },
+            {
+              "expectedOutput": "[[1,5]]",
+              "explanation": "Touching intervals also merge.",
+              "id": "f70a956c-ec5b-4b71-bf26-526b1ad92c3f",
+              "input": "intervals = [[1,4],[4,5]]"
+            }
+          ]
+        }
+      ],
+      "id": "0562ba51-0891-44cc-8ef8-e9d3dd5be2e0",
+      "lastUpdated": "2026-02-06T00:00:00Z",
+      "problemSlug": "merge-intervals",
+      "relatedProblems": [
+        "insert-interval",
+        "meeting-rooms-ii"
+      ],
+      "summary": "Sort intervals by start and merge overlapping ranges in one pass."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Sort intervals by end time\n2. Track the end time of last kept interval\n3. For each interval:\n   a. If start >= lastEnd, keep it (update lastEnd)\n   b. Else, skip it (it overlaps)\n4. Return total - kept",
+          "code": "class Solution {\n    func eraseOverlapIntervals(_ intervals: [[Int]]) -> Int {\n        guard intervals.count > 1 else { return 0 }\n\n        // Sort by end time\n        let sorted = intervals.sorted { $0[1] < $1[1] }\n\n        var kept = 1\n        var lastEnd = sorted[0][1]\n\n        for i in 1..<sorted.count {\n            if sorted[i][0] >= lastEnd {\n                kept += 1\n                lastEnd = sorted[i][1]\n            }\n        }\n\n        return intervals.count - kept\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Creating sorted copy of intervals",
+            "time": "O(n log n)",
+            "timeExplanation": "Dominated by sorting"
+          },
+          "explanation": "Sorting by end time ensures we greedily pick intervals that finish earliest. If a new interval starts after the previous ends, it doesn't overlap. By choosing early-ending intervals, we maximize the number we can fit. The intervals we don't keep are the ones we'd remove.",
+          "id": "a6006334-a763-4410-8e1d-222c69ea4608",
+          "intuition": "Always keep the interval that ends earliest - this leaves maximum room for subsequent intervals. Count how many we keep, subtract from total.",
+          "name": "Greedy (Sort by End Time)",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "Remove [1,3]. Keep [1,2], [2,3], [3,4] which don't overlap.",
+              "id": "5b6d32d6-27d5-469e-aa62-013ed6aeeb5d",
+              "input": "intervals = [[1,2],[2,3],[3,4],[1,3]]"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "All identical, can only keep 1. Remove 2.",
+              "id": "500527a5-4b75-4804-884b-633594a23aae",
+              "input": "intervals = [[1,2],[1,2],[1,2]]"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "Already non-overlapping (touching endpoints is OK)",
+              "id": "06f907b4-5c21-4a4e-b78c-ea98e32b4a40",
+              "input": "intervals = [[1,2],[2,3]]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Sort intervals by start time\n2. Track end of previous kept interval\n3. For each interval:\n   a. If overlap (start < prevEnd), increment removals, keep shorter one (update prevEnd to min)\n   b. Else, update prevEnd to current end",
+          "code": "class Solution {\n    func eraseOverlapIntervals(_ intervals: [[Int]]) -> Int {\n        guard intervals.count > 1 else { return 0 }\n\n        // Sort by start time\n        let sorted = intervals.sorted { $0[0] < $1[0] }\n\n        var removals = 0\n        var prevEnd = sorted[0][1]\n\n        for i in 1..<sorted.count {\n            if sorted[i][0] < prevEnd {\n                // Overlap - remove one (keep the one ending sooner)\n                removals += 1\n                prevEnd = min(prevEnd, sorted[i][1])\n            } else {\n                prevEnd = sorted[i][1]\n            }\n        }\n\n        return removals\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Sorted copy of intervals",
+            "time": "O(n log n)",
+            "timeExplanation": "Sorting dominates"
+          },
+          "explanation": "When intervals overlap, we want to keep the one ending sooner. By sorting by start time and keeping the smaller end when conflicts occur, we minimize future overlaps. This is equivalent to the end-time approach but processes differently.",
+          "id": "9292907f-e7f5-415a-a981-a74969447d6d",
+          "intuition": "Sort by start time. When two intervals overlap, remove the one that ends later (it's more likely to cause future conflicts).",
+          "name": "Greedy (Sort by Start, Track Overlaps)",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "Keep [1,11] and [11,22], remove the longer overlapping ones",
+              "id": "5b89ec8c-8ada-4764-af2b-3636c8083efe",
+              "input": "intervals = [[1,100],[11,22],[1,11],[2,12]]"
+            }
+          ]
+        }
+      ],
+      "id": "801675de-2c25-440e-9366-c3b5e3014fe9",
+      "lastUpdated": "2026-02-06T08:38:32Z",
+      "problemSlug": "non-overlapping-intervals",
+      "relatedProblems": [
+        "merge-intervals",
+        "insert-interval",
+        "minimum-number-of-arrows-to-burst-balloons"
+      ],
+      "summary": "Find minimum intervals to remove to make the rest non-overlapping. Greedy: sort by end time, keep intervals that don't overlap with previous kept interval. Remove count = total - kept."
+    }
+  ],
+  "topic": "intervals",
+  "version": "2.0.0"
+}

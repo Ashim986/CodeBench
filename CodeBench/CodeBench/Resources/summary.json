@@ -1,0 +1,66 @@
+{
+  "evaluated_at" : "2026-02-24T18:16:02Z",
+  "problems" : [
+    {
+      "invalid_tests" : 0,
+      "slug" : "partition-array-into-disjoint-intervals",
+      "topic" : "arrays-hashing",
+      "total_tests" : 25,
+      "valid_tests" : 25
+    },
+    {
+      "invalid_tests" : 0,
+      "slug" : "non-overlapping-intervals",
+      "topic" : "intervals",
+      "total_tests" : 25,
+      "valid_tests" : 25
+    },
+    {
+      "invalid_tests" : 0,
+      "slug" : "merge-intervals",
+      "topic" : "intervals",
+      "total_tests" : 25,
+      "valid_tests" : 25
+    },
+    {
+      "invalid_tests" : 0,
+      "slug" : "meeting-rooms",
+      "topic" : "intervals",
+      "total_tests" : 23,
+      "valid_tests" : 23
+    },
+    {
+      "invalid_tests" : 0,
+      "slug" : "meeting-rooms-ii",
+      "topic" : "intervals",
+      "total_tests" : 25,
+      "valid_tests" : 25
+    },
+    {
+      "invalid_tests" : 0,
+      "slug" : "insert-interval",
+      "topic" : "intervals",
+      "total_tests" : 22,
+      "valid_tests" : 22
+    }
+  ],
+  "topics" : [
+    {
+      "invalid" : 0,
+      "match_rate" : 1,
+      "matches" : 25,
+      "topic" : "arrays-hashing",
+      "total" : 25,
+      "valid" : 25
+    },
+    {
+      "invalid" : 0,
+      "match_rate" : 1,
+      "matches" : 120,
+      "topic" : "intervals",
+      "total" : 120,
+      "valid" : 120
+    }
+  ],
+  "total_results" : 145
+}

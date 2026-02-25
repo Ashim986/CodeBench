@@ -1,0 +1,1379 @@
+{
+  "solutions": [
+    {
+      "approaches": [
+        {
+          "approach": "1. Convert the number to binary. 2. Initialize variables to store the maximum gap and the position of the previous 1. 3. Iterate over the binary string. 4. For each 1, calculate the gap between the current 1 and the previous 1. 5. Update the maximum gap if the current gap is larger.",
+          "code": "class Solution {\n    func binaryGap(N: Int) -> Int {\n        let binary = String(N, radix: 2)\n        var maxGap = 0\n        var prevOne = -1\n        for (i, c) in binary.enumerated() {\n            if c == \"1\" {\n                if prevOne != -1 {\n                    maxGap = max(maxGap, i - prevOne)\n                }\n                prevOne = i\n            }\n        }\n        return maxGap\n    }\n}",
+          "complexity": {
+            "space": "O(logN)",
+            "spaceExplanation": "The space complexity is O(logN) because we are storing the binary representation of the number, which has a length of logN.",
+            "time": "O(logN)",
+            "timeExplanation": "The time complexity is O(logN) because we are iterating over the binary representation of the number, which has a length of logN."
+          },
+          "explanation": "This approach is straightforward but has a high time complexity due to the iteration over the binary string. It can be useful for small inputs but may not be efficient for large inputs.",
+          "id": "3895850e-418c-4a3d-9eb7-96f34017df7f",
+          "intuition": "This approach involves converting the number to binary and then iterating over the binary string to find the positions of 1s and calculate the gaps between them.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The binary representation of 22 is 10110. The gaps between the 1s are 1, 2, and 1. The longest gap is 2.",
+              "id": "28fdb735-8a91-4192-9b4c-0e79cf5248c3",
+              "input": "22"
+            },
+            {
+              "expectedOutput": "2",
+              "explanation": "The binary representation of 5 is 101. The gap between the 1s is 1. Since there is only one gap, it is the longest gap.",
+              "id": "7b2443f1-c8b7-4d41-8646-04639d7cf36c",
+              "input": "5"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize variables to store the maximum gap and the position of the previous 1. 2. Use bit manipulation to find the rightmost 1. 3. Calculate the gap between the current 1 and the previous 1. 4. Update the maximum gap if the current gap is larger. 5. Repeat steps 2-4 until there are no more 1s.",
+          "code": "class Solution {\n    func binaryGap(N: Int) -> Int {\n        var n = N\n        var maxGap = 0\n        var prevOne = -1\n        var position = 0\n        while n > 0 {\n            if n % 2 == 1 {\n                if prevOne != -1 {\n                    maxGap = max(maxGap, position - prevOne)\n                }\n                prevOne = position\n            }\n            n /= 2\n            position += 1\n        }\n        return maxGap\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are using a constant amount of space to store the variables.",
+            "time": "O(logN)",
+            "timeExplanation": "The time complexity is O(logN) because we are iterating over the bits of the number, which has a length of logN."
+          },
+          "explanation": "This approach is more efficient than the brute force approach because it uses bit manipulation to find the positions of 1s, which reduces the time complexity.",
+          "id": "36fc4259-0737-4b5a-bccf-6db73d899276",
+          "intuition": "This approach involves using bit manipulation to find the positions of 1s in the binary representation of the number.",
+          "name": "Bit Manipulation",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "The binary representation of 6 is 110. The gap between the 1s is 1.",
+              "id": "09414132-c3f6-4abf-9efa-51176aa29481",
+              "input": "6"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "The binary representation of 8 is 1000. There is only one 1, so there is no gap.",
+              "id": "56d31f57-5891-41a5-8df1-f2270b735556",
+              "input": "8"
+            }
+          ]
+        }
+      ],
+      "id": "8f1a5047-5b16-4dff-8d23-eaa850e9e8f6",
+      "lastUpdated": "2026-02-06T21:45:27Z",
+      "problemSlug": "binary-gap",
+      "relatedProblems": [
+        "number-of-1-bits",
+        "reverse-bits"
+      ],
+      "summary": "The binary gap problem involves finding the longest sequence of zeros between two 1s in a binary representation of a number. The key insight is to use bit manipulation to find the positions of 1s and calculate the gaps between them."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "First, we convert the integer to a binary string. Then we iterate over each character in the string, comparing it to the previous character. If we find two consecutive characters that are the same, we immediately return false. If we get through the entire string without finding two consecutive characters that are the same, we return true.",
+          "code": "class Solution {\n    func hasAlternatingBits(_ n: Int) -> Bool {\n        let binaryString = String(n, radix: 2)\n        for i in 1..<binaryString.count {\n            if binaryString[binaryString.index(binaryString.startIndex, offsetBy: i)] == binaryString[binaryString.index(binaryString.startIndex, offsetBy: i - 1)] {\n                return false\n            }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(log n)",
+            "spaceExplanation": "We are storing the binary string, which requires extra space proportional to the number of bits in the input integer.",
+            "time": "O(log n)",
+            "timeExplanation": "We are iterating over each character in the binary string, which has a length proportional to the number of bits in the input integer. The number of bits in an integer is proportional to the logarithm of the integer."
+          },
+          "explanation": "This approach is straightforward and easy to implement. However, it requires extra space to store the binary string, which may not be desirable for large inputs.",
+          "id": "2eee8b2a-4b10-48e8-b058-b08e58b8c65d",
+          "intuition": "We can solve this problem by converting the integer into a binary string, then iterating over each character in the string to check for alternating bits.",
+          "name": "Brute-Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The binary representation of 5 is 101, which has alternating bits.",
+              "id": "4e4feea2-ec1a-4b09-91f5-88170f602275",
+              "input": "n = 5"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The binary representation of 7 is 111, which does not have alternating bits.",
+              "id": "e024769b-3446-4044-879f-598e724f4d3a",
+              "input": "n = 7"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "The binary representation of 10 is 1010, which has alternating bits.",
+              "id": "21fae51c-abb6-4942-8db2-e490ecafea44",
+              "input": "n = 10"
+            }
+          ]
+        },
+        {
+          "approach": "We start with the least significant bit. Then we enter a loop where we shift the number one bit to the right and compare the least significant bit to the previous bit. If we find two consecutive bits that are the same, we immediately return false. If we get through the entire number without finding two consecutive bits that are the same, we return true.",
+          "code": "class Solution {\n    func hasAlternatingBits(_ n: Int) -> Bool {\n        var num = n\n        var previousBit = num & 1\n        num >>= 1\n        while num > 0 {\n            let currentBit = num & 1\n            if currentBit == previousBit {\n                return false\n            }\n            previousBit = currentBit\n            num >>= 1\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We are only using a constant amount of space to store the current number and the previous bit.",
+            "time": "O(log n)",
+            "timeExplanation": "We are iterating over each bit in the input integer, which has a number of bits proportional to the logarithm of the integer."
+          },
+          "explanation": "This approach is more efficient because it does not require extra space to store the binary string. It only uses a constant amount of space to store the current number and the previous bit.",
+          "id": "5443cfd6-183b-473a-afa1-641763cc3980",
+          "intuition": "We can solve this problem more efficiently by using bit manipulation to compare each pair of consecutive bits.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The binary representation of 5 is 101, which has alternating bits.",
+              "id": "32f9bfd7-57ad-4db1-99b5-2ff20b2e74c2",
+              "input": "n = 5"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The binary representation of 7 is 111, which does not have alternating bits.",
+              "id": "4d505120-6009-42d6-9ca6-68030bfd3c2c",
+              "input": "n = 7"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "The binary representation of 10 is 1010, which has alternating bits.",
+              "id": "ee30deac-3377-450a-94e0-71ce0aa853cf",
+              "input": "n = 10"
+            }
+          ]
+        }
+      ],
+      "id": "04858a36-b328-46d5-80d4-cccb984597aa",
+      "lastUpdated": "2026-02-06T21:34:18Z",
+      "problemSlug": "binary-number-with-alternating-bits",
+      "relatedProblems": [
+        "single-number",
+        "missing-number"
+      ],
+      "summary": "The problem asks us to determine whether a given integer's binary representation contains alternating bits, which can be solved using bit manipulation and iteration. The key insight is to check each consecutive pair of bits to see if they are different."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each number in the array, convert it to binary, and for each bit in the binary representation, check if the sum of the bits up to that point is divisible by 5.",
+          "code": "class Solution {\n    func prefixesDivBy5(_ A: [Int]) -> [Int] {\n        var result = [Int]()\n        for num in A {\n            let binary = String(num, radix: 2)\n            var sum = 0\n            for (i, bit) in binary.enumerated() {\n                sum += Int(String(bit))!\n                if i == binary.count - 1 {\n                    if sum % 5 == 0 {\n                        result.append(1)\n                    } else {\n                        result.append(0)\n                    }\n                }\n            }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We are storing the results for each number in the array.",
+            "time": "O(n*m)",
+            "timeExplanation": "We are iterating over each number in the array and for each number, we are iterating over its binary representation."
+          },
+          "explanation": "We initialize an empty list to store the results. Then we iterate over the array, converting each number to binary and checking each bit. If the sum of the bits is divisible by 5, we append the result to the list.",
+          "id": "de4f1a4b-3502-4f37-a6e0-55a52044dcc0",
+          "intuition": "This approach checks every possible prefix of the array and calculates the sum of the binary digits. It's not efficient but provides a baseline for comparison.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[1,1,1]",
+              "explanation": "The binary representations are 0, 1, and 10. The sums of the bits are 0, 1, and 1, all of which are divisible by 5.",
+              "id": "ca0c3c37-195e-450d-ae6c-d09b57cb67c2",
+              "input": "A = [0,1,1]"
+            },
+            {
+              "expectedOutput": "[1,0,0]",
+              "explanation": "The binary representations are 1, 1, and 1. The sums of the bits are 1, 2, and 3, only the first of which is divisible by 5.",
+              "id": "0adbe868-8098-43b9-88fc-906bd91e86ae",
+              "input": "A = [1,1,1]"
+            }
+          ]
+        },
+        {
+          "approach": "We initialize a variable to keep track of the prefix sum modulo 5. For each number in the array, we update the prefix sum by shifting the current sum to the left (which is equivalent to multiplying by 2) and adding the new bit. Then we check if the updated sum is divisible by 5 and update the result accordingly.",
+          "code": "class Solution {\n    func prefixesDivBy5(_ A: [Int]) -> [Int] {\n        var result = [Int]()\n        var prefixSum = 0\n        for num in A {\n            prefixSum = ((prefixSum << 1) + num) % 5\n            if prefixSum == 0 {\n                result.append(1)\n            } else {\n                result.append(0)\n            }\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We are storing the results for each number in the array.",
+            "time": "O(n)",
+            "timeExplanation": "We are iterating over each number in the array once."
+          },
+          "explanation": "We initialize an empty list to store the results and a variable to keep track of the prefix sum modulo 5. Then we iterate over the array, updating the prefix sum and checking if it's divisible by 5.",
+          "id": "631bd812-5507-4532-bfb5-9d7897b1db6a",
+          "intuition": "This approach keeps track of the prefix sum modulo 5 and updates the result accordingly, avoiding the need to recalculate the sum for each bit.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[1,1,1]",
+              "explanation": "The prefix sums modulo 5 are 0, 1, and 3, but since we are checking if the sum is 0, we get 1, 1, and 1.",
+              "id": "4b13de34-e770-40c0-98a1-c72fd18e52f5",
+              "input": "A = [0,1,1]"
+            },
+            {
+              "expectedOutput": "[1,0,0]",
+              "explanation": "The prefix sums modulo 5 are 1, 3, and 2, so we get 1, 0, and 0.",
+              "id": "d77de18c-d988-4e66-b2b0-e6286e401ef6",
+              "input": "A = [1,1,1]"
+            }
+          ]
+        }
+      ],
+      "id": "089e68d9-7f07-4865-b204-e25c38b03c29",
+      "lastUpdated": "2026-02-06T21:55:59Z",
+      "problemSlug": "binary-prefix-divisible-by-5",
+      "relatedProblems": [
+        "x-of-a-kind-in-a-deck-of-cards",
+        "find-singles-in-mixed-nuts"
+      ],
+      "summary": "The problem requires checking the binary prefix of each number in the array to see if it's divisible by 5. The key insight is to keep track of the prefix sum modulo 5 and update the result accordingly."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Generate all possible substrings of the binary string and check if each substring represents a number from 1 to N by converting it to an integer.",
+          "code": "class Solution {\n    import Foundation\n\n    func queryString(_ S: String, _ N: Int) -> Bool {\n        for i in 1...N {\n            let binaryString = String(i, radix: 2)\n            if !S.contains(binaryString) {\n                return false\n            }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are using a constant amount of space to store the input string S and the number N.",
+            "time": "O(N * S.length)",
+            "timeExplanation": "The time complexity is O(N * S.length) because we are generating all possible binary strings for numbers from 1 to N and checking if they exist in S."
+          },
+          "explanation": "The brute force approach is straightforward but inefficient due to its exhaustive nature, checking every possible combination of substrings to see if they meet the criteria.",
+          "id": "c7aef6cd-11ce-4c03-9935-33a208427260",
+          "intuition": "This approach works by generating all possible substrings of the given binary string and checking whether they represent the numbers from 1 to N.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The binary string \"0110\" can be broken down into \"1\", \"10\", and \"11\", which represent the numbers 1, 2, and 3.",
+              "id": "7944593d-daad-44fb-9fd8-4d5037171fbc",
+              "input": "S = \"0110\", N = 3"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The binary string \"0110\" cannot be broken down into substrings representing the numbers 1, 2, 3, and 4.",
+              "id": "b101efdf-d286-4dd2-9357-1760bb0a344e",
+              "input": "S = \"0110\", N = 4"
+            }
+          ]
+        },
+        {
+          "approach": "Generate binary strings for numbers from 1 to N and check if they are substrings of S using the 'contains' method.",
+          "code": "class Solution {\n    import Foundation\n\n    func queryString(_ S: String, _ N: Int) -> Bool {\n        for i in 1...N {\n            let binaryString = String(i, radix: 2)\n            if !S.contains(binaryString) {\n                return false\n            }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are using a constant amount of space to store the input string S and the number N.",
+            "time": "O(N * log N)",
+            "timeExplanation": "The time complexity is O(N * log N) because we are generating binary strings for numbers from 1 to N, which takes O(log N) time per number."
+          },
+          "explanation": "The optimized approach is more efficient than the brute force approach because it avoids generating all possible substrings of S and instead checks only the binary strings that represent numbers from 1 to N.",
+          "id": "1be3eae6-7b3e-4220-94ee-95cbd28d4dfc",
+          "intuition": "This approach works by generating binary strings for numbers from 1 to N and checking if they are substrings of the given binary string S.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The binary string \"1011\" can be broken down into \"1\", \"10\", and \"11\", which represent the numbers 1, 2, and 3.",
+              "id": "fdad39aa-83ad-42a2-86c8-8c4495d738ce",
+              "input": "S = \"1011\", N = 3"
+            },
+            {
+              "expectedOutput": "true",
+              "explanation": "The binary string \"0011\" can be broken down into \"1\", \"10\", and \"11\", which represent the numbers 1, 2, and 3.",
+              "id": "6acb5038-e8f7-4d53-9609-3777954aaefc",
+              "input": "S = \"0011\", N = 3"
+            }
+          ]
+        }
+      ],
+      "id": "aa411fd5-704d-42b0-b889-b9452651788f",
+      "lastUpdated": "2026-02-06T21:55:50Z",
+      "problemSlug": "binary-string-with-substrings-representing-1-to-n",
+      "relatedProblems": [
+        "substrings-of-size-three-with-distinct-characters",
+        "subarray-sums-divisible-by-k"
+      ],
+      "summary": "This problem involves determining whether a given binary string can be broken down into substrings representing consecutive integers from 1 to N. A key insight is that a binary string can be divided into substrings of varying lengths."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Start from the leftmost bit, compare the bits at the same position for all numbers in the range. If the bits are the same, the bit at that position in the result should be the same. If the bits are different, the bit at that position in the result should be 0. Continue this process until all bits have been compared.",
+          "code": "class Solution {\n    func rangeBitwiseAnd(_ m: Int, _ n: Int) -> Int { var res = m; for i in m + 1...n { res = res & i }; return res }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because it only uses a constant amount of space to store the result.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity of the brute-force approach is O(n) because it needs to iterate over all numbers within the given range."
+          },
+          "explanation": "For example, given a range [5, 7], we need to find the bitwise AND of numbers 5, 6, and 7. The binary representation of these numbers is 101, 110, and 111 respectively. The bitwise AND of these numbers is 100, which is the common prefix among all numbers in the range.",
+          "id": "c5a81506-cfd1-4a4d-93d9-3a6848549ff3",
+          "intuition": "The brute-force approach works by iterating over all numbers within the given range and performing a bitwise AND operation on each pair of numbers.",
+          "name": "Brute-Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "The bitwise AND of numbers 5, 6, and 7 is 100, which is the binary representation of 4.",
+              "id": "342330b4-cce9-4c18-9643-c7fd7cc96b3d",
+              "input": "m = 5, n = 7"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "The bitwise AND of numbers 0 and 1 is 0.",
+              "id": "72eca0a0-b77e-4c20-8cc2-0ef8059f9768",
+              "input": "m = 0, n = 1"
+            }
+          ]
+        },
+        {
+          "approach": "Shift both numbers to the right until they are equal. The number of shifts is the number of bits that are not part of the common prefix. Then, shift the result to the left by the same number of bits to get the final result.",
+          "code": "class Solution {\n    func rangeBitwiseAnd(_ m: Int, _ n: Int) -> Int {\n        var mCopy = m\n        var nCopy = n\n        var shift = 0\n        while mCopy != nCopy {\n            mCopy >>= 1\n            nCopy >>= 1\n            shift += 1\n        }\n        return mCopy << shift\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because it only uses a constant amount of space to store the result.",
+            "time": "O(log n)",
+            "timeExplanation": "The time complexity of the optimized approach is O(log n) because it needs to shift the numbers to the right until they are equal."
+          },
+          "explanation": "For example, given a range [5, 7], we need to find the bitwise AND of numbers 5 and 7. The binary representation of these numbers is 101 and 111 respectively. Shift both numbers to the right until they are equal, which is 1. The number of shifts is 2. Then, shift the result to the left by 2 bits to get the final result, which is 100.",
+          "id": "96aa7da6-42ae-4741-a7f5-eb3cc3d33045",
+          "intuition": "The optimized approach works by finding the common prefix among all numbers in the range, which is the bitwise AND of the numbers.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "4",
+              "explanation": "The bitwise AND of numbers 5 and 7 is 100, which is the binary representation of 4.",
+              "id": "56e8763a-785e-4b0c-a105-c946d671a392",
+              "input": "m = 5, n = 7"
+            },
+            {
+              "expectedOutput": "8",
+              "explanation": "The bitwise AND of numbers 10 and 15 is 1000, which is the binary representation of 8.",
+              "id": "6bfd1cf0-97d1-491a-b4ca-18a022287178",
+              "input": "m = 10, n = 15"
+            }
+          ]
+        }
+      ],
+      "id": "7497c31d-6591-4a82-8825-53676f36004a",
+      "lastUpdated": "2026-02-06T21:10:10Z",
+      "problemSlug": "bitwise-and-of-numbers-range",
+      "relatedProblems": [
+        "single-number",
+        "missing-number"
+      ],
+      "summary": "This problem asks for the bitwise AND of numbers within a given range, and the key insight is to find the common prefix among all numbers in the range. The problem can be solved using both brute-force and optimized approaches."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Convert the number to binary. 2. Flip all the bits. 3. Convert back to decimal.",
+          "code": "class Solution {\n    func findComplement(_ num: Int) -> Int {\n        var numBinary = String(num, radix: 2)\n        var flipped = \"\"\n        for bit in numBinary {\n            flipped += bit == \"0\" ? \"1\" : \"0\"\n        }\n        return Int(flipped, radix: 2)!\n    }\n}",
+          "complexity": {
+            "space": "O(log n)",
+            "spaceExplanation": "The space complexity is also O(log n) because we are storing the binary representation of the number which requires log(n) space.",
+            "time": "O(log n)",
+            "timeExplanation": "The time complexity is O(log n) because we are processing each bit of the number once, and the number of bits in a number n is log(n) base 2."
+          },
+          "explanation": "The brute force approach involves converting the number to binary and then iterating through each bit to flip it. After flipping all the bits, we convert the binary representation back to decimal to get the complement.",
+          "id": "40fba91b-0fc8-40a0-ae9c-36bf5f936aa7",
+          "intuition": "This approach works by first converting the number into its binary representation, then flipping all the bits, and finally converting it back to decimal.",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The binary representation of 5 is 101. After flipping the bits, it becomes 010 which is 2 in decimal.",
+              "id": "8e1c2c56-dc7d-46ac-9e13-f42019188307",
+              "input": "num = 5"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "The binary representation of 1 is 1. After flipping the bits, it becomes 0 which is 0 in decimal.",
+              "id": "475ae3eb-c2ba-4bb9-8b34-1bb3c6ec8293",
+              "input": "num = 1"
+            }
+          ]
+        },
+        {
+          "approach": "1. Find the number of bits in the number. 2. Create a mask with all bits set to 1 up to the number of bits found. 3. Use bitwise XOR operation to find the complement.",
+          "code": "class Solution {\n    func findComplement(_ num: Int) -> Int {\n        var n = num\n        var bits = 0\n        while n > 0 {\n            bits += 1\n            n = n >> 1\n        }\n        let mask = (1 << bits) - 1\n        return num ^ mask\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity improves to O(1) because we are using a constant amount of space to store the mask and other variables.",
+            "time": "O(log n)",
+            "timeExplanation": "The time complexity remains O(log n) because we are still processing each bit of the number once."
+          },
+          "explanation": "The optimized approach works by first finding the number of bits in the given number. Then, it creates a mask with all bits set to 1 up to the number of bits found. Finally, it uses the bitwise XOR operation with the mask to find the complement of the number.",
+          "id": "814203f5-fa2f-46d8-a103-6fec6a3ca87b",
+          "intuition": "This approach involves finding the number of bits in the given number and then using bitwise operations to find the complement.",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "As in the brute force approach, the complement of 5 (101) is 2 (010) in decimal.",
+              "id": "211a5d4a-8661-4353-8fa6-07eff188449c",
+              "input": "num = 5"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "The complement of 1 is 0 because flipping the only bit results in 0.",
+              "id": "f14f11dd-5711-46b5-b9a3-4e6f90878ebd",
+              "input": "num = 1"
+            },
+            {
+              "expectedOutput": "5",
+              "explanation": "The binary representation of 10 is 1010. After flipping the bits, it becomes 0101 which is 5 in decimal.",
+              "id": "01d0405c-6d4c-4a95-9f20-21c09d0f43a2",
+              "input": "num = 10"
+            }
+          ]
+        }
+      ],
+      "id": "1017019a-8853-4cfe-a8f8-ed013137cd64",
+      "lastUpdated": "2026-02-06T21:55:20Z",
+      "problemSlug": "complement-of-base-10-integer",
+      "relatedProblems": [
+        "number-of-1-bits",
+        "binary-number-with-alternating-bits"
+      ],
+      "summary": "The problem requires finding the complement of a base 10 integer by flipping all its bits. The key insight is to understand how bit manipulation works in complementing a number."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Create two hash tables, one for each string, and then compare them to find the character with a frequency of 1 in the first table and 0 in the second table, or the character that exists only in the first table",
+          "code": "class Solution {\n    func findTheDifference(_ s: String, _ t: String) -> Character {\n        var countS = Dictionary(String(s).map { ($0, 1) }, uniquingKeysWith: +)\n        var countT = Dictionary(String(t).map { ($0, 1) }, uniquingKeysWith: +)\n\n        for (k, v) in countT {\n            if countS[k] ?? 0 != v {\n                return k\n            }\n        }\n        fatalError()\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is also O(n) because we are storing characters and their frequencies in two hash tables",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because creating the hash tables takes O(n) time"
+          },
+          "explanation": "This approach works by creating two hash tables where the keys are the characters and the values are their frequencies. However, the brute-force approach has a higher time complexity",
+          "id": "167e9f54-33ba-4274-9092-baa6f53c0100",
+          "intuition": "Compare characters of two strings one by one to find the difference",
+          "name": "Brute Force Approach",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "e",
+              "explanation": "Because 'e' is the character that exists only in the second string",
+              "id": "cdce6f19-07c6-44df-b199-272b8a7cd5fe",
+              "input": "s = \"abcd\", t = \"abcde\""
+            },
+            {
+              "expectedOutput": "a",
+              "explanation": "Because 'a' is the character that exists only in the second string",
+              "id": "917f471a-23f8-4622-8186-63cfb0b79169",
+              "input": "s = \"\", t = \"a\""
+            },
+            {
+              "expectedOutput": "a",
+              "explanation": "Because 'a' exists twice in the second string but only once in the first string",
+              "id": "ae7a4884-0023-4812-a138-77ef3fb96164",
+              "input": "s = \"a\", t = \"aa\""
+            }
+          ]
+        },
+        {
+          "approach": "Calculate XOR of all characters in the first string, calculate XOR of all characters in the second string, and then find the XOR of the two results. The final result is the character that exists in the second string but not in the first string",
+          "code": "import Foundation\n\nclass Solution {\n    func findTheDifference(_ s: String, _ t: String) -> Character {\n        var result = 0\n        for c in s {\n            result = result ^ Int(c.asciiValue ?? 0)\n        }\n        for c in t {\n            result = result ^ Int(c.asciiValue ?? 0)\n        }\n        return Character(UnicodeScalar(UInt32(result)) ?? UnicodeScalar(0))\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we only use a constant amount of space to store the result",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) because we need to iterate through all characters in both strings"
+          },
+          "explanation": "The XOR operation is its own inverse. So, if we XOR a character with itself, the result will be zero. Therefore, all characters that exist in both strings will cancel out, and we will be left with the character that exists only in the second string",
+          "id": "ce90ab05-6416-486f-b4e9-6286f598ad83",
+          "intuition": "Use XOR operation to find the difference between two strings",
+          "name": "Optimized Approach",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "e",
+              "explanation": "Because 'e' is the character that exists only in the second string",
+              "id": "1e5b00fd-27dc-4558-8e1b-f441673ef66e",
+              "input": "s = \"abcd\", t = \"abcde\""
+            },
+            {
+              "expectedOutput": "a",
+              "explanation": "Because 'a' is the character that exists only in the second string",
+              "id": "a4390f04-3314-4297-bfc8-2a7ba7f511dc",
+              "input": "s = \"\", t = \"a\""
+            },
+            {
+              "expectedOutput": "a",
+              "explanation": "Because 'a' exists twice in the second string but only once in the first string",
+              "id": "ee7d1543-44eb-4533-8282-c0d82bd2b4fc",
+              "input": "s = \"a\", t = \"aa\""
+            }
+          ]
+        }
+      ],
+      "id": "ac5db9f1-00be-4c79-85f5-6828890c35a1",
+      "lastUpdated": "2026-02-06T21:15:54Z",
+      "problemSlug": "find-the-difference",
+      "relatedProblems": [
+        "single-number",
+        "single-number-iii"
+      ],
+      "summary": "The problem requires finding the difference between two strings, where one string contains all characters from the other string plus one additional character. The key insight is to use a hash table to store character frequencies."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Convert the integers to binary strings. 2. Iterate over each bit position in the two strings. 3. Compare the bits at each position. 4. If the bits are different, increment the Hamming distance.",
+          "code": "class Solution {\n    func hammingDistance(_ x: Int, _ y: Int) -> Int {\n        let binaryX = String(x, radix: 2)\n        let binaryY = String(y, radix: 2)\n        let length = max(binaryX.count, binaryY.count)\n        var distance = 0\n        for i in 0..<length {\n            let bitX = binaryX.count > i ? String(binaryX[binaryX.index(binaryX.startIndex, offsetBy: length - i - 1)]) : \"0\"\n            let bitY = binaryY.count > i ? String(binaryY[binaryY.index(binaryY.startIndex, offsetBy: length - i - 1)]) : \"0\"\n            if bitX != bitY {\n                distance += 1\n            }\n        }\n        return distance\n    }\n}",
+          "complexity": {
+            "space": "O(log n)",
+            "spaceExplanation": "The space complexity is O(log n) because we are converting the integers to binary strings.",
+            "time": "O(log n)",
+            "timeExplanation": "The time complexity is O(log n) because we are iterating over each bit position in the two numbers."
+          },
+          "explanation": "This approach is straightforward but not efficient because it involves string manipulation and iteration over each bit position.",
+          "id": "43274d7b-b70c-4b8a-a937-5a2bb5cf01de",
+          "intuition": "This approach works by iterating over each bit position in the two numbers and comparing the bits. If the bits are different, it increments the Hamming distance.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The binary representation of 1 is 01 and the binary representation of 4 is 100. The Hamming distance is 2 because the bits are different at two positions.",
+              "id": "9f734710-6821-4282-825a-81fe07015c51",
+              "input": "x = 1, y = 4"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The binary representation of 2 is 10 and the binary representation of 3 is 11. The Hamming distance is 1 because the bits are different at one position.",
+              "id": "90f33a91-ea4e-4a11-88d8-3fb3ebc3f036",
+              "input": "x = 2, y = 3"
+            }
+          ]
+        },
+        {
+          "approach": "1. Use the XOR operator to find the bits that are different between the two numbers. 2. Count the number of bits set in the result.",
+          "code": "class Solution {\n    func hammingDistance(_ x: Int, _ y: Int) -> Int { var xor = x ^ y; var distance = 0; while xor > 0 { if xor & 1 == 1 { distance += 1 }; xor >>= 1 }; return distance }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) because we are only using a constant amount of space to store the result of the XOR operation and the Hamming distance.",
+            "time": "O(log n)",
+            "timeExplanation": "The time complexity is O(log n) because we are counting the number of bits set in the result of the XOR operation."
+          },
+          "explanation": "This approach is more efficient than the brute force approach because it uses bit manipulation and does not involve string manipulation or iteration over each bit position.",
+          "id": "2e60f5b4-4ce5-4d89-b866-a1ed132f66a1",
+          "intuition": "This approach works by using the XOR operator to find the bits that are different between the two numbers and then counting the number of bits set in the result.",
+          "name": "Bit Manipulation",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The XOR of 1 and 4 is 5, which has two bits set. Therefore, the Hamming distance is 2.",
+              "id": "201bf790-951c-4ff6-ac9e-d15ec958d665",
+              "input": "x = 1, y = 4"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The XOR of 2 and 3 is 1, which has one bit set. Therefore, the Hamming distance is 1.",
+              "id": "721409bb-cdbb-4b1b-aad0-f277743fe9fe",
+              "input": "x = 2, y = 3"
+            }
+          ]
+        }
+      ],
+      "id": "16e0befe-5546-4313-af58-6245982b1517",
+      "lastUpdated": "2026-02-06T21:20:18Z",
+      "problemSlug": "hamming-distance",
+      "relatedProblems": [
+        "number-of-1-bits",
+        "counting-bits"
+      ],
+      "summary": "The Hamming distance between two integers is the number of positions at which the corresponding bits are different. To find the Hamming distance, we can use bit manipulation to XOR the two numbers and then count the number of bits set in the result."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "For each pair of words, compare each character of one word with each character of the other word. If any characters match, skip this pair. Otherwise, calculate the product of the lengths of these two words and update the maximum product if necessary.",
+          "code": "class Solution {\n    func maxProduct(words: [String]) -> Int {\n        let n = words.count\n        var maxProduct = 0\n        for i in 0..<n {\n            for j in (i+1)..<n {\n                if !hasCommonCharacter(word1: words[i], word2: words[j]) {\n                    maxProduct = max(maxProduct, words[i].count * words[j].count)\n                }\n            }\n        }\n        return maxProduct\n    }\n\n    func hasCommonCharacter(word1: String, word2: String) -> Bool {\n        var word1 = word1\n        var word2 = word2\n        for char in word1 {\n            if word2.contains(char) {\n                return true\n            }\n        }\n        return false\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We are not using any additional space that scales with the input size.",
+            "time": "O(n^2 * m^2)",
+            "timeExplanation": "We are iterating over all pairs of words and comparing each character of one word with each character of the other word."
+          },
+          "explanation": "This approach has a time complexity of O(n^2 * m^2) where n is the number of words and m is the maximum length of a word, because we are comparing each pair of words character by character.",
+          "id": "c4da044d-8413-492c-8b95-3852ded634e2",
+          "intuition": "This approach works by iterating over all pairs of words, checking for common characters, and keeping track of the maximum product of word lengths.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "16",
+              "explanation": "The maximum product of word lengths is from the words \"abcw\" and \"fxyz\".",
+              "id": "c205adeb-ecd4-4129-afa5-6bdd97337c6b",
+              "input": "words = [\"abcw\",\"baz\",\"foo\",\"bar\",\"fxyz\",\"abc\"]"
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "The maximum product of word lengths is from the words \"ab\" and \"cd\".",
+              "id": "aca72923-ce51-414f-8e31-02abd131fe8e",
+              "input": "words = [\"a\",\"ab\",\"abc\",\"d\",\"cd\",\"bcd\",\"abcd\"]"
+            }
+          ]
+        },
+        {
+          "approach": "For each word, create a bitmask where the i-th bit is set if the word contains the i-th letter of the alphabet. Then, for each pair of words, use bitwise AND operation to check if they have any common characters.",
+          "code": "class Solution {\n    func maxProduct(words: [String]) -> Int {\n        let n = words.count\n        var masks = [Int]()\n        var maxProduct = 0\n        for word in words {\n            var mask = 0\n            for char in word {\n                let bit = 1 << (UnicodeScalar(String(char))!.value - 97)\n                mask |= Int(bit)\n            }\n            masks.append(mask)\n        }\n        for i in 0..<n {\n            for j in (i+1)..<n {\n                if (masks[i] & masks[j]) == 0 {\n                    maxProduct = max(maxProduct, words[i].count * words[j].count)\n                }\n            }\n        }\n        return maxProduct\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We are storing the bitmasks for all words.",
+            "time": "O(n^2 + n*m)",
+            "timeExplanation": "We are creating a bitmask for each word and then comparing each pair of words using bitwise operations."
+          },
+          "explanation": "This approach has a time complexity of O(n^2 + n*m) where n is the number of words and m is the maximum length of a word, because we are creating a bitmask for each word and then comparing each pair of words using bitwise operations.",
+          "id": "9856c800-d5bd-4f18-8aa1-1c86d7ea9bb0",
+          "intuition": "This approach works by using bit manipulation to efficiently check for common characters between two words.",
+          "name": "Bit Manipulation",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "16",
+              "explanation": "The maximum product of word lengths is from the words \"abcw\" and \"fxyz\".",
+              "id": "f7f37aea-88e7-4b25-ad9c-87fbb567797e",
+              "input": "words = [\"abcw\",\"baz\",\"foo\",\"bar\",\"fxyz\",\"abc\"]"
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "The maximum product of word lengths is from the words \"ab\" and \"cd\".",
+              "id": "f05682c2-50cb-47c6-b3c2-5ea08a87ef5f",
+              "input": "words = [\"a\",\"ab\",\"abc\",\"d\",\"cd\",\"bcd\",\"abcd\"]"
+            }
+          ]
+        }
+      ],
+      "id": "587cfa65-4ae0-40f7-b8b2-73f5d6475cfa",
+      "lastUpdated": "2026-02-06T21:12:56Z",
+      "problemSlug": "maximum-product-of-word-lengths",
+      "relatedProblems": [
+        "single-number",
+        "missing-number"
+      ],
+      "summary": "The problem asks us to find the maximum product of word lengths in a given array of words, with the constraint that no two words can have common characters. The key insight is to use bit manipulation to efficiently check for common characters."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize max XOR to 0. 2. Iterate over the array for each pair of numbers. 3. Calculate the XOR of each pair. 4. Update max XOR if the current pair's XOR is greater.",
+          "code": "class Solution {\n    let findMaximumXOR = { (nums: [Int]) -> Int in\n        var max = 0\n        for i in 0..<nums.count {\n            for j in i+1..<nums.count {\n                let xor = nums[i] ^ nums[j]\n                max = Swift.max(max, xor)\n            }\n        }\n        return max\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we only use a fixed amount of space to store the max XOR value.",
+            "time": "O(n^2)",
+            "timeExplanation": "We iterate over the array for each pair of numbers, resulting in n*(n-1)/2 comparisons."
+          },
+          "explanation": "This approach is straightforward but inefficient due to its O(n^2) time complexity, where n is the number of elements in the array.",
+          "id": "dd310cbf-d0f2-42a5-afef-ac6cff05e7c1",
+          "intuition": "The brute force approach involves comparing every pair of numbers in the array and calculating their XOR, keeping track of the maximum value found.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "15",
+              "explanation": "The XOR of 7 and 15 is 7^15 = 14, and the XOR of 11 and 15 is 11^15 = 12, but the XOR of 7 and 11 is 7^11 = 12, and the XOR of 2 and 15 is 2^15 = 13. The XOR of 7 and 15 is less than the XOR of 2 and 15. However, when checking the XOR of all pairs, 15 results from 7 and 8 which are not in the array, but checking all possible pairs results in the number 15 being the greatest XOR possible.",
+              "id": "59b5dd58-8330-4e16-9f5f-4de9fbe01265",
+              "input": "nums = [2,7,11,15]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The XOR of 0 and 1 is 1.",
+              "id": "c98dbb1d-a755-4253-9c69-2ea37c1d8ca8",
+              "input": "nums = [0,1]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Construct a Trie with the given numbers. 2. For each number, navigate the Trie to find the maximum XOR. 3. Update the max XOR if a larger value is found.",
+          "code": "class Solution {\n    class TrieNode {\n        var children = [Int: TrieNode]()\n        var EndOfNumber = false\n    }\n\n    func findMaximumXOR(_ nums: [Int]) -> Int {\n        var root = TrieNode()\n        for num in nums {\n            var node = root\n            var tempNum = num\n            for _ in 1...31 {\n                let bit = tempNum & 1\n                tempNum >>= 1\n                if node.children[bit] == nil {\n                    node.children[bit] = TrieNode()\n                }\n                node = node.children[bit]!\n            }\n            node.EndOfNumber = true\n        }\n\n        func find(num: Int, node: TrieNode) -> Int {\n            var result = 0\n            var tempNum = num\n            var node = node\n            for i in 1...31 {\n                let bit = tempNum & 1\n                tempNum >>= 1\n                let oppositeBit = 1 - bit\n                if let nextNode = node.children[oppositeBit] {\n                    result += (1 << (31 - i))\n                    node = nextNode\n                } else if let nextNode = node.children[bit] {\n                    node = nextNode\n                }\n            }\n            return result\n        }\n\n        var max = 0\n        for num in nums {\n            max = Swift.max(max, find(num: num, node: root))\n        }\n        return max\n    }\n}",
+          "complexity": {
+            "space": "O(n*32)",
+            "spaceExplanation": "The Trie's space complexity is O(n*32) because in the worst case, we have to store all 32 bits of each number.",
+            "time": "O(n*32)",
+            "timeExplanation": "Constructing the Trie takes O(n*32) time, and finding the maximum XOR for each number takes O(32) time, resulting in O(n*32) total time."
+          },
+          "explanation": "The Trie allows us to efficiently find the maximum XOR in O(n*32) time, where n is the number of elements in the array, assuming 32-bit integers.",
+          "id": "628487b5-d03f-4e00-8098-a9a3716a5c7d",
+          "intuition": "A Trie (prefix tree) can be used to efficiently find the maximum XOR by representing binary numbers and quickly identifying the maximum XOR by navigating through the Trie.",
+          "name": "Trie Optimization",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "15",
+              "explanation": "Using the Trie to find the maximum XOR of two numbers in the array results in 15.",
+              "id": "c4bc09b1-3234-49ff-abd2-5aa8bf8b286c",
+              "input": "nums = [2,7,11,15]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "The XOR of 0 and 1 is 1.",
+              "id": "a77f7a5b-f870-46ef-b1c0-8afd9e56b698",
+              "input": "nums = [0,1]"
+            }
+          ]
+        }
+      ],
+      "id": "f28b7c78-2e75-474e-bd15-421cf2e6c161",
+      "lastUpdated": "2026-02-06T21:17:42Z",
+      "problemSlug": "maximum-xor-of-two-numbers-in-an-array",
+      "relatedProblems": [
+        "single-number",
+        "find-the-difference"
+      ],
+      "summary": "The Maximum XOR of Two Numbers in an Array problem involves finding the maximum XOR of two numbers in a given array, and a key insight is using a Trie data structure for optimization."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Convert the number to binary, iterate over each bit, and flip it.",
+          "code": "import Foundation\n\nclass Solution {\n    func findComplement(_ num: Int) -> Int {\n        let binary = String(num, radix: 2)\n        var result = \"\"\n        for char in binary {\n            result += (char == \"0\") ? \"1\" : \"0\"\n        }\n        return Int(result, radix: 2)!\n    }\n}",
+          "complexity": {
+            "space": "O(log n)",
+            "spaceExplanation": "The space complexity is logarithmic because we are storing the binary representation of the number as a string.",
+            "time": "O(log n)",
+            "timeExplanation": "The time complexity is logarithmic because we are converting the number to binary and then iterating over each character in the string."
+          },
+          "explanation": "The brute force approach involves converting the number to binary and then iterating over each character in the string to flip the bits.",
+          "id": "da559480-e25f-4f96-96f9-ae0fc7f48090",
+          "intuition": "This approach works by first converting the number to binary and then iterating over each bit to flip it.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The binary representation of 5 is \"101\". Flipping the bits gives us \"010\", which is 2 in decimal.",
+              "id": "58742c72-814c-4e1e-b585-fe458f036857",
+              "input": "5"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "The binary representation of 1 is \"1\". Flipping the bit gives us \"0\", which is 0 in decimal.",
+              "id": "9c607432-6770-4d94-9bf6-5bf2e7c82467",
+              "input": "1"
+            }
+          ]
+        },
+        {
+          "approach": "Calculate the number of bits, create a bitmask with all bits set to 1 up to the number of bits, and then use XOR to flip all the bits.",
+          "code": "class Solution {\n    func findComplement(_ num: Int) -> Int { let numberOfBits = num.nonzeroBitCount; let bitmask = (1 << (numberOfBits + 1)) - 1; return num ^ bitmask }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is constant because we are using a constant amount of space to store the result.",
+            "time": "O(1)",
+            "timeExplanation": "The time complexity is constant because we are using a constant number of operations to calculate the result."
+          },
+          "explanation": "The optimized approach involves calculating the number of bits in the given number, creating a bitmask with all bits set to 1 up to the number of bits, and then using XOR to flip all the bits.",
+          "id": "0e9a735b-4b21-4b1d-a22d-673d86cf0d3f",
+          "intuition": "This approach works by using bit manipulation to find the number of bits in the given number and then using a bitmask to flip all the bits.",
+          "name": "Optimized Bit Manipulation",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "2",
+              "explanation": "The binary representation of 5 is \"101\". Flipping the bits gives us \"010\", which is 2 in decimal.",
+              "id": "8408b703-c73b-46f4-90df-c577c877fa1e",
+              "input": "5"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "The binary representation of 1 is \"1\". Flipping the bit gives us \"0\", which is 0 in decimal.",
+              "id": "764d2ee3-19b2-42cd-aed1-18b2eb8cf75e",
+              "input": "1"
+            }
+          ]
+        }
+      ],
+      "id": "980cf0ca-b82e-4be9-920f-82f7eae5f0e6",
+      "lastUpdated": "2026-02-06T21:21:14Z",
+      "problemSlug": "number-complement",
+      "relatedProblems": [
+        "toeplitz-matrix",
+        "reverse-bits"
+      ],
+      "summary": "The problem requires finding the complement of a given number by flipping all bits of the number. The key insight is to use bit manipulation."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize count = 0\n2. While n != 0:\n   a. n = n & (n - 1)\n   b. count += 1\n3. Return count",
+          "code": "class Solution {\n    func hammingWeight(_ n: Int) -> Int {\n        var num = n\n        var count = 0\n\n        while num != 0 {\n            num &= (num - 1)\n            count += 1\n        }\n\n        return count\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only using counter variable",
+            "time": "O(k)",
+            "timeExplanation": "k is the number of 1 bits, at most 32 for 32-bit integer"
+          },
+          "explanation": "When we subtract 1 from n, all bits after the rightmost 1 are flipped (including the 1 itself). ANDing with original n clears that rightmost 1. For example: 12 (1100) & 11 (1011) = 8 (1000). We cleared the rightmost 1 bit. This runs in O(k) where k is the number of 1 bits, not the total bits.",
+          "id": "7e52ff8f-6b86-4568-ab67-678e4f25ab81",
+          "intuition": "n & (n-1) clears the rightmost set bit. Count how many times we can do this until n becomes 0.",
+          "name": "Brian Kernighan's Algorithm",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "1011 → 1010 (count 1) → 1000 (count 2) → 0 (count 3)",
+              "id": "7e530791-0f85-4efb-9104-240c4ba9e316",
+              "input": "n = 11 (binary: 1011)"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "Only one 1 bit, single iteration",
+              "id": "d6ea447a-f77a-414f-b869-80206cdca6d8",
+              "input": "n = 128 (binary: 10000000)"
+            },
+            {
+              "expectedOutput": "30",
+              "explanation": "Almost all bits set in this large number",
+              "id": "25e3b834-3ef2-4eda-ae68-63a3ed4b12c2",
+              "input": "n = 2147483645 (many 1s)"
+            }
+          ]
+        },
+        {
+          "approach": "1. Initialize count = 0\n2. Repeat 32 times:\n   a. If n & 1 == 1, increment count\n   b. Right shift n by 1\n3. Return count",
+          "code": "class Solution {\n    func hammingWeight(_ n: Int) -> Int {\n        var num = n\n        var count = 0\n\n        for _ in 0..<32 {\n            count += num & 1\n            num >>= 1\n        }\n\n        return count\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only counter and input variables",
+            "time": "O(1)",
+            "timeExplanation": "Always exactly 32 iterations for 32-bit integer"
+          },
+          "explanation": "We examine each bit position by masking with 1 (which checks if the LSB is set) and then shifting right to bring the next bit into position. This always takes 32 iterations for a 32-bit integer regardless of how many 1s there are.",
+          "id": "62ed1384-def6-43d4-9894-5ef76815664d",
+          "intuition": "Check the least significant bit with n & 1, then right shift. Repeat for all 32 bits.",
+          "name": "Check Each Bit",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "Check all 32 bits, count three 1s",
+              "id": "acfb3fb2-c207-4274-a082-c27cd8d7905c",
+              "input": "n = 11"
+            },
+            {
+              "expectedOutput": "0",
+              "explanation": "No bits set",
+              "id": "ffcc6c1f-4e8b-4cd5-8ac7-b7da345e6989",
+              "input": "n = 0"
+            }
+          ]
+        }
+      ],
+      "id": "9de8a3ba-238c-41a0-856e-07e952e0576a",
+      "lastUpdated": "2026-02-06T08:38:32Z",
+      "problemSlug": "number-of-1-bits",
+      "relatedProblems": [
+        "reverse-bits",
+        "counting-bits",
+        "hamming-distance"
+      ],
+      "summary": "Count the number of 1 bits (Hamming weight) in an integer. Use bit manipulation: n & (n-1) clears the lowest set bit, or check each bit with n & 1."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Create an empty set to store unique substrings.\n2. Iterate through the DNA string using a sliding window of size 10.\n3. For each substring, check if it has been encountered before (i.e., it exists in the set).\n4. If it has, add it to the result set.\n5. Otherwise, add it to the set of unique substrings.",
+          "code": "import Foundation\n\nclass Solution {\n    func findRepeatedDnaSequences(_ s: String) -> [String] {\n        var dnaSet = Set<String>()\n        var repeatedSet = Set<String>()\n        \n        for i in 0..<(s.count - 9) {\n            let substring = String(s.dropFirst(i).prefix(10))\n            if dnaSet.contains(substring) {\n                repeatedSet.insert(substring)\n            }\n            dnaSet.insert(substring)\n        }\n        \n        return Array(repeatedSet)\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity is O(n) as in the worst case, we might end up storing all substrings of length 10 in our sets.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) where n is the length of the DNA string because we are potentially scanning the string once."
+          },
+          "explanation": "This solution is straightforward but has the potential to be inefficient due to redundant computations and high memory usage.",
+          "id": "e74e6cff-a07f-488b-9f5e-384806009611",
+          "intuition": "The idea is to iterate through the string and store all substrings of length 10 in a set, then return those that have been encountered before.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[\"AAAAACCCCC\",\"CCCCCAAAAA\"]",
+              "explanation": "These sequences are repeated.",
+              "id": "9895f126-5421-4f99-9cd7-5e8a408f53fd",
+              "input": "s = \"AAAAACCCCCAAAAACCCCCC\""
+            },
+            {
+              "expectedOutput": "[\"AAAAAAAAAA\"]",
+              "explanation": "Only one repeated sequence exists.",
+              "id": "86de66c7-de94-4336-8610-0f920e4b0170",
+              "input": "s = \"AAAAAAAAAAA\""
+            }
+          ]
+        },
+        {
+          "approach": "1. Define a hash function that maps each nucleotide (A, C, G, T) to a distinct integer.\n2. Compute the initial hash of the first substring of length 10.\n3. For subsequent substrings, update the hash by removing the contribution of the first character and adding the contribution of the new character at the end.\n4. Check if the updated hash value corresponds to a previously seen substring.\n5. Repeat this process for the entire DNA string.",
+          "code": "class Solution {\n    func findRepeatedDnaSequences(_ s: String) -> [String] {\n        let base = 4\n        let mod = Int(1e9) + 7\n\n        let nucleotideToIndex: [Character: Int] = [\n            \"A\": 0,\n            \"C\": 1,\n            \"G\": 2,\n            \"T\": 3\n        ]\n\n        var hashValues = Set<Int>()\n        var repeatedHashValues = Set<Int>()\n        var currentHash = 0\n\n        let sChars = Array(s)\n\n        // Compute initial hash\n        for i in 0..<10 {\n            currentHash = (currentHash * base) % mod + nucleotideToIndex[sChars[i]]!\n        }\n\n        hashValues.insert(currentHash)\n\n        let power = Int(pow(Double(base), 9))\n\n        // Compute hashes for subsequent substrings\n        for i in 10..<(s.count) {\n            currentHash = ((currentHash * base - nucleotideToIndex[sChars[i - 10]]! * power % mod + mod) % mod + nucleotideToIndex[sChars[i]]!)\n\n            if hashValues.contains(currentHash) {\n                repeatedHashValues.insert(currentHash)\n            }\n            hashValues.insert(currentHash)\n        }\n\n        var repeatedSequences = [String]()\n        for i in 0..<(s.count - 9) {\n            let substring = String(s.dropFirst(i).prefix(10))\n            let hash = getHash(for: substring, base: base, mod: mod, nucleotideToIndex: nucleotideToIndex)\n            if repeatedHashValues.contains(hash) {\n                repeatedSequences.append(substring)\n            }\n        }\n\n        // Remove duplicates\n        let uniqueSequences = Array(Set(repeatedSequences))\n\n        return uniqueSequences\n    }\n\n    func getHash(for substring: String, base: Int, mod: Int, nucleotideToIndex: [Character: Int]) -> Int {\n        var hash = 0\n        let substringChars = Array(substring)\n\n        for i in 0..<10 {\n            hash = (hash * base) % mod + nucleotideToIndex[substringChars[i]]!\n        }\n\n        return hash\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "The space complexity remains O(n) for storing the hash values and repeated sequences.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity remains O(n), but with a lower constant factor due to the optimized hash calculations."
+          },
+          "explanation": "Rolling hash significantly optimizes the solution by reducing the computational complexity of hash calculations.",
+          "id": "aa50f3c1-cb3d-4a26-be1f-574a46c864a4",
+          "intuition": "To optimize the solution, we can utilize the concept of rolling hash, which allows us to efficiently calculate the hash of a substring by using the previously computed hash, thus reducing redundant calculations.",
+          "name": "Rolling Hash",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[\"AAAAACCCCC\",\"CCCCCAAAAA\"]",
+              "explanation": "Identical to the brute force solution but with improved efficiency.",
+              "id": "5c09c73a-15ba-4c66-8eb0-e0a304b5bc64",
+              "input": "s = \"AAAAACCCCCAAAAACCCCCC\""
+            },
+            {
+              "expectedOutput": "[\"AAAAAAAAAA\"]",
+              "explanation": "Rolling hash approach still correctly identifies repeated sequences.",
+              "id": "c4fcc36a-a7ce-40b5-abc2-965013208fd9",
+              "input": "s = \"AAAAAAAAAAA\""
+            }
+          ]
+        }
+      ],
+      "id": "1ad0ff97-0e5e-4e3d-87c7-44a79f8bac91",
+      "lastUpdated": "2026-02-06T21:09:22Z",
+      "problemSlug": "repeated-dna-sequences",
+      "relatedProblems": [
+        "substring-with-concatenation-of-all-words",
+        "longest-substring-without-repeating-characters"
+      ],
+      "summary": "This problem involves finding all repeated DNA sequences of length 10. Key insight is utilizing hash-based approaches to efficiently keep track of visited sequences."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize result = 0\n2. For 32 iterations:\n   a. Left shift result by 1 (make room)\n   b. Add n's least significant bit (n & 1)\n   c. Right shift n by 1\n3. Return result",
+          "code": "class Solution {\n    func reverseBits(_ n: Int) -> Int {\n        var result = 0\n        var num = n\n\n        for _ in 0..<32 {\n            result = (result << 1) | (num & 1)\n            num >>= 1\n        }\n\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only using two integer variables",
+            "time": "O(1)",
+            "timeExplanation": "Always exactly 32 iterations"
+          },
+          "explanation": "We process bits from right to left in n, and place them from left to right in result. After 32 iterations, bit 0 of original n is now bit 31 of result, bit 1 is bit 30, etc. Each iteration shifts result left (making room at LSB) and shifts n right (exposing next bit).",
+          "id": "6d5a3516-6d13-47e4-9839-166a5774c3db",
+          "intuition": "Extract the least significant bit from input, place it at the most significant position of result, then shift both accordingly.",
+          "name": "Bit by Bit",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "964176192 (00111001011110000010100101000000)",
+              "explanation": "Bits reversed position by position",
+              "id": "6282dc33-c2e8-4621-9832-cc6d9d6f12ac",
+              "input": "n = 43261596 (00000010100101000001111010011100)"
+            },
+            {
+              "expectedOutput": "3221225471 (10111111111111111111111111111111)",
+              "explanation": "Near-maximum value with trailing zeros becomes leading zeros",
+              "id": "c7e8530f-84bb-453d-89bc-a2cba0a3dbb4",
+              "input": "n = 4294967293 (11111111111111111111111111111101)"
+            }
+          ]
+        },
+        {
+          "approach": "1. Swap adjacent bits\n2. Swap adjacent 2-bit groups\n3. Swap adjacent 4-bit groups\n4. Swap adjacent 8-bit groups\n5. Swap adjacent 16-bit groups",
+          "code": "class Solution {\n    func reverseBits(_ n: Int) -> Int {\n        var num = n\n        // Swap adjacent bits\n        num = ((num & 0x55555555) << 1) | ((num >> 1) & 0x55555555)\n        // Swap adjacent 2-bit pairs\n        num = ((num & 0x33333333) << 2) | ((num >> 2) & 0x33333333)\n        // Swap adjacent 4-bit nibbles\n        num = ((num & 0x0F0F0F0F) << 4) | ((num >> 4) & 0x0F0F0F0F)\n        // Swap adjacent bytes\n        num = ((num & 0x00FF00FF) << 8) | ((num >> 8) & 0x00FF00FF)\n        // Swap adjacent 16-bit halves\n        num = ((num & 0x0000FFFF) << 16) | ((num >> 16) & 0x0000FFFF)\n        return num\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only using one variable",
+            "time": "O(1)",
+            "timeExplanation": "Fixed 5 swap operations"
+          },
+          "explanation": "Each step swaps groups of increasing size. After swapping 1s, 2s, 4s, 8s, and 16s, we've effectively reversed all 32 bits. Uses bit masks to isolate and move groups. Very fast with just 5 operations (plus masks).",
+          "id": "7d60de68-5728-4be5-bce4-8e3002633e6e",
+          "intuition": "Swap adjacent bits, then adjacent pairs, then adjacent nibbles, etc. Like merge sort in reverse - combine small swaps into larger reversal.",
+          "name": "Divide and Conquer (Swap)",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "964176192",
+              "explanation": "Same result as bit-by-bit, but faster constant factor",
+              "id": "7c2f9bc5-face-40fb-8d99-a11140a6b2ad",
+              "input": "n = 43261596"
+            }
+          ]
+        }
+      ],
+      "id": "11b186ca-5869-4db6-a077-e6144d07bc3f",
+      "lastUpdated": "2026-02-06T08:38:32Z",
+      "problemSlug": "reverse-bits",
+      "relatedProblems": [
+        "number-of-1-bits",
+        "reverse-integer"
+      ],
+      "summary": "Reverse the bits of a 32-bit unsigned integer. Extract each bit from the input and place it in the mirrored position of the result."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Create a hash table to store the numbers we have seen. 2. Iterate through the array and for each number, check if it is already in the hash table. If it is, mark it as the duplicate. 3. After iterating through the array, find the missing number by checking which number is not in the hash table.",
+          "code": "class Solution {\n    func findErrorNums(_ nums: [Int]) -> [Int] {\n        var numCount: [Int: Int] = [:]\n        var duplicate: Int = 0\n        var missing: Int = 0\n        for num in nums {\n            numCount[num, default: 0] += 1\n        }\n        for i in 1...nums.count {\n            if numCount[i] == 0 {\n                missing = i\n            } else if numCount[i] == 2 {\n                duplicate = i\n            }\n        }\n        return [duplicate, missing]\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "We are using a hash table to store the numbers, resulting in a linear space complexity.",
+            "time": "O(n)",
+            "timeExplanation": "We are iterating through the array once, resulting in a linear time complexity."
+          },
+          "explanation": "This approach is straightforward but has a high time and space complexity due to the hash table.",
+          "id": "6d078c8c-a796-4316-86a2-e263580a9544",
+          "intuition": "This approach works by iterating through the array and checking for duplicates and missing numbers using a hash table.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[2,3]",
+              "explanation": "The duplicate number is 2 and the missing number is 3.",
+              "id": "0fd8cbf7-2f74-491d-864c-f6c648774c15",
+              "input": "nums = [1,2,2,4]"
+            },
+            {
+              "expectedOutput": "[1,2]",
+              "explanation": "The duplicate number is 1 and the missing number is 2.",
+              "id": "0a8431f3-4185-467a-aeaa-6bd1acabc493",
+              "input": "nums = [1,1]"
+            },
+            {
+              "expectedOutput": "[2,1]",
+              "explanation": "The duplicate number is 2 and the missing number is 1.",
+              "id": "8c051b6c-ff42-4398-bd90-d84d54e1a621",
+              "input": "nums = [2,2]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Iterate through the array and for each number, negate the value at the corresponding index (using the absolute value of the number). 2. After iterating through the array, find the duplicate and missing numbers by checking which indices have a positive value.",
+          "code": "class Solution {\n    func findErrorNums(_ nums: [Int]) -> [Int] {\n        var nums = nums\n        var duplicate: Int = 0\n        var missing: Int = 0\n        for i in 0..<nums.count {\n            let index = abs(nums[i]) - 1\n            if nums[index] < 0 {\n                duplicate = abs(nums[i])\n            } else {\n                nums[index] *= -1\n            }\n        }\n        for i in 0..<nums.count {\n            if nums[i] > 0 {\n                missing = i + 1\n            }\n        }\n        return [duplicate, missing]\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We are using the array itself as an auxiliary data structure, resulting in a constant space complexity.",
+            "time": "O(n)",
+            "timeExplanation": "We are still iterating through the array once, resulting in a linear time complexity."
+          },
+          "explanation": "This approach is more efficient than the brute force approach because it uses the array itself as an auxiliary data structure, eliminating the need for a hash table.",
+          "id": "94912a18-dcdd-408d-8097-57f55e83bd77",
+          "intuition": "This approach works by using the index of the array to negate the corresponding value, thus finding the duplicate and missing numbers.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[2,3]",
+              "explanation": "The duplicate number is 2 and the missing number is 3.",
+              "id": "e68f2897-d8c1-4f97-b788-8138ac5c4c4c",
+              "input": "nums = [1,2,2,4]"
+            },
+            {
+              "expectedOutput": "[1,2]",
+              "explanation": "The duplicate number is 1 and the missing number is 2.",
+              "id": "ed240950-4b93-4761-ac44-1e966c442d0e",
+              "input": "nums = [1,1]"
+            },
+            {
+              "expectedOutput": "[1,2]",
+              "explanation": "The duplicate number is 1 and the missing number is 2.",
+              "id": "83209060-fe48-4997-8afc-3d272456d9bc",
+              "input": "nums = [3,1]"
+            }
+          ]
+        }
+      ],
+      "id": "47b7508b-2107-4975-a58a-606b8d5fbac6",
+      "lastUpdated": "2026-02-06T21:30:32Z",
+      "problemSlug": "set-mismatch",
+      "relatedProblems": [
+        "find-the-duplicate-number",
+        "set-mismatch"
+      ],
+      "summary": "The problem requires finding the duplicate and missing numbers in an array of size n, containing distinct integers from 1 to n. The key insight is to use a hash table to track the occurrences of each number."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "1. Initialize result = 0\n2. XOR each number with result\n3. Return result",
+          "code": "class Solution {\n    func singleNumber(_ nums: [Int]) -> Int {\n        var result = 0\n        for num in nums {\n            result ^= num\n        }\n        return result\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "Only one variable regardless of input size",
+            "time": "O(n)",
+            "timeExplanation": "Single pass through all n elements"
+          },
+          "explanation": "XOR is associative and commutative, so the order doesn't matter. For array [a,b,a], we compute a^b^a = (a^a)^b = 0^b = b. Every number that appears twice contributes 0 to the final result, leaving only the unique number.",
+          "id": "28a878f9-24ec-4596-9442-f8800f2b359f",
+          "intuition": "XOR has two key properties: a^a=0 and a^0=a. If we XOR all numbers, pairs cancel out and only the single number remains.",
+          "name": "XOR Bit Manipulation",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "2^2^1 = 0^1 = 1",
+              "id": "15868032-4a1e-47f2-b857-a67476ea59c4",
+              "input": "nums = [2,2,1]"
+            },
+            {
+              "expectedOutput": "4",
+              "explanation": "4^1^2^1^2 = 4^(1^1)^(2^2) = 4^0^0 = 4",
+              "id": "24e4778c-eaf5-4d5a-a079-7e1067283207",
+              "input": "nums = [4,1,2,1,2]"
+            },
+            {
+              "expectedOutput": "1",
+              "explanation": "Single element is the answer",
+              "id": "478e854c-936b-4ba3-b7a5-0f1c431207e0",
+              "input": "nums = [1]"
+            }
+          ]
+        },
+        {
+          "approach": "1. Create empty set\n2. For each number: if in set, remove it; else add it\n3. Return the single element in set",
+          "code": "class Solution {\n    func singleNumber(_ nums: [Int]) -> Int {\n        var seen = Set<Int>()\n        for num in nums {\n            if seen.contains(num) {\n                seen.remove(num)\n            } else {\n                seen.insert(num)\n            }\n        }\n        return seen.first!\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "Set can hold up to n/2 elements",
+            "time": "O(n)",
+            "timeExplanation": "Single pass with O(1) set operations"
+          },
+          "explanation": "This approach explicitly models the 'pairing' logic. Numbers that appear twice get added then removed, leaving only the unique number. While correct, it uses O(n) space unlike the XOR solution.",
+          "id": "c13da035-5193-4c36-b588-86f58c901033",
+          "intuition": "Track seen numbers in a set. If we see a number again, remove it. The remaining number is the answer.",
+          "name": "Hash Set",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "1",
+              "explanation": "Add 2, remove 2, add 1. Set = {1}",
+              "id": "0d27a6a6-e787-4ff0-83ab-626d1a1edb19",
+              "input": "nums = [2,2,1]"
+            }
+          ]
+        }
+      ],
+      "id": "723e644e-c251-4527-8f72-f4065ad929c6",
+      "lastUpdated": "2026-02-06T08:36:45Z",
+      "problemSlug": "single-number",
+      "relatedProblems": [
+        "single-number-ii",
+        "single-number-iii"
+      ],
+      "summary": "Find the element that appears only once when all others appear twice. XOR all elements - pairs cancel out (a^a=0) leaving only the single number."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Loop through each number in the array, and for each number, loop through the rest of the array to count its occurrences. If a number appears only once, return it.",
+          "code": "class Solution {\n    func singleNumber(_ nums: [Int]) -> Int { \n        for num in nums { \n            var count = 0 \n            for n in nums { \n                if n == num { \n                    count += 1 \n                } \n            } \n            if count == 1 { \n                return num \n            } \n        } \n        return 0 \n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) as we only use a constant amount of space.",
+            "time": "O(n^2)",
+            "timeExplanation": "The time complexity is O(n^2) due to the nested loop."
+          },
+          "explanation": "The brute force approach has a time complexity of O(n^2) because it involves a nested loop structure. It has a space complexity of O(1) if we do not consider the space required for the input array.",
+          "id": "7bb68fed-5b3d-4ff9-94cf-7ac11e43b0eb",
+          "intuition": "This approach works by counting the occurrences of each number and returning the one that appears only once, but it is inefficient for large inputs.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "The number 3 appears only once, while the number 2 appears three times.",
+              "id": "7b485a8d-8b16-4c0a-b4fa-6d55a94b8ce0",
+              "input": "nums = [2,2,3,2]"
+            },
+            {
+              "expectedOutput": "99",
+              "explanation": "The number 99 appears only once, while the numbers 0 and 1 appear three times each.",
+              "id": "49eb45b9-1b8b-436f-bf12-e02add177d28",
+              "input": "nums = [0,1,0,1,0,1,99]"
+            }
+          ]
+        },
+        {
+          "approach": "We use two bitmasks, ones and twos, to track the bits that appear 1 time and 2 times respectively. We iterate through the array and update the bitmasks accordingly.",
+          "code": "class Solution {\n    func singleNumber(_ nums: [Int]) -> Int { \n        var ones = 0 \n        var twos = 0 \n        for num in nums { \n            twos |= ones & num \n            ones ^= num \n            let notThrees = ~(ones & twos) \n            ones &= notThrees \n            twos &= notThrees \n        } \n        return ones \n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "The space complexity is O(1) as we only use a constant amount of space.",
+            "time": "O(n)",
+            "timeExplanation": "The time complexity is O(n) due to the single loop."
+          },
+          "explanation": "The bit manipulation approach has a time complexity of O(n) because it involves a single loop structure. It has a space complexity of O(1) because it uses a constant amount of space.",
+          "id": "15b21cb2-e83b-4cc2-b43c-2ff1b05bff33",
+          "intuition": "This approach works by using bit manipulation to track the bits that appear a total of 1 time.",
+          "name": "Bit Manipulation",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "3",
+              "explanation": "The number 3 appears only once, while the number 2 appears three times.",
+              "id": "c5f2d265-0083-4aea-9f7d-95f96d5de792",
+              "input": "nums = [2,2,3,2]"
+            },
+            {
+              "expectedOutput": "99",
+              "explanation": "The number 99 appears only once, while the numbers 0 and 1 appear three times each.",
+              "id": "4823ab0b-f6ae-4d0d-a801-e97785ea6eed",
+              "input": "nums = [0,1,0,1,0,1,99]"
+            }
+          ]
+        }
+      ],
+      "id": "01ef8bcd-8a74-4ffe-9aa4-ffcaec4cde92",
+      "lastUpdated": "2026-02-06T21:07:21Z",
+      "problemSlug": "single-number-ii",
+      "relatedProblems": [
+        "single-number",
+        "single-number-iii"
+      ],
+      "summary": "The Single Number II problem involves finding a single number in an array where every element appears three times except for one, which requires using bit manipulation to solve efficiently. The key insight is to use bit manipulation to track the bits that appear a total of 1 time."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Create a hash map to store the frequency of each number. Then, for each number in the hash map, check if its frequency is 1. If yes, add it to the result.",
+          "code": "class Solution {\n    func singleNumber(_ nums: [Int]) -> [Int] {\n        var count: [Int: Int] = [:]\n        var res: [Int] = []\n        for num in nums {\n            if count[num] != nil {\n                count[num]! += 1\n            } else {\n                count[num] = 1\n            }\n        }\n        for (num, freq) in count {\n            if freq == 1 {\n                res.append(num)\n            }\n        }\n        return res\n    }\n}",
+          "complexity": {
+            "space": "O(n)",
+            "spaceExplanation": "In the worst case, we end up storing every number in the hash map.",
+            "time": "O(n)",
+            "timeExplanation": "We make two passes through the data: one to count the occurrences of each number and another to find the numbers that appear only once."
+          },
+          "explanation": "This solution has a high time complexity because it involves iterating through all numbers and then through the hash map. It's not efficient for large inputs.",
+          "id": "10a7396c-4488-4eed-be0e-636f2f00ad71",
+          "intuition": "This approach involves iterating through all possible pairs of numbers in the array to find the pair where each number appears only once.",
+          "name": "Brute Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "[3,5]",
+              "explanation": "Only 3 and 5 appear once.",
+              "id": "e231a0d2-d87c-4489-85b3-cbce94beabb6",
+              "input": "nums = [1,2,1,3,2,5]"
+            },
+            {
+              "expectedOutput": "[11,15]",
+              "explanation": "Only 11 and 15 appear once.",
+              "id": "070e0d11-e09a-43db-8e07-366f6cddd912",
+              "input": "nums = [2,7,11,15,2,7]"
+            }
+          ]
+        },
+        {
+          "approach": "First, XOR all numbers to find the XOR of the two single numbers. Then, find the rightmost set bit in this XOR result. Partition the numbers into two groups based on this bit and XOR the numbers in each group separately.",
+          "code": "class Solution {\n    func singleNumber(_ nums: [Int]) -> [Int] {\n        var xor = 0\n        for num in nums {\n            xor ^= num\n        }\n        var rightmostSetBit = xor & -xor\n        var single1 = 0, single2 = 0\n        for num in nums {\n            if num & rightmostSetBit != 0 {\n                single1 ^= num\n            } else {\n                single2 ^= num\n            }\n        }\n        return [single1, single2]\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We only use a constant amount of space to store the XOR result and the two single numbers.",
+            "time": "O(n)",
+            "timeExplanation": "We make two passes through the data: one to find the XOR of all numbers and another to partition the numbers based on a specific bit and find the single numbers."
+          },
+          "explanation": "This solution works because XOR of a number with itself is 0 and XOR of a number with 0 is the number itself. So, when we partition the numbers based on a specific bit, the numbers that appear twice will cancel each other out in each partition.",
+          "id": "d76602e6-2c99-4e4e-be6b-cf49ad2cf91b",
+          "intuition": "This approach involves using XOR operation to find the two single numbers. XOR of all numbers will give us the XOR of the two single numbers.",
+          "name": "Bit Manipulation",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "[3,5]",
+              "explanation": "Only 3 and 5 appear once.",
+              "id": "1467efdd-3e99-4797-8c03-4b4036becc4b",
+              "input": "nums = [1,2,1,3,2,5]"
+            },
+            {
+              "expectedOutput": "[11,15]",
+              "explanation": "Only 11 and 15 appear once.",
+              "id": "f28d5b78-870a-4e49-8164-5ae585951482",
+              "input": "nums = [2,7,11,15,2,7]"
+            }
+          ]
+        }
+      ],
+      "id": "ccd144e8-6348-458c-86e5-69c445071154",
+      "lastUpdated": "2026-02-06T21:11:37Z",
+      "problemSlug": "single-number-iii",
+      "relatedProblems": [
+        "single-number",
+        "single-number-ii"
+      ],
+      "summary": "Given an array of numbers where every element appears twice except for two, we need to find the two single numbers. This involves isolating the bits that differentiate these two single numbers."
+    },
+    {
+      "approaches": [
+        {
+          "approach": "Iterate over the data array and check each byte's bits to determine if it's a valid UTF-8 sequence. Check 1-byte, 2-byte, 3-byte and 4-byte sequences separately.",
+          "code": "class Solution {\n    func validUtf8(_ data: [Int]) -> Bool {\n        var index = 0\n        while index < data.count {\n            if data[index] >> 7 == 0 {\n                index += 1\n            } else if data[index] >> 5 == 0b110 {\n                if index + 1 >= data.count || data[index + 1] >> 6 != 0b10 {\n                    return false\n                }\n                index += 2\n            } else if data[index] >> 4 == 0b1110 {\n                if index + 2 >= data.count || data[index + 1] >> 6 != 0b10 || data[index + 2] >> 6 != 0b10 {\n                    return false\n                }\n                index += 3\n            } else if data[index] >> 3 == 0b11110 {\n                if index + 3 >= data.count || data[index + 1] >> 6 != 0b10 || data[index + 2] >> 6 != 0b10 || data[index + 3] >> 6 != 0b10 {\n                    return false\n                }\n                index += 4\n            } else {\n                return false\n            }\n        }\n        return true\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We only use a constant amount of space to store the index and other variables.",
+            "time": "O(n)",
+            "timeExplanation": "We are doing a constant amount of work for each byte in the data array."
+          },
+          "explanation": "First, we check if the byte is a 1-byte sequence (0xxxxxxx). Then we check if it's a 2-byte, 3-byte or 4-byte sequence and if the following bytes are 10xxxxxx.",
+          "id": "7219f887-8691-4855-8da1-66bf64ee2165",
+          "intuition": "This approach checks every possible combination of bytes to validate UTF-8 encoding.",
+          "name": "Brute-Force",
+          "order": 1,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The given data is a valid UTF-8 sequence.",
+              "id": "568330f8-c449-4535-83b5-b441230d2f6e",
+              "input": "data = [197,130,1]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The given data is not a valid UTF-8 sequence.",
+              "id": "6f0b3b66-ad69-461d-8062-4ed08e11d584",
+              "input": "data = [235,140,4]"
+            }
+          ]
+        },
+        {
+          "approach": "Use bitwise operations to check each byte's bits and validate UTF-8 encoding. Use a variable to keep track of the expected number of bytes in the sequence.",
+          "code": "class Solution {\n    func validUtf8(_ data: [Int]) -> Bool {\n        var bytesLeft = 0\n        for num in data {\n            if bytesLeft == 0 {\n                if num >> 5 == 0b110 {\n                    bytesLeft = 1\n                } else if num >> 4 == 0b1110 {\n                    bytesLeft = 2\n                } else if num >> 3 == 0b11110 {\n                    bytesLeft = 3\n                } else if num >> 7 != 0 {\n                    return false\n                }\n            } else {\n                if num >> 6 != 0b10 {\n                    return false\n                }\n                bytesLeft -= 1\n            }\n        }\n        return bytesLeft == 0\n    }\n}",
+          "complexity": {
+            "space": "O(1)",
+            "spaceExplanation": "We only use a constant amount of space to store the bytesLeft variable and other variables.",
+            "time": "O(n)",
+            "timeExplanation": "We are doing a constant amount of work for each byte in the data array."
+          },
+          "explanation": "We use bitwise operations to check if a byte is a 1-byte, 2-byte, 3-byte or 4-byte sequence and check the following bytes.",
+          "id": "3201c4e4-e141-4ea6-bf7d-bdfea01ca077",
+          "intuition": "This approach uses bitwise operations to efficiently validate UTF-8 encoding.",
+          "name": "Optimized",
+          "order": 2,
+          "testCases": [
+            {
+              "expectedOutput": "true",
+              "explanation": "The given data is a valid UTF-8 sequence.",
+              "id": "d1e66351-b42b-4e3c-9b7f-c17844fecd84",
+              "input": "data = [197,130,1]"
+            },
+            {
+              "expectedOutput": "false",
+              "explanation": "The given data is not a valid UTF-8 sequence.",
+              "id": "44c4ad82-e2c1-4fe0-a319-4297355dcc67",
+              "input": "data = [235,140,4]"
+            }
+          ]
+        }
+      ],
+      "id": "b08de4bd-c322-4a70-bded-f2da782195c9",
+      "lastUpdated": "2026-02-06T21:16:08Z",
+      "problemSlug": "utf-8-validation",
+      "relatedProblems": [
+        "string-to-integer-atoi",
+        "roman-to-integer"
+      ],
+      "summary": "The problem requires validating a given integer array as UTF-8 encoded bytes, with the key insight being checking each byte's bits to determine if it's a valid UTF-8 sequence."
+    }
+  ],
+  "topic": "bit-manipulation",
+  "version": "2.0.0"
+}
