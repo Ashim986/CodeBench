@@ -51,6 +51,9 @@ Recent decisions affecting current work:
 - [01-02]: All layout types use same @State + onAppear + onChange caching pattern for consistency
 - [01-02]: Hard limit of 40 nodes for visualization, fixed and not configurable
 - [01-02]: BFS-based truncation for tree/trie preserves upper levels closest to root
+- [01-03]: Used LeetPulseDesignSystemCore (not umbrella) matching project.yml SPM product
+- [01-03]: TraceBubble diff colors fixed: added=success green, removed=danger red 25%, modified=warning amber
+- [01-03]: ChangeType enum kept local (aligned with DSBubbleChangeType naming)
 - [01-04]: Used LeetPulseDesignSystemCore (not umbrella) matching project.yml SPM product
 - [01-04]: All 12 Plan 04 files already had DS token usage -- only missing explicit import
 - [01-04]: VizTypography.swift intentionally excluded from DS imports (constants file)
@@ -68,5 +71,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: Completed 01-04-PLAN.md
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None
