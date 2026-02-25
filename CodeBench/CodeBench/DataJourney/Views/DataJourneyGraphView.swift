@@ -11,6 +11,7 @@ struct GraphView: View {
     let pointerSpacing: CGFloat
     let bubbleStyle: TraceBubble.Style
     @Environment(\.dsTheme) var theme
+    @State private var cachedLayout: GraphLayout?
 
     private var pointerHeight: CGFloat {
         pointerFontSize + pointerVerticalPadding * 2 + 4
@@ -37,8 +38,7 @@ struct GraphView: View {
     }
 
     var body: some View {
-        let compactSize = CGSize(width: graphCompactWidth, height: graphHeight)
-        let layout = GraphLayout(adjacency: adjacency, size: compactSize, nodeSize: nodeSize)
+        let layout = cachedLayout ?? makeLayout()
         let pointersByIndex = groupedPointers
         let visitedIndices = visitedNodeIndices
         ScrollView(.horizontal, showsIndicators: false) {
@@ -86,9 +86,20 @@ struct GraphView: View {
                     .position(node.position)
                 }
             }
-            .frame(width: compactSize.width, height: layout.height)
+            .frame(width: graphCompactWidth, height: layout.height)
         }
         .frame(height: layout.height)
+        .onAppear {
+            cachedLayout = makeLayout()
+        }
+        .onChange(of: adjacency) { _, _ in
+            cachedLayout = makeLayout()
+        }
+    }
+
+    private func makeLayout() -> GraphLayout {
+        let compactSize = CGSize(width: graphCompactWidth, height: graphHeight)
+        return GraphLayout(adjacency: adjacency, size: compactSize, nodeSize: nodeSize)
     }
 
     private var graphCompactWidth: CGFloat {

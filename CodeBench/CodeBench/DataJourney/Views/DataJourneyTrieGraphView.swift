@@ -10,6 +10,7 @@ struct TrieGraphView: View {
     let pointerHorizontalPadding: CGFloat
     let pointerVerticalPadding: CGFloat
     @Environment(\.dsTheme) var theme
+    @State private var cachedTrieLayout: TrieLayout?
 
     private let horizontalSpacing: CGFloat = 16
     private let verticalSpacing: CGFloat = 60
@@ -34,7 +35,7 @@ struct TrieGraphView: View {
     }
 
     var body: some View {
-        let layout = TrieLayout(trie: trie, nodeSize: nodeSize, hSpacing: horizontalSpacing, vSpacing: verticalSpacing)
+        let layout = cachedTrieLayout ?? makeTrieLayout()
         let pointerMap = groupedPointers
         ScrollView(.horizontal, showsIndicators: false) {
             ZStack(alignment: .topLeading) {
@@ -111,6 +112,16 @@ struct TrieGraphView: View {
             }
             .frame(width: layout.totalWidth, height: layout.totalHeight)
         }
+        .onAppear {
+            cachedTrieLayout = makeTrieLayout()
+        }
+        .onChange(of: trie) { _, _ in
+            cachedTrieLayout = makeTrieLayout()
+        }
+    }
+
+    private func makeTrieLayout() -> TrieLayout {
+        TrieLayout(trie: trie, nodeSize: nodeSize, hSpacing: horizontalSpacing, vSpacing: verticalSpacing)
     }
 
     private var groupedPointers: [String: [PointerMarker]] {

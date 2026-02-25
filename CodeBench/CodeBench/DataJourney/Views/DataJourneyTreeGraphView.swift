@@ -14,6 +14,7 @@ struct TreeGraphView: View {
     private let levelSpacing: CGFloat = 60
     private let pointerSpacing: CGFloat = 2
     @Environment(\.dsTheme) var theme
+    @State private var cachedTreeLayout: TraceTreeLayout?
 
     private var pointerHeight: CGFloat {
         pointerFontSize + pointerVerticalPadding * 2 + 4
@@ -42,11 +43,7 @@ struct TreeGraphView: View {
     }
 
     var body: some View {
-        let layout = TraceTreeLayout(
-            tree: tree,
-            nodeSize: nodeSize,
-            levelSpacing: levelSpacing
-        )
+        let layout = cachedTreeLayout ?? makeTreeLayout()
         let topPadding = pointerMotions.isEmpty ? 0 : nodeSize * 0.8
         let bottomPadding = pointerMotions.count >= 3 ? nodeSize * 0.6 : 0
         let yOffset = topPadding
@@ -125,6 +122,16 @@ struct TreeGraphView: View {
             .frame(width: layout.width, height: totalHeight)
         }
         .frame(height: totalHeight)
+        .onAppear {
+            cachedTreeLayout = makeTreeLayout()
+        }
+        .onChange(of: tree) { _, _ in
+            cachedTreeLayout = makeTreeLayout()
+        }
+    }
+
+    private func makeTreeLayout() -> TraceTreeLayout {
+        TraceTreeLayout(tree: tree, nodeSize: nodeSize, levelSpacing: levelSpacing)
     }
 
     private func drawPointerMotion(
