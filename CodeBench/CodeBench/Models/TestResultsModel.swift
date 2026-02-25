@@ -6,7 +6,7 @@ struct TestSummary: Codable {
     let evaluatedAt: String
     let totalResults: Int
     let topics: [TopicSummary]
-    let problems: [ProblemMeta]
+    var problems: [ProblemMeta]
 
     enum CodingKeys: String, CodingKey {
         case evaluatedAt = "evaluated_at"
@@ -41,7 +41,7 @@ struct TopicResults: Codable {
     let topic: String
     let evaluatedAt: String
     let totalResults: Int
-    let problems: [ProblemMeta]
+    var problems: [ProblemMeta]
     let testResults: [TestResult]
 
     enum CodingKeys: String, CodingKey {
@@ -59,6 +59,8 @@ struct ProblemMeta: Codable, Identifiable {
     let totalTests: Int
     let validTests: Int
     let invalidTests: Int
+    var leetCodeNumber: Int = 0
+    var difficulty: String = "medium"
 
     var id: String { slug }
 

@@ -17,6 +17,14 @@ final class ResultsLoader {
         #endif
     }
 
+    /// Problem metadata (leetCodeNumber, difficulty) loaded from problem-metadata.json
+    private(set) var problemMetadata: [String: ProblemMetadataEntry] = [:]
+
+    struct ProblemMetadataEntry: Codable {
+        let n: Int
+        let d: String
+    }
+
     /// Load from bundled sample data (precomputed test results)
     func loadFromBundle() {
         guard let summaryURL = resourceBundle.url(forResource: "summary", withExtension: "json") else {
@@ -25,15 +33,28 @@ final class ResultsLoader {
         }
 
         do {
+            // Load metadata first
+            if let metaURL = resourceBundle.url(forResource: "problem-metadata", withExtension: "json") {
+                let metaData = try Data(contentsOf: metaURL)
+                problemMetadata = try JSONDecoder().decode([String: ProblemMetadataEntry].self, from: metaData)
+            }
+
             let summaryData = try Data(contentsOf: summaryURL)
             summary = try JSONDecoder().decode(TestSummary.self, from: summaryData)
+
+            // Enrich summary problems with metadata
+            if var s = summary {
+                s.problems = s.problems.map { enrichProblem($0) }
+                summary = s
+            }
 
             // Load each topic file
             for topicSummary in summary?.topics ?? [] {
                 let topicName = topicSummary.topic
                 if let topicURL = resourceBundle.url(forResource: topicName, withExtension: "json") {
                     let topicData = try Data(contentsOf: topicURL)
-                    let results = try JSONDecoder().decode(TopicResults.self, from: topicData)
+                    var results = try JSONDecoder().decode(TopicResults.self, from: topicData)
+                    results.problems = results.problems.map { enrichProblem($0) }
                     topicResults[topicName] = results
                 }
             }
@@ -41,6 +62,15 @@ final class ResultsLoader {
         } catch {
             errorMessage = "Failed to load bundled results: \(error.localizedDescription)"
         }
+    }
+
+    private func enrichProblem(_ problem: ProblemMeta) -> ProblemMeta {
+        var p = problem
+        if let meta = problemMetadata[problem.slug] {
+            p.leetCodeNumber = meta.n
+            p.difficulty = meta.d
+        }
+        return p
     }
 
     /// Load from a user-selected directory (live test results)

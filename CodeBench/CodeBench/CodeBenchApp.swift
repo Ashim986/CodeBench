@@ -7,6 +7,11 @@ struct CodeBenchApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(loader: loader)
+                .onAppear {
+                    if !loader.isLoaded {
+                        loader.loadFromBundle()
+                    }
+                }
         }
     }
 }
