@@ -15,7 +15,7 @@ final class DataJourneyPresenter {
     var dataJourney: [DataJourneyEvent] = []
 
     /// The currently selected event in the Data Journey timeline.
-    var selectedJourneyEventID: UUID?
+    var selectedJourneyEventID: String?
 
     /// The source line highlighted in the code editor for the selected event.
     var highlightedExecutionLine: Int?
@@ -67,7 +67,7 @@ final class DataJourneyPresenter {
     }
 
     /// Selects an event by ID and updates the highlighted line.
-    func selectEvent(_ id: UUID?) {
+    func selectEvent(_ id: String?) {
         selectedJourneyEventID = id
         if let id,
            let event = dataJourney.first(where: { $0.id == id }) {

@@ -1,5 +1,5 @@
 
-import LeetPulseDesignSystemCore
+import LeetPulseDesignSystem
 import SwiftUI
 
 // MARK: - List Structure View Builders

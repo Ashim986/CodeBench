@@ -1,4 +1,4 @@
-import LeetPulseDesignSystemCore
+import LeetPulseDesignSystem
 import SwiftUI
 
 /// Thin delegate: all structure detection and resolution logic lives in StructureResolver.

@@ -1,0 +1,17 @@
+# .swiftlint.yml -- CodeBench project SwiftLint configuration
+# Primary purpose: UUID() regression guard (REQ-F01)
+
+included:
+  - CodeBench/CodeBench
+
+excluded:
+  - .build
+  - TestCaseEvaluator
+  - CodeBench/CodeBench.xcodeproj
+
+custom_rules:
+  no_uuid_identifiable:
+    name: "No UUID() in Identifiable"
+    regex: 'let id\s*=\s*UUID\(\)'
+    message: "Use stable composite IDs instead of UUID() in Identifiable types. See REQ-F01."
+    severity: error

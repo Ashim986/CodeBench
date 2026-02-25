@@ -5,7 +5,7 @@ struct SolutionView: View {
     let results: [TestResult]
 
     @State private var selectedResultIndex = 0
-    @State private var selectedEventID: UUID?
+    @State private var selectedEventID: String?
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {

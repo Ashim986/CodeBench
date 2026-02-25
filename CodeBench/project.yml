@@ -20,7 +20,7 @@ targets:
       - CodeBench
     dependencies:
       - package: LeetPulseDesignSystem
-        product: LeetPulseDesignSystemCore
+        product: LeetPulseDesignSystem
     resources:
       - path: CodeBench/Resources
         type: folder

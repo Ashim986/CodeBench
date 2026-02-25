@@ -1,4 +1,4 @@
-import LeetPulseDesignSystemCore
+import LeetPulseDesignSystem
 import SwiftUI
 import UniformTypeIdentifiers
 

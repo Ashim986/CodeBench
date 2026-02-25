@@ -1,10 +1,10 @@
-import LeetPulseDesignSystemCore
+import LeetPulseDesignSystem
 import SwiftUI
 import UniformTypeIdentifiers
 
 struct DataJourneyView: View {
     let events: [DataJourneyEvent]
-    @Binding var selectedEventID: UUID?
+    @Binding var selectedEventID: String?
     let onSelectEvent: (DataJourneyEvent) -> Void
     let isTruncated: Bool
     let sourceCode: String

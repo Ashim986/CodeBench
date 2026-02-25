@@ -1,5 +1,5 @@
 
-import LeetPulseDesignSystemCore
+import LeetPulseDesignSystem
 import SwiftUI
 
 /// Dual visualization for heap data: array view on top, implicit binary tree below.

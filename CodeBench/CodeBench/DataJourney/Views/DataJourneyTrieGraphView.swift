@@ -1,5 +1,5 @@
 
-import LeetPulseDesignSystemCore
+import LeetPulseDesignSystem
 import SwiftUI
 
 /// Renders a trie as an N-ary tree layout with character-labeled edges and isEnd highlighting.

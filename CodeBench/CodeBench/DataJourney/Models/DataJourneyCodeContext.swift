@@ -1,4 +1,5 @@
 
+import LeetPulseDesignSystem
 import SwiftUI
 
 /// Shows a compact 3-line code context above the visualization canvas.

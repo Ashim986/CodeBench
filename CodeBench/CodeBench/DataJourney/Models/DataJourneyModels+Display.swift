@@ -1,4 +1,4 @@
-
+import LeetPulseDesignSystem
 import SwiftUI
 
 // MARK: - Centralized TraceValue Display Properties
