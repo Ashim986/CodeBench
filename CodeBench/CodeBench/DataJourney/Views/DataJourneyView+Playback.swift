@@ -129,6 +129,8 @@ extension DataJourneyView {
                                         size: chipFontSize
                                     )
                                 )
+                                .lineLimit(1)
+                                .fixedSize()
                         }
                         .padding(
                             .horizontal,

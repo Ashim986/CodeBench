@@ -1,8 +1,12 @@
 import SwiftUI
+import LeetPulseDesignSystem
 
 struct ContentView: View {
     @Bindable var loader: ResultsLoader
+    @Environment(\.dsTheme) private var theme
     @State private var showFilePicker = false
+    @State private var searchText = ""
+    @FocusState private var isSearchFocused: Bool
 
     var body: some View {
         NavigationStack {
@@ -16,49 +20,94 @@ struct ContentView: View {
 
     private var topicsView: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("Topics")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-                    .padding(.horizontal, 16)
+            VStack(alignment: .leading, spacing: theme.spacing.lg) {
+                // Header
+                VStack(alignment: .leading, spacing: theme.spacing.xs) {
+                    Text("Problem Selection")
+                        .font(theme.typography.title)
+                        .foregroundColor(theme.colors.textPrimary)
 
-                TopicBrowseView(loader: loader)
+                    Text("Browse and practice LeetCode problems by topic")
+                        .font(theme.typography.caption)
+                        .foregroundColor(theme.colors.textSecondary)
+                }
+                .padding(.horizontal, theme.spacing.lg)
+
+                // Search bar
+                HStack(spacing: theme.spacing.sm) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 14))
+                        .foregroundColor(
+                            isSearchFocused
+                                ? theme.colors.primary
+                                : theme.colors.textSecondary
+                        )
+
+                    TextField("Search problems...", text: $searchText)
+                        .font(theme.typography.body)
+                        .foregroundColor(theme.colors.textPrimary)
+                        .focused($isSearchFocused)
+
+                    if !searchText.isEmpty {
+                        Button {
+                            searchText = ""
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 14))
+                                .foregroundColor(theme.colors.textSecondary)
+                        }
+                    }
+                }
+                .padding(.horizontal, theme.spacing.md)
+                .padding(.vertical, theme.spacing.sm)
+                .background(theme.colors.surfaceElevated)
+                .cornerRadius(theme.radii.md)
+                .overlay(
+                    RoundedRectangle(cornerRadius: theme.radii.md)
+                        .stroke(
+                            isSearchFocused
+                                ? theme.colors.primary
+                                : theme.colors.border,
+                            lineWidth: 1
+                        )
+                )
+                .padding(.horizontal, theme.spacing.lg)
+
+                TopicBrowseView(loader: loader, searchText: searchText)
             }
-            .padding(.top, 8)
+            .padding(.top, theme.spacing.sm)
             .padding(.bottom, 32)
         }
-        .background(Color(white: 0.98))
-        .navigationTitle("CodeBench")
+        .background(theme.colors.background)
+        .toolbar(.hidden, for: .navigationBar)
     }
 
     private var loadingView: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: theme.spacing.xl) {
             Spacer()
 
             Image(systemName: "chart.bar.doc.horizontal")
                 .font(.system(size: 64))
-                .foregroundColor(.accentColor)
+                .foregroundColor(theme.colors.primary)
 
-            Text("Test Results Viewer")
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
+            Text("CodeBench")
+                .font(theme.typography.title)
+                .foregroundColor(theme.colors.textPrimary)
 
             Text("Load precomputed test results or select a test_results directory from your evaluator runs.")
-                .font(.body)
-                .foregroundColor(.secondary)
+                .font(theme.typography.body)
+                .foregroundColor(theme.colors.textSecondary)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 24)
+                .padding(.horizontal, theme.spacing.xl)
 
             if let error = loader.errorMessage {
                 Text(error)
-                    .font(.caption)
-                    .foregroundColor(.red)
-                    .padding(.horizontal, 16)
+                    .font(theme.typography.caption)
+                    .foregroundColor(theme.colors.danger)
+                    .padding(.horizontal, theme.spacing.lg)
             }
 
-            VStack(spacing: 12) {
+            VStack(spacing: theme.spacing.md) {
                 Button {
                     loader.loadFromBundle()
                 } label: {
@@ -66,6 +115,7 @@ struct ContentView: View {
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
+                .tint(theme.colors.primary)
 
                 Button {
                     showFilePicker = true
@@ -74,12 +124,13 @@ struct ContentView: View {
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.bordered)
+                .tint(theme.colors.primary)
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, theme.spacing.xl)
 
             Spacer()
         }
-        .background(Color(white: 0.98))
+        .background(theme.colors.background)
         .fileImporter(
             isPresented: $showFilePicker,
             allowedContentTypes: [.folder],

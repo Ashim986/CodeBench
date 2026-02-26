@@ -30,20 +30,23 @@ final class DataJourneyAnimationController: ObservableObject {
         totalSteps: Int,
         currentIndex _: Int,
         advance: @escaping () -> Void,
-        onEnd _: @escaping () -> Void,
+        onEnd: @escaping () -> Void,
         reduceMotion _: Bool
     ) {
         guard totalSteps > 1 else { return }
-        isPlaying = true
         playbackTask?.cancel()
+        isPlaying = true
         playbackTask = Task { [weak self] in
             guard let self else { return }
-            while isPlaying {
-                let interval = baseInterval / playbackSpeed
+            while self.isPlaying {
+                let interval = self.baseInterval / self.playbackSpeed
                 let nanos = UInt64(interval * 1_000_000_000)
                 try? await Task.sleep(nanoseconds: nanos)
-                guard !Task.isCancelled, isPlaying else { break }
+                guard !Task.isCancelled, self.isPlaying else { break }
                 advance()
+            }
+            if !Task.isCancelled {
+                onEnd()
             }
         }
     }

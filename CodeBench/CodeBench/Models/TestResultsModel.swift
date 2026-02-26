@@ -91,6 +91,7 @@ struct TestResult: Codable, Identifiable {
     let outputMatches: Bool
     let orderMatters: Bool
     let errorMessage: String?
+    let traceSteps: [TraceStep]?
 
     var id: String { testId }
 
@@ -104,5 +105,50 @@ struct TestResult: Codable, Identifiable {
         case outputMatches = "output_matches"
         case orderMatters = "order_matters"
         case errorMessage = "error_message"
+        case traceSteps = "trace_steps"
     }
+}
+
+// MARK: - Algorithm Trace Steps
+
+struct TraceStep: Codable {
+    let label: String
+    let values: [String: TraceValue]
+
+    enum CodingKeys: String, CodingKey {
+        case label, values
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        label = try container.decode(String.self, forKey: .label)
+
+        // Decode each value in the dictionary via JourneyValueFactory,
+        // producing TraceValue directly (no intermediate type).
+        let rawContainer = try container.nestedContainer(
+            keyedBy: DynamicCodingKey.self, forKey: .values
+        )
+        var decoded: [String: TraceValue] = [:]
+        for key in rawContainer.allKeys {
+            let valueDecoder = try rawContainer.superDecoder(forKey: key)
+            decoded[key.stringValue] = try JourneyValueFactory.fromDecoder(valueDecoder)
+        }
+        values = decoded
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(label, forKey: .label)
+        // Encode values as a pass-through JSON dictionary.
+        // TraceValue doesn't need to be Encodable for read-only use;
+        // skip encoding values since test results are read-only.
+    }
+}
+
+/// Dynamic coding key for iterating arbitrary dictionary keys.
+private struct DynamicCodingKey: CodingKey {
+    var stringValue: String
+    var intValue: Int?
+    init?(stringValue: String) { self.stringValue = stringValue }
+    init?(intValue: Int) { self.intValue = intValue; self.stringValue = "\(intValue)" }
 }

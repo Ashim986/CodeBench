@@ -1,229 +1,221 @@
 import SwiftUI
+import LeetPulseDesignSystem
 
 struct TopicBrowseView: View {
     @Bindable var loader: ResultsLoader
+    var searchText: String
+    @Environment(\.dsTheme) private var theme
+    @State private var expandedTopics: Set<String> = []
 
     private var topics: [TopicSummary] {
         loader.summary?.topics ?? []
     }
 
     var body: some View {
-        LazyVStack(spacing: 8) {
-            ForEach(topics) { topic in
-                NavigationLink(value: topic) {
-                    topicRow(topic)
+        LazyVStack(spacing: theme.spacing.md) {
+            let filtered = filteredTopics
+            if filtered.isEmpty && !searchText.isEmpty {
+                noResultsView
+            } else {
+                ForEach(filtered, id: \.topic) { topic in
+                    topicCard(topic)
                 }
-                .buttonStyle(.plain)
             }
         }
-        .padding(.horizontal, 16)
-        .navigationDestination(for: TopicSummary.self) { topic in
-            TopicDetailView(topic: topic, loader: loader)
+        .padding(.horizontal, theme.spacing.lg)
+        .navigationDestination(for: ProblemMeta.self) { problem in
+            SolutionView(
+                problem: problem,
+                results: loader.resultsForProblem(problem.slug, topic: problem.topic)
+            )
         }
     }
 
-    private func topicRow(_ topic: TopicSummary) -> some View {
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(topic.displayName)
-                    .font(.body)
-                    .fontWeight(.medium)
-                    .foregroundColor(.primary)
+    // MARK: - Filtering
 
-                Text("\(topic.matches)/\(topic.total) matched  ·  \(topic.invalid) invalid")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+    private var filteredTopics: [(topic: TopicSummary, problems: [ProblemMeta])] {
+        topics.compactMap { topic in
+            let problems = loader.topicResults[topic.topic]?.problems ?? []
+            if searchText.isEmpty {
+                return problems.isEmpty ? nil : (topic, problems)
             }
-
-            Spacer()
-
-            ZStack {
-                Circle()
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 3)
-
-                Circle()
-                    .trim(from: 0, to: topic.matchRate)
-                    .stroke(rateColor(topic.matchRate), style: StrokeStyle(lineWidth: 3, lineCap: .round))
-                    .rotationEffect(.degrees(-90))
-
-                Text("\(Int(topic.matchRate * 100))%")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundColor(.primary)
+            let query = searchText.lowercased()
+            let matched = problems.filter {
+                $0.displayName.lowercased().contains(query)
+                    || ($0.leetCodeNumber != 0 && "\($0.leetCodeNumber)".contains(query))
             }
-            .frame(width: 40, height: 40)
-
-            Image(systemName: "chevron.right")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundColor(.secondary)
-        }
-        .padding(12)
-        .background(Color(white: 0.95))
-        .cornerRadius(8)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-        )
-    }
-
-    private func rateColor(_ rate: Double) -> Color {
-        if rate >= 0.95 { return .green }
-        if rate >= 0.7 { return .orange }
-        return .red
-    }
-}
-
-// MARK: - Topic Detail
-
-struct TopicDetailView: View {
-    let topic: TopicSummary
-    @Bindable var loader: ResultsLoader
-
-    private var topicData: TopicResults? {
-        loader.topicResults[topic.topic]
-    }
-
-    private var problems: [ProblemMeta] {
-        topicData?.problems ?? []
-    }
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                topicMetrics
-                    .padding(.horizontal, 16)
-
-                if !problems.isEmpty {
-                    ProblemBarChart(problems: problems)
-                        .padding(.horizontal, 16)
-                }
-
-                Text("Problems")
-                    .font(.title2)
-                    .foregroundColor(.primary)
-                    .padding(.horizontal, 16)
-
-                ProblemBrowseView(
-                    problems: problems,
-                    topic: topic.topic,
-                    loader: loader
-                )
-            }
-            .padding(.top, 8)
-            .padding(.bottom, 32)
-        }
-        .background(Color(white: 0.98))
-        .navigationTitle(topic.displayName)
-    }
-
-    private var topicMetrics: some View {
-        LazyVGrid(
-            columns: [
-                GridItem(.flexible(), spacing: 8),
-                GridItem(.flexible(), spacing: 8),
-            ],
-            spacing: 8
-        ) {
-            metricCard(label: "Total Tests", value: "\(topic.total)")
-            metricCard(label: "Match Rate", value: "\(Int(topic.matchRate * 100))%")
-            metricCard(label: "Valid", value: "\(topic.valid)")
-            metricCard(label: "Invalid", value: "\(topic.invalid)")
+            return matched.isEmpty ? nil : (topic, matched)
         }
     }
 
-    private func metricCard(label: String, value: String) -> some View {
-        VStack(spacing: 4) {
-            Text(label)
-                .font(.caption)
-                .foregroundColor(.secondary)
-            Text(value)
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
+    // MARK: - No Results
+
+    private var noResultsView: some View {
+        VStack(spacing: theme.spacing.sm) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 32))
+                .foregroundColor(theme.colors.textSecondary)
+            Text("No problems found")
+                .font(theme.typography.subtitle)
+                .foregroundColor(theme.colors.textSecondary)
+            Text("Try a different search term")
+                .font(theme.typography.caption)
+                .foregroundColor(theme.colors.textSecondary.opacity(0.7))
         }
         .frame(maxWidth: .infinity)
-        .padding(16)
-        .background(Color(white: 0.95))
-        .cornerRadius(8)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-        )
-    }
-}
-
-// MARK: - Problem Bar Chart
-
-struct ProblemBarChart: View {
-    let problems: [ProblemMeta]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Match Rate by Problem")
-                .font(.body)
-                .fontWeight(.semibold)
-                .foregroundColor(.primary)
-
-            GeometryReader { geo in
-                chartContent(width: geo.size.width, height: geo.size.height - 24)
-            }
-            .frame(height: 180)
-        }
-        .padding(16)
-        .background(Color(white: 0.95))
-        .cornerRadius(8)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-        )
-        .shadow(color: .primary.opacity(0.05), radius: 3, x: 0, y: 1)
+        .padding(.vertical, 48)
     }
 
-    private func chartContent(width: CGFloat, height: CGFloat) -> some View {
-        let data = problems.map { CGFloat($0.matchRate) }
-        let labels = problems.map { abbreviate($0.slug) }
-        let barWidth: CGFloat = max(8, min(28, (width - 40) / CGFloat(data.count)))
-        let totalBars = CGFloat(data.count)
-        let spacing = (width - barWidth * totalBars) / (totalBars + 1)
+    // MARK: - Topic Card
 
-        return ZStack(alignment: .bottomLeading) {
-            ForEach(0..<5, id: \.self) { gridIndex in
-                let yPos = height * CGFloat(gridIndex) / 4
-                Path { path in
-                    path.move(to: CGPoint(x: 0, y: yPos))
-                    path.addLine(to: CGPoint(x: width, y: yPos))
+    private func topicCard(_ entry: (topic: TopicSummary, problems: [ProblemMeta])) -> some View {
+        let topic = entry.topic
+        let problems = entry.problems
+        let isExpanded = expandedTopics.contains(topic.topic)
+
+        return VStack(alignment: .leading, spacing: 0) {
+            // Header
+            topicHeader(topic: topic, problemCount: problems.count, isExpanded: isExpanded)
+
+            Divider()
+                .background(theme.colors.border)
+
+            // Problem rows
+            VStack(spacing: 1) {
+                if isExpanded {
+                    expandedContent(problems: problems)
+                } else {
+                    collapsedContent(problems: problems)
                 }
-                .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 0.5, dash: [4]))
             }
+            .padding(.vertical, theme.spacing.xs)
 
-            HStack(alignment: .bottom, spacing: spacing) {
-                ForEach(0..<data.count, id: \.self) { index in
-                    VStack(spacing: 2) {
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(barColor(data[index]))
-                            .frame(width: barWidth, height: max(2, height * data[index]))
+            // Toggle button
+            if problems.count > 4 {
+                Divider()
+                    .background(theme.colors.border)
 
-                        Text(index < labels.count ? labels[index] : "")
-                            .font(.system(size: 6))
-                            .foregroundColor(.secondary)
-                            .frame(width: barWidth)
-                            .lineLimit(1)
+                Button {
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        if isExpanded {
+                            expandedTopics.remove(topic.topic)
+                        } else {
+                            expandedTopics.insert(topic.topic)
+                        }
                     }
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text(isExpanded ? "Show less" : "Show all \(problems.count) problems")
+                            .font(theme.typography.caption)
+                            .foregroundColor(theme.colors.primary)
+                        Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundColor(theme.colors.primary)
+                        Spacer()
+                    }
+                    .padding(.vertical, theme.spacing.sm)
                 }
             }
-            .padding(.leading, spacing)
+        }
+        .background(theme.colors.surface)
+        .cornerRadius(theme.radii.lg)
+        .overlay(
+            RoundedRectangle(cornerRadius: theme.radii.lg)
+                .stroke(theme.colors.border, lineWidth: 1)
+        )
+    }
+
+    private func topicHeader(topic: TopicSummary, problemCount: Int, isExpanded: Bool) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(topic.displayName)
+                    .font(theme.typography.subtitle)
+                    .foregroundColor(theme.colors.textPrimary)
+
+                Text("\(problemCount) problems")
+                    .font(theme.typography.caption)
+                    .foregroundColor(theme.colors.textSecondary)
+            }
+            Spacer()
+
+            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(theme.colors.textSecondary)
+        }
+        .padding(.horizontal, theme.spacing.lg)
+        .padding(.vertical, theme.spacing.md)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            withAnimation(.easeInOut(duration: 0.25)) {
+                if isExpanded {
+                    expandedTopics.remove(topic.topic)
+                } else {
+                    expandedTopics.insert(topic.topic)
+                }
+            }
         }
     }
 
-    private func barColor(_ rate: CGFloat) -> Color {
-        if rate >= 0.95 { return .green }
-        if rate >= 0.7 { return .orange }
-        return .red
+    // MARK: - Collapsed / Expanded Content
+
+    private func collapsedContent(problems: [ProblemMeta]) -> some View {
+        ForEach(problems.prefix(4)) { problem in
+            problemRow(problem)
+        }
     }
 
-    private func abbreviate(_ slug: String) -> String {
-        let parts = slug.split(separator: "-")
-        if parts.count <= 2 { return String(slug.prefix(5)) }
-        return parts.prefix(3).map { String($0.prefix(2)) }.joined()
+    private func expandedContent(problems: [ProblemMeta]) -> some View {
+        let grouped = Dictionary(grouping: problems) { $0.difficulty.capitalized }
+        let order = ["Easy", "Medium", "Hard"]
+        let sortedKeys = order.filter { grouped[$0] != nil }
+
+        return ForEach(sortedKeys, id: \.self) { difficulty in
+            if let group = grouped[difficulty] {
+                // Difficulty sub-header
+                Text(difficulty)
+                    .font(theme.typography.caption)
+                    .foregroundColor(theme.colors.textSecondary)
+                    .padding(.horizontal, theme.spacing.lg)
+                    .padding(.top, theme.spacing.sm)
+                    .padding(.bottom, theme.spacing.xs)
+
+                ForEach(group) { problem in
+                    problemRow(problem)
+                }
+            }
+        }
+    }
+
+    // MARK: - Problem Row
+
+    private func problemRow(_ problem: ProblemMeta) -> some View {
+        NavigationLink(value: problem) {
+            HStack(spacing: theme.spacing.sm) {
+                if problem.leetCodeNumber != 0 {
+                    Text("#\(problem.leetCodeNumber)")
+                        .font(theme.typography.caption)
+                        .foregroundColor(theme.colors.textSecondary)
+                        .frame(width: 44, alignment: .leading)
+                }
+
+                Text(problem.displayName)
+                    .font(theme.typography.body)
+                    .fontWeight(.semibold)
+                    .foregroundColor(theme.colors.textPrimary)
+                    .lineLimit(1)
+
+                Spacer()
+
+                DSBadge(text: problem.difficulty.capitalized, difficultyLevel: problem.difficulty.capitalized)
+            }
+            .padding(.horizontal, theme.spacing.lg)
+            .padding(.vertical, theme.spacing.sm)
+            .background(theme.colors.surfaceElevated)
+            .cornerRadius(theme.radii.sm)
+            .padding(.horizontal, theme.spacing.sm)
+        }
+        .buttonStyle(.plain)
     }
 }
 
@@ -235,5 +227,14 @@ extension TopicSummary: Hashable {
     }
     static func == (lhs: TopicSummary, rhs: TopicSummary) -> Bool {
         lhs.topic == rhs.topic
+    }
+}
+
+extension ProblemMeta: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(slug)
+    }
+    static func == (lhs: ProblemMeta, rhs: ProblemMeta) -> Bool {
+        lhs.slug == rhs.slug
     }
 }

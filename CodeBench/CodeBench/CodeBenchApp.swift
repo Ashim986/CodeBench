@@ -1,4 +1,5 @@
 import SwiftUI
+import LeetPulseDesignSystem
 
 @main
 struct CodeBenchApp: App {
@@ -6,12 +7,15 @@ struct CodeBenchApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(loader: loader)
-                .onAppear {
-                    if !loader.isLoaded {
-                        loader.loadFromBundle()
+            DSThemeProvider(theme: .dark) {
+                ContentView(loader: loader)
+                    .onAppear {
+                        if !loader.isLoaded {
+                            loader.loadFromBundle()
+                        }
                     }
-                }
+            }
+            .preferredColorScheme(.dark)
         }
     }
 }

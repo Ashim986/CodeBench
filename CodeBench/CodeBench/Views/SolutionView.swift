@@ -1,4 +1,5 @@
 import SwiftUI
+import LeetPulseDesignSystem
 
 struct SolutionView: View {
     let problem: ProblemMeta
@@ -7,6 +8,7 @@ struct SolutionView: View {
     @State private var selectedResultIndex = 0
     @State private var selectedEventID: String?
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.dsTheme) private var theme
 
     var body: some View {
         ScrollView {
@@ -52,7 +54,7 @@ struct SolutionView: View {
             .padding(.top, 8)
             .padding(.bottom, 32)
         }
-        .background(Color(white: 0.98))
+        .background(theme.colors.background)
         .navigationTitle(problem.displayName)
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
@@ -67,46 +69,49 @@ struct SolutionView: View {
             HStack(spacing: 6) {
                 Image(systemName: "chevron.left.forwardslash.chevron.right")
                     .font(.system(size: 10, weight: .semibold))
-                    .foregroundColor(.blue)
+                    .foregroundColor(theme.colors.primary)
                 Text("Test Data")
                     .font(.system(size: 11, weight: .bold))
-                    .foregroundColor(.primary)
+                    .foregroundColor(theme.colors.textPrimary)
             }
             .padding(.horizontal, 12)
             .padding(.top, 10)
             .padding(.bottom, 6)
 
             Divider()
+                .background(theme.colors.border)
                 .padding(.horizontal, 8)
 
             // Input
             codeSection(
                 icon: "arrow.right.circle.fill",
-                iconColor: .blue,
+                iconColor: theme.colors.primary,
                 label: "INPUT",
                 text: result.input,
                 lineNumbers: true
             )
 
             Divider()
+                .background(theme.colors.border)
                 .padding(.horizontal, 8)
 
             // Expected
             codeSection(
                 icon: "target",
-                iconColor: .orange,
+                iconColor: theme.colors.warning,
                 label: "EXPECTED",
                 text: result.originalExpected,
                 lineNumbers: false
             )
 
             Divider()
+                .background(theme.colors.border)
                 .padding(.horizontal, 8)
 
             // Computed Output
             codeSection(
                 icon: result.outputMatches ? "checkmark.circle.fill" : "xmark.circle.fill",
-                iconColor: result.outputMatches ? .green : .red,
+                iconColor: result.outputMatches ? theme.colors.success : theme.colors.danger,
                 label: "COMPUTED",
                 text: result.computedOutput,
                 lineNumbers: false
@@ -115,14 +120,15 @@ struct SolutionView: View {
             // Error message if present
             if let error = result.errorMessage {
                 Divider()
+                    .background(theme.colors.border)
                     .padding(.horizontal, 8)
                 HStack(alignment: .top, spacing: 6) {
                     Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundColor(.orange)
+                        .foregroundColor(theme.colors.warning)
                         .font(.system(size: 10))
                     Text(error)
                         .font(.system(size: 10, design: .monospaced))
-                        .foregroundColor(.red)
+                        .foregroundColor(theme.colors.danger)
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
@@ -136,18 +142,18 @@ struct SolutionView: View {
                     Text("Order matters")
                         .font(.system(size: 9, weight: .medium))
                 }
-                .foregroundColor(.secondary)
+                .foregroundColor(theme.colors.textSecondary)
                 .padding(.horizontal, 12)
                 .padding(.bottom, 8)
             }
         }
         .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color(white: 0.96))
+            RoundedRectangle(cornerRadius: theme.radii.md)
+                .fill(theme.colors.surface)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+            RoundedRectangle(cornerRadius: theme.radii.md)
+                .stroke(theme.colors.border, lineWidth: 1)
         )
     }
 
@@ -159,16 +165,21 @@ struct SolutionView: View {
         lineNumbers: Bool
     ) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            // Label
+            // Label with copy button
             HStack(spacing: 4) {
                 Image(systemName: icon)
                     .font(.system(size: 9))
                     .foregroundColor(iconColor)
                 Text(label)
                     .font(.system(size: 8, weight: .bold))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(theme.colors.textSecondary)
+
+                Spacer()
+
+                CopyButton(text: text, theme: theme)
             }
             .padding(.leading, 12)
+            .padding(.trailing, 12)
             .padding(.top, 8)
 
             // Code content
@@ -177,7 +188,7 @@ struct SolutionView: View {
             } else {
                 Text(text)
                     .font(.system(size: 11, weight: .medium, design: .monospaced))
-                    .foregroundColor(.primary)
+                    .foregroundColor(theme.colors.textPrimary)
                     .textSelection(.enabled)
                     .padding(.horizontal, 12)
             }
@@ -203,12 +214,12 @@ struct SolutionView: View {
                 HStack(alignment: .top, spacing: 6) {
                     Text("\(index + 1)")
                         .font(.system(size: 9, design: .monospaced))
-                        .foregroundColor(.secondary.opacity(0.5))
+                        .foregroundColor(theme.colors.textSecondary.opacity(0.5))
                         .frame(width: 14, alignment: .trailing)
 
                     Text(param)
                         .font(.system(size: 11, weight: .medium, design: .monospaced))
-                        .foregroundColor(.primary)
+                        .foregroundColor(theme.colors.textPrimary)
                         .textSelection(.enabled)
                 }
             }
@@ -224,16 +235,17 @@ struct SolutionView: View {
             HStack(spacing: 6) {
                 Image(systemName: "cube.transparent")
                     .font(.system(size: 10, weight: .semibold))
-                    .foregroundColor(.cyan)
+                    .foregroundColor(theme.colors.accent)
                 Text("Data Journey")
                     .font(.system(size: 11, weight: .bold))
-                    .foregroundColor(.primary)
+                    .foregroundColor(theme.colors.textPrimary)
             }
             .padding(.horizontal, 12)
             .padding(.top, 10)
             .padding(.bottom, 6)
 
             Divider()
+                .background(theme.colors.border)
                 .padding(.horizontal, 8)
 
             DataJourneyView(
@@ -246,12 +258,12 @@ struct SolutionView: View {
             .padding(12)
         }
         .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.white)
+            RoundedRectangle(cornerRadius: theme.radii.md)
+                .fill(theme.colors.surface)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+            RoundedRectangle(cornerRadius: theme.radii.md)
+                .stroke(theme.colors.border, lineWidth: 1)
         )
     }
 
@@ -262,7 +274,7 @@ struct SolutionView: View {
             Text("Test Cases")
                 .font(.caption)
                 .fontWeight(.semibold)
-                .foregroundColor(.secondary)
+                .foregroundColor(theme.colors.textSecondary)
                 .textCase(.uppercase)
 
             ScrollView(.horizontal, showsIndicators: false) {
@@ -275,22 +287,23 @@ struct SolutionView: View {
                             HStack(spacing: 4) {
                                 Image(systemName: result.outputMatches ? "checkmark.circle.fill" : "xmark.circle.fill")
                                     .font(.system(size: 10))
-                                    .foregroundColor(result.outputMatches ? .green : .red)
+                                    .foregroundColor(result.outputMatches ? theme.colors.success : theme.colors.danger)
 
                                 Text("#\(index + 1)")
                                     .font(.system(size: 11, weight: .semibold))
+                                    .foregroundColor(theme.colors.textPrimary)
                             }
                             .padding(.horizontal, 10)
                             .padding(.vertical, 6)
                             .background(
-                                RoundedRectangle(cornerRadius: 6)
+                                RoundedRectangle(cornerRadius: theme.radii.sm)
                                     .fill(index == selectedResultIndex
-                                          ? Color.blue.opacity(0.15)
-                                          : Color(white: 0.95))
+                                          ? theme.colors.primary.opacity(0.2)
+                                          : theme.colors.surfaceElevated)
                             )
                             .overlay(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .stroke(index == selectedResultIndex ? Color.blue : Color.clear, lineWidth: 1)
+                                RoundedRectangle(cornerRadius: theme.radii.sm)
+                                    .stroke(index == selectedResultIndex ? theme.colors.primary : Color.clear, lineWidth: 1)
                             )
                         }
                         .buttonStyle(.plain)
@@ -305,11 +318,12 @@ struct SolutionView: View {
     private func statusBadge(_ result: TestResult) -> some View {
         HStack(spacing: 8) {
             Image(systemName: result.outputMatches ? "checkmark.circle.fill" : "xmark.circle.fill")
-                .foregroundColor(result.outputMatches ? .green : .red)
+                .foregroundColor(result.outputMatches ? theme.colors.success : theme.colors.danger)
 
             Text(result.outputMatches ? "Output Matches Expected" : "Output Does Not Match")
                 .font(.subheadline)
                 .fontWeight(.medium)
+                .foregroundColor(theme.colors.textPrimary)
 
             Spacer()
 
@@ -319,14 +333,14 @@ struct SolutionView: View {
                     .foregroundColor(.white)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(.red)
+                    .background(theme.colors.danger)
                     .cornerRadius(4)
             }
         }
         .padding(12)
         .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(result.outputMatches ? Color.green.opacity(0.08) : Color.red.opacity(0.08))
+            RoundedRectangle(cornerRadius: theme.radii.sm)
+                .fill(result.outputMatches ? theme.colors.success.opacity(0.15) : theme.colors.danger.opacity(0.15))
         )
     }
 
@@ -336,13 +350,42 @@ struct SolutionView: View {
         VStack(spacing: 12) {
             Image(systemName: "doc.text.magnifyingglass")
                 .font(.system(size: 36))
-                .foregroundColor(.secondary)
+                .foregroundColor(theme.colors.textSecondary)
 
             Text("No test results available for this problem.")
                 .font(.body)
-                .foregroundColor(.secondary)
+                .foregroundColor(theme.colors.textSecondary)
         }
         .frame(maxWidth: .infinity)
         .padding(32)
+    }
+}
+
+// MARK: - Copy Button
+
+private struct CopyButton: View {
+    let text: String
+    let theme: DSTheme
+    @State private var copied = false
+
+    var body: some View {
+        Button {
+            #if os(iOS)
+            UIPasteboard.general.string = text
+            #elseif os(macOS)
+            NSPasteboard.general.clearContents()
+            NSPasteboard.general.setString(text, forType: .string)
+            #endif
+            copied = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                copied = false
+            }
+        } label: {
+            Image(systemName: copied ? "checkmark" : "doc.on.doc")
+                .font(.system(size: 9))
+                .foregroundColor(copied ? theme.colors.success : theme.colors.textSecondary)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(copied ? "Copied" : "Copy to clipboard")
     }
 }

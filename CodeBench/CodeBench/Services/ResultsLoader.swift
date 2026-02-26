@@ -1,4 +1,5 @@
 import Foundation
+import TestResultsBundle
 
 @Observable
 final class ResultsLoader {
@@ -7,14 +8,9 @@ final class ResultsLoader {
     var isLoaded = false
     var errorMessage: String?
 
-    /// The bundle containing processed resources.
-    /// SPM places resources in Bundle.module; Xcode project uses Bundle.main.
+    /// The bundle containing test result JSON files from TestCaseEvaluator.
     private var resourceBundle: Bundle {
-        #if SWIFT_PACKAGE
-        Bundle.module
-        #else
-        Bundle.main
-        #endif
+        TestResultsBundle.bundle
     }
 
     /// Problem metadata (leetCodeNumber, difficulty) loaded from problem-metadata.json
@@ -33,8 +29,8 @@ final class ResultsLoader {
         }
 
         do {
-            // Load metadata first
-            if let metaURL = resourceBundle.url(forResource: "problem-metadata", withExtension: "json") {
+            // Load metadata from the app bundle (CodeBench-specific, not in TestResultsBundle)
+            if let metaURL = Bundle.main.url(forResource: "problem-metadata", withExtension: "json") {
                 let metaData = try Data(contentsOf: metaURL)
                 problemMetadata = try JSONDecoder().decode([String: ProblemMetadataEntry].self, from: metaData)
             }

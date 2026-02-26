@@ -30,7 +30,7 @@ struct DataJourneyEvent: Identifiable {
 
         let label = dict["label"] as? String
         let valuesDict = dict["values"] as? [String: Any] ?? [:]
-        let values = valuesDict.mapValues { TraceValue.from(json: $0) }
+        let values = valuesDict.mapValues { JourneyValueFactory.fromJSON($0) }
         let eventId = "event-\(index)-\(kind.rawValue)-\(line ?? 0)-\(label ?? "unlabeled")"
 
         return DataJourneyEvent(id: eventId, kind: kind, line: line, label: label, values: values)

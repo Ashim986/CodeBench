@@ -35,10 +35,6 @@ struct DataJourneyView: View {
                     exportTriggered = false
                     renderAndExport()
                 }
-                .onChange(of: animationController.isPlaying) { _, playing in
-                    guard playing else { return }
-                    startPlaybackLoop()
-                }
                 .onChange(of: events.map(\.id)) { _, _ in
                     animationController.pause()
                     ensurePlaybackSelection()
@@ -140,18 +136,6 @@ struct DataJourneyView: View {
         let total = playbackEvents.count
         let current = currentPlaybackIndex
         animationController.togglePlayPause(
-            totalSteps: total,
-            currentIndex: current,
-            advance: { [self] in advancePlayback() },
-            onEnd: { [self] in animationController.pause() },
-            reduceMotion: reduceMotion
-        )
-    }
-
-    private func startPlaybackLoop() {
-        let total = playbackEvents.count
-        let current = currentPlaybackIndex
-        animationController.play(
             totalSteps: total,
             currentIndex: current,
             advance: { [self] in advancePlayback() },
